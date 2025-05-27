@@ -1,0 +1,45 @@
+argo-cd:
+  global:
+    #   domain: argocd.bakseter.net
+    revisionHistoryLimit: 3
+    networkPolicy:
+      create: true
+
+  configs:
+    repositories:
+      argocd:
+        url: https://github.com/bakseter/homelab.git
+
+    cm:
+    #     admin.enabled: false
+    #     dex.config: |
+    #       connectors:
+    #         - type: authproxy
+    #           id: oauth2-proxy
+    #           name: Proxy
+    #           config:
+    #             userHeader: X-Auth-Request-Email
+    #             groupHeader: X-Auth-Request-Groups
+
+    #   rbac:
+    #     scopes: '[groups, email]'
+    #     policy.default: ''
+    #     policy.csv: |
+    #       p, role:org-admin, *, get, *, allow
+    #       p, role:org-admin, applications, sync, *, allow
+    #       p, role:org-admin, applicationsets, sync, *, allow
+    #       g, andreas_tkd@hotmail.com, role:org-admin
+
+  #   dex:
+  #     enabled: true
+
+  #   params:
+  #     server.insecure: true
+
+  # notifications:
+  #   enabled: false
+
+  controller:
+    env:
+      - name: ARGOCD_APPLICATION_TREE_SHARD_SIZE
+        value: '50'
