@@ -23,6 +23,7 @@ resource "talos_machine_configuration_apply" "cp_config_apply" {
   machine_configuration_input = data.talos_machine_configuration.machineconfig_cp.machine_configuration
   count                       = 1
   node                        = local.talos_cp_01_ip_addr
+  /*
   config_patches = [
     yamlencode({
       machine = {
@@ -34,6 +35,7 @@ resource "talos_machine_configuration_apply" "cp_config_apply" {
       }
     })
   ]
+  */
 }
 
 data "talos_machine_configuration" "machineconfig_worker" {
@@ -49,6 +51,7 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
   machine_configuration_input = data.talos_machine_configuration.machineconfig_worker.machine_configuration
   count                       = 1
   node                        = local.talos_worker_01_ip_addr
+  /*
   config_patches = [
     yamlencode({
       machine = {
@@ -58,27 +61,9 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
           }
         },
       }
-      cluster = {
-        inlineManifests = [
-          {
-            name     = namespace-argocd # Name of the manifest.
-            contents = <<-EOF
-              apiVersion: v1
-              kind: Namespace
-              metadata:
-                name: argocd
-            EOF
-          }
-        ]
-        extraManifests = [
-          "https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml",
-          "https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml",
-          "https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml",
-          "https://raw.githubusercontent.com/bakseter/homelab/refs/heads/master/manifests/bootstrap/argocd/templates/applicationset.yaml",
-        ]
-      }
     })
   ]
+  */
 }
 
 resource "talos_machine_bootstrap" "bootstrap" {

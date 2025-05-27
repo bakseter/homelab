@@ -23,7 +23,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp_01" {
   on_boot     = true
 
   cpu {
-    cores = 2
+    cores = 4
     type  = "x86-64-v2-AES"
   }
 
@@ -75,7 +75,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
   on_boot     = true
 
   cpu {
-    cores = 2
+    cores = 4
     type  = "x86-64-v2-AES"
   }
 
@@ -119,6 +119,6 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
 }
 
 locals {
-  talos_cp_01_ip_addr     = flatten(proxmox_virtual_environment_vm.talos_cp_01.ipv4_addresses)[1]
-  talos_worker_01_ip_addr = flatten(proxmox_virtual_environment_vm.talos_worker_01.ipv4_addresses)[1]
+  talos_cp_01_ip_addr     = proxmox_virtual_environment_vm.talos_cp_01.ipv4_addresses[7][0]
+  talos_worker_01_ip_addr = proxmox_virtual_environment_vm.talos_worker_01.ipv4_addresses[7][0]
 }
