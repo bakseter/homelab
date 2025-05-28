@@ -10,7 +10,7 @@ argo-cd:
       argocd:
         url: https://github.com/bakseter/homelab.git
 
-    cm:
+    # cm:
     #     admin.enabled: false
     #     dex.config: |
     #       connectors:

@@ -27,7 +27,7 @@ spec:
           path: '{{.path.path}}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{or (index . "namespace") .path.basename}}'
+        namespace: '{{if eq .path.basename "bootstrap"}}argocd{{else}}{{or (index . "namespace") .path.basename}}{{end}}'
       syncPolicy:
         automated:
           selfHeal: true
