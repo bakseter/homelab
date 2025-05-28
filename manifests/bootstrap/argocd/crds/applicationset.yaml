@@ -12,6 +12,7 @@ spec:
         revision: HEAD
         directories:
           - path: manifests/bootstrap
+        files:
           - path: manifests/applications/**/config.yaml
           - path: manifests/cluster-addons/**/config.yaml
   template:
