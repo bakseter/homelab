@@ -1,2 +1,2 @@
-speaker:
-  ignoreExcludeLB: true
+controller:
+  logLevel: debug
