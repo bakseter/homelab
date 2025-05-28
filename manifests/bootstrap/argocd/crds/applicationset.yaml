@@ -13,7 +13,11 @@ spec:
               repoURL: https://github.com/bakseter/homelab.git
               revision: HEAD
               directories:
-                - path: manifests/bootstrap/**
+                - path: manifests/*
+                - path: manifests/applications
+                  exclude: true
+                - path: manifests/cluster-addons
+                  exclude: true
           - git:
               repoURL: https://github.com/bakseter/homelab.git
               revision: HEAD
