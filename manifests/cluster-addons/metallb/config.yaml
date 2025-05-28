@@ -1,1 +1,2 @@
-namespace: metallb-system
+namespace:
+  create: false
