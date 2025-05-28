@@ -20,7 +20,7 @@ spec:
     spec:
       project: default
       destination:
-        namespace: '{{or (index (index . "namespace") .name) .path.basename}}'
+        namespace: '{{if ((.namespace).name)}}{{.namespace.name}}{{else}}{{.path.basename}}{{end}'
         server: https://kubernetes.default.svc
       source:
         path: '{{.path.path}}'
@@ -31,5 +31,5 @@ spec:
           prune: true
           selfHeal: true
         syncOptions:
-          - 'CreateNamespace={{if eq (index (index . "namespace") .create) "true"}}true{{else}}false{{end}}'
+          - 'CreateNamespace={{if eq ((.namespace).create) "true"}}true{{else}}false{{end}}'
           - ServerSideApply=true
