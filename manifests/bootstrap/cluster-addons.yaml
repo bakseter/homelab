@@ -8,8 +8,8 @@ spec:
   goTemplateOptions: ['missingkey=error']
   generators:
     - git:
-        directories:
-          - files: manifests/applications/**/config.yaml
+        files:
+          - path: manifests/applications/**/config.yaml
         repoURL: https://github.com/bakseter/homelab.git
         revision: HEAD
   template:
