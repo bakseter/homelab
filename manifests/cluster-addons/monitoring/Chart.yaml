@@ -1,0 +1,16 @@
+apiVersion: v2
+name: monitoring-umbrella
+version: 0.1.0
+dependencies:
+  - name: kube-prometheus-stack
+    version: v72.6.2
+    repository: https://prometheus-community.github.io/helm-charts
+  - name: loki
+    version: 6.30.0
+    repository: https://grafana.github.io/helm-charts
+  - name: grafana-operator
+    version: v5.18.0
+    repository: https://grafana.github.io/helm-charts
+  - name: alloy
+    version: 1.0.3
+    repository: https://grafana.github.io/helm-charts

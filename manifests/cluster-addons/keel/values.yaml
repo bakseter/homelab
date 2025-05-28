@@ -1,0 +1,14 @@
+keel:
+  helmProvider:
+    enabled: false
+
+  secret:
+    enabled: false
+
+  nodeSelector:
+    kubernetes.io/arch: amd64
+
+  tolerations:
+    - key: 'node-role.kubernetes.io/control-plane'
+      operator: 'Exists'
+      effect: 'NoSchedule'

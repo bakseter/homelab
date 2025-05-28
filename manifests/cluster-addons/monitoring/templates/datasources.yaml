@@ -1,0 +1,33 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: loki
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  allowCrossNamespaceImport: true
+  datasource:
+    name: loki
+    type: loki
+    access: proxy
+    basicAuth: false
+    url: http://monitoring-loki-gateway.monitoring.svc.cluster.local:80
+    isDefault: false
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: prometheus
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  allowCrossNamespaceImport: true
+  datasource:
+    name: prometheus
+    type: prometheus
+    access: proxy
+    basicAuth: false
+    url: http://prometheus-operated.monitoring.svc.cluster.local:9090
+    isDefault: false

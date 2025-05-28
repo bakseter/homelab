@@ -1,0 +1,203 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: alertmanager-overview
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-alertmanager-overview
+    key: alertmanager-overview.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: apiserver
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-apiserver
+    key: apiserver.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: cluster-total
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-cluster-total
+    key: cluster-total.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: controller-manager
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-controller-manager
+    key: controller-manager.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: etcd
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-etcd
+    key: etcd.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-overview
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-grafana-overview
+    key: grafana-overview.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-coredns
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-k8s-coredns
+    key: k8s-coredns.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-resources-cluster
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-k8s-resources-cluster
+    key: k8s-resources-cluster.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-resources-multicluster
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-k8s-resources-multicluster
+    key: k8s-resources-multicluster.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-resources-namespace
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-k8s-resources-namespace
+    key: k8s-resources-namespace.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-resources-node
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-k8s-resources-node
+    key: k8s-resources-node.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-resources-pod
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-k8s-resources-pod
+    key: k8s-resources-pod.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-resources-workload
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-k8s-resources-workload
+    key: k8s-resources-workload.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-resources-workloads-namespace
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-k8s-resources-workloads-namespace
+    key: k8s-resources-workloads-namespace.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kubelet
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-kubelet
+    key: kubelet.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: namespace-by-pod
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-namespace-by-pod
+    key: namespace-by-pod.json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: namespace-by-workload
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  configMapRef:
+    name: monitoring-kube-prometheus-namespace-by-workload
+    key: namespace-by-workload.json

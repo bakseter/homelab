@@ -1,0 +1,65 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: grafana
+  labels:
+    dashboards: 'grafana'
+spec:
+  ingress:
+    metadata:
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+        traefik.ingress.kubernetes.io/router.middlewares: oauth2-proxy-forwardauth@kubernetescrd,oauth2-proxy-errors@kubernetescrd
+    spec:
+      ingressClassName: traefik
+      rules:
+        - host: grafana.bakseter.net
+          http:
+            paths:
+              - backend:
+                  service:
+                    name: grafana-service
+                    port:
+                      number: 3000
+                path: /
+                pathType: Prefix
+      tls:
+        - hosts:
+            - grafana.bakseter.net
+          secretName: grafana-tls
+  deployment:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: grafana
+              env:
+                - name: GF_SECURITY_ADMIN_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: admin-user
+                      name: grafana-admin-secret
+                - name: GF_SECURITY_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: admin-password
+                      name: grafana-admin-secret
+  config:
+    log:
+      mode: 'console'
+    auth:
+      disable_login_form: 'false'
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: grafana-admin-secret
+  namespace: monitoring
+spec:
+  encryptedData:
+    admin-password: AgAI/vhXNh8ZKSnDl/lmu8WZhOt7QtjeMS4m+GQ9tlefYHd7BTBFzP/YBmiVK/bM1pdnkjfGeReZY0rRwx2BqE777e7lEnCKfsLM9N7Su1PPjT17M1LwunDo6mf3e4Rw2WZ3Rs0Ukew1httZrgYKpEl70lVDUIxKMYGstpP1y56HnV8wDXz9PuyeP3eGxD3a70dVnWytfKFtiSmtdWQQXS8SP2HseEebkF0bR0zeGSRo/XK4zL4X2rXNjDhB8fARsyeqFWLLi5iHcv43qMI3b+yQIPZ64remwXzdGwKOQdft7i7vDYpH8XUTfhQSgSi9opXKT5Ck2aAwyF3B+9QSG912rD/Tem+RPv5UKaCpDHtiQBftHdh4DD/PtuYMmt7XazcyaKy+2x+aTBObk3fdlXKusbvIGT/i7ld4f45YDHCWdYLrP4oVeHLrPGJBK9WXVPabM30ylVPYyEJJC9nFUdytaJs8XCIvoAU/M5LtJnXH9TPmgA/uz1Xkmn4vj/BDsKcSTnUc+JutIK60OxO6SQk4IFntA5gwXrsWTBvvumNjcHNqhzV5RgGFs0ITKkK//JMK6KT+TE+Z/WrpUswDzV+T4yzNw5Q5a5y1XIXn93HkEsogclA6GGSREEZYzrEyJHKnrIiS8zLcnT9UorxSjig6KfUKZiNrMu3mfE5KV8MahyOmL1lAtoVmi9XABnu8svX8V+RT6WNsqoFyzvyzMnE3BawChHnwyOJ6pgotih2zCQ==
+    admin-user: AgAON0xYmNr2bTWHAo06wy8SwxEss5d/oJiM8esxM4kUZJI1ReLN9/3Ozix+DgucBgaIqlozB0p86v+GkYEjv6bTipQew+SbPU49Y/avlBDRRRbe8T5PtVTTWBhvQgrx1zkxIgaMeyr5GZi6jYrUR58J9CbO6snpK3uZPYCblwT9MYkQPTbLEZldj3xwNEojVMLLZQyJbO2GrTH4wBRZIF0IJ7zpQ6r8UQnVpsB6W/MpXIxar3qxAS4o9ylMLlksWo0QPgS+nzB+5j4mC/LXeLQPkIZEyQYhc/2rDjnJRnIz80QuY2UcaK4nwNE8aT1I5GYpW8jo4KIcGYF5UwfHhRaUzHunym6N2/qfm2GOMOC3aIL9OeGNgHpvbN++r9QfNzFgACEo+ODhKRuIPEmJ080GTLi4xEgNohkZzCb5LbPCFU6Ywer5pr62HKMrHWRDMuNoUwNLUCkpg+HPCzIRY2hteagz6rMmVH92Nj2sIUVoPYzKiWbn4hbiq2u/XAB16tzh3lIlJY/M3FdZ4k2xSoWCwBwTkDccpCZR0sI57QsRqbmitMDkvXJpROGKJinyNML/SMnGeNHXfGNZniWtG0nEMLVAgMhAI9TWchIAtuEptjEFXaR3o5705jSzYYJbtXCjV9NfaZKOXBoR7FyKU+QdOEtQkv5M5VukDG53MCozZaSkNHwlKI91/O6bmabL6b85hPlvUSmGrcX2Yws=
+  template:
+    metadata:
+      name: grafana-admin-secret
+      namespace: monitoring
