@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-addons
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ['missingkey=error']
+  generators:
+    - git:
+        directories:
+          - files: manifests/applications/**/config.yaml
+        repoURL: https://github.com/bakseter/homelab.git
+        revision: HEAD
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: controller
+      name: '{{.path.basename}}'
+    spec:
+      project: default
+      destination:
+        namespace: '{{or (index . "namespace") .path.basename}}'
+        server: https://kubernetes.default.svc
+      source:
+        path: '{{.path.path}}'
+        repoURL: https://github.com/bakseter/homelab.git
+        targetRevision: HEAD
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true

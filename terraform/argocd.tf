@@ -19,26 +19,7 @@ resource "helm_release" "argocd" {
 }
 
 locals {
-  root_app_manifest  = <<-EOF
-    apiVersion: argoproj.io/v1alpha1
-    kind: Application
-    metadata:
-      name: bootstrap
-      namespace: argocd
-    spec:
-      project: default
-      source:
-        repoURL: https://github.com/bakseter/homelab.git
-        targetRevision: HEAD
-        path: manifests/bootstrap
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: argocd
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-    EOF
+  root_app_manifest  = file("${path.module}/../manifests/bootstrap/argocd/crds/applicationset.yaml")
   kubernetes_version = "1.33"
 }
 
