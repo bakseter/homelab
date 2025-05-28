@@ -13,7 +13,7 @@ spec:
               repoURL: https://github.com/bakseter/homelab.git
               revision: HEAD
               directories:
-                - path: manifests/bootstrap
+                - path: manifests/bootstrap/**
           - git:
               repoURL: https://github.com/bakseter/homelab.git
               revision: HEAD
