@@ -31,5 +31,5 @@ spec:
           prune: true
           selfHeal: true
         syncOptions:
-          - 'CreateNamespace={{if and (and (hasKey . "namespace") (hasKey .namespace "create")) (eq .namespace.create "true")}}true{{else}}false{{end}}'
+          - 'CreateNamespace={{if and (and (hasKey . "namespace") (hasKey .namespace "create")) (eq .namespace.create true)}}true{{else}}false{{end}}'
           - ServerSideApply=true
