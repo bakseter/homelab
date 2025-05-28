@@ -7,14 +7,19 @@ spec:
   goTemplate: true
   goTemplateOptions: ['missingkey=error']
   generators:
-    - git:
-        repoURL: https://github.com/bakseter/homelab.git
-        revision: HEAD
-        directories:
-          - path: manifests/bootstrap
-        files:
-          - path: manifests/applications/**/config.yaml
-          - path: manifests/cluster-addons/**/config.yaml
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/bakseter/homelab.git
+              revision: HEAD
+              directories:
+                - path: manifests/bootstrap
+          - git:
+              repoURL: https://github.com/bakseter/homelab.git
+              revision: HEAD
+              files:
+                - path: manifests/applications/**/config.yaml
+                - path: manifests/cluster-addons/**/config.yaml
   template:
     metadata:
       name: '{{.path.basename}}'
