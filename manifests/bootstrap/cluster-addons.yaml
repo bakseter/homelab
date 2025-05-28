@@ -31,5 +31,5 @@ spec:
           prune: true
           selfHeal: true
         syncOptions:
-          - CreateNamespace='{{if (dig "namespace" "create" "false" .)}}false{{else}}true{{end}}'
+          - CreateNamespace='{{if eq "true" (dig "namespace" "create" "true" .)}}true{{else}}false{{end}}'
           - ServerSideApply=true
