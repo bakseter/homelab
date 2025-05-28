@@ -1,0 +1,7 @@
+apiVersion: v2
+name: tailscale-umbrella
+version: 0.1.0
+dependencies:
+  - name: tailscale-operator
+    version: 1.84.0
+    repository: https://pkgs.tailscale.com/helmcharts
