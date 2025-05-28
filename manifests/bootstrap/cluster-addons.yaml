@@ -20,7 +20,7 @@ spec:
     spec:
       project: default
       destination:
-        namespace: '{{if ((.namespace).name)}}{{.namespace.name}}{{else}}{{.path.basename}}{{end}'
+        namespace: '{{if ((.namespace).name)}}{{.namespace.name}}{{else}}{{.path.basename}}{{end}}'
         server: https://kubernetes.default.svc
       source:
         path: '{{.path.path}}'
