@@ -19,8 +19,7 @@ resource "helm_release" "argocd" {
 }
 
 locals {
-  root_app_manifest  = file("${path.module}/../manifests/bootstrap/argocd/crds/applicationset.yaml")
-  kubernetes_version = "1.33"
+  root_app_manifest = file("${path.module}/../manifests/bootstrap/bootstrap.yaml")
 }
 
 resource "null_resource" "kubectl-apply" {
