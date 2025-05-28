@@ -9,7 +9,7 @@ spec:
   generators:
     - git:
         files:
-          - path: manifests/applications/**/config.yaml
+          - path: manifests/cluster-addons/**/config.yaml
         repoURL: https://github.com/bakseter/homelab.git
         revision: HEAD
   template:
