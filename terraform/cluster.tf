@@ -23,7 +23,6 @@ resource "talos_machine_configuration_apply" "cp_config_apply" {
   machine_configuration_input = data.talos_machine_configuration.machineconfig_cp.machine_configuration
   count                       = 1
   node                        = local.talos_cp_01_ip_addr
-  /*
   config_patches = [
     yamlencode({
       machine = {
@@ -32,10 +31,13 @@ resource "talos_machine_configuration_apply" "cp_config_apply" {
             rotate-server-certificates = true
           }
         },
+        nodeLabels = {
+          "node.kubernetes.io/exclude-from-external-load-balancers" = ""
+          "$patch"                                                  = "delete"
+        }
       }
     })
   ]
-  */
 }
 
 data "talos_machine_configuration" "machineconfig_worker" {
@@ -51,7 +53,6 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
   machine_configuration_input = data.talos_machine_configuration.machineconfig_worker.machine_configuration
   count                       = 1
   node                        = local.talos_worker_01_ip_addr
-  /*
   config_patches = [
     yamlencode({
       machine = {
@@ -63,7 +64,6 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
       }
     })
   ]
-  */
 }
 
 resource "talos_machine_bootstrap" "bootstrap" {
@@ -72,6 +72,7 @@ resource "talos_machine_bootstrap" "bootstrap" {
   node                 = local.talos_cp_01_ip_addr
 }
 
+/*
 data "talos_cluster_health" "health" {
   depends_on           = [talos_machine_configuration_apply.cp_config_apply, talos_machine_configuration_apply.worker_config_apply]
   client_configuration = data.talos_client_configuration.talosconfig.client_configuration
@@ -79,9 +80,10 @@ data "talos_cluster_health" "health" {
   worker_nodes         = [local.talos_worker_01_ip_addr]
   endpoints            = data.talos_client_configuration.talosconfig.endpoints
 }
+*/
 
 resource "talos_cluster_kubeconfig" "kubeconfig" {
-  depends_on           = [talos_machine_bootstrap.bootstrap, data.talos_cluster_health.health]
+  depends_on           = [talos_machine_bootstrap.bootstrap]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   node                 = local.talos_cp_01_ip_addr
 }
