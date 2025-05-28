@@ -11,8 +11,9 @@ spec:
         repoURL: https://github.com/bakseter/homelab.git
         revision: HEAD
         directories:
-          - path: manifests/applications/**
-          - path: manifests/cluster-addons/**
+          - path: manifests/bootstrap
+          - path: manifests/applications/**/config.yaml
+          - path: manifests/cluster-addons/**/config.yaml
   template:
     metadata:
       name: '{{.path.basename}}'
@@ -26,7 +27,7 @@ spec:
           path: '{{.path.path}}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{.path.basename}}'
+        namespace: '{{or (index . "namespace") .path.basename}}'
       syncPolicy:
         automated:
           selfHeal: true

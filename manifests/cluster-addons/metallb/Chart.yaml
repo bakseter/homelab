@@ -1,0 +1,7 @@
+apiVersion: v2
+name: metallb-umbrella
+version: 0.1.0
+dependencies:
+  - name: metallb
+    version: 0.14.9
+    repository: https://metallb.github.io/metallb
