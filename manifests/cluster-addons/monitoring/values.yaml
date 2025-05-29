@@ -41,7 +41,8 @@ loki:
 
   minio:
     enabled: true
-    storageClass: local-path
+    persistence:
+      storageClass: local-path
 
   lokiCanary:
     enabled: true
