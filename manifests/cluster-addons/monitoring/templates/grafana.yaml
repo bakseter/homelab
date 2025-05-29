@@ -8,13 +8,11 @@ spec:
   ingress:
     metadata:
       annotations:
-        cert-manager.io/cluster-issuer: letsencrypt
-        traefik.ingress.kubernetes.io/router.middlewares: oauth2-proxy-forwardauth@kubernetescrd,oauth2-proxy-errors@kubernetescrd
+        tailscale.com/funnel: 'true'
     spec:
-      ingressClassName: traefik
+      ingressClassName: tailscale
       rules:
-        - host: grafana.bakseter.net
-          http:
+        - http:
             paths:
               - backend:
                   service:
@@ -25,8 +23,7 @@ spec:
                 pathType: Prefix
       tls:
         - hosts:
-            - grafana.bakseter.net
-          secretName: grafana-tls
+            - grafana
   deployment:
     spec:
       template:
