@@ -4,6 +4,9 @@ kube-prometheus-stack:
     forceDeployDashboards: true
   prometheus:
     prometheusSpec:
+      securityContext:
+        runAsUser: 65534
+        fsGroup: 65534
       retention: 24h
       storageSpec:
         volumeClaimTemplate:
