@@ -55,6 +55,7 @@ loki:
     persistence:
       enableStatefulSetAutoDeletePVC: true
       enabled: true
+      storageClass: local-path
     resources:
       limits:
         cpu: 500m
