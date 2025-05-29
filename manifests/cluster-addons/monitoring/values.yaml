@@ -5,8 +5,10 @@ kube-prometheus-stack:
   prometheus:
     prometheusSpec:
       securityContext:
-        runAsUser: 65534
-        fsGroup: 65534
+        runAsGroup: 0
+        runAsNonRoot: false
+        runAsUser: 0
+        fsGroup: 0
       retention: 24h
       storageSpec:
         volumeClaimTemplate:
