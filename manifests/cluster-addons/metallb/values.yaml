@@ -1,5 +1,0 @@
-metallb:
-  controller:
-    logLevel: debug
-  speaker:
-    ignoreExcludeLB: true
