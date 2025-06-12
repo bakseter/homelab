@@ -30,12 +30,6 @@ resource "null_resource" "kubectl-apply" {
     helm_argocd = helm_release.argocd.id
   }
 
-  /*
-  provisioner "local-exec" {
-    command = "curl -LO https://storage.googleapis.com/kubernetes-release/release/v${local.kubernetes_version}/bin/linux/amd64/kubectl && chmod +x kubectl"
-  }
-  */
-
   provisioner "local-exec" {
     command     = "kubectl apply --force --kubeconfig <(echo \"$KUBECONFIG\" | base64 -d) -f <(echo \"$MANIFEST\" | base64 -d)"
     interpreter = ["/bin/bash", "-c"]
