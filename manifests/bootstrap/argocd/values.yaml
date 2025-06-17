@@ -11,7 +11,7 @@ argo-cd:
         url: https://github.com/bakseter/homelab.git
 
     params:
-      server.insecure: true
+      server.insecure: false
 
       #cm:
       #     admin.enabled: false
