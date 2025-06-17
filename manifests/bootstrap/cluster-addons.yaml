@@ -21,7 +21,7 @@ spec:
       project: default
       destination:
         namespace: '{{dig "namespace" "name" .path.basename .}}'
-        server: https://kubernetes.default.svc
+        name: admin@homelab
       source:
         path: '{{.path.path}}'
         repoURL: https://github.com/bakseter/homelab.git
@@ -31,5 +31,5 @@ spec:
           prune: true
           selfHeal: true
         syncOptions:
-        # - CreateNamespace='{{if eq "true" (dig "namespace" "create" "true" .)}}true{{else}}false{{end}}'
+          # - CreateNamespace='{{if eq "true" (dig "namespace" "create" "true" .)}}true{{else}}false{{end}}'
           - ServerSideApply=true

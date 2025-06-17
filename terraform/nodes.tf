@@ -40,6 +40,17 @@ locals {
     for node_name in local.k8s_virtual_node_names :
     node_name if startswith(node_name, "talos-worker-")
   ])
+
+  static_ip_map = {
+    "talos-cp-m720q-1"     = "192.168.0.10"
+    "talos-cp-m715q-1"     = "192.168.0.11"
+    "talos-cp-m715q-2"     = "192.168.0.12"
+    "talos-worker-m720q-1" = "192.168.0.13"
+    "talos-worker-m720q-2" = "192.168.0.14"
+  }
+
+  all_nodes   = local.k8s_virtual_node_names
+  ip_map_keys = keys(local.static_ip_map)
 }
 
 resource "proxmox_virtual_environment_download_file" "talos_nocloud_image" {
@@ -70,7 +81,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp" {
   }
 
   memory {
-    dedicated = strcontains(each.key, "m720q") ? 4096 : 2048 # m715q has less RAM
+    dedicated = strcontains(each.key, "m720q") ? 4096 : 2048
   }
 
   agent {
@@ -86,11 +97,11 @@ resource "proxmox_virtual_environment_vm" "talos_cp" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image[strcontains(each.key, "m720q") ? "m720q" : "m715q"].id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = strcontains(each.key, "m720q") ? 60 : 30 # m715q has less disk space
+    size         = strcontains(each.key, "m720q") ? 60 : 30
   }
 
   operating_system {
-    type = "l26" # Linux Kernel 2.6 - 5.X.
+    type = "l26"
   }
 
   initialization {
@@ -98,11 +109,8 @@ resource "proxmox_virtual_environment_vm" "talos_cp" {
 
     ip_config {
       ipv4 {
-        address = "dhcp"
-      }
-
-      ipv6 {
-        address = "dhcp"
+        address = "${local.static_ip_map[each.key]}/24"
+        gateway = "192.168.0.1"
       }
     }
   }
@@ -124,7 +132,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
   }
 
   memory {
-    dedicated = strcontains(each.key, "m720q") ? 4096 : 2048 # m715q has less RAM
+    dedicated = strcontains(each.key, "m720q") ? 4096 : 2048
   }
 
   agent {
@@ -140,11 +148,11 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image[strcontains(each.key, "m720q") ? "m720q" : "m715q"].id
     file_format  = "raw"
     interface    = "virtio0"
-    size         = strcontains(each.key, "m720q") ? 60 : 30 # m715q has less disk space
+    size         = strcontains(each.key, "m720q") ? 60 : 30
   }
 
   operating_system {
-    type = "l26" # Linux Kernel 2.6 - 5.X.
+    type = "l26"
   }
 
   initialization {
@@ -152,17 +160,9 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
 
     ip_config {
       ipv4 {
-        address = "dhcp"
-      }
-
-      ipv6 {
-        address = "dhcp"
+        address = "${local.static_ip_map[each.key]}/24"
+        gateway = "192.168.0.1"
       }
     }
   }
-}
-
-locals {
-  talos_cp_ip_addresses     = { for vm in proxmox_virtual_environment_vm.talos_cp : vm.name => vm.ipv4_addresses[7][0] }
-  talos_worker_ip_addresses = { for vm in proxmox_virtual_environment_vm.talos_worker : vm.name => vm.ipv4_addresses[7][0] }
 }

@@ -22,7 +22,7 @@ locals {
   root_app_manifest = file("${path.module}/../manifests/bootstrap/bootstrap.yaml")
 }
 
-resource "null_resource" "kubectl-apply" {
+resource "null_resource" "kubectl-apply-bootstrap" {
   depends_on = [helm_release.argocd]
 
   triggers = {

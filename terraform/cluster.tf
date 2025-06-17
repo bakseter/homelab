@@ -1,5 +1,14 @@
 locals {
   cluster_name = "homelab"
+
+  # Separate IP lists for CP and workers (to use for client config endpoints)
+  talos_cp_ip_addresses = {
+    for k, v in local.static_ip_map : k => v if startswith(k, "talos-cp-")
+  }
+
+  talos_worker_ip_addresses = {
+    for k, v in local.static_ip_map : k => v if startswith(k, "talos-worker-")
+  }
 }
 
 resource "talos_machine_secrets" "machine_secrets" {}
@@ -7,11 +16,13 @@ resource "talos_machine_secrets" "machine_secrets" {}
 data "talos_client_configuration" "talosconfig" {
   cluster_name         = local.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoints            = values(local.talos_cp_ip_addresses)
+
+  # Pass all CP IPs as endpoints (you can add worker IPs if needed)
+  endpoints = values(local.talos_cp_ip_addresses)
 }
 
 data "talos_machine_configuration" "machineconfig_cp" {
-  for_each = local.k8s_cp_node_names
+  for_each = toset(keys(local.talos_cp_ip_addresses))
 
   cluster_name     = local.cluster_name
   cluster_endpoint = "https://${local.talos_cp_ip_addresses[each.key]}:6443"
@@ -20,12 +31,13 @@ data "talos_machine_configuration" "machineconfig_cp" {
 }
 
 resource "talos_machine_configuration_apply" "cp_config_apply" {
-  for_each   = local.k8s_cp_node_names
+  for_each   = toset(keys(local.talos_cp_ip_addresses))
   depends_on = [proxmox_virtual_environment_vm.talos_cp]
 
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.machineconfig_cp[each.key].machine_configuration
   node                        = local.talos_cp_ip_addresses[each.key]
+
   config_patches = each.key == "talos-cp-m715q-1" ? [
     yamlencode({
       machine = {
@@ -33,7 +45,7 @@ resource "talos_machine_configuration_apply" "cp_config_apply" {
           extraArgs = {
             rotate-server-certificates = true
           }
-        },
+        }
       },
       cluster = {
         extraManifests = [
@@ -49,23 +61,23 @@ resource "talos_machine_configuration_apply" "cp_config_apply" {
           extraArgs = {
             rotate-server-certificates = true
           }
-        },
-      },
+        }
+      }
     })
   ]
 }
 
 data "talos_machine_configuration" "machineconfig_worker" {
-  for_each = local.k8s_worker_node_names
+  for_each = toset(keys(local.talos_worker_ip_addresses))
 
   cluster_name     = local.cluster_name
-  cluster_endpoint = "https://${local.talos_worker_ip_addresses[each.key]}:6443"
+  cluster_endpoint = "https://${local.talos_cp_ip_addresses["talos-cp-m720q-1"]}:6443"
   machine_type     = "worker"
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
 }
 
 resource "talos_machine_configuration_apply" "worker_config_apply" {
-  for_each   = local.k8s_worker_node_names
+  for_each   = toset(keys(local.talos_worker_ip_addresses))
   depends_on = [proxmox_virtual_environment_vm.talos_worker]
 
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
@@ -78,8 +90,8 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
           extraArgs = {
             rotate-server-certificates = true
           }
-        },
-      },
+        }
+      }
     })
   ]
 }
@@ -88,23 +100,14 @@ resource "talos_machine_bootstrap" "bootstrap" {
   depends_on = [talos_machine_configuration_apply.cp_config_apply]
 
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = values(local.talos_cp_ip_addresses)[0]
+  node                 = local.talos_cp_ip_addresses["talos-cp-m720q-1"]
 }
-
-#data "talos_cluster_health" "health" {
-#  depends_on           = [talos_machine_configuration_apply.cp_config_apply, talos_machine_configuration_apply.worker_config_apply]
-#
-#  client_configuration = data.talos_client_configuration.talosconfig.client_configuration
-#  control_plane_nodes  = [local.talos_cp_01_ip_addr]
-#  worker_nodes         = [local.talos_worker_01_ip_addr]
-#  endpoints            = data.talos_client_configuration.talosconfig.endpoints
-#}
 
 resource "talos_cluster_kubeconfig" "kubeconfig" {
   depends_on = [talos_machine_bootstrap.bootstrap]
 
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = values(local.talos_cp_ip_addresses)[0]
+  node                 = local.talos_cp_ip_addresses["talos-cp-m720q-1"]
 }
 
 output "talosconfig" {

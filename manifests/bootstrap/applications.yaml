@@ -21,7 +21,7 @@ spec:
       project: default
       destination:
         namespace: '{{.path.basename}}'
-        server: https://kubernetes.default.svc
+        name: admin@homelab
       source:
         path: '{{.path.path}}'
         repoURL: https://github.com/bakseter/homelab.git
