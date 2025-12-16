@@ -11,7 +11,7 @@ locals {
 
     worker = {
       m720q = 2
-      m715q = 0
+      m715q = 1
     }
   }
 
@@ -42,11 +42,13 @@ locals {
   ])
 
   static_ip_map = {
-    "talos-cp-m720q-1"     = "192.168.0.10"
-    "talos-cp-m715q-1"     = "192.168.0.11"
-    "talos-cp-m715q-2"     = "192.168.0.12"
-    "talos-worker-m720q-1" = "192.168.0.13"
-    "talos-worker-m720q-2" = "192.168.0.14"
+    "talos-cp-m720q-1"     = "192.168.1.50"
+    "talos-worker-m720q-1" = "192.168.1.51"
+    "talos-worker-m720q-2" = "192.168.1.52"
+
+    "talos-cp-m715q-1"     = "192.168.1.60"
+    "talos-cp-m715q-2"     = "192.168.1.61"
+    "talos-worker-m715q-1" = "192.168.1.62"
   }
 
   all_nodes   = local.k8s_virtual_node_names
@@ -110,7 +112,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp" {
     ip_config {
       ipv4 {
         address = "${local.static_ip_map[each.key]}/24"
-        gateway = "192.168.0.1"
+        gateway = "192.168.1.1"
       }
     }
   }
@@ -161,7 +163,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
     ip_config {
       ipv4 {
         address = "${local.static_ip_map[each.key]}/24"
-        gateway = "192.168.0.1"
+        gateway = "192.168.1.1"
       }
     }
   }
