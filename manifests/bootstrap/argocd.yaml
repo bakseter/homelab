@@ -6,7 +6,7 @@ metadata:
 spec:
   destination:
     namespace: argocd
-    name: admin@homelab
+    server: https://kubernetes.default.svc
   project: default
   source:
     path: manifests/bootstrap/argocd
