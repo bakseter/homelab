@@ -1,16 +1,3 @@
-locals {
-  cluster_name = "homelab"
-
-  # Separate IP lists for CP and workers (to use for client config endpoints)
-  talos_cp_ip_addresses = {
-    for k, v in local.static_ip_map : k => v if startswith(k, "talos-cp-")
-  }
-
-  talos_worker_ip_addresses = {
-    for k, v in local.static_ip_map : k => v if startswith(k, "talos-worker-")
-  }
-}
-
 resource "talos_machine_secrets" "machine_secrets" {}
 
 data "talos_client_configuration" "talosconfig" {
@@ -18,96 +5,66 @@ data "talos_client_configuration" "talosconfig" {
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
 
   # Pass all CP IPs as endpoints (you can add worker IPs if needed)
-  endpoints = values(local.talos_cp_ip_addresses)
+  endpoints = [for node_name, node in local.virtual_controlplane_nodes : node.ip]
 }
 
-data "talos_machine_configuration" "machineconfig_cp" {
-  for_each = toset(keys(local.talos_cp_ip_addresses))
+data "talos_machine_configuration" "machineconfig_controlplane" {
+  for_each = local.virtual_controlplane_nodes
 
   cluster_name     = local.cluster_name
-  cluster_endpoint = "https://${local.talos_cp_ip_addresses[each.key]}:6443"
-  machine_type     = "controlplane"
+  cluster_endpoint = "https://${each.value.ip}:6443"
+  machine_type     = each.value.type
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
 }
 
-resource "talos_machine_configuration_apply" "cp_config_apply" {
-  for_each   = toset(keys(local.talos_cp_ip_addresses))
-  depends_on = [proxmox_virtual_environment_vm.talos_cp]
+resource "talos_machine_configuration_apply" "controlplane_config_apply" {
+  for_each   = local.virtual_controlplane_nodes
+  depends_on = [proxmox_virtual_environment_vm.talos_controlplane]
 
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
-  machine_configuration_input = data.talos_machine_configuration.machineconfig_cp[each.key].machine_configuration
-  node                        = local.talos_cp_ip_addresses[each.key]
+  machine_configuration_input = data.talos_machine_configuration.machineconfig_controlplane[each.key].machine_configuration
+  node                        = each.value.ip
 
-  config_patches = each.key == "talos-cp-m715q-1" ? [
-    yamlencode({
-      machine = {
-        kubelet = {
-          extraArgs = {
-            rotate-server-certificates = true
-          }
-        }
-      },
-      cluster = {
-        extraManifests = [
-          "https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml",
-          "https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml",
-        ]
-      }
-    })
-    ] : [
-    yamlencode({
-      machine = {
-        kubelet = {
-          extraArgs = {
-            rotate-server-certificates = true
-          }
-        }
-      }
-    })
-  ]
+  config_patches = compact([
+    local.config.default.configPatches,
+    try(each.value.extraConfigPatches, null)
+  ])
 }
 
 data "talos_machine_configuration" "machineconfig_worker" {
-  for_each = toset(keys(local.talos_worker_ip_addresses))
+  for_each = local.virtual_worker_nodes
 
   cluster_name     = local.cluster_name
-  cluster_endpoint = "https://${local.talos_cp_ip_addresses["talos-cp-m720q-1"]}:6443"
+  cluster_endpoint = "https://${local.main_virtual_controlplane_node}:6443"
   machine_type     = "worker"
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
 }
 
 resource "talos_machine_configuration_apply" "worker_config_apply" {
-  for_each   = toset(keys(local.talos_worker_ip_addresses))
+  for_each   = local.virtual_worker_nodes
   depends_on = [proxmox_virtual_environment_vm.talos_worker]
 
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.machineconfig_worker[each.key].machine_configuration
-  node                        = local.talos_worker_ip_addresses[each.key]
-  config_patches = [
-    yamlencode({
-      machine = {
-        kubelet = {
-          extraArgs = {
-            rotate-server-certificates = true
-          }
-        }
-      }
-    })
-  ]
+  node                        = each.value.ip
+  config_patches = compact([
+    local.config.default.configPatches,
+    try(each.value.extraConfigPatches, null)
+  ])
 }
 
 resource "talos_machine_bootstrap" "bootstrap" {
-  depends_on = [talos_machine_configuration_apply.cp_config_apply]
+  depends_on = [talos_machine_configuration_apply.controlplane_config_apply]
 
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = local.talos_cp_ip_addresses["talos-cp-m720q-1"]
+  node                 = local.main_virtual_controlplane_node
 }
 
 resource "talos_cluster_kubeconfig" "kubeconfig" {
   depends_on = [talos_machine_bootstrap.bootstrap]
 
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = local.talos_cp_ip_addresses["talos-cp-m720q-1"]
+  node                 = local.main_virtual_controlplane_node
 }
 
 output "talosconfig" {
