@@ -1,0 +1,4 @@
+image:
+  registry: quay.io
+  repository: keycloak/keycloak
+  tag: 26.4.7
