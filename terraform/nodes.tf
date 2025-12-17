@@ -83,7 +83,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp" {
   }
 
   memory {
-    dedicated = strcontains(each.key, "m720q") ? 4096 : 2048
+    dedicated = 4096
   }
 
   agent {
@@ -134,7 +134,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
   }
 
   memory {
-    dedicated = strcontains(each.key, "m720q") ? 4096 : 2048
+    dedicated = 4096
   }
 
   agent {
