@@ -1,4 +1,8 @@
 keycloak:
+  global:
+    security:
+      allowInsecureImages: true
+
   image:
     registry: quay.io
     repository: keycloak/keycloak
