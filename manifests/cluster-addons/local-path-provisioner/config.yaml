@@ -1,3 +1,2 @@
 namespace:
   name: local-path-storage
-  create: false
