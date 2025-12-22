@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: bootstrap
+  name: argocd
   namespace: argocd
 spec:
   destination:
@@ -9,12 +9,16 @@ spec:
     name: admin@homelab
   project: default
   source:
-    path: manifests/bootstrap
+    path: manifests/cluster-addons/argocd
     repoURL: https://github.com/bakseter/homelab.git
     targetRevision: HEAD
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    managedNamespaceMetaData:
+      labels:
+        pod-security.kubernetes.io/enforce: restricted
     syncOptions:
+      - CreateNamespace=true
       - ServerSideApply=true

@@ -1,7 +1,0 @@
-apiVersion: v2
-name: keycloak-umbrella
-version: 0.1.0
-dependencies:
-  - name: keycloak
-    version: 25.2.0
-    repository: https://charts.bitnami.com/bitnami

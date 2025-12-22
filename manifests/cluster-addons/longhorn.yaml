@@ -1,20 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd
+  name: longhorn
   namespace: argocd
 spec:
   destination:
-    namespace: argocd
+    namespace: longhorn-system
     name: admin@homelab
   project: default
   source:
-    path: manifests/bootstrap/argocd
+    path: manifests/cluster-addons/longhorn
     repoURL: https://github.com/bakseter/homelab.git
     targetRevision: HEAD
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    managedNamespaceMetaData:
+      labels:
+        pod-security.kubernetes.io/enforce: privileged
     syncOptions:
+      - CreateNamespace=true
       - ServerSideApply=true
