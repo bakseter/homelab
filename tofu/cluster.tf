@@ -1,4 +1,6 @@
-resource "talos_machine_secrets" "machine_secrets" {}
+resource "talos_machine_secrets" "machine_secrets" {
+  talos_version = local.talos_version
+}
 
 data "talos_client_configuration" "talosconfig" {
   cluster_name         = local.cluster_name

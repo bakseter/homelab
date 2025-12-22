@@ -1,4 +1,6 @@
 longhorn:
+  preUpgradeChecker:
+    jobEnabled: false
   defaultSettings:
     defaultDataPath: /var/lib/longhorn
     createDefaultDiskLabeledNodes: true
