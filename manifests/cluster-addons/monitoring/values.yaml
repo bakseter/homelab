@@ -13,11 +13,10 @@ kube-prometheus-stack:
       storageSpec:
         volumeClaimTemplate:
           spec:
-            storageClassName: local-path
             accessModes: ['ReadWriteOnce']
             resources:
               requests:
-                storage: 10Gi
+                storage: 20Gi
 
 loki:
   loki:
@@ -46,8 +45,6 @@ loki:
 
   minio:
     enabled: true
-    persistence:
-      storageClass: local-path
 
   lokiCanary:
     enabled: true
@@ -63,23 +60,22 @@ loki:
     persistence:
       enableStatefulSetAutoDeletePVC: true
       enabled: true
-      storageClass: local-path
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 1
+        memory: 1Gi
       requests:
         cpu: 50m
         memory: 128Mi
     extraEnv:
       # Keep a little bit lower than memory limits
       - name: GOMEMLIMIT
-        value: 400MiB
+        value: 850MiB
 
   chunksCache:
     enabled: false
     # default is 500MB, with limited memory keep this smaller
-    writebackSizeLimit: 10MB
+    writebackSizeLimit: 25MB
 
   # Zero out replica counts of other deployment modes
   backend:
