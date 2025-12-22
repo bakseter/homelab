@@ -1,4 +1,4 @@
-tailscale:
+tailscale-operator:
   operatorConfig:
     securityContext:
       capabilities:

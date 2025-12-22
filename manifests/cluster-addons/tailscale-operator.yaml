@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: tailscale
+  name: tailscale-operator
   namespace: argocd
 spec:
   destination:
@@ -9,7 +9,7 @@ spec:
     name: admin@homelab
   project: default
   source:
-    path: manifests/cluster-addons/tailscale
+    path: manifests/cluster-addons/tailscale-operator
     repoURL: https://github.com/bakseter/homelab.git
     targetRevision: HEAD
   syncPolicy:
