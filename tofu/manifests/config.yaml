@@ -29,7 +29,6 @@ nodes:
         extraConfigPatches: |-
           machine:
             nodeLabels:
-              node.longhorn.io/storage: "true"
               node.longhorn.io/create-default-disk: "true"
             kubelet:
               extraMounts:
@@ -57,7 +56,6 @@ nodes:
         extraConfigPatches: |-
           machine:
             nodeLabels:
-              node.longhorn.io/storage: "true"
               node.longhorn.io/create-default-disk: "true"
             kubelet:
               extraMounts:
@@ -108,7 +106,6 @@ nodes:
         extraConfigPatches: |-
           machine:
             nodeLabels:
-              node.longhorn.io/storage: "true"
               node.longhorn.io/create-default-disk: "true"
             kubelet:
               extraMounts:

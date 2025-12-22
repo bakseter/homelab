@@ -3,4 +3,4 @@ longhorn:
     jobEnabled: false
   defaultSettings:
     defaultDataPath: /var/lib/longhorn
-    createDefaultDiskLabeledNodes: true
+#   createDefaultDiskLabeledNodes: true
