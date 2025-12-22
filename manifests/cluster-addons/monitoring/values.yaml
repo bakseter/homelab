@@ -268,10 +268,13 @@ alloy:
   configReloader:
     securityContext:
       allowPrivilegeEscalation: false
-      runAsNonRoot: true
       capabilities:
         drop:
           - ALL
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsUser: 65535
+      runAsGroup: 65535
 
 grafana-operator:
   podSecurityContext:
