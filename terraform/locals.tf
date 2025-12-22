@@ -16,5 +16,6 @@ locals {
     [for name, node in local.virtual_controlplane_nodes : node.ip if name == "m720q-controlplane-1"]
   )
 
-  cluster_name = "homelab"
+  cluster_name  = "homelab"
+  talos_version = "v1.12.0"
 }

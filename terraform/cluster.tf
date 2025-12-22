@@ -19,7 +19,7 @@ data "talos_machine_configuration" "machineconfig_controlplane" {
 
 resource "talos_machine_configuration_apply" "controlplane_config_apply" {
   for_each   = local.virtual_controlplane_nodes
-  depends_on = [proxmox_virtual_environment_vm.talos_controlplane]
+  depends_on = [proxmox_virtual_environment_vm.talos-controlplane]
 
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.machineconfig_controlplane[each.key].machine_configuration
@@ -42,7 +42,7 @@ data "talos_machine_configuration" "machineconfig_worker" {
 
 resource "talos_machine_configuration_apply" "worker_config_apply" {
   for_each   = local.virtual_worker_nodes
-  depends_on = [proxmox_virtual_environment_vm.talos_worker]
+  depends_on = [proxmox_virtual_environment_vm.talos-worker]
 
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.machineconfig_worker[each.key].machine_configuration

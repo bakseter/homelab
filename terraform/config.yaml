@@ -16,14 +16,14 @@ nodes:
         cores: 4
         memory: 4
         disk: 25
-        ip: 192.168.1.50
+        ip: 192.168.1.100
 
       - type: worker
         cores: 4
         memory: 4
         disk: 25
         longhornDisk: 200
-        ip: 192.168.1.51
+        ip: 192.168.1.101
         extraConfigPatches: |-
           machine:
             nodeLabels:
@@ -34,7 +34,7 @@ nodes:
         memory: 4
         disk: 25
         longhornDisk: 200
-        ip: 192.168.1.52
+        ip: 192.168.1.102
         extraConfigPatches: |-
           machine:
             nodeLabels:
@@ -50,7 +50,7 @@ nodes:
         cores: 4
         memory: 4
         disk: 25
-        ip: 192.168.1.60
+        ip: 192.168.1.110
         extraConfigPatches: |-
           cluster:
             extraManifests:
@@ -61,14 +61,14 @@ nodes:
         cores: 4
         memory: 4
         disk: 25
-        ip: 192.168.1.61
+        ip: 192.168.1.111
 
       - type: worker
         cores: 4
         memory: 4
         disk: 25
         longhornDisk: 400
-        ip: 192.168.1.62
+        ip: 192.168.1.112
         extraConfigPatches: |-
           machine:
             nodeLabels:

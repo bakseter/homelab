@@ -1,15 +1,39 @@
-resource "proxmox_virtual_environment_download_file" "talos_nocloud_image" {
+data "talos_image_factory_extensions_versions" "talos" {
+  talos_version = local.talos_version
+  filters = {
+    names = [
+      "siderolabs/iscsi-tools",
+      "siderolabs/qemu-guest-agent",
+      "siderolabs/tailscale",
+      "siderolabs/util-linux-tools",
+    ]
+  }
+}
+
+resource "talos_image_factory_schematic" "talos" {
+  schematic = yamlencode(
+    {
+      customization = {
+        systemExtensions = {
+          officialExtensions = data.talos_image_factory_extensions_versions.talos.extensions_info.*.name
+        }
+      }
+    }
+  )
+}
+
+resource "proxmox_virtual_environment_download_file" "talos-nocloud-image" {
   for_each = local.nodes
 
   content_type = "iso"
   datastore_id = "local"
   node_name    = each.key
 
-  url       = "https://factory.talos.dev/image/077514df2c1b6436460bc60faabc976687b16193b8a1290fda4366c69024fec2/v1.11.6/nocloud-amd64.iso"
+  url       = "https://factory.talos.dev/image/${talos_image_factory_schematic.talos.id}/${local.talos_version}/nocloud-amd64.iso"
   overwrite = false
 }
 
-resource "proxmox_virtual_environment_vm" "talos_controlplane" {
+resource "proxmox_virtual_environment_vm" "talos-controlplane" {
   for_each = local.virtual_controlplane_nodes
 
   name          = each.key
@@ -39,7 +63,7 @@ resource "proxmox_virtual_environment_vm" "talos_controlplane" {
   disk {
     datastore_id = "local-lvm"
 
-    file_id     = proxmox_virtual_environment_download_file.talos_nocloud_image[each.value.parent_node].id
+    file_id     = proxmox_virtual_environment_download_file.talos-nocloud-image[each.value.parent_node].id
     file_format = "raw"
 
     interface = "scsi0"
@@ -66,9 +90,9 @@ resource "proxmox_virtual_environment_vm" "talos_controlplane" {
   }
 }
 
-resource "proxmox_virtual_environment_vm" "talos_worker" {
+resource "proxmox_virtual_environment_vm" "talos-worker" {
   for_each   = local.virtual_worker_nodes
-  depends_on = [proxmox_virtual_environment_vm.talos_controlplane]
+  depends_on = [proxmox_virtual_environment_vm.talos-controlplane]
 
   name          = each.key
   description   = "Managed by Terraform"
@@ -97,7 +121,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
   disk {
     datastore_id = "local-lvm"
 
-    file_id     = proxmox_virtual_environment_download_file.talos_nocloud_image[each.value.parent_node].id
+    file_id     = proxmox_virtual_environment_download_file.talos-nocloud-image[each.value.parent_node].id
     file_format = "raw"
 
     interface = "scsi0"
