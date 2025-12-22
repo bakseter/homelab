@@ -57,13 +57,13 @@ loki:
   minio:
     enabled: true
 
-    securityContext:
+    containerSecurityContext:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
           - ALL
 
-    podSecurityContext:
+    securityContext:
       runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
