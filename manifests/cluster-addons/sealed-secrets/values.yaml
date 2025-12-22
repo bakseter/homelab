@@ -1,5 +1,5 @@
 sealed-secrets:
-  podSecurityContext:
+  containerSecurityContext:
     allowPrivilegeEscalation: false
     seccompProfile:
       type: RuntimeDefault
