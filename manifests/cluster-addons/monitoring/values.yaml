@@ -132,7 +132,19 @@ loki:
     replicas: 0
 
 alloy:
+  global:
+    podSecurityContext:
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+
   alloy:
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+
     configMap:
       content: |
         loki.write "default" {
