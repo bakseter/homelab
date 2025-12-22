@@ -7,6 +7,5 @@ tailscale-operator:
           - ALL
 
     podSecurityContext:
-      runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
