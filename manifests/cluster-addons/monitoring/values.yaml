@@ -134,7 +134,6 @@ loki:
 alloy:
   global:
     podSecurityContext:
-      runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
 
@@ -269,6 +268,7 @@ alloy:
   configReloader:
     securityContext:
       allowPrivilegeEscalation: false
+      runAsNonRoot: true
       capabilities:
         drop:
           - ALL
