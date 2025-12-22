@@ -22,7 +22,7 @@ nodes:
         cores: 4
         memory: 4
         disk: 25
-        longhornDisk: 50
+        longhornDisk: 200
         ip: 192.168.1.51
         extraConfigPatches: |-
           machine:
@@ -33,7 +33,7 @@ nodes:
         cores: 4
         memory: 4
         disk: 25
-        longhornDisk: 50
+        longhornDisk: 200
         ip: 192.168.1.52
         extraConfigPatches: |-
           machine:
@@ -67,7 +67,7 @@ nodes:
         cores: 4
         memory: 4
         disk: 25
-        longhornDisk: 30
+        longhornDisk: 400
         ip: 192.168.1.62
         extraConfigPatches: |-
           machine:

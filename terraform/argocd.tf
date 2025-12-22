@@ -18,12 +18,25 @@ resource "helm_release" "argocd" {
   namespace        = "argocd"
 }
 
-locals {
-  root_app_manifest = file("${path.module}/../manifests/bootstrap/bootstrap.yaml")
+resource "null_resource" "argocd-add-cluster" {
+  depends_on = [helm_release.argocd]
+
+  provisioner "local-exec" {
+    command     = "echo \"$SCRIPT\" > /tmp/argocd-add-cluster.sh && chmod +x /tmp/argocd-add-cluster.sh && bash /tmp/argocd-add-cluster.sh"
+    interpreter = ["/bin/bash", "-c"]
+    environment = {
+      KUBECONFIG = base64encode(talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw)
+      SCRIPT     = file("${path.module}/scripts/argocd-add-cluster.sh")
+    }
+  }
 }
 
-resource "null_resource" "kubectl-apply-bootstrap" {
-  depends_on = [helm_release.argocd]
+locals {
+  root_app_manifest = file("${path.module}/../manifests/root.yaml")
+}
+
+resource "null_resource" "kubectl-apply-root" {
+  depends_on = [null_resource.argocd-add-cluster]
 
   triggers = {
     manifest    = local.root_app_manifest
