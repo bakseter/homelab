@@ -2,13 +2,14 @@ kube-prometheus-stack:
   grafana:
     enabled: false
     forceDeployDashboards: true
+
   prometheus:
     prometheusSpec:
-      securityContext:
-        runAsGroup: 0
-        runAsNonRoot: false
-        runAsUser: 0
-        fsGroup: 0
+      #     securityContext:
+      #       runAsGroup: 0
+      #       runAsNonRoot: false
+      #       runAsUser: 0
+      #       fsGroup: 0
       retention: 24h
       storageSpec:
         volumeClaimTemplate:
@@ -67,9 +68,11 @@ loki:
 
   singleBinary:
     replicas: 1
+
     persistence:
       enableStatefulSetAutoDeletePVC: true
       enabled: true
+
     resources:
       limits:
         cpu: 1
@@ -77,6 +80,7 @@ loki:
       requests:
         cpu: 50m
         memory: 128Mi
+
     extraEnv:
       # Keep a little bit lower than memory limits
       - name: GOMEMLIMIT
@@ -86,6 +90,9 @@ loki:
     enabled: false
     # default is 500MB, with limited memory keep this smaller
     writebackSizeLimit: 25MB
+
+  gateway:
+    enabled: false
 
   # Zero out replica counts of other deployment modes
   backend:
@@ -235,3 +242,8 @@ alloy:
             }
           }
         }
+
+grafana-operator:
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
