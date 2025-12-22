@@ -266,6 +266,13 @@ alloy:
           }
         }
 
+  configReloader:
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+
 grafana-operator:
   podSecurityContext:
     seccompProfile:
