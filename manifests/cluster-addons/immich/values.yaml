@@ -1,0 +1,3 @@
+immich:
+  machine-learning:
+    enabled: false
