@@ -1,8 +1,0 @@
-tailscale-operator:
-  operatorConfig:
-    securityContext:
-      allowPrivilegeEscalation: false
-
-    podSecurityContext:
-      seccompProfile:
-        type: RuntimeDefault
