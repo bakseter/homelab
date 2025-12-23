@@ -7,8 +7,9 @@ immich:
   machine-learning:
     enabled: false
 
-  # https://github.com/immich-app/immich-charts/issues/112#issuecomment-3648173277
-  server:
+  valkey:
+    enabled: true
+
     defaultPodOptions:
       securityContext:
         runAsUser: 1000
@@ -16,6 +17,26 @@ immich:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
+
+    controllers:
+      main:
+        defaultContainerOptions:
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+
+  server:
+    enabled: true
+
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+
     controllers:
       main:
         defaultContainerOptions:
