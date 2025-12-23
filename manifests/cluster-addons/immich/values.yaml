@@ -1,3 +1,8 @@
 immich:
+  immich:
+    persistence:
+      library:
+        existingClaim: immich-library
+
   machine-learning:
     enabled: false
