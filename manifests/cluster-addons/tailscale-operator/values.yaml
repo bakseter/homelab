@@ -2,9 +2,6 @@ tailscale-operator:
   operatorConfig:
     securityContext:
       allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
 
     podSecurityContext:
       seccompProfile:
