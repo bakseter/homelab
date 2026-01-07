@@ -4,7 +4,6 @@ data "talos_image_factory_extensions_versions" "talos" {
     names = [
       "siderolabs/iscsi-tools",
       "siderolabs/qemu-guest-agent",
-      "siderolabs/tailscale",
       "siderolabs/util-linux-tools",
     ]
   }
@@ -41,11 +40,12 @@ resource "proxmox_virtual_environment_vm" "talos-controlplane" {
   tags          = ["terraform"]
   node_name     = each.value.parent_node
   on_boot       = true
-  scsi_hardware = "virtio-scsi-single"
+  scsi_hardware = "virtio-scsi"
+  bios          = "ovmf"
 
   cpu {
     cores = each.value.cores
-    type  = "x86-64-v2-AES"
+    type  = "host"
   }
 
   memory {
@@ -58,6 +58,13 @@ resource "proxmox_virtual_environment_vm" "talos-controlplane" {
 
   network_device {
     bridge = "vmbr0"
+  }
+
+  efi_disk {
+    datastore_id = "local-lvm"
+
+    file_format = "raw"
+    type        = "4m"
   }
 
   disk {
@@ -99,11 +106,12 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
   tags          = ["terraform"]
   node_name     = each.value.parent_node
   on_boot       = true
-  scsi_hardware = "virtio-scsi-single"
+  bios          = "ovmf"
+  scsi_hardware = "virtio-scsi"
 
   cpu {
     cores = each.value.cores
-    type  = "x86-64-v2-AES"
+    type  = "host"
   }
 
   memory {
@@ -116,6 +124,14 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
 
   network_device {
     bridge = "vmbr0"
+  }
+
+
+  efi_disk {
+    datastore_id = "local-lvm"
+
+    file_format = "raw"
+    type        = "4m"
   }
 
   disk {

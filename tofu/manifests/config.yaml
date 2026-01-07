@@ -1,30 +1,40 @@
 default:
   configPatches: |-
     machine:
+      network:
+        cni:
+          name: none
       install:
         image: factory.talos.dev/installer/${talos_schematic_id}:${talos_version}
       kubelet:
         extraArgs:
           rotate-server-certificates: true
 
+# TODO: Verify virtualNodes use no more than available resources on physical nodes
+
 nodes:
-  m720q:
+  m720q1:
     cores: 6
     ip: 192.168.1.28
     memory: 32
-    disk: 240
+    disk: 480
     virtualNodes:
       - type: controlplane
-        cores: 2
+        cores: 4
         memory: 4
         disk: 25
         ip: 192.168.1.100
+        extraConfigPatches: |-
+          cluster:
+            extraManifests:
+              - 'https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml'
+              - 'https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml'
 
       - type: worker
-        cores: 4
-        memory: 10
+        cores: 8
+        memory: 20
         disk: 25
-        longhornDisk: 200
+        longhornDisk: 400
         ip: 192.168.1.101
         extraConfigPatches: |-
           machine:
@@ -51,66 +61,24 @@ nodes:
               %{~ endfor ~}
             %{~ endif ~}
 
-      - type: worker
-        cores: 4
-        memory: 10
-        disk: 25
-        longhornDisk: 200
-        ip: 192.168.1.102
-        extraConfigPatches: |-
-          machine:
-            nodeLabels:
-              node.longhorn.io/create-default-disk: "true"
-            disks:
-              - device: /dev/sdb
-                partitions:
-                  - mountpoint: /var/lib/longhorn
-            kubelet:
-              extraMounts:
-                - destination: /var/lib/longhorn
-                  type: bind
-                  source: /var/lib/longhorn
-                  options:
-                    - bind
-                    - rshared
-                    - rw
-            %{~ if length(extension_image_refs) > 0 ~}
-            install:
-              extensions:
-              %{~ for image_ref in extension_image_refs ~}
-                - image: ${image_ref}
-              %{~ endfor ~}
-            %{~ endif ~}
-
-  m715q:
+  m715q1:
     cores: 4
     memory: 16
-    disk: 120
+    disk: 480
     ip: 192.168.1.27
     virtualNodes:
       - type: controlplane
-        cores: 2
-        memory: 4
-        disk: 25
-        ip: 192.168.1.110
-        extraConfigPatches: |-
-          cluster:
-            extraManifests:
-              - 'https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml'
-              - 'https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml'
-
-      - type: controlplane
-        cores: 2
-        memory: 4
-        disk: 25
-        ip: 192.168.1.111
-
-      - type: worker
         cores: 4
         memory: 4
         disk: 25
+        ip: 192.168.1.110
+
+      - type: worker
+        cores: 4
+        memory: 8
+        disk: 25
         longhornDisk: 400
-        ip: 192.168.1.112
+        ip: 192.168.1.111
         extraConfigPatches: |-
           machine:
             nodeLabels:
@@ -135,3 +103,21 @@ nodes:
                 - image: ${image_ref}
               %{~ endfor ~}
             %{~ endif ~}
+
+  m715q2:
+    cores: 4
+    memory: 16
+    disk: 120
+    ip: 192.168.1.29
+    virtualNodes:
+      - type: controlplane
+        cores: 4
+        memory: 4
+        disk: 25
+        ip: 192.168.1.120
+
+      - type: worker
+        cores: 4
+        memory: 8
+        disk: 25
+        ip: 192.168.1.121

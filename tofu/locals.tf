@@ -8,7 +8,7 @@ locals {
       {
         talos_version = local.talos_version,
         # TODO: Find way to not hardcode this value, cannot use output from resource because of for_each
-        talos_schematic_id   = "077514df2c1b6436460bc60faabc976687b16193b8a1290fda4366c69024fec2"
+        talos_schematic_id   = "88d1f7a5c4f1d3aba7df787c448c1d3d008ed29cfb34af53fa0df4336a56040b"
         extension_image_refs = data.talos_image_factory_extensions_versions.talos.extensions_info.*.ref,
       }
     )
