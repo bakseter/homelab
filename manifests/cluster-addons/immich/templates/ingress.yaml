@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: immich-server
   namespace: immich
-  annotations:
-    tailscale.com/funnel: 'true'
 spec:
   ingressClassName: tailscale
   rules:
