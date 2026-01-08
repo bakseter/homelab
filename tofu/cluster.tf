@@ -29,7 +29,19 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
 
   config_patches = compact([
     local.config.default.configPatches,
-    try(each.value.extraConfigPatches, null)
+    try(each.value.extraConfigPatches, null),
+    <<-EOF
+      machine:
+        network:
+          interfaces:
+            - interface: eth0
+              dhcp: false
+              addresses:
+                - ${each.value.ip}/24
+              routes:
+                - network: 0.0.0.0/0
+                  gateway: 192.168.1.1
+    EOF
   ])
 }
 
@@ -51,7 +63,19 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
   node                        = each.value.ip
   config_patches = compact([
     local.config.default.configPatches,
-    try(each.value.extraConfigPatches, null)
+    try(each.value.extraConfigPatches, null),
+    <<-EOF
+      machine:
+        network:
+          interfaces:
+            - interface: eth0
+              dhcp: false
+              addresses:
+                - ${each.value.ip}/24
+              routes:
+                - network: 0.0.0.0/0
+                  gateway: 192.168.1.1
+    EOF
   ])
 }
 

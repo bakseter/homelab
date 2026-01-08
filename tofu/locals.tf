@@ -1,6 +1,6 @@
 locals {
   cluster_name  = "homelab"
-  talos_version = "v1.12.0"
+  talos_version = "v1.12.1"
 
   config = yamldecode(
     templatefile(
@@ -8,7 +8,7 @@ locals {
       {
         talos_version = local.talos_version,
         # TODO: Find way to not hardcode this value, cannot use output from resource because of for_each
-        talos_schematic_id   = "88d1f7a5c4f1d3aba7df787c448c1d3d008ed29cfb34af53fa0df4336a56040b"
+        talos_schematic_id   = "4c4acaf75b4a51d6ec95b38dc8b49fb0af5f699e7fbd12fbf246821c649b5312"
         extension_image_refs = data.talos_image_factory_extensions_versions.talos.extensions_info.*.ref,
       }
     )
@@ -18,7 +18,7 @@ locals {
   virtual_nodes = merge([
     for name, node in local.nodes : {
       for idx, v_node in node.virtualNodes :
-      "${name}-${v_node.type}-${idx + 1}" => merge(v_node, { parent_node = name })
+      v_node.hostname => merge(v_node, { parent_node = name })
     }
   ]...)
 

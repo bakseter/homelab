@@ -13,6 +13,9 @@ resource "talos_image_factory_schematic" "talos" {
   schematic = yamlencode(
     {
       customization = {
+        extraKernelArgs = [
+          "net.ifnames=0",
+        ]
         systemExtensions = {
           officialExtensions = data.talos_image_factory_extensions_versions.talos.extensions_info.*.name
         }
@@ -37,11 +40,10 @@ resource "proxmox_virtual_environment_vm" "talos-controlplane" {
 
   name          = each.key
   description   = "Managed by Terraform"
-  tags          = ["terraform"]
+  tags          = ["terraform", "controlplane"]
   node_name     = each.value.parent_node
   on_boot       = true
-  scsi_hardware = "virtio-scsi"
-  bios          = "ovmf"
+  scsi_hardware = "virtio-scsi-single"
 
   cpu {
     cores = each.value.cores
@@ -58,13 +60,6 @@ resource "proxmox_virtual_environment_vm" "talos-controlplane" {
 
   network_device {
     bridge = "vmbr0"
-  }
-
-  efi_disk {
-    datastore_id = "local-lvm"
-
-    file_format = "raw"
-    type        = "4m"
   }
 
   disk {
@@ -103,11 +98,10 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
 
   name          = each.key
   description   = "Managed by Terraform"
-  tags          = ["terraform"]
+  tags          = ["terraform", "worker"]
   node_name     = each.value.parent_node
   on_boot       = true
-  bios          = "ovmf"
-  scsi_hardware = "virtio-scsi"
+  scsi_hardware = "virtio-scsi-single"
 
   cpu {
     cores = each.value.cores
@@ -126,14 +120,6 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
     bridge = "vmbr0"
   }
 
-
-  efi_disk {
-    datastore_id = "local-lvm"
-
-    file_format = "raw"
-    type        = "4m"
-  }
-
   disk {
     datastore_id = "local-lvm"
 
@@ -148,15 +134,19 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
     iothread = true
   }
 
-  disk {
-    datastore_id = "local-lvm"
+  dynamic "disk" {
+    for_each = try(each.value.longhornDisk, null) != null ? [1] : []
 
-    interface = "scsi1"
-    size      = each.value.longhornDisk
+    content {
+      datastore_id = "local-lvm"
 
-    cache    = "none"
-    discard  = "on"
-    iothread = true
+      interface = "scsi1"
+      size      = each.value.longhornDisk
+
+      cache    = "none"
+      discard  = "on"
+      iothread = true
+    }
   }
 
   operating_system {
