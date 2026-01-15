@@ -7,18 +7,16 @@ provider "helm" {
   }
 }
 
-/*
 resource "helm_release" "cilium" {
-  depends_on = [
-    talos_machine_configuration_apply.worker_config_apply,
-    talos_machine_configuration_apply.controlplane_config_apply,
-  ]
+  depends_on = [talos_machine_bootstrap.bootstrap]
 
   name       = "cilium"
   repository = "https://helm.cilium.io/"
   chart      = "cilium"
+  namespace  = "kube-system"
 
-  namespace = "kube-system"
+  atomic        = true
+  force_update = true
 
   set = [
     {
@@ -52,13 +50,16 @@ resource "helm_release" "cilium" {
     {
       name  = "k8sServicePort"
       value = "7445"
+    },
+    {
+      name  = "socketLB.hostNamespaceOnly"
+      value = "true"
     }
   ]
 }
-*/
 
 resource "helm_release" "argocd" {
-  depends_on = [talos_machine_bootstrap.bootstrap]
+  depends_on = [helm_release.cilium]
 
   name       = "argocd"
   repository = "https://argoproj.github.io/argo-helm"

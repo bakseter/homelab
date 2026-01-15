@@ -13,9 +13,6 @@ resource "talos_image_factory_schematic" "talos" {
   schematic = yamlencode(
     {
       customization = {
-        extraKernelArgs = [
-          "net.ifnames=0",
-        ]
         systemExtensions = {
           officialExtensions = data.talos_image_factory_extensions_versions.talos.extensions_info.*.name
         }

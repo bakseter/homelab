@@ -1,0 +1,17 @@
+machine:
+  network:
+    interfaces:
+      - deviceSelector:
+          busPath: '0*'
+          driver: 'virtio_net'
+        dhcp: false
+        addresses:
+          - ${node_ip}/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.1.1
+        %{~ if node_type == "controlplane" ~}
+        vip:
+          ip: ${vip_ip}
+        %{~ endif ~}
+

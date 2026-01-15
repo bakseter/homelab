@@ -30,24 +30,21 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
   config_patches = compact([
     local.config.default.configPatches,
     try(each.value.extraConfigPatches, null),
-    <<-EOF
-      machine:
-        network:
-          interfaces:
-            - interface: eth0
-              dhcp: false
-              addresses:
-                - ${each.value.ip}/24
-              routes:
-                - network: 0.0.0.0/0
-                  gateway: 192.168.1.1
-    EOF
+    templatefile(
+      "${path.module}/manifests/patches.yaml",
+      {
+        node_ip   = each.value.ip
+        node_type = each.value.type
+        vip_ip    = local.virtual_ip_controlplane
+      }
+    )
   ])
 }
 
 data "talos_machine_configuration" "machineconfig_worker" {
   for_each = local.virtual_worker_nodes
 
+  talos_version    = local.talos_version
   cluster_name     = local.cluster_name
   cluster_endpoint = "https://${local.main_virtual_controlplane_node}:6443"
   machine_type     = "worker"
@@ -61,21 +58,18 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.machineconfig_worker[each.key].machine_configuration
   node                        = each.value.ip
+
   config_patches = compact([
     local.config.default.configPatches,
     try(each.value.extraConfigPatches, null),
-    <<-EOF
-      machine:
-        network:
-          interfaces:
-            - interface: eth0
-              dhcp: false
-              addresses:
-                - ${each.value.ip}/24
-              routes:
-                - network: 0.0.0.0/0
-                  gateway: 192.168.1.1
-    EOF
+    templatefile(
+      "${path.module}/manifests/patches.yaml",
+      {
+        node_ip   = each.value.ip
+        node_type = each.value.type
+        vip_ip    = local.virtual_ip_controlplane
+      }
+    )
   ])
 }
 
