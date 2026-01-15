@@ -12,6 +12,7 @@ keel:
   podSecurityContext:
     runAsUser: 666 # matches the UID inside the container
     runAsGroup: 666 # matches the GID inside the container
+    fsGroup: 666 # matches the GID inside the container
     runAsNonRoot: true
     seccompProfile:
       type: RuntimeDefault
