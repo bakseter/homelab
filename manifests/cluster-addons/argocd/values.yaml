@@ -9,31 +9,31 @@ argo-cd:
       argocd:
         url: https://github.com/bakseter/homelab.git
 
-    params:
-      #server.insecure: false
+    #params:
+    #  server.insecure: false
 
-      #cm:
-      #     admin.enabled: false
-      #     dex.config: |
-      #       connectors:
-      #         - type: authproxy
-      #           id: oauth2-proxy
-      #           name: Proxy
-      #           config:
-      #             userHeader: X-Auth-Request-Email
-      #             groupHeader: X-Auth-Request-Groups
+    #  cm:
+    #     admin.enabled: false
+    #     dex.config: |
+    #       connectors:
+    #         - type: authproxy
+    #           id: oauth2-proxy
+    #           name: Proxy
+    #           config:
+    #             userHeader: X-Auth-Request-Email
+    #             groupHeader: X-Auth-Request-Groups
 
-      #   rbac:
-      #     scopes: '[groups, email]'
-      #     policy.default: ''
-      #     policy.csv: |
-      #       p, role:org-admin, *, get, *, allow
-      #       p, role:org-admin, applications, sync, *, allow
-      #       p, role:org-admin, applicationsets, sync, *, allow
-      #       g, andreas_tkd@hotmail.com, role:org-admin
+    #   rbac:
+    #     scopes: '[groups, email]'
+    #     policy.default: ''
+    #     policy.csv: |
+    #       p, role:org-admin, *, get, *, allow
+    #       p, role:org-admin, applications, sync, *, allow
+    #       p, role:org-admin, applicationsets, sync, *, allow
+    #       g, andreas_tkd@hotmail.com, role:org-admin
 
-      #   dex:
-      #     enabled: true
+    #   dex:
+    #     enabled: true
 
   # notifications:
   #   enabled: false
