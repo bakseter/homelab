@@ -7,14 +7,14 @@ spec:
   podSelector: {}
   policyTypes:
     - Ingress
-    - Egress
+#   - Egress
   ingress:
     - from:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: immich
-  egress:
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: immich
+# egress:
+#   - to:
+#       - namespaceSelector:
+#           matchLabels:
+#             kubernetes.io/metadata.name: immich
