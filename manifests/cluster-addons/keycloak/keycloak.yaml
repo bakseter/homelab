@@ -14,8 +14,8 @@ spec:
     passwordSecret:
       name: keycloak-database-app
       key: password
-  # http:
-  #   tlsSecret: example-tls-secret
+  http:
+    httpEnabled: true
   # hostname:
   #   hostname: test.keycloak.org
   proxy:
