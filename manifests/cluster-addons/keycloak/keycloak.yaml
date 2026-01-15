@@ -19,9 +19,7 @@ spec:
   hostname:
     hostname: keycloak.tail79d70a.ts.net
   ingress:
-    className: tailscale
-    annotations:
-      tailscale.com/funnel: 'true'
+    enabled: false
   proxy:
     headers: xforwarded # double check your reverse proxy sets and overwrites the X-Forwarded-* headers
   unsupported:

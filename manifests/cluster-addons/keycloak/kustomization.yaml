@@ -12,6 +12,7 @@ resources:
   - keycloak.yaml
   - networkpolicy-allow-ingress-same-namespace.yaml
   - networkpolicy-allow-ingress-cnpg.yaml
+  - ingress.yaml
 
 patches:
   - target:
