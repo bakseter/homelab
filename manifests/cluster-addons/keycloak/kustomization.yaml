@@ -15,7 +15,7 @@ patches:
       - op: replace
         path: /spec/template/spec/securityContext
         value:
-          runAnAsNonRoot: true
+          runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
 
@@ -23,6 +23,6 @@ patches:
         path: /spec/template/spec/containers/0/securityContext
         value:
           allowPrivilegeEscalation: false
-          capababilities:
+          capabilities:
             drop:
               - ALL
