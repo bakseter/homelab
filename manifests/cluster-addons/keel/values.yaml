@@ -1,6 +1,6 @@
 keel:
   image:
-    repository: keel-hq/keel
+    repository: keelhq/keel
     tag: 0.20.0 # https://github.com/keel-hq/keel/issues/833
 
   helmProvider:
