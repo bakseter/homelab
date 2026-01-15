@@ -8,5 +8,13 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-  ingress: []
-  egress: []
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: immich
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: immich
