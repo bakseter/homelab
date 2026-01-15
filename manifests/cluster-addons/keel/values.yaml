@@ -1,4 +1,8 @@
 keel:
+  image:
+    repository: keel-hq/keel
+    tag: 0.20.0 # https://github.com/keel-hq/keel/issues/833
+
   helmProvider:
     enabled: false
 
