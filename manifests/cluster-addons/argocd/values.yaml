@@ -1,6 +1,5 @@
 argo-cd:
   global:
-    #   domain: argocd.bakseter.net
     revisionHistoryLimit: 3
     networkPolicy:
       create: true
@@ -11,7 +10,7 @@ argo-cd:
         url: https://github.com/bakseter/homelab.git
 
     params:
-      server.insecure: false
+      #server.insecure: false
 
       #cm:
       #     admin.enabled: false
