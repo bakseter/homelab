@@ -8,7 +8,10 @@ resources:
   - https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/26.5.1/kubernetes/keycloakrealmimports.k8s.keycloak.org-v1.yml
   - https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/26.5.1/kubernetes/kubernetes.yml
   - cluster.yaml
+  - database.yaml
   - keycloak.yaml
+  - networkpolicy-allow-ingress-same-namespace.yaml
+  - networkpolicy-allow-ingress-cnpg.yaml
 
 patches:
   - target:
