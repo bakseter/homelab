@@ -1,6 +1,0 @@
-traefik:
-  service:
-    enabled: false
-  securityContext:
-    seccompProfile:
-      type: RuntimeDefault
