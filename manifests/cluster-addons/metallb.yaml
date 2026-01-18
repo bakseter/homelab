@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    namespace: metallb
+    namespace: metallb-system
     name: admin@homelab
   project: default
   source:
