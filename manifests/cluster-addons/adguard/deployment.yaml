@@ -13,6 +13,12 @@ spec:
       labels:
         app: adguard
     spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: adguard-home
           image: adguard/adguardhome:latest
@@ -22,6 +28,11 @@ spec:
                 configMapKeyRef:
                   name: adguard-config
                   key: AdGuardHome.yaml
+          securityContext:
+            allowPrivilegeEscalation: false
+            capababilities:
+              drop:
+                - ALL
           ports:
             - containerPort: 53
               name: dns
