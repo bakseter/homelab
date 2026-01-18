@@ -30,7 +30,7 @@ spec:
                   key: AdGuardHome.yaml
           securityContext:
             allowPrivilegeEscalation: false
-            capababilities:
+            capabilities:
               drop:
                 - ALL
           ports:
