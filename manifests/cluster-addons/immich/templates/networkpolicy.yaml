@@ -51,6 +51,3 @@ spec:
             matchLabels:
               tailscale.com/parent-resource: immich-server
               tailscale.com/parent-resource-ns: immich
-      ports:
-        - port: 8000
-        - port: 543
