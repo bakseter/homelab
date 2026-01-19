@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: mandagsmiddag
+  namespace: argocd
+spec:
+  description: Mandagsmiddag application
+  destinations:
+    - namespace: mandagsmiddag
+      name: admin@homelab
+  sourceRepos:
+    - https://github.com/bakseter/mandagsmiddag.git
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  namespaceResourceWhiteList:
+    - group: 'apps'
+      kind: Deployment
+
+    - group: ''
+      kind: Service
+
+    - group: ''
+      kind: ConfigMap
+
+    - group: ''
+      kind: Secret
+
+    - group: ''
+      kind: NetworkPolicy
+
+    - group: 'postgresql.cnpg.io'
+      kind: Cluster
+
+    - group: 'networking.k8s.io'
+      kind: Ingress
+
+    - group: 'postgresql.cnpg.io'
+      kind: Cluster
+
+    - group: 'postgresql.cnpg.io'
+      kind: Database
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mandagsmiddag
+  namespace: argocd
+spec:
+  destination:
+    namespace: mandagsmiddag
+    name: admin@homelab
+  project: mandagsmiddag
+  source:
+    path: manifests
+    repoURL: https://github.com/bakseter/mandagsmiddag.git
+    targetRevision: HEAD
+  syncPolicy:
+    # TODO: enable
+    #   automated:
+    #     prune: true
+    #     selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: restricted
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
