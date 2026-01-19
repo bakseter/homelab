@@ -13,7 +13,7 @@ spec:
   clusterResourceWhitelist:
     - group: ''
       kind: Namespace
-  namespaceResourceWhiteList:
+  namespaceResourceWhitelist:
     - group: 'apps'
       kind: Deployment
 
