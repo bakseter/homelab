@@ -10,8 +10,7 @@ resources:
   - cluster.yaml
   - database.yaml
   - keycloak.yaml
-  - networkpolicy-allow-ingress-same-namespace.yaml
-  - networkpolicy-allow-ingress-cnpg.yaml
+  - networkpolicy.yaml
   - ingress.yaml
 
 patches:
