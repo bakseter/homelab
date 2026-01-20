@@ -4,9 +4,9 @@ traefik:
 
   entrypoints:
     funnel:
-      address: ':8000'
+      address: ':9000'
     internal:
-      address: ':8001'
+      address: ':9001'
 
   ports:
     # Disable default entrypoints
@@ -23,16 +23,16 @@ traefik:
     funnel:
       expose:
         default: true
-      port: 8080
-      exposedPort: 8080
+      port: 9000
+      exposedPort: 9000
       protocol: TCP
 
     internal:
       expose:
         default: true
       asDefault: true
-      port: 8081
-      exposedPort: 8081
+      port: 9001
+      exposedPort: 9001
       protocol: TCP
 
   api:
