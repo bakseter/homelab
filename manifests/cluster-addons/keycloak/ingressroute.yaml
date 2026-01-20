@@ -4,8 +4,8 @@ metadata:
   name: keycloak
   namespace: keycloak
 spec:
-  # entryPoints:
-  #   - funnel
+  entryPoints:
+    - funnel
   routes:
     - match: Host(`keycloak.ts.net`)
       kind: Rule
