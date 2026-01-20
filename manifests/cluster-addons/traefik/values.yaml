@@ -8,6 +8,17 @@ traefik:
     internal:
       address: ':8001'
 
+  ports:
+    funnel:
+      port: 8000
+      exposedPort: 8000
+      protocol: TCP
+    internal:
+      asDefault: true
+      port: 8001
+      exposedPort: 8001
+      protocol: TCP
+
   globalArguments:
     - '--entrypoints.internal.address=:8001'
     - '--entrypoints.funnel.address=:8000'
@@ -25,8 +36,3 @@ traefik:
   service:
     enabled: true
     type: ClusterIP
-    ports:
-      funnel:
-        port: 8000
-      internal:
-        port: 8001
