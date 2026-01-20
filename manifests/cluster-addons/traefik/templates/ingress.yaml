@@ -8,8 +8,7 @@ metadata:
 spec:
   ingressClassName: tailscale
   rules:
-    - host: traefik
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
@@ -18,3 +17,6 @@ spec:
                 name: traefik
                 port:
                   name: funnel
+  tls:
+    - hosts:
+        - traefik
