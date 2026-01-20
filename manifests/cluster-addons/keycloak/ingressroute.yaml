@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - funnel
   routes:
-    - match: Host(`keycloak.ts.net`)
+    - match: HostRegexp(`keycloak\..*\.ts\.net`)
       kind: Rule
       #     middlewares:
       #       - name: oauth2-auth
