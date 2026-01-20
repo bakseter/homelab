@@ -1,0 +1,7 @@
+apiVersion: v2
+name: ouath2-proxy-umbrella
+version: 0.1.0
+dependencies:
+  - name: oauth2-proxy
+    version: 10.1.0
+    repository: https://oauth2-proxy.github.io/manifests
