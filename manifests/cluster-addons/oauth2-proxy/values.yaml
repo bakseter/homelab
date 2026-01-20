@@ -3,4 +3,4 @@ oauth2-proxy:
     enabled: true
     className: tailscale
     annotations:
-      tailscale.com/funnel: true
+      tailscale.com/funnel: 'true'
