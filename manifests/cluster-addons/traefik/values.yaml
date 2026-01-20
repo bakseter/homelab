@@ -1,0 +1,32 @@
+traefik:
+  deployment:
+    replicas: 2
+
+  entrypoints:
+    funnel:
+      address: ':8000'
+    internal:
+      address: ':8001'
+
+  globalArguments:
+    - '--entrypoints.internal.address=:8001'
+    - '--entrypoints.funnel.address=:8000'
+
+  api:
+    dashboard: false
+
+  additionalArguments:
+    - '--serversTransport.insecureSkipVerify=true'
+
+  providers:
+    kubernetesCRD:
+      allowCrossNamespace: true
+
+  service:
+    enabled: true
+    type: ClusterIP
+    ports:
+      funnel:
+        port: 8000
+      internal:
+        port: 8001
