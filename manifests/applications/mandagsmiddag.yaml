@@ -49,6 +49,9 @@ spec:
 
     - group: 'postgresql.cnpg.io'
       kind: Database
+
+    - group: 'bitnami.com'
+      kind: SealedSecret
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
