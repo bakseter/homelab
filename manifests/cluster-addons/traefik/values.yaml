@@ -9,19 +9,31 @@ traefik:
       address: ':8001'
 
   ports:
+    # Disable default entrypoints
+    web:
+      expose:
+        default: false
+    websecure:
+      expose:
+        default: false
+    traefik:
+      expose:
+        default: false
+
     funnel:
-      port: 8000
-      exposedPort: 8000
-      protocol: TCP
-    internal:
-      asDefault: true
-      port: 8001
-      exposedPort: 8001
+      expose:
+        default: true
+      port: 8080
+      exposedPort: 8080
       protocol: TCP
 
-  globalArguments:
-    - '--entrypoints.internal.address=:8001'
-    - '--entrypoints.funnel.address=:8000'
+    internal:
+      expose:
+        default: true
+      asDefault: true
+      port: 8081
+      exposedPort: 8081
+      protocol: TCP
 
   api:
     dashboard: false
