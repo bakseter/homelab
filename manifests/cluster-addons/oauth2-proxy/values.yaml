@@ -4,3 +4,6 @@ oauth2-proxy:
     className: tailscale
     annotations:
       tailscale.com/funnel: 'true'
+    tls:
+      - hosts:
+          - oauth2-proxy
