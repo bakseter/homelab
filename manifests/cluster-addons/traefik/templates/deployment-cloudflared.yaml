@@ -3,15 +3,17 @@ kind: Deployment
 metadata:
   name: cloudflared-deployment
   namespace: traefik
+  labels:
+    app: cloudflared
 spec:
   replicas: 1
   selector:
     matchLabels:
-      pod: cloudflared
+      app: cloudflared
   template:
     metadata:
       labels:
-        pod: cloudflared
+        app: cloudflared
     spec:
       securityContext:
         runAsNonRoot: true
