@@ -10,6 +10,8 @@ public:
     redirect-url: https://auth.bakseter.net/oauth2/callback
     cookie-csrf-per-request: true
     cookie-domain: .bakseter.net
+    cookie-secure: true
+    cookie-samesite: none
     whitelist-domain: .bakseter.net
     silence-ping-logging: true
     skip-provider-button: true
@@ -33,8 +35,8 @@ private:
     code-challenge-method: S256
     redirect-url: https://auth.tail79d70a.ts.net/oauth2/callback
     cookie-csrf-per-request: true
-    #   cookie-domain: .ts.net
-    #   whitelist-domain: .ts.net
+    cookie-secure: true
+    cookie-samesite: none
     silence-ping-logging: true
     skip-provider-button: true
     reverse-proxy: true
