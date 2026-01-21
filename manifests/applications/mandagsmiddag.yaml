@@ -41,8 +41,8 @@ spec:
     - group: 'postgresql.cnpg.io'
       kind: Cluster
 
-    - group: 'networking.k8s.io'
-      kind: Ingress
+    - group: 'traefik.io'
+      kind: IngressRoute
 
     - group: 'postgresql.cnpg.io'
       kind: Cluster
