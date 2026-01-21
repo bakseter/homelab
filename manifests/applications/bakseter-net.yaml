@@ -1,0 +1,59 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: bakseter-net
+  namespace: argocd
+spec:
+  description: bakseter.net application
+  destinations:
+    - namespace: bakseter-net
+      name: admin@homelab
+  sourceRepos:
+    - https://github.com/bakseter/bakseter.net.git
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: 'apps'
+      kind: Deployment
+
+    - group: 'apps'
+      kind: ReplicaSet
+
+    - group: ''
+      kind: Pod
+
+    - group: ''
+      kind: Service
+
+    - group: ''
+      kind: NetworkPolicy
+
+    - group: 'traefik.io'
+      kind: IngressRoute
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bakseter-net
+  namespace: argocd
+spec:
+  destination:
+    namespace: bakseter-net
+    name: admin@homelab
+  project: bakseter-net
+  source:
+    path: manifests
+    repoURL: https://github.com/bakseter/bakseter.net.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: restricted
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
