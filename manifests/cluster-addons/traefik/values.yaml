@@ -14,14 +14,42 @@ traefik:
       cpu: '300m'
       memory: '300Mi'
 
-  ports:
-    web:
-      asDefault: true
+  entryPoints:
+    public:
+      address: ':9000'
+    private:
+      address: ':9001'
 
-    websecure:
-      asDefault: false
+  ports:
+    # Disable default entrypoints
+    web:
       expose:
         default: false
+    websecure:
+      expose:
+        default: false
+    traefik:
+      expose:
+        default: false
+
+    public: # Cloudflare Tunnel
+      expose:
+        default: true
+      port: 9000
+      exposedPort: 9000
+
+    private: # Tailscale (not funnel)
+      asDefault: true
+      expose:
+        default: true
+      port: 9001
+      exposedPort: 9001
+
+  api:
+    dashboard: false
+
+  additionalArguments:
+    - '--serversTransport.insecureSkipVerify=true'
 
   logs:
     access:

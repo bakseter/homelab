@@ -1,6 +1,6 @@
 argo-cd:
   global:
-    revisionHistoryLimit: 3
+    revisionHistoryLimit: 5
     networkPolicy:
       create: true
 
