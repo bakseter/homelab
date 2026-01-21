@@ -17,7 +17,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: oauth2-proxy-private
-  namespace: oauth2-proxy
+  namespace: traefik
 spec:
   ingressClassName: tailscale
   rules:
@@ -25,9 +25,9 @@ spec:
         paths:
           - backend:
               service:
-                name: oauth2-proxy-private
+                name: traefik
                 port:
-                  number: 80
+                  name: private
             path: /
             pathType: Prefix
   tls:
