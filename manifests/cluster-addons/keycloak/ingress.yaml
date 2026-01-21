@@ -3,10 +3,8 @@ kind: Ingress
 metadata:
   name: keycloak
   namespace: keycloak
-  annotations:
-    tailscale.com/funnel: 'true'
 spec:
-  ingressClassName: tailscale
+  ingressClassName: traefik
   rules:
     - http:
         paths:
@@ -19,4 +17,4 @@ spec:
                   name: http
   tls:
     - hosts:
-        - keycloak
+        - keycloak.bakseter.net
