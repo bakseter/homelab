@@ -1,4 +1,4 @@
-oauth2-proxy-public:
+public:
   config:
     existingSecret: google-credentials
 
@@ -22,7 +22,7 @@ oauth2-proxy-public:
   ingress:
     enabled: false
 
-oauth2-proxy-private:
+private:
   config:
     existingSecret: google-credentials
 
