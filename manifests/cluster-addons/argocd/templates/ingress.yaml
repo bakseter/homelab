@@ -1,24 +1,3 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: argocd-server
-  namespace: argocd
-spec:
-  ingressClassName: tailscale
-  rules:
-    - http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: traefik
-                port:
-                  name: internal
-  tls:
-    - hosts:
-        - argocd
----
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -26,10 +5,10 @@ metadata:
   namespace: argocd
 spec:
   entryPoints:
-    - private
+    - public
   routes:
     - kind: Rule
-      match: HostRegexp(`^argocd\..*\.ts\.net$`)
+      match: Host(`argocd.bakseter.net`)
       priority: 10
       services:
         - name: argocd-server
@@ -38,7 +17,7 @@ spec:
         - name: forwardauth
           namespace: oauth2-proxy
     - kind: Rule
-      match: HostRegexp(`^argocd\..*\.ts\.net$`) && Header(`Content-Type`, `application/grpc`)
+      match: Host(`argocd.bakseter.net`) && Header(`Content-Type`, `application/grpc`)
       priority: 11
       services:
         - name: argocd-server
