@@ -17,7 +17,7 @@ spec:
   http:
     httpEnabled: true
   hostname:
-    hostname: keycloak.tail79d70a.ts.net
+    hostname: keycloak.bakseter.net
   ingress:
     enabled: false
   proxy:
