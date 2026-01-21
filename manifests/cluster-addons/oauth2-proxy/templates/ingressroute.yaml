@@ -5,13 +5,34 @@ metadata:
   namespace: oauth2-proxy
 spec:
   entryPoints:
-    - private
+    - public
   routes:
     - kind: Rule
       match: Host(`auth.bakseter.net`)
       services:
-        - name: oauth2-proxy
+        - name: oauth2-proxy-public
           port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: oauth2-proxy-private
+  namespace: oauth2-proxy
+spec:
+  ingressClassName: tailscale
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: oauth2-proxy-private
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - auth
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
@@ -23,7 +44,7 @@ spec:
     - private
   routes:
     - kind: Rule
-      match: Host(`auth.tail79d70a.ts.net`)
+      match: HostRegexp(`^auth\..*\.ts\.net$`)
       services:
         - name: oauth2-proxy-private
           port: 80

@@ -1,7 +1,7 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: argocd-server
+  name: argocd-server-public
   namespace: argocd
 spec:
   entryPoints:
@@ -14,9 +14,9 @@ spec:
         - name: argocd-server
           port: 80
       middlewares:
-        - name: forwardauth
+        - name: forwardauth-public
           namespace: oauth2-proxy
-        - name: errors
+        - name: errors-public
           namespace: oauth2-proxy
     - kind: Rule
       match: Host(`argocd.bakseter.net`) && Header(`Content-Type`, `application/grpc`)
@@ -29,7 +29,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: argocd-server
+  name: argocd-server-private
   namespace: traefik
 spec:
   ingressClassName: tailscale
@@ -40,9 +40,37 @@ spec:
               service:
                 name: traefik
                 port:
-                  name: internal
+                  name: private
             path: /
             pathType: Prefix
   tls:
     - hosts:
         - argocd
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd-server-private
+  namespace: argocd
+spec:
+  entryPoints:
+    - private
+  routes:
+    - kind: Rule
+      match: HostRegexp(`^argocd\..*\.ts\.net$`)
+      priority: 10
+      services:
+        - name: argocd-server
+          port: 80
+      middlewares:
+        - name: forwardauth-private
+          namespace: oauth2-proxy
+        - name: errors-private
+          namespace: oauth2-proxy
+    - kind: Rule
+      match: HostRegexp(`^argocd\..*\.ts\.net$`) && Header(`Content-Type`, `application/grpc`)
+      priority: 11
+      services:
+        - name: argocd-server
+          port: 80
+          scheme: h2c
