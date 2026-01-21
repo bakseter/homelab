@@ -13,3 +13,12 @@ traefik:
     limits:
       cpu: '300m'
       memory: '300Mi'
+
+  ports:
+    web:
+      asDefault: true
+
+    websecure:
+      asDefault: false
+      expose:
+        default: false
