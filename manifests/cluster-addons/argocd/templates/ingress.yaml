@@ -18,6 +18,7 @@ spec:
           namespace: oauth2-proxy
         - name: errors-public
           namespace: oauth2-proxy
+
     - kind: Rule
       match: Host(`argocd.bakseter.net`) && Header(`Content-Type`, `application/grpc`)
       priority: 11
@@ -56,8 +57,14 @@ spec:
   entryPoints:
     - private
   routes:
+    - match: Host(`argocd.tail79d70a.ts.net`) && PathPrefix(`/oauth2`)
+      kind: Rule
+      services:
+        - name: oauth2-proxy-private
+          port: 4180
+
     - kind: Rule
-      match: HostRegexp(`^argocd\..*\.ts\.net$`)
+      match: Host(`argocd.tail79d70a.ts.net`)
       priority: 10
       services:
         - name: argocd-server
@@ -67,8 +74,9 @@ spec:
           namespace: oauth2-proxy
         - name: errors-private
           namespace: oauth2-proxy
+
     - kind: Rule
-      match: HostRegexp(`^argocd\..*\.ts\.net$`) && Header(`Content-Type`, `application/grpc`)
+      match: Host(`argocd.tail79d70a.ts.net`) && Header(`Content-Type`, `application/grpc`)
       priority: 11
       services:
         - name: argocd-server
