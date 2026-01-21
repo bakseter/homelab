@@ -26,7 +26,7 @@ spec:
     - group: ''
       kind: Service
 
-    - group: ''
+    - group: 'networking.k8s.io'
       kind: NetworkPolicy
 
     - group: 'traefik.io'
