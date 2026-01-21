@@ -15,7 +15,7 @@ argo-cd:
     cm:
       url: https://argocd.bakseter.net
       additionalUrls: |
-        http://argocd.tail79d70a.ts.net
+        https://argocd.tail79d70a.ts.net
 
       admin.enabled: false
       dex.config: |
