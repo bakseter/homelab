@@ -6,7 +6,8 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - http:
+    - host: keycloak.bakseter.net
+      http:
         paths:
           - path: /
             pathType: Prefix
@@ -15,6 +16,3 @@ spec:
                 name: keycloak-service
                 port:
                   name: http
-  tls:
-    - hosts:
-        - keycloak.bakseter.net
