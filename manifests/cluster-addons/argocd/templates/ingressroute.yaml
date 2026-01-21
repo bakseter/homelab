@@ -1,0 +1,25 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd-server
+  namespace: argocd
+spec:
+  entrypoints:
+    - private
+  routes:
+    - kind: Rule
+      match: Host(`argocd.tail79d70a.ts.net`)
+      priority: 10
+      services:
+        - name: argocd-server
+          port: 80
+      middlewares:
+        - name: forwardauth
+          namespace: oauth2-proxy
+    - kind: Rule
+      match: Host(`argocd.tail79d70a.ts.net`) && Header(`Content-Type`, `application/grpc`)
+      priority: 11
+      services:
+        - name: argocd-server
+          port: 80
+          scheme: h2c
