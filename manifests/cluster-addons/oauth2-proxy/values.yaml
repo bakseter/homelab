@@ -1,0 +1,26 @@
+oauth2-proxy:
+  config:
+    existingSecret: google-credentials
+
+  extraArgs:
+    provider: google
+    oidc-issuer-url: https://accounts.google.com
+    http-address: 0.0.0.0:4180
+    code-challenge-method: S256
+    redirect-url: https://auth.bakseter.net/oauth2/callback
+    cookie-csrf-per-request: true
+    cookie-domain: .bakseter.net
+    whitelist-domain: .bakseter.net
+    silence-ping-logging: true
+    skip-provider-button: true
+    reverse-proxy: true
+    real-client-ip-header: X-Forwarded-For
+    upstream: static://200
+    email-domain: '*'
+    set-xauthrequest: true
+
+  ingress:
+    enabled: true
+    className: traefik
+    hosts:
+      - auth.bakseter.net
