@@ -1,0 +1,29 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: oauth2-proxy-public
+  namespace: oauth2-proxy
+spec:
+  entryPoints:
+    - private
+  routes:
+    - kind: Rule
+      match: Host(`auth.bakseter.net`)
+      services:
+        - name: oauth2-proxy
+          port: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: oauth2-proxy-private
+  namespace: oauth2-proxy
+spec:
+  entryPoints:
+    - private
+  routes:
+    - kind: Rule
+      match: Host(`auth.tail79d70a.ts.net`)
+      services:
+        - name: oauth2-proxy-private
+          port: 80
