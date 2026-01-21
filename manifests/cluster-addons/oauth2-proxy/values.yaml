@@ -20,7 +20,4 @@ oauth2-proxy:
     set-xauthrequest: true
 
   ingress:
-    enabled: true
-    className: traefik
-    hosts:
-      - auth.bakseter.net
+    enabled: false

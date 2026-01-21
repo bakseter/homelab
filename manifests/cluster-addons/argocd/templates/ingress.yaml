@@ -16,6 +16,8 @@ spec:
       middlewares:
         - name: forwardauth
           namespace: oauth2-proxy
+        - name: errors
+          namespace: oauth2-proxy
     - kind: Rule
       match: Host(`argocd.bakseter.net`) && Header(`Content-Type`, `application/grpc`)
       priority: 11
