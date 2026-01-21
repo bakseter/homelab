@@ -22,3 +22,7 @@ traefik:
       asDefault: false
       expose:
         default: false
+
+  logs:
+    access:
+      enabled: true
