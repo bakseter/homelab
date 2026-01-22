@@ -7,6 +7,17 @@ public:
 
   replicaCount: 2
 
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - public
+          topologyKey: 'bakseter.net/physical-node'
+
   extraArgs:
     provider: google
     oidc-issuer-url: https://accounts.google.com
@@ -35,6 +46,17 @@ private:
     enabled: false
 
   replicaCount: 2
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - private
+          topologyKey: 'bakseter.net/physical-node'
 
   extraArgs:
     provider: google
