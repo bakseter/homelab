@@ -3,5 +3,5 @@ name: tailscale-operator-umbrella
 version: 0.1.0
 dependencies:
   - name: tailscale-operator
-    version: 1.92.4
+    version: 1.92.5
     repository: https://pkgs.tailscale.com/helmcharts
