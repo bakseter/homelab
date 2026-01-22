@@ -9,76 +9,62 @@ spec:
   routes:
     - kind: Rule
       match: Host(`argocd.bakseter.net`)
-      priority: 10
       services:
-        - name: argocd-server
-          port: 80
-      middlewares:
-        - name: forwardauth-public
-          namespace: oauth2-proxy
-        - name: errors-public
-          namespace: oauth2-proxy
-
-    - kind: Rule
-      match: Host(`argocd.bakseter.net`) && Header(`Content-Type`, `application/grpc`)
-      priority: 11
-      services:
-        - name: argocd-server
-          port: 80
-          scheme: h2c
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: argocd-server-private
-  namespace: traefik
-spec:
-  ingressClassName: tailscale
-  rules:
-    - http:
-        paths:
-          - backend:
-              service:
-                name: traefik
-                port:
-                  name: private
-            path: /
-            pathType: Prefix
-  tls:
-    - hosts:
-        - argocd
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: argocd-server-private
-  namespace: argocd
-spec:
-  entryPoints:
-    - private
-  routes:
-    - match: Host(`argocd.tail79d70a.ts.net`) && PathPrefix(`/oauth2`)
-      kind: Rule
-      services:
-        - name: oauth2-proxy-private
+        - name: oauth2-proxy
           port: 4180
-
-    - kind: Rule
-      match: Host(`argocd.tail79d70a.ts.net`)
-      priority: 10
-      services:
-        - name: argocd-server
-          port: 80
-      middlewares:
-        - name: forwardauth-private
-          namespace: oauth2-proxy
-        - name: errors-private
-          namespace: oauth2-proxy
-
-    - kind: Rule
-      match: Host(`argocd.tail79d70a.ts.net`) && Header(`Content-Type`, `application/grpc`)
-      priority: 11
-      services:
-        - name: argocd-server
-          port: 80
-          scheme: h2c
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: argocd-server-private
+#  namespace: traefik
+#spec:
+#  ingressClassName: tailscale
+#  rules:
+#    - http:
+#        paths:
+#          - backend:
+#              service:
+#                name: traefik
+#                port:
+#                  name: private
+#            path: /
+#            pathType: Prefix
+#  tls:
+#    - hosts:
+#        - argocd
+#---
+#apiVersion: traefik.io/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: argocd-server-private
+#  namespace: argocd
+#spec:
+#  entryPoints:
+#    - private
+#  routes:
+#    - match: Host(`argocd.tail79d70a.ts.net`) && PathPrefix(`/oauth2`)
+#      kind: Rule
+#      services:
+#        - name: oauth2-proxy-private
+#          port: 4180
+#
+#    - kind: Rule
+#      match: Host(`argocd.tail79d70a.ts.net`)
+#      priority: 10
+#      services:
+#        - name: argocd-server
+#          port: 80
+#      middlewares:
+#        - name: forwardauth-private
+#          namespace: oauth2-proxy
+#        - name: errors-private
+#          namespace: oauth2-proxy
+#
+#    - kind: Rule
+#      match: Host(`argocd.tail79d70a.ts.net`) && Header(`Content-Type`, `application/grpc`)
+#      priority: 11
+#      services:
+#        - name: argocd-server
+#          port: 80
+#          scheme: h2c
