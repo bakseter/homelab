@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cloudflared-deployment
-  namespace: traefik
+  namespace: cloudflared
   labels:
     app: cloudflared
 spec:
@@ -32,6 +32,8 @@ spec:
         fsGroup: 65534
         seccompProfile:
           type: RuntimeDefault
+        supplementalGroups:
+          - 65534
         sysctls:
           # Allows ICMP traffic (ping, traceroute) to resources behind cloudflared.
           - name: net.ipv4.ping_group_range
@@ -44,7 +46,7 @@ spec:
             - name: TUNNEL_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: cloudflare-tunnel-token
+                  name: tunnel-token
                   key: token
           command:
             # Configures tunnel run parameters
