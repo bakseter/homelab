@@ -17,8 +17,6 @@ traefik:
   entryPoints:
     public:
       address: ':9000'
-    private:
-      address: ':9001'
 
   ports:
     # Disable default entrypoints
@@ -37,13 +35,6 @@ traefik:
         default: true
       port: 9000
       exposedPort: 9000
-
-    private: # Tailscale (not funnel)
-      asDefault: true
-      expose:
-        default: true
-      port: 9001
-      exposedPort: 9001
 
   api:
     dashboard: false

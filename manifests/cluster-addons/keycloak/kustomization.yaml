@@ -11,7 +11,7 @@ resources:
   - database.yaml
   - keycloak.yaml
   - networkpolicy.yaml
-  - ingress.yaml
+  - ingressroute.yaml
 
 patches:
   - target:

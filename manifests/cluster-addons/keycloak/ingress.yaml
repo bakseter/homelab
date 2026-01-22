@@ -4,6 +4,7 @@ metadata:
   name: keycloak
   namespace: keycloak
 spec:
+
   ingressClassName: traefik
   rules:
     - host: keycloak.bakseter.net
