@@ -1,6 +1,11 @@
-global:
+public:
   config:
     existingSecret: google-credentials
+
+  ingress:
+    enabled: false
+
+  replicaCount: 2
 
   extraArgs:
     provider: google
@@ -18,17 +23,33 @@ global:
     email-domain: '*'
     set-xauthrequest: true
 
-  ingress:
-    enabled: false
-
-  replicaCount: 2
-
-public:
-  extraArgs:
     redirect-url: https://auth.bakseter.net/oauth2/callback
     cookie-domain: .bakseter.net
     whitelist-domain: .bakseter.net
 
 private:
+  config:
+    existingSecret: google-credentials
+
+  ingress:
+    enabled: false
+
+  replicaCount: 2
+
   extraArgs:
+    provider: google
+    oidc-issuer-url: https://accounts.google.com
+    http-address: 0.0.0.0:4180
+    code-challenge-method: S256
+    cookie-csrf-per-request: true
+    cookie-secure: true
+    cookie-samesite: none
+    silence-ping-logging: true
+    skip-provider-button: true
+    reverse-proxy: true
+    real-client-ip-header: X-Forwarded-For
+    upstream: static://200
+    email-domain: '*'
+    set-xauthrequest: true
+
     redirect-url: https://auth.tail79d70a.ts.net/oauth2/callback
