@@ -16,7 +16,7 @@ public:
                 operator: In
                 values:
                   - public
-          topologyKey: 'bakseter.net/physical-node'
+          topologyKey: bakseter.net/physical-node
 
   extraArgs:
     provider: google
@@ -56,7 +56,7 @@ private:
                 operator: In
                 values:
                   - private
-          topologyKey: 'bakseter.net/physical-node'
+          topologyKey: bakseter.net/physical-node
 
   extraArgs:
     provider: google

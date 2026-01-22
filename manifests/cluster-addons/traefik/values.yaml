@@ -1,6 +1,6 @@
 traefik:
   deployment:
-    replicas: 1
+    replicas: 2
 
   providers:
     kubernetesCRD:
@@ -54,3 +54,11 @@ traefik:
   logs:
     access:
       enabled: true
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+          topologyKey: bakseter.net/physical-node
