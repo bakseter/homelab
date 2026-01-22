@@ -13,19 +13,16 @@ argo-cd:
       server.insecure: true
 
     cm:
-      url: https://argocd.bakseter.net
-      additionalUrls: |
-        https://argocd.tail79d70a.ts.net
+      url: https://argocd.tail79d70a.ts.net
 
       admin.enabled: false
       dex.config: |
         connectors:
           - type: authproxy
-            id: oauth2-proxy
+            id: tailscale
             name: Proxy
             config:
-              userHeader: X-Auth-Request-Email
-              groupHeader: X-Auth-Request-Groups
+              userHeader: Tailscale-User-Login
 
     rbac:
       scopes: '[groups, email]'
@@ -34,7 +31,7 @@ argo-cd:
         p, role:org-admin, *, get, *, allow
         p, role:org-admin, applications, sync, *, allow
         p, role:org-admin, applicationsets, sync, *, allow
-        g, andreas_tkd@hotmail.com, role:org-admin
+        g, bakseter@github, role:org-admin
 
     dex:
       enabled: true
@@ -59,43 +56,3 @@ argo-cd:
 
   applicationSet:
     replicas: 2
-
-oauth2-proxy:
-  config:
-    existingSecret: google-credentials
-
-  ingress:
-    enabled: false
-
-  replicaCount: 2
-
-  affinity:
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchExpressions:
-              - key: app
-                operator: In
-                values:
-                  - public
-          topologyKey: bakseter.net/physical-node
-
-  extraArgs:
-    provider: google
-    oidc-issuer-url: https://accounts.google.com
-    http-address: 0.0.0.0:4180
-    code-challenge-method: S256
-    cookie-csrf-per-request: true
-    cookie-secure: true
-    cookie-samesite: none
-    silence-ping-logging: true
-    skip-provider-button: true
-    #reverse-proxy: true
-    real-client-ip-header: X-Forwarded-For
-    email-domain: '*'
-    set-xauthrequest: true
-
-    upstream: http://argocd-server.argocd.svc.cluster.local:80
-    redirect-url: https://argocd.tail79d70a.ts.net/oauth2/callback
-    #cookie-domain: .bakseter.net
-    #whitelist-domain: .bakseter.net
