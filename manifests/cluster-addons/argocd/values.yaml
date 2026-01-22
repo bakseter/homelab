@@ -42,7 +42,20 @@ argo-cd:
   notifications:
     enabled: false
 
+  redis-ha:
+    enabled: true
+
   controller:
+    replicas: 1
     env:
       - name: ARGOCD_APPLICATION_TREE_SHARD_SIZE
         value: '50'
+
+  server:
+    replicas: 2
+
+  repoServer:
+    replicas: 2
+
+  applicationSet:
+    replicas: 2
