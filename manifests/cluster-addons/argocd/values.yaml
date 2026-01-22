@@ -96,6 +96,6 @@ oauth2-proxy:
     set-xauthrequest: true
 
     upstream: http://argocd-server.argocd.svc.cluster.local:80
-    redirect-url: https://argocd.bakseter.net/oauth2/callback
-    cookie-domain: .bakseter.net
-    whitelist-domain: .bakseter.net
+    redirect-url: https://argocd.tail79d70a.ts.net/oauth2/callback
+    #cookie-domain: .bakseter.net
+    #whitelist-domain: .bakseter.net

@@ -1,70 +1,35 @@
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
+#apiVersion: traefik.io/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: argocd-oauth2-proxy
+#  namespace: argocd
+#spec:
+#  entryPoints:
+#    - public
+#  routes:
+#    - kind: Rule
+#      match: Host(`argocd.bakseter.net`)
+#      services:
+#        - name: argocd-oauth2-proxy
+#          port: 80
+#---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: argocd-oauth2-proxy
   namespace: argocd
 spec:
-  entryPoints:
-    - public
-  routes:
-    - kind: Rule
-      match: Host(`argocd.bakseter.net`)
-      services:
-        - name: argocd-oauth2-proxy
-          port: 80
-#---
-#apiVersion: networking.k8s.io/v1
-#kind: Ingress
-#metadata:
-#  name: argocd-server-private
-#  namespace: traefik
-#spec:
-#  ingressClassName: tailscale
-#  rules:
-#    - http:
-#        paths:
-#          - backend:
-#              service:
-#                name: traefik
-#                port:
-#                  name: private
-#            path: /
-#            pathType: Prefix
-#  tls:
-#    - hosts:
-#        - argocd
-#---
-#apiVersion: traefik.io/v1alpha1
-#kind: IngressRoute
-#metadata:
-#  name: argocd-server-private
-#  namespace: argocd
-#spec:
-#  entryPoints:
-#    - private
-#  routes:
-#    - match: Host(`argocd.tail79d70a.ts.net`) && PathPrefix(`/oauth2`)
-#      kind: Rule
-#      services:
-#        - name: oauth2-proxy-private
-#          port: 4180
-#
-#    - kind: Rule
-#      match: Host(`argocd.tail79d70a.ts.net`)
-#      priority: 10
-#      services:
-#        - name: argocd-server
-#          port: 80
-#      middlewares:
-#        - name: forwardauth-private
-#          namespace: oauth2-proxy
-#        - name: errors-private
-#          namespace: oauth2-proxy
-#
-#    - kind: Rule
-#      match: Host(`argocd.tail79d70a.ts.net`) && Header(`Content-Type`, `application/grpc`)
-#      priority: 11
-#      services:
-#        - name: argocd-server
-#          port: 80
-#          scheme: h2c
+  ingressClassName: tailscale
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: argocd-oauth2-proxy
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - argocd
