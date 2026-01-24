@@ -5,10 +5,12 @@ longhorn:
   defaultSettings:
     defaultDataPath: /var/lib/longhorn
     #createDefaultDiskLabeledNodes: true
+    snapshotDataIntegrity: enabled
 
   defaultBackupStore:
     backupTarget: s3://bakseter-homelab-longhorn@hel1/
     backupTargetCredentialSecret: longhorn-backup-secret
+    pollInterval: 600
 
   networkPolicies:
     enabled: true
