@@ -44,9 +44,6 @@ argo-cd:
 
   controller:
     replicas: 1
-    env:
-      - name: ARGOCD_APPLICATION_TREE_SHARD_SIZE
-        value: '50'
 
   server:
     replicas: 2
