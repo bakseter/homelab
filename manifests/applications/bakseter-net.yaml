@@ -31,7 +31,6 @@ spec:
 
     - group: 'traefik.io'
       kind: IngressRoute
-
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
