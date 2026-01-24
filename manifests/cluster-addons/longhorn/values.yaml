@@ -7,7 +7,7 @@ longhorn:
     #createDefaultDiskLabeledNodes: true
 
   defaultBackupStore:
-    backupTarget: hel1.your-objectstorage.com
+    backupTarget: s3://bakseter-homelab-longhorn@hel1/
     backupTargetCredentialSecret: longhorn-backup-secret
 
   networkPolicies:
