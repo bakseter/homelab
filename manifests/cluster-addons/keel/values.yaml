@@ -1,7 +1,8 @@
 keel:
   image:
-    repository: keelhq/keel
-    tag: 0.20.0 # https://github.com/keel-hq/keel/issues/833
+    # TODO: Replace with upstream when keel fixes their shit
+    repository: ghcr.io/bakseter/keel/keel
+    tag: latest
 
   helmProvider:
     enabled: false
