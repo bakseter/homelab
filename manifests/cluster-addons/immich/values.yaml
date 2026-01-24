@@ -31,6 +31,17 @@ immich:
     enabled: true
 
     defaultPodOptions:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - server
+              topologyKey: bakseter.net/physical-node
+
       securityContext:
         fsGroup: 65534
         runAsUser: 65534
@@ -41,6 +52,8 @@ immich:
 
     controllers:
       main:
+        replicas: 2
+
         defaultContainerOptions:
           securityContext:
             allowPrivilegeEscalation: false
