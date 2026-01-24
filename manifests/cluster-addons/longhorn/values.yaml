@@ -8,3 +8,10 @@ longhorn:
 
   networkPolicies:
     enabled: true
+
+  ingress:
+    enabled: true
+    ingressClassName: tailscale
+    tls:
+      - hosts:
+          - longhorn
