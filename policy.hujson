@@ -1,0 +1,36 @@
+{
+	"acls": [
+		{"action": "accept", "src": ["*"], "dst": ["*:*"]}
+	],
+
+	"grants": [
+		{
+			"src": ["group:prod"],
+			"dst": ["tag:k8s-operator"],
+			"app": {
+				"tailscale.com/cap/kubernetes": [{
+					"impersonate": {
+						"groups": ["system:masters"]
+					}
+				}]
+			}
+		}
+	],
+
+    "groups": {
+        "group:prod": [
+            "bakseter@github"
+        ]
+    },
+
+	"nodeAttrs": [
+		{
+			"target": ["tag:k8s"]
+		}
+	],
+
+	"tagOwners": {
+		"tag:k8s-operator": [],
+		"tag:k8s":          ["tag:k8s-operator"]
+	}
+}

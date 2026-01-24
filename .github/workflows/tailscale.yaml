@@ -1,0 +1,35 @@
+name: Sync Tailscale ACLs
+
+on:
+  push:
+    branches: [master]
+    paths: ['policy.hujson']
+  pull_request:
+    branches: [master]
+    paths: ['policy.hujson']
+
+jobs:
+  acls:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Deploy ACL
+        if: ${{ github.event_name == 'push' }}
+        uses: tailscale/gitops-acl-action@v1
+        with:
+          action: 'apply'
+          oauth-client-id: ${{ secrets.TS_OAUTH_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tailnet: ${{ secrets.TS_TAILNET }}
+
+      - name: Test ACL
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: tailscale/gitops-acl-action@v1
+        with:
+          action: 'test'
+          oauth-client-id: ${{ secrets.TS_OAUTH_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tailnet: ${{ secrets.TS_TAILNET }}
