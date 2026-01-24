@@ -7,6 +7,7 @@ longhorn:
     #createDefaultDiskLabeledNodes: true
 
   defaultBackupStore:
+    backupTarget: hel1.your-objectstorage.com
     backupTargetCredentialSecret: longhorn-backup-secret
 
   networkPolicies:
