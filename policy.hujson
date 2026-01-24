@@ -1,11 +1,12 @@
 {
-	"acls": [
-		{"action": "accept", "src": ["*"], "dst": ["*:*"]}
-	],
-
 	"grants": [
+        {
+            "src": ["bakseter@github"],
+            "dst": ["*"],
+            "ip": ["*"]
+        },
 		{
-			"src": ["group:prod"],
+			"src": ["bakseter@github"],
 			"dst": ["tag:k8s-operator"],
 			"app": {
 				"tailscale.com/cap/kubernetes": [{
@@ -16,12 +17,6 @@
 			}
 		}
 	],
-
-    "groups": {
-        "group:prod": [
-            "bakseter@github"
-        ]
-    },
 
 	"nodeAttrs": [
 		{
