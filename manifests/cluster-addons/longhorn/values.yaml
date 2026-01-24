@@ -1,6 +1,15 @@
 longhorn:
   preUpgradeChecker:
     jobEnabled: false
+
   defaultSettings:
     defaultDataPath: /var/lib/longhorn
-#   createDefaultDiskLabeledNodes: true
+    #createDefaultDiskLabeledNodes: true
+
+  networkPolicies:
+    enabled: true
+
+  ingress:
+    enabled: true
+    ingressClassName: tailscale
+    host: longhorn
