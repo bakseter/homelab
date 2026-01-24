@@ -1,4 +1,16 @@
 jellyfin:
+  ingress:
+    enabled: true
+    className: tailscale
+    hosts:
+      - host: jellyfin
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls:
+      - hosts:
+          - jellyfin
+
   podSecurityContext:
     runAsNonRoot: true
     runAsUser: 65534
