@@ -6,6 +6,9 @@ longhorn:
     defaultDataPath: /var/lib/longhorn
     #createDefaultDiskLabeledNodes: true
 
+  defaultBackupStore:
+    backupTargetCredentialSecret: longhorn-backup-secret
+
   networkPolicies:
     enabled: true
 
