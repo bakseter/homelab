@@ -6,6 +6,8 @@ jellyfin:
   ingress:
     enabled: true
     className: tailscale
+    annotations:
+      tailscale.com/tags: jellyfin
     hosts:
       - host: jellyfin
         paths:

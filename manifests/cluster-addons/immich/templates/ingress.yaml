@@ -3,6 +3,8 @@ kind: Ingress
 metadata:
   name: immich-server
   namespace: immich
+  annotations:
+    tailscale.com/tags: immich
 spec:
   ingressClassName: tailscale
   rules:
