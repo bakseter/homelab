@@ -30,6 +30,10 @@ nodes:
         memory: 4
         disk: 25
         ip: 192.168.1.100
+        extraConfigPatches: |-
+          machine:
+            nodeLabels:
+              bakseter.net/physical-node: m720q
 
       - hostname: m720q-worker-1
         type: worker
@@ -41,6 +45,7 @@ nodes:
         extraConfigPatches: |-
           machine:
             nodeLabels:
+              bakseter.net/physical-node: m720q
               node.longhorn.io/create-default-disk: "true"
             disks:
               - device: /dev/sdb
@@ -73,6 +78,7 @@ nodes:
         extraConfigPatches: |-
           machine:
             nodeLabels:
+              bakseter.net/physical-node: m720q
               node.longhorn.io/create-default-disk: "true"
             disks:
               - device: /dev/sdb
@@ -108,6 +114,9 @@ nodes:
         disk: 25
         ip: 192.168.1.110
         extraConfigPatches: |-
+          machine:
+            nodeLabels:
+              bakseter.net/physical-node: m715q
           cluster:
             extraManifests:
               - 'https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml'
@@ -123,6 +132,7 @@ nodes:
         extraConfigPatches: |-
           machine:
             nodeLabels:
+              bakseter.net/physical-node: m715q
               node.longhorn.io/create-default-disk: "true"
             disks:
               - device: /dev/sdb
@@ -157,6 +167,10 @@ nodes:
         memory: 4
         disk: 25
         ip: 192.168.1.120
+        extraConfigPatches: |-
+          machine:
+            nodeLabels:
+              bakseter.net/physical-node: m715q2
 
       - hostname: m715q2-worker-1
         type: worker
@@ -164,3 +178,7 @@ nodes:
         memory: 8
         disk: 75
         ip: 192.168.1.121
+        extraConfigPatches: |-
+          machine:
+            nodeLabels:
+              bakseter.net/physical-node: m715q2
