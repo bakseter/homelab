@@ -7,7 +7,7 @@ jellyfin:
     enabled: true
     className: tailscale
     annotations:
-      tailscale.com/tags: 'tag:media'
+      tailscale.com/tags: 'tag:k8s,tag:media'
     hosts:
       - host: jellyfin
         paths:
