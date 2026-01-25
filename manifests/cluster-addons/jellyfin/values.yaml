@@ -1,4 +1,8 @@
 jellyfin:
+  persistence:
+    media:
+      size: 50Gi
+
   ingress:
     enabled: true
     className: tailscale
