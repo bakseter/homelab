@@ -18,6 +18,7 @@ spec:
     httpEnabled: true
   hostname:
     hostname: keycloak.bakseter.net
+    admin: keycloak-service.keycloak.svc.cluster.local
   ingress:
     enabled: false
   proxy:

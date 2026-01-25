@@ -8,7 +8,7 @@ spec:
     - public
   routes:
     - kind: Rule
-      match: Host(`keycloak.bakseter.net`)
+      match: Host(`keycloak.bakseter.net`) && !PathPrefix(`/admin`)
       services:
         - name: keycloak-service
           port: http
