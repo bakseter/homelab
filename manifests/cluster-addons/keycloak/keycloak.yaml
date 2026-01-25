@@ -21,8 +21,9 @@ spec:
 
   hostname:
     hostname: https://keycloak.bakseter.net
-  #   admin: http://localhost:8080
-  #   backchannelDynamic: true
+    strict: true
+    admin: http://localhost:8080
+    backchannelDynamic: true
 
   ingress:
     enabled: false
