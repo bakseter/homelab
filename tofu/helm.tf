@@ -15,7 +15,7 @@ resource "helm_release" "cilium" {
   chart      = "cilium"
   namespace  = "kube-system"
 
-  atomic        = true
+  atomic       = true
   force_update = true
 
   set = [
@@ -53,6 +53,14 @@ resource "helm_release" "cilium" {
     },
     {
       name  = "socketLB.hostNamespaceOnly"
+      value = "true"
+    },
+    {
+      name  = "hubble.relay.enabled"
+      value = "true"
+    },
+    {
+      name  = "hubble.ui.enabled"
       value = "true"
     }
   ]
