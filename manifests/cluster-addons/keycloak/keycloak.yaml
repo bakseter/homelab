@@ -20,7 +20,7 @@ spec:
     httpEnabled: true
 
   hostname:
-    hostname: keycloak.bakseter.net
+    hostname: https://keycloak.bakseter.net
     admin: http://localhost:8080
     backchannelDynamic: true
 
