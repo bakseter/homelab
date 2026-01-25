@@ -1,7 +1,7 @@
 jellyfin:
   persistence:
     media:
-      size: 50Gi
+      size: 100Gi
 
   # networkPolicy:
   #   enabled: true
