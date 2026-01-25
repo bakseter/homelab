@@ -1,12 +1,17 @@
 {
 	"grants": [
         {
-            "src": ["bakseter@github"],
+            "src": ["autogroup:owner"],
             "dst": ["*"],
             "ip": ["*"]
         },
+        {
+            "src": ["autogroup:member"],
+            "dst": ["jellyfin", "immich"],
+            "ip": ["*"]
+        },
 		{
-			"src": ["bakseter@github"],
+			"src": ["autogroup:owner"],
 			"dst": ["tag:k8s-operator"],
 			"app": {
 				"tailscale.com/cap/kubernetes": [{
