@@ -22,7 +22,7 @@ spec:
   hostname:
     hostname: https://keycloak.bakseter.net
     strict: true
-    admin: http://localhost:8080
+    admin: http://keycloak.tail79d70a.ts.net
     backchannelDynamic: true
 
   ingress:
