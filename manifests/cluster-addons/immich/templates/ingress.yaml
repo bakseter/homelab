@@ -4,7 +4,7 @@ metadata:
   name: immich-server
   namespace: immich
   annotations:
-    tailscale.com/tags: media
+    tailscale.com/tags: 'tag:media'
 spec:
   ingressClassName: tailscale
   rules:
