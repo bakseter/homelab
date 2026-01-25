@@ -5,6 +5,7 @@ metadata:
   namespace: keycloak
 spec:
   instances: 1
+
   db:
     vendor: postgres
     host: keycloak-database-rw
@@ -14,16 +15,21 @@ spec:
     passwordSecret:
       name: keycloak-database-app
       key: password
+
   http:
     httpEnabled: true
+
   hostname:
-    hostname: http://keycloak.bakseter.net
-    admin: http://localhost:8080
+    hostname: keycloak.bakseter.net
+    admin: localhost
     backchannelDynamic: true
+
   ingress:
     enabled: false
+
   proxy:
     headers: xforwarded # double check your reverse proxy sets and overwrites the X-Forwarded-* headers
+
   unsupported:
     podTemplate:
       spec:
