@@ -7,7 +7,7 @@
         },
         {
             "src": ["autogroup:member"],
-            "dst": ["jellyfin", "immich"],
+            "dst": ["tag:jellyfin", "tag:immich"],
             "ip": ["*"]
         },
 		{
