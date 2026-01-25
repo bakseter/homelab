@@ -3,20 +3,20 @@ jellyfin:
     media:
       size: 50Gi
 
-  networkPolicy:
-    enabled: true
+  # networkPolicy:
+  #   enabled: true
 
-    ingress:
-      allowExternal: false
+  #   ingress:
+  #     allowExternal: false
 
-      namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: tailscale
+  #     namespaceSelector:
+  #       matchLabels:
+  #         kubernetes.io/metadata.name: tailscale
 
-      podSelector:
-        matchLabels:
-          tailscale.com/parent-resource: jellyfin
-          tailscale.com/parent-resource-ns: jellyfin
+  #     podSelector:
+  #       matchLabels:
+  #         tailscale.com/parent-resource: jellyfin
+  #         tailscale.com/parent-resource-ns: jellyfin
 
   ingress:
     enabled: true
