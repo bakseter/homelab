@@ -6,7 +6,7 @@ metadata:
 spec:
   instances: 1
   storage:
-    size: 1Gi
+    size: 2Gi
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
   postgresql:
     shared_preload_libraries:
