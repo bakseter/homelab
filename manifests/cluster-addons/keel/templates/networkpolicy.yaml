@@ -11,37 +11,37 @@ spec:
   # TODO: fix egress
   #   - Egress
 
-  egress:
-    # Allow egress to kube-dns
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: kube-system
-          podSelector:
-            matchLabels:
-              k8s-app: kube-dns
-      ports:
-        - protocol: UDP
-          port: 53
-        - protocol: TCP
-          port: 53
+# egress:
+#   # Allow egress to kube-dns
+#   - to:
+#       - namespaceSelector:
+#           matchLabels:
+#             kubernetes.io/metadata.name: kube-system
+#         podSelector:
+#           matchLabels:
+#             k8s-app: kube-dns
+#     ports:
+#       - protocol: UDP
+#         port: 53
+#       - protocol: TCP
+#         port: 53
 
-    # Allow egress to kube-apiserver
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: default
-          podSelector:
-            matchLabels:
-              component: kube-apiserver
-      ports:
-        - protocol: TCP
-          port: 6443
+#   # Allow egress to kube-apiserver
+#   - to:
+#       - namespaceSelector:
+#           matchLabels:
+#             kubernetes.io/metadata.name: default
+#         podSelector:
+#           matchLabels:
+#             component: kube-apiserver
+#     ports:
+#       - protocol: TCP
+#         port: 6443
 
-    # Allow egress to Internet
-    - to:
-        - ipBlock:
-            cidr: '0.0.0.0/0'
-      ports:
-        - protocol: TCP
-          port: 443
+#   # Allow egress to Internet
+#   - to:
+#       - ipBlock:
+#           cidr: '0.0.0.0/0'
+#     ports:
+#       - protocol: TCP
+#         port: 443
