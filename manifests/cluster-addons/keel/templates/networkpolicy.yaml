@@ -16,7 +16,7 @@ spec:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: kube-system
-        - podSelector:
+          podSelector:
             matchLabels:
               k8s-app: kube-dns
       ports:
@@ -25,7 +25,19 @@ spec:
         - protocol: TCP
           port: 53
 
-    # Allow egress to Internet (and Kubernetes API server)
+    # Allow egress to kube-apiserver
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: default
+          podSelector:
+            matchLabels:
+              component: kube-apiserver
+      ports:
+        - protocol: TCP
+          port: 6443
+
+    # Allow egress to Internet
     - to:
         - ipBlock:
             cidr: '0.0.0.0/0'
