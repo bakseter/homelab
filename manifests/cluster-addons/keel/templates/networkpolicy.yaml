@@ -5,6 +5,3 @@ metadata:
   namespace: keel
 spec:
   podSelector: {}
-  policyTypes:
-    - Ingress
-    - Egress
