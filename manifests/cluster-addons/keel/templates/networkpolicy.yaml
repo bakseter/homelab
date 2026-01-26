@@ -8,7 +8,8 @@ spec:
 
   policyTypes:
     - Ingress
-    - Egress
+  # TODO: fix egress
+  #   - Egress
 
   egress:
     # Allow egress to kube-dns
