@@ -25,15 +25,7 @@ spec:
         - protocol: TCP
           port: 53
 
-    # Allow egress to Kubernetes API server
-    - to:
-        - ipBlock:
-            cidr: 10.96.0.0/12
-      ports:
-        - protocol: TCP
-          port: 443
-
-    # Allow egress to Internet
+    # Allow egress to Internet (and Kubernetes API server)
     - to:
         - ipBlock:
             cidr: '0.0.0.0/0'
