@@ -11,6 +11,7 @@ spec:
     - Egress
 
   egress:
+    # Allow egress to kube-dns
     - to:
         - namespaceSelector:
             matchLabels:
@@ -21,7 +22,18 @@ spec:
       ports:
         - protocol: UDP
           port: 53
+        - protocol: TCP
+          port: 53
 
+    # Allow egress to Kubernetes API server
+    - to:
+        - ipBlock:
+            cidr: 10.96.0.0/12
+      ports:
+        - protocol: TCP
+          port: 443
+
+    # Allow egress to Internet
     - to:
         - ipBlock:
             cidr: '0.0.0.0/0'
