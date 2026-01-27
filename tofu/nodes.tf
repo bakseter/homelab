@@ -137,8 +137,9 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
     content {
       datastore_id = "local-lvm"
 
-      interface = "scsi1"
-      size      = each.value.longhornDisk
+      interface   = "scsi1"
+      size        = each.value.longhornDisk.size
+      file_format = try(each.value.longhornDisk.fileFormat, null)
 
       cache    = "none"
       discard  = "on"

@@ -40,7 +40,8 @@ nodes:
         cores: 6
         memory: 20
         disk: 25
-        longhornDisk: 400
+        longhornDisk:
+          size: 400
         ip: 192.168.1.101
         extraConfigPatches: |-
           machine:
@@ -94,7 +95,8 @@ nodes:
         cores: 4
         memory: 8
         disk: 25
-        longhornDisk: 400
+        longhornDisk:
+          size: 400
         ip: 192.168.1.111
         extraConfigPatches: |-
           machine:
@@ -143,9 +145,33 @@ nodes:
         type: worker
         cores: 4
         memory: 8
-        disk: 75
+        disk: 25
+        longhornDisk:
+          size: 250
+          fileFormat: raw
         ip: 192.168.1.121
         extraConfigPatches: |-
           machine:
             nodeLabels:
               bakseter.net/physical-node: m715q2
+              node.longhorn.io/create-default-disk: "true"
+            disks:
+              - device: /dev/sdb
+                partitions:
+                  - mountpoint: /var/lib/longhorn
+            kubelet:
+              extraMounts:
+                - destination: /var/lib/longhorn
+                  type: bind
+                  source: /var/lib/longhorn
+                  options:
+                    - bind
+                    - rshared
+                    - rw
+            %{~ if length(extension_image_refs) > 0 ~}
+            install:
+              extensions:
+              %{~ for image_ref in extension_image_refs ~}
+                - image: ${image_ref}
+              %{~ endfor ~}
+            %{~ endif ~}
