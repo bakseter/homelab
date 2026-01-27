@@ -25,19 +25,22 @@ spec:
     spec:
       template:
         spec:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            runAsGroup: 65534
+            fsGroup: 65534
+            seccompProfile:
+              type: RuntimeDefault
+            supplementalGroups:
+              - 65534
           containers:
             - name: grafana
-              env:
-                - name: GF_SECURITY_ADMIN_USER
-                  valueFrom:
-                    secretKeyRef:
-                      key: admin-user
-                      name: grafana-admin-secret
-                - name: GF_SECURITY_ADMIN_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: admin-password
-                      name: grafana-admin-secret
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
   config:
     log:
       mode: 'console'
