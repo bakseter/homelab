@@ -6,9 +6,6 @@ metadata:
     dashboards: 'grafana'
 spec:
   ingress:
-    metadata:
-      annotations:
-        tailscale.com/funnel: 'true'
     spec:
       ingressClassName: tailscale
       rules:
@@ -44,19 +41,15 @@ spec:
   config:
     log:
       mode: 'console'
-    auth:
-      disable_login_form: 'false'
----
-apiVersion: bitnami.com/v1alpha1
-kind: SealedSecret
-metadata:
-  name: grafana-admin-secret
-  namespace: monitoring
-spec:
-  encryptedData:
-    admin-password: AgAmySQp+UWeM2bABxcRCj5LQCq7AiLJAejwxXjhPN9gjyYUs94l5FCaHhMiFemVh3ciuzcd157fnk4CqZiB2/ecJiEGa+ezZQBSxyFENLGthh2IQ5dVV/1lfrnl0mhSyEghYIW+/YmLkKJBM/ro4vbilZHVJceWtND/vPb2aJsM3nNdUxb8l6z/cCHfQ713aWycTCMuDh+d0ri/0gLni7fLpjfwqBLNYyOpIgIrE067cTt8r5L+o9lxQ9/Juez1Gpf2PCoSjZ4QBzcx5CuNEANXqA073rtJVN/yG8WYfIVFeZdKn6vwjSqgfB1zq8/fJdjyU2aU0bKu8/prIp/vQfwGfDmZLEs8SPoRXqwptKoT1qUxPTTkYMHthNrUOTdmDDnfIXK753ByJZA7rU2SeOW5XkWBsXp8uTojmm8YxLJqfhCuguNKI16xr9ps9iaTP4UZEPjOA7driwicqC1PLFWlYVFR2DL3wa0WdcRr8jkBpXfIXNn8X8hUpxs65n1xPzNcUwLL23pQrAdnHr4EVP96B+RyC5GltO9TBIzZFL3XUXCzYnYHtwKAypOg7nVt9sRdJuWxlSxT9jKToYV4Zc+460BiAHEbUqrlntcPH5NNqTz4D8Lvwny/MTQ0Munym1X6kxCQRObI88SIhjEODt6TbNm6RYulFi8vh+N0vtkekkZnKOoTEFhFnKeHeuSpUoXJFy6Q5eo14DvCo8vUtKHVqxwdl5LB6h2TFy3aeeb+C+34C8WxgTXFS+itQsR4y+XpHEFlvRgpvNO2RfIICJyD
-    admin-user: AgCYpl1F8m23ZLmJsgXyXhWKCnzB7fQXQyhh22YHNOI6rb814d9I/dlvesGBGJ449mpOziQoir4CblA7yjZ20JFhBivHiEClA1pSBBQhyfaKtq6oKXS7a765Z6JxLBz39SL+wJNXJErD70R+HIY8QsZKwFKVCNyrvVKKa6SGDVKfJRKO4cdz6YgAzuogixk6e9pXNXMf0H+I+itlP/emQeTz5ylaBed9Zq3qmZjMXgsi4ooNrrN6m0HHZtDxAVeJqZB2CoN/5Y80+XnSRTYbWQ+As13b2NzWCXQB7Pp4rr4ieOcgJigE8ffFjg1ajR/yug7qq76Z9dGqMQTVq4bke/WLf4fzClQK/w/uDxKkkjs/otVROHhBHbwZRt9OZE4D0ua+Nk7+cUocMHVXZaf4KP+7fsgQxV3aSE+stbceergoKC3Ml1yZE1oCcu+DUCuaAGOzcaa1n7GqB6hobRfGxrEC3OJ7hZmn+3rL7bfjtZkLsz16nPNB2vinYFHX7PuGHdWkzaOl3NppPBlKUuAcXVliys8P7SdzqtiZOE/yt0TiqGvpogqunwKTWykwzYnznsSFllPnbyKnLX1T7Kn8K8j+3yyLT+j37Fo0w/9AF9P/gp3k2M3vPFgFxcAYUqd+L4/3bCKVyEic6yGTWgZTzsnUlujG0msGtFGveCoD0zqSXPB4FJRZdM1c6AKTJ/ku/ZDutMrZZq3hRsfcBg4g8vo=
-  template:
-    metadata:
-      name: grafana-admin-secret
-      namespace: monitoring
+    server:
+      domain: grafana.tail79d70a.ts.net
+      root_url: https://grafana.tail79d70a.ts.net
+    auth.proxy:
+      enabled: true
+      header_name: Tailscale-User-Login
+      header_property: username
+      auto_sign_up: true
+      sync_ttl: 60
+      whitelist: 127.0.0.1
+      headers: Name:Tailscale-User-Name
+      # enable_login_token: true
