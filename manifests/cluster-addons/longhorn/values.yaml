@@ -12,6 +12,9 @@ longhorn:
     backupTargetCredentialSecret: longhorn-backup-secret
     pollInterval: 600
 
+  persistence:
+    defaultClassReplicaCount: 2
+
   networkPolicies:
     enabled: true
 

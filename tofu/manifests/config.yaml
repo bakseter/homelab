@@ -26,7 +26,7 @@ nodes:
     virtualNodes:
       - hostname: m720q-controlplane-1
         type: controlplane
-        cores: 2
+        cores: 6
         memory: 4
         disk: 25
         ip: 192.168.1.100
@@ -38,43 +38,10 @@ nodes:
       - hostname: m720q-worker-1
         type: worker
         cores: 6
-        memory: 12
+        memory: 20
         disk: 25
-        longhornDisk: 200
+        longhornDisk: 400
         ip: 192.168.1.101
-        extraConfigPatches: |-
-          machine:
-            nodeLabels:
-              bakseter.net/physical-node: m720q
-              node.longhorn.io/create-default-disk: "true"
-            disks:
-              - device: /dev/sdb
-                partitions:
-                  - mountpoint: /var/lib/longhorn
-            kubelet:
-              extraMounts:
-                - destination: /var/lib/longhorn
-                  type: bind
-                  source: /var/lib/longhorn
-                  options:
-                    - bind
-                    - rshared
-                    - rw
-            %{~ if length(extension_image_refs) > 0 ~}
-            install:
-              extensions:
-              %{~ for image_ref in extension_image_refs ~}
-                - image: ${image_ref}
-              %{~ endfor ~}
-            %{~ endif ~}
-
-      - hostname: m720q-worker-2
-        type: worker
-        cores: 4
-        memory: 8
-        disk: 25
-        longhornDisk: 200
-        ip: 192.168.1.102
         extraConfigPatches: |-
           machine:
             nodeLabels:
