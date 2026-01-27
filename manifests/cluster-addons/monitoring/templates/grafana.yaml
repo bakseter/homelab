@@ -48,11 +48,11 @@ spec:
       domain: grafana.tail79d70a.ts.net
       root_url: https://grafana.tail79d70a.ts.net
     auth.proxy:
-      enabled: true
+      enabled: 'true'
       header_name: Tailscale-User-Login
       header_property: username
-      auto_sign_up: true
-      sync_ttl: 60
+      auto_sign_up: 'true'
+      sync_ttl: '60'
       whitelist: 127.0.0.1
       headers: Name:Tailscale-User-Name
       # enable_login_token: true
