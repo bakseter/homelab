@@ -20,9 +20,9 @@ spec:
     httpEnabled: true
 
   hostname:
-    hostname: https://keycloak.bakseter.net
+    hostname: http://localhost:8080
     strict: true
-    admin: http://keycloak.tail79d70a.ts.net
+    admin: http://localhost:8080
     backchannelDynamic: true
 
   ingress:
