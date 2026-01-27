@@ -157,7 +157,7 @@ alloy:
               __path__  = "/var/log/syslog",
               job       = "node/syslog",
               node_name = sys.env("HOSTNAME"),
-              cluster   = "whpah",
+              cluster   = "homelab",
           }]
         }
 
@@ -170,7 +170,7 @@ alloy:
           role = "pod"
 
           namespaces {
-            names = ["spenn", "five31", "bakseter-net", "traefik"]
+            names = ["argocd", "mandagsmidag", "tailscale", "bakseter-net", "traefik", "immich", "jellyfin", "cloudflared"]
           }
         }
 
@@ -234,7 +234,7 @@ alloy:
         loki.process "pod_logs" {
           stage.static_labels {
               values = {
-                cluster = "whpah",
+                cluster = "homelab",
               }
           }
 
@@ -254,7 +254,7 @@ alloy:
 
           stage.static_labels {
             values = {
-              cluster = "whpah",
+              cluster = "homelab",
             }
           }
 
