@@ -49,12 +49,17 @@ spec:
       root_url: https://grafana.tail79d70a.ts.net
     auth:
       disable_login_form: 'true'
+    users:
+      auto_assign_org: 'true'
+      auto_assign_org_id: 'true'
+      auto_assign_role: 'Viewer'
     auth.proxy:
       enabled: 'true'
       header_name: Tailscale-User-Login
       header_property: username
       auto_sign_up: 'true'
       sync_ttl: '60'
-      whitelist: '100.0.0.0/8, 100.73.169.118' # all Tailscale IPs
+      whitelist: '0.0.0.0/0'
+      #whitelist: '100.0.0.0/8, 100.73.169.118' # all Tailscale IPs
       headers: Name:Tailscale-User-Name
       # enable_login_token: true
