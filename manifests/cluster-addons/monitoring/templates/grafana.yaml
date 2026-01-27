@@ -55,6 +55,6 @@ spec:
       header_property: username
       auto_sign_up: 'true'
       sync_ttl: '60'
-      whitelist: 100.0.0.0/8 # all Tailscale IPs
+      whitelist: '100.0.0.0/8, 100.73.169.118' # all Tailscale IPs
       headers: Name:Tailscale-User-Name
       # enable_login_token: true
