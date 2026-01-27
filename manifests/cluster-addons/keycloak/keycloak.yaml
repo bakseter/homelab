@@ -21,6 +21,7 @@ spec:
 
   hostname:
     hostname: keycloak.bakseter.net
+    strict: true
 
   ingress:
     enabled: false
