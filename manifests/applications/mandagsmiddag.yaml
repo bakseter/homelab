@@ -86,10 +86,9 @@ spec:
     repoURL: https://github.com/bakseter/mandagsmiddag.git
     targetRevision: HEAD
   syncPolicy:
-    # TODO: enable
-    #   automated:
-    #     prune: true
-    #     selfHeal: true
+    automated:
+      prune: true
+      selfHeal: true
     managedNamespaceMetadata:
       labels:
         pod-security.kubernetes.io/enforce: restricted
