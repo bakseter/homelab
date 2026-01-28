@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: five31
+  namespace: argocd
+spec:
+  description: five31 application
+  destinations:
+    - namespace: five31
+      name: admin@homelab
+  sourceRepos:
+    - https://github.com/bakseter/five31.git
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: 'apps'
+      kind: Deployment
+
+    - group: 'apps'
+      kind: ReplicaSet
+
+    - group: ''
+      kind: Pod
+
+    - group: ''
+      kind: Service
+
+    - group: 'networking.k8s.io'
+      kind: Ingress
+
+    - group: 'cilium.io'
+      kind: CiliumNetworkPolicy
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: five31
+  namespace: argocd
+spec:
+  destination:
+    namespace: five31
+    name: admin@homelab
+  project: five31
+  source:
+    path: manifests
+    repoURL: https://github.com/bakseter/five31.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: restricted
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
