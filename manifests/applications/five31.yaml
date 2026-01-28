@@ -26,11 +26,47 @@ spec:
     - group: ''
       kind: Service
 
+    - group: ''
+      kind: ConfigMap
+
+    - group: ''
+      kind: Secret
+
+    - group: ''
+      kind: ServiceAccount
+
+    - group: ''
+      kind: PersistentVolumeClaim
+
+    - group: 'policy'
+      kind: PodDisruptionBudget
+
+    - group: 'rbac.authorization.k8s.io'
+      kind: Role
+
+    - group: 'rbac.authorization.k8s.io'
+      kind: RoleBinding
+
     - group: 'networking.k8s.io'
-      kind: Ingress
+      kind: NetworkPolicy
 
     - group: 'cilium.io'
       kind: CiliumNetworkPolicy
+
+    - group: 'traefik.io'
+      kind: IngressRoute
+
+    - group: 'postgresql.cnpg.io'
+      kind: Cluster
+
+    - group: 'postgresql.cnpg.io'
+      kind: Database
+
+    - group: 'bitnami.com'
+      kind: SealedSecret
+
+    - group: 'monitoring.coreos.com'
+      kind: ServiceMonitor
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application

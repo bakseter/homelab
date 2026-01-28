@@ -53,9 +53,6 @@ spec:
     - group: 'cilium.io'
       kind: CiliumNetworkPolicy
 
-    - group: 'postgresql.cnpg.io'
-      kind: Cluster
-
     - group: 'traefik.io'
       kind: IngressRoute
 
