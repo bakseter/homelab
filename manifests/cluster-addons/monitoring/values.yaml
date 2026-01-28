@@ -103,7 +103,7 @@ loki:
     writebackSizeLimit: 25MB
 
   gateway:
-    enabled: false
+    enabled: true
 
   # Zero out replica counts of other deployment modes
   backend:
