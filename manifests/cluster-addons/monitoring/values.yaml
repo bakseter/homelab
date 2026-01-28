@@ -5,7 +5,10 @@ kube-prometheus-stack:
 
   prometheus:
     prometheusSpec:
+      scrapeInterval: 30s
+
       retention: 24h
+
       serviceMonitorNamespaceSelector:
         matchExpressions:
           - key: kubernetes.io/metadata.name
@@ -13,6 +16,7 @@ kube-prometheus-stack:
             values:
               - monitoring
               - mandagsmiddag
+
       storageSpec:
         volumeClaimTemplate:
           spec:
