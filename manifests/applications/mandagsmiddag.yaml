@@ -50,6 +50,9 @@ spec:
     - group: 'networking.k8s.io'
       kind: NetworkPolicy
 
+    - group: 'cilium.io'
+      kind: CiliumNetworkPolicy
+
     - group: 'postgresql.cnpg.io'
       kind: Cluster
 
@@ -64,6 +67,9 @@ spec:
 
     - group: 'bitnami.com'
       kind: SealedSecret
+
+    - group: 'monitoring.coreos.com'
+      kind: ServiceMonitor
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
