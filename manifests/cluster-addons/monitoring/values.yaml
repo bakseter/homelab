@@ -7,7 +7,7 @@ kube-prometheus-stack:
     prometheusSpec:
       scrapeInterval: 30s
 
-      retention: 24h
+      retention: 72h
 
       serviceMonitorNamespaceSelector:
         matchExpressions:
