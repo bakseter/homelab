@@ -5,9 +5,8 @@ kube-prometheus-stack:
 
   prometheus:
     prometheusSpec:
-      serviceMonitorNamespaceSelector:
-        any: true
       retention: 24h
+      serviceMonitorNamespaceSelector: {}
       storageSpec:
         volumeClaimTemplate:
           spec:
