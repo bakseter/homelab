@@ -6,7 +6,13 @@ kube-prometheus-stack:
   prometheus:
     prometheusSpec:
       retention: 24h
-      serviceMonitorNamespaceSelector: {}
+      serviceMonitorNamespaceSelector:
+        matchExpressions:
+          - key: kubernetes.io/metadata.name
+            operator: In
+            values:
+              - monitoring
+              - mandagsmiddag
       storageSpec:
         volumeClaimTemplate:
           spec:
