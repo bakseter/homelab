@@ -100,7 +100,7 @@ loki:
   chunksCache:
     enabled: false
     # default is 500MB, with limited memory keep this smaller
-    writebackSizeLimit: 25MB
+    writebackSizeLimit: 100MB
 
   gateway:
     enabled: true
@@ -170,7 +170,7 @@ alloy:
           role = "pod"
 
           namespaces {
-            names = ["argocd", "mandagsmidag", "tailscale", "bakseter-net", "traefik", "immich", "jellyfin", "cloudflared"]
+            names = ["bakseter-net", "cloudflared", "immich", "jellyfin", "longhorn-system", "mandagsmiddag", "tailscale", "traefik"]
           }
         }
 
