@@ -5,11 +5,8 @@ kube-prometheus-stack:
 
   prometheus:
     prometheusSpec:
-      #     securityContext:
-      #       runAsGroup: 0
-      #       runAsNonRoot: false
-      #       runAsUser: 0
-      #       fsGroup: 0
+      serviceMonitorNamespaceSelector:
+        any: true
       retention: 24h
       storageSpec:
         volumeClaimTemplate:
