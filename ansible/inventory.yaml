@@ -1,0 +1,10 @@
+all:
+  hosts:
+    m715q:
+      ansible_host: 192.168.1.27
+    m720q:
+      ansible_host: 192.168.1.28
+    m715q2:
+      ansible_host: 192.168.1.29
+  vars:
+    ansible_user: root

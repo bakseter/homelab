@@ -1,0 +1,30 @@
+- name: Manage Proxmox hosts
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Ensure useful packages are installed
+      ansible.builtin.apt:
+        name:
+          - curl
+          - vim
+          - htop
+        state: present
+        update_cache: true
+#   - name: Example cron job
+#     ansible.builtin.cron:
+#       name: 'example-maintenance'
+#       user: root
+#       hour: '2'
+#       minute: '0'
+#       job: '/usr/bin/echo hello from ansible'
+
+#   - name: Drop example config file
+#     ansible.builtin.copy:
+#       dest: /etc/example.conf
+#       content: |
+#         managed_by = ansible
+#         cluster = proxmox
+#       owner: root
+#       group: root
+#       mode: '0644'
