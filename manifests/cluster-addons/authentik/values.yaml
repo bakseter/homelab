@@ -1,4 +1,8 @@
 authentik:
+  authentik:
+    existingSecret:
+      secretName: authentik-secret-key
+
   global:
     securityContext:
       runAsNonRoot: true
