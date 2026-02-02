@@ -1,8 +1,22 @@
-postgresql:
-  enabled: false
-
 authentik:
+  global:
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+      runAsGroup: 65534
+      fsGroup: 65534
+      seccompProfile:
+        type: RuntimeDefault
+      supplementalGroups:
+        - 65534
+
   server:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+
     env:
       - name: AUTHENTIK_POSTGRESQL__HOST
         valueFrom:
@@ -29,6 +43,12 @@ authentik:
             key: dbname
 
   worker:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+
     env:
       - name: AUTHENTIK_POSTGRESQL__HOST
         valueFrom:
