@@ -22,6 +22,12 @@ authentik:
           - ALL
 
     env:
+      - name: AUTHENTIK_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: authentik-secret-key
+            key: secret-key
+
       - name: AUTHENTIK_POSTGRESQL__HOST
         valueFrom:
           secretKeyRef:
@@ -58,7 +64,7 @@ authentik:
         valueFrom:
           secretKeyRef:
             name: authentik-secret-key
-            key: secret_key
+            key: secret-key
 
       - name: AUTHENTIK_POSTGRESQL__HOST
         valueFrom:
