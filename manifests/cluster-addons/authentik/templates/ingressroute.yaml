@@ -1,0 +1,14 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: authentik-server
+  namespace: authentik
+spec:
+  entryPoints:
+    - public
+  routes:
+    - kind: Rule
+      match: Host(`authentik.bakseter.net`)
+      services:
+        - name: authentik-server
+          port: http
