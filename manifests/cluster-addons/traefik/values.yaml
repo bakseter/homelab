@@ -14,10 +14,6 @@ traefik:
       cpu: '300m'
       memory: '300Mi'
 
-  entryPoints:
-    public:
-      address: ':9000'
-
   ports:
     # Disable default entrypoints
     web:
