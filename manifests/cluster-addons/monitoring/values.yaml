@@ -5,7 +5,7 @@ kube-prometheus-stack:
 
   prometheus:
     prometheusSpec:
-      scrapeInterval: 30s
+      scrapeInterval: 60s
 
       retention: 72h
 
@@ -55,10 +55,6 @@ loki:
 
     ruler:
       enable_api: true
-
-    querier:
-      # Default is 4, if you have enough memory and CPU you can increase, reduce if OOMing
-      max_concurrent: 2
 
   minio:
     enabled: true
