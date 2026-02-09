@@ -56,3 +56,4 @@ jellyfin:
   volumeMounts:
     - name: tmp
       mountPath: /tmp
+      readOnly: false
