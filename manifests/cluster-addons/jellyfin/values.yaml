@@ -1,4 +1,6 @@
 jellyfin:
+  image:
+    tag: 10.10.7
   persistence:
     media:
       size: 100Gi
