@@ -33,8 +33,7 @@ traefik:
       exposedPort: 9000
       forwardedHeaders:
         trustedIPs:
-          - '10.244.5.15'
-          - '10.244.7.82'
+          - '10.244.0.0/16'
 
   api:
     dashboard: false
