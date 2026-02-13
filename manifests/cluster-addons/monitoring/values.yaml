@@ -52,9 +52,16 @@ loki:
     limits_config:
       allow_structured_metadata: true
       volume_enabled: true
+      retention_period: 48h
 
     ruler:
       enable_api: true
+
+    querier:
+      max_concurrent: 4
+
+    pattern_ingester:
+      enabled: true
 
   minio:
     enabled: true
@@ -77,27 +84,34 @@ loki:
   resultsCache:
     enabled: false
 
-  deploymentMode: SingleBinary
+  deploymentMode: Distributed
 
-  singleBinary:
+  ingester:
+    replicas: 1
+    zoneAwareReplication:
+      enabled: false
+
+  queryFrontend:
     replicas: 1
 
-    persistence:
-      enableStatefulSetAutoDeletePVC: true
-      enabled: true
+  queryScheduler:
+    replicas: 1
 
-    resources:
-      limits:
-        cpu: 1
-        memory: 1Gi
-      requests:
-        cpu: 50m
-        memory: 128Mi
+  distributor:
+    replicas: 1
+    maxUnavailable: 1
 
-    extraEnv:
-      # Keep a little bit lower than memory limits
-      - name: GOMEMLIMIT
-        value: 850MiB
+  compactor:
+    replicas: 1
+    working_directory: /data/retention
+    compaction_interval: 10m
+    retention_enabled: true
+    retention_delete_delay: 2h
+    retention_delete_worker_count: 5
+
+  indexGateway:
+    replicas: 1
+    maxUnavailable: 1
 
   chunksCache:
     enabled: false
@@ -107,30 +121,19 @@ loki:
   gateway:
     enabled: true
 
-  # Zero out replica counts of other deployment modes
+  bloomPlanner:
+    replicas: 0
+  bloomBuilder:
+    replicas: 0
+  bloomGateway:
+    replicas: 0
   backend:
     replicas: 0
   read:
     replicas: 0
   write:
     replicas: 0
-  ingester:
-    replicas: 0
-  querier:
-    replicas: 0
-  queryFrontend:
-    replicas: 0
-  queryScheduler:
-    replicas: 0
-  distributor:
-    replicas: 0
-  compactor:
-    replicas: 0
-  indexGateway:
-    replicas: 0
-  bloomCompactor:
-    replicas: 0
-  bloomGateway:
+  singleBinary:
     replicas: 0
 
 alloy:
