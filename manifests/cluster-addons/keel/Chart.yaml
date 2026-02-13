@@ -3,5 +3,5 @@ name: keel-umbrella
 version: 0.1.0
 dependencies:
   - name: keel
-    version: 1.1.0
+    version: 1.2.0
     repository: https://charts.keel.sh
