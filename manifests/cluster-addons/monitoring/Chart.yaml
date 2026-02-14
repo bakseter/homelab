@@ -3,7 +3,7 @@ name: monitoring-umbrella
 version: 0.1.0
 dependencies:
   - name: kube-prometheus-stack
-    version: 81.3.2
+    version: 81.6.1
     repository: https://prometheus-community.github.io/helm-charts
 
   - name: loki
