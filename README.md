@@ -1,10 +1,16 @@
 # homelab
 
-This repository contains everything needed to repliacte my homelab setup
-(except for the hardware, of course).
+This repository contains everything needed to replicate the software side of my homelab.
 
 Everything except for the OS install of Proxmox itsself
-is managed either via OpenTofu or Argo CD.
+is managed either via OpenTofu, (Ansible) or Argo CD.
+
+...exceeeeept for the ones below (TODO):
+
+- [ ] Cloudflare configuration (OpenTofu)
+- [ ] Tailscale configuration (OpenTofu)
+- [ ] Hetzner Cloud backup for Longhorn (OpenTofu)
+- [ ] Misc. OS fixes for stubborn M720q ethernet controller (Ansible)
 
 ## Components
 
