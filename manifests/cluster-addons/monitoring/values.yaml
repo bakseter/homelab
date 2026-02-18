@@ -26,13 +26,24 @@ kube-prometheus-stack:
           regex: '.*_bucket'
           action: drop
 
-        - sourceLabels: [__name__]
-          regex: 'container_.*'
-          action: drop
+  defaultRules:
+    create: true
+    reules:
+      alertmanager: false
+      etcd: false
+      kubeControllerManager: false
+      kubeScheduler: false
+      kubeProxy: false
+      windows: false
+      kubeSchedulerAlerting: false
+      kubeSchedulerRecording: false
 
   grafana:
     enabled: false
     forceDeployDashboards: true
+
+  alertmanager:
+    enabled: false
 
   kubeEtcd:
     enabled: false
