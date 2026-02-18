@@ -1,13 +1,9 @@
 kube-prometheus-stack:
-  grafana:
-    enabled: false
-    forceDeployDashboards: true
-
   prometheus:
     prometheusSpec:
-      scrapeInterval: 60s
+      scrapeInterval: 30s
 
-      retention: 48h
+      retentionSize: 20GB
 
       serviceMonitorNamespaceSelector:
         matchExpressions:
@@ -25,9 +21,45 @@ kube-prometheus-stack:
               requests:
                 storage: 20Gi
 
+      metricRelabelings:
+        - sourceLabels: [__name__]
+          regex: '.*_bucket'
+          action: drop
+
+        - sourceLabels: [__name__]
+          regex: 'container_.*'
+          action: drop
+
+  grafana:
+    enabled: false
+    forceDeployDashboards: true
+
+  kubeEtcd:
+    enabled: false
+
+  kubeControllerManager:
+    enabled: false
+
+  kubeScheduler:
+    enabled: false
+
+  kubeProxy:
+    enabled: false
+
 loki:
   loki:
     auth_enabled: false
+
+    storage:
+      type: s3
+      bucketNames:
+        chunks: loki-chunks
+        ruler: loki-ruler
+      s3:
+        endpoint: minio.minio.svc.cluster.local:9000
+        access_key_id: minio
+        secret_access_key: minio123
+        insecure: true
 
     commonConfig:
       replication_factor: 1
