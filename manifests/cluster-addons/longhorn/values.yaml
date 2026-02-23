@@ -1,6 +1,7 @@
 longhorn:
   preUpgradeChecker:
     jobEnabled: false
+    upgradeVersionCheck: false # hotfix
 
   defaultSettings:
     defaultDataPath: /var/lib/longhorn
@@ -25,3 +26,11 @@ longhorn:
     tls:
       - hosts:
           - longhorn
+
+  # Hotfix: https://github.com/longhorn/longhorn/releases/tag/v1.11.0
+  image:
+    longhorn:
+      manager:
+        tag: v1.11.0-hotfix-1
+      instanceManager:
+        tag: v1.11.0-hotfix-1
