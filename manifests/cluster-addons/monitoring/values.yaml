@@ -3,6 +3,7 @@ kube-prometheus-stack:
     prometheusSpec:
       scrapeInterval: 30s
 
+      retention: 168h
       retentionSize: 20GB # https://prometheus.io/docs/prometheus/latest/storage/#right-sizing-retention-size
 
       serviceMonitorNamespaceSelector:
