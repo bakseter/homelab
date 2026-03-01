@@ -4,7 +4,7 @@ metadata:
   name: immich-library
   namespace: immich
   labels:
-    recurring-job-group.longhorn.io/hetzner-backup: enabled
+    recurring-job.longhorn.io/hetzner-backup: enabled
 spec:
   accessModes:
     - ReadWriteOnce
