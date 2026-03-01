@@ -1,6 +1,8 @@
 jellyfin:
   image:
     tag: 10.10.7
+
+  # TODO: add recurringjobs label
   persistence:
     media:
       size: 100Gi

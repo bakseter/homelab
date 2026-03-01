@@ -9,4 +9,4 @@ spec:
   retain: 4
   concurrency: 1
   groups:
-    - default
+    - hetzner-backup

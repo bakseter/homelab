@@ -5,5 +5,8 @@ metadata:
   namespace: authentik
 spec:
   instances: 1
+  inheritedMetadata:
+    labels:
+      recurring-job-group.longhorn.io/hetzner-backup: enabled
   storage:
     size: 2Gi

@@ -6,7 +6,7 @@ longhorn:
   defaultSettings:
     defaultDataPath: /var/lib/longhorn
     createDefaultDiskLabeledNodes: true
-    snapshotDataIntegrity: enabled
+    snapshotDataIntegrity: disabled
 
   defaultBackupStore:
     backupTarget: s3://bakseter-homelab-longhorn@hel1/
