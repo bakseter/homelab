@@ -7,7 +7,8 @@ spec:
   instances: 1
   inheritedMetadata:
     labels:
-      recurring-job.longhorn.io/hetzner-backup: enabled
+      recurring-job.longhorn.io/source: enabled
+      recurring-job-group.longhorn.io/hetzner-backup: enabled
   storage:
     size: 2Gi
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
