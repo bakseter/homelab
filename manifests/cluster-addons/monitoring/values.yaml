@@ -16,6 +16,10 @@ kube-prometheus-stack:
 
       storageSpec:
         volumeClaimTemplate:
+          metadata:
+            labels:
+              recurring-job.longhorn.io/source: enabled
+              recurring-job-group.longhorn.io/fstrim: enabled
           spec:
             accessModes: ['ReadWriteOnce']
             resources:

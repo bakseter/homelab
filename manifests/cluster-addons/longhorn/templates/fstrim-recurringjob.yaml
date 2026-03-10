@@ -1,0 +1,10 @@
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: fstrim
+  namespace: longhorn-system
+spec:
+  cron: '0 6 */7 * *'
+  task: filesystem-trim
+  groups:
+    - fstrim
