@@ -17,6 +17,8 @@ kube-prometheus-stack:
       storageSpec:
         volumeClaimTemplate:
           metadata:
+            name: prometheus-monitoring-kube-prometheus-prometheus-db-prometheus-monitoring-kube-prometheus-prometheus-0
+            namespace: monitoring
             labels:
               recurring-job.longhorn.io/source: enabled
               recurring-job-group.longhorn.io/fstrim: enabled
