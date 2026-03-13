@@ -234,7 +234,7 @@ spec:
               "format": "time_series",
               "instant": false,
               "interval": "",
-              "legendFormat": "{{label_name}}",
+              "legendFormat": "\{\{label_name\}\}",
               "range": true,
               "refId": "A"
             }
