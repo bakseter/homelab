@@ -13,10 +13,9 @@ spec:
     repoURL: https://github.com/bakseter/homelab.git
     targetRevision: HEAD
   syncPolicy:
-    # TODO: enable
-    #   automated:
-    #     prune: true
-    #     selfHeal: true
+    automated:
+      prune: true
+      selfHeal: true
     managedNamespaceMetadata:
       labels:
         # Needs root for node-exporter
