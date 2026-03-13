@@ -44,12 +44,40 @@ argo-cd:
 
   controller:
     replicas: 1
+    resouces:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1Gi
 
   server:
     replicas: 2
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        cpu: 100m
+        memory: 320Mi
 
   repoServer:
     replicas: 2
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        cpu: 100m
+        memory: 320Mi
 
   applicationSet:
     replicas: 2
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 256Mi
