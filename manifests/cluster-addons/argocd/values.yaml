@@ -81,3 +81,12 @@ argo-cd:
       limits:
         cpu: 100m
         memory: 256Mi
+
+  dex:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
