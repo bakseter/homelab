@@ -67,7 +67,7 @@ spec:
             failureThreshold: 1
             initialDelaySeconds: 10
             periodSeconds: 10
-          resouces:
+          resources:
             requests:
               cpu: 10m
               memory: 64Mi
