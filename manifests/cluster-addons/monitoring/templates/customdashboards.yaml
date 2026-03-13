@@ -6,7 +6,7 @@ metadata:
 spec:
   instanceSelector:
     matchLabels:
-      dashboards: 'grafana'
+      dashboards: grafana
   title: custom
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -17,7 +17,7 @@ metadata:
 spec:
   instanceSelector:
     matchLabels:
-      dashboards: 'grafana'
+      dashboards: grafana
   folder: custom
   json: |
     {
@@ -131,7 +131,7 @@ spec:
                 "uid": "91483154-8678-40d3-9f5d-7ad6b07dc497"
               },
               "editorMode": "code",
-              "expr": "sum(rate(container_cpu_usage_seconds_total{\n    namespace=~\"$namespace\",\n    container!=\"\",\n    container!=\"POD\"\n  }[5m])) by (container)",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=~\"$namespace\",container!=\"\",container!=\"POD\"}[5m])) by (container)",
               "instant": false,
               "legendFormat": "__auto",
               "range": true,
@@ -230,11 +230,11 @@ spec:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(container_memory_working_set_bytes{\n  namespace=~\"$namespace\",\n  container!=\"\",\n  container!=\"POD\"\n  }) by (container) / (1024*1024)",
+              "expr": "sum(container_memory_working_set_bytes{namespace=~\"$namespace\",container!=\"\",container!=\"POD\"}) by (container) / (1024*1024)",
               "format": "time_series",
               "instant": false,
               "interval": "",
-              "legendFormat": "\{\{label_name\}\}",
+              "legendFormat": "{{container}}",
               "range": true,
               "refId": "A"
             }
