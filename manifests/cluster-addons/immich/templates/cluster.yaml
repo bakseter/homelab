@@ -12,7 +12,7 @@ spec:
   storage:
     size: 2Gi
     pvcTemplate:
-      volumeName:
+      volumeName: pvc-93523875-1702-4d29-8d99-6c96cfdc311c
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
   postgresql:
     shared_preload_libraries:
