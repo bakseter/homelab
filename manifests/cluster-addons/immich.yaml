@@ -13,9 +13,9 @@ spec:
     repoURL: https://github.com/bakseter/homelab.git
     targetRevision: HEAD
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+    #   automated:
+    #     prune: true
+    #     selfHeal: true
     managedNamespaceMetadata:
       labels:
         pod-security.kubernetes.io/enforce: restricted
