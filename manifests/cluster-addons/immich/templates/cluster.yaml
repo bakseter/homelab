@@ -13,8 +13,9 @@ spec:
     size: 2Gi
     pvcTemplate:
       dataSource:
-        name: immich-database-backup
+        apiGroup: v1
         kind: PersistentVolumeClaim
+        name: immich-database-backup
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
   postgresql:
     shared_preload_libraries:
