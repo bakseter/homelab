@@ -11,6 +11,9 @@ spec:
       recurring-job-group.longhorn.io/hetzner-backup: enabled
   storage:
     size: 2Gi
+    pvcTemplate:
+      metadata:
+        name: immich-database-backup
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
   postgresql:
     shared_preload_libraries:
