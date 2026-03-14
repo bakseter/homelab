@@ -11,16 +11,21 @@ spec:
       recurring-job-group.longhorn.io/hetzner-backup: enabled
   storage:
     size: 2Gi
-    pvcTemplate:
-      volumeName: pvc-93523875-1702-4d29-8d99-6c96cfdc311c
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
   postgresql:
     shared_preload_libraries:
       - 'vchord.so'
+  # bootstrap:
+  #   initdb:
+  #     # TODO: Use managed extensions (pg 18)
+  #     postInitApplicationSQL:
+  #       # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
+  #       - CREATE EXTENSION vchord CASCADE;
+  #       - CREATE EXTENSION earthdistance CASCADE;
   bootstrap:
-    initdb:
-      # TODO: Use managed extensions (pg 18)
-      postInitApplicationSQL:
-        # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
-        - CREATE EXTENSION vchord CASCADE;
-        - CREATE EXTENSION earthdistance CASCADE;
+    recovery:
+      volumeSnapshots:
+        storage:
+          name: immich-database-1
+          kind: PersistentVolumeClaim
+          apiGroup: ''
