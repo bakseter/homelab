@@ -22,6 +22,6 @@ spec:
     recovery:
       volumeSnapshots:
         storage:
-          name: authentik-database-1
+          name: authentik-database-backup-1
           kind: PersistentVolumeClaim
           apiGroup: ''
