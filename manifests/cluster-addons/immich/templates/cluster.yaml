@@ -12,18 +12,15 @@ spec:
   storage:
     size: 2Gi
     pvcTemplate:
-      dataSource:
-        apiGroup: v1
-        kind: PersistentVolumeClaim
-        name: immich-database-backup
+      volumeName:
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
   postgresql:
     shared_preload_libraries:
       - 'vchord.so'
-# bootstrap:
-#   initdb:
-#     # TODO: Use managed extensions (pg 18)
-#     postInitApplicationSQL:
-#       # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
-#       - CREATE EXTENSION vchord CASCADE;
-#       - CREATE EXTENSION earthdistance CASCADE;
+  bootstrap:
+    initdb:
+      # TODO: Use managed extensions (pg 18)
+      postInitApplicationSQL:
+        # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
+        - CREATE EXTENSION vchord CASCADE;
+        - CREATE EXTENSION earthdistance CASCADE;
