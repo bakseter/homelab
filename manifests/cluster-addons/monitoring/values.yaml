@@ -242,6 +242,11 @@ alloy:
               "traefik",
             ]
           }
+
+          selectors {
+            role  = "pod"
+            label = "logs.bakseter.net/scrape=true"
+          }
         }
 
         discovery.relabel "pod_logs" {
@@ -335,14 +340,29 @@ alloy:
 
         otelcol.processor.batch "apps" {
           output {
-            logs = [otelcol.exporter.otlphttp.loki.input]
+            logs = [otelcol.exporter.loki.apps.input]
           }
         }
 
-        otelcol.exporter.otlphttp "loki" {
-          client {
-            endpoint = "http://monitoring-loki-gateway.monitoring.svc.cluster.local/otlp"
+        otelcol.exporter.loki "apps" {
+          forward_to = [loki.process.otel_logs.receiver]
+        }
+
+        loki.process "otel_logs" {
+          stage.static_labels {
+            values = {
+              cluster = "homelab",
+              source  = "otlp",
+            }
           }
+
+          stage.labels {
+            values = {
+              service_name = "service.name"
+            }
+          }
+
+          forward_to = [loki.write.default.receiver]
         }
 
   configReloader:
