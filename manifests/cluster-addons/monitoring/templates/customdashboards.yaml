@@ -46,7 +46,7 @@ spec:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "91483154-8678-40d3-9f5d-7ad6b07dc497"
+            "uid": "prometheus"
           },
           "description": "CPU usage last 5 minutes for containers in the namespace. Denoted in CPU cores.",
           "fieldConfig": {
@@ -128,7 +128,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "91483154-8678-40d3-9f5d-7ad6b07dc497"
+                "uid": "prometheus"
               },
               "editorMode": "code",
               "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=~\"$namespace\",container!=\"\",container!=\"POD\"}[5m])) by (container)",
@@ -144,7 +144,7 @@ spec:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "91483154-8678-40d3-9f5d-7ad6b07dc497"
+            "uid": "prometheus"
           },
           "description": "Memory usage for containers in namespace. Denoted in Mi.",
           "fieldConfig": {
@@ -226,7 +226,7 @@ spec:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "91483154-8678-40d3-9f5d-7ad6b07dc497"
+                "uid": "prometheus"
               },
               "editorMode": "code",
               "exemplar": false,
@@ -255,7 +255,7 @@ spec:
             },
             "datasource": {
               "type": "prometheus",
-              "uid": "91483154-8678-40d3-9f5d-7ad6b07dc497"
+              "uid": "prometheus"
             },
             "definition": "label_values(container_memory_usage_bytes,namespace)",
             "includeAll": true,
@@ -281,6 +281,6 @@ spec:
       "timezone": "browser",
       "title": "CPU and Memory usage for namespace",
       "uid": "dffwhms45kv7kf",
-      "version": 9,
+      "version": 12,
       "weekStart": ""
     }
