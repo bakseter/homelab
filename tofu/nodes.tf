@@ -161,4 +161,11 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
       }
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      disk[0].datastore_id,
+      disk[1].datastore_id,
+    ]
+  }
 }

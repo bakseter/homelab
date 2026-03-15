@@ -22,13 +22,13 @@ nodes:
     cores: 6
     ip: 192.168.1.28
     memory: 32
-    disk: 480
+    disk: 500
     virtualNodes:
       - hostname: m720q-controlplane-1
         type: controlplane
         cores: 6
         memory: 4
-        disk: 25
+        disk: 100
         ip: 192.168.1.100
         extraConfigPatches: |-
           machine:
@@ -39,9 +39,10 @@ nodes:
         type: worker
         cores: 6
         memory: 20
-        disk: 25
+        disk: 100
         longhornDisk:
-          size: 400
+          size: 500
+          fileFormat: raw
         ip: 192.168.1.101
         extraConfigPatches: |-
           machine:
@@ -72,14 +73,14 @@ nodes:
   m715q:
     cores: 4
     memory: 16
-    disk: 480
+    disk: 500
     ip: 192.168.1.27
     virtualNodes:
       - hostname: m715q-controlplane-1
         type: controlplane
         cores: 4
         memory: 4
-        disk: 25
+        disk: 100
         ip: 192.168.1.110
         extraConfigPatches: |-
           machine:
@@ -94,9 +95,10 @@ nodes:
         type: worker
         cores: 4
         memory: 8
-        disk: 25
+        disk: 100
         longhornDisk:
-          size: 400
+          size: 500
+          fileFormat: raw
         ip: 192.168.1.111
         extraConfigPatches: |-
           machine:
@@ -134,7 +136,7 @@ nodes:
         type: controlplane
         cores: 4
         memory: 4
-        disk: 25
+        disk: 50
         ip: 192.168.1.120
         extraConfigPatches: |-
           machine:
@@ -145,9 +147,9 @@ nodes:
         type: worker
         cores: 4
         memory: 8
-        disk: 25
+        disk: 50
         longhornDisk:
-          size: 250
+          size: 238
           fileFormat: raw
         ip: 192.168.1.121
         extraConfigPatches: |-
