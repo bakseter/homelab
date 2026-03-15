@@ -217,7 +217,8 @@ alloy:
 
     extraPorts:
       - name: otlp-grpc
-        containerPort: 4317
+        port: 4317
+        targetPort: 4317
         protocol: TCP
 
     configMap:
