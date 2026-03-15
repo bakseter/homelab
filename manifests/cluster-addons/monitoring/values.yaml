@@ -68,9 +68,11 @@ loki:
 
     storage:
       type: s3
+
       bucketNames:
         chunks: loki-chunks
         ruler: loki-ruler
+
       s3:
         endpoint: minio.minio.svc.cluster.local:9000
         access_key_id: minio
@@ -201,16 +203,16 @@ alloy:
       content: |
         loki.write "default" {
           endpoint {
-            url = "http://monitoring-loki.monitoring.svc.cluster.local:3100/loki/api/v1/push"
+            url = "http://monitoring-loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push"
           }
         }
 
         local.file_match "node_logs" {
           path_targets = [{
-              __path__  = "/var/log/syslog",
-              job       = "node/syslog",
-              node_name = sys.env("HOSTNAME"),
-              cluster   = "homelab",
+            __path__  = "/var/log/syslog",
+            job       = "node/syslog",
+            node_name = sys.env("HOSTNAME"),
+            cluster   = "homelab",
           }]
         }
 
@@ -223,7 +225,16 @@ alloy:
           role = "pod"
 
           namespaces {
-            names = ["bakseter-net", "cloudflared", "immich", "jellyfin", "longhorn-system", "mandagsmiddag", "tailscale", "traefik"]
+            names = [
+              "bakseter-net",
+              "cloudflared",
+              "immich",
+              "jellyfin",
+              "longhorn-system",
+              "mandagsmiddag",
+              "tailscale",
+              "traefik",
+            ]
           }
         }
 
@@ -232,50 +243,34 @@ alloy:
 
           rule {
             source_labels = ["__meta_kubernetes_namespace"]
-            action = "replace"
-            target_label = "namespace"
+            action        = "replace"
+            target_label  = "namespace"
           }
 
           rule {
             source_labels = ["__meta_kubernetes_pod_name"]
-            action = "replace"
-            target_label = "pod"
+            action        = "replace"
+            target_label  = "pod"
           }
 
           rule {
             source_labels = ["__meta_kubernetes_pod_container_name"]
-            action = "replace"
-            target_label = "container"
+            action        = "replace"
+            target_label  = "container"
           }
 
           rule {
             source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
-            action = "replace"
-            target_label = "app"
+            action        = "replace"
+            target_label  = "app"
           }
 
           rule {
             source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_container_name"]
-            action = "replace"
-            target_label = "job"
-            separator = "/"
-            replacement = "$1"
-          }
-
-          rule {
-            source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
-            action = "replace"
-            target_label = "__path__"
-            separator = "/"
-            replacement = "/var/log/pods/*$1/*.log"
-          }
-
-          rule {
-            source_labels = ["__meta_kubernetes_pod_container_id"]
-            action = "replace"
-            target_label = "container_runtime"
-            regex = "^(\\S+):\\/\\/.+$"
-            replacement = "$1"
+            action        = "replace"
+            target_label  = "job"
+            separator     = "/"
+            replacement   = "$1/$2"
           }
         }
 
@@ -286,9 +281,10 @@ alloy:
 
         loki.process "pod_logs" {
           stage.static_labels {
-              values = {
-                cluster = "homelab",
-              }
+            values = {
+              cluster = "homelab",
+              source  = "kubernetes",
+            }
           }
 
           forward_to = [loki.write.default.receiver]
@@ -297,24 +293,43 @@ alloy:
         loki.source.kubernetes_events "cluster_events" {
           job_name   = "integrations/kubernetes/eventhandler"
           log_format = "logfmt"
-          forward_to = [
-            loki.process.cluster_events.receiver,
-          ]
+          forward_to = [loki.process.cluster_events.receiver]
         }
 
         loki.process "cluster_events" {
-          forward_to = [loki.write.default.receiver]
-
           stage.static_labels {
             values = {
               cluster = "homelab",
+              source  = "k8s_events",
             }
           }
 
-          stage.labels {
-            values = {
-              kubernetes_cluster_events = "job",
-            }
+          forward_to = [loki.write.default.receiver]
+        }
+
+        otelcol.receiver.otlp "apps" {
+          grpc {
+            endpoint = "0.0.0.0:4317"
+          }
+
+          http {
+            endpoint = "0.0.0.0:4318"
+          }
+
+          output {
+            logs = [otelcol.processor.batch.apps.input]
+          }
+        }
+
+        otelcol.processor.batch "apps" {
+          output {
+            logs = [otelcol.exporter.otlphttp.loki.input]
+          }
+        }
+
+        otelcol.exporter.otlphttp "loki" {
+          client {
+            endpoint = "http://monitoring-loki-gateway.monitoring.svc.cluster.local/otlp"
           }
         }
 
@@ -328,6 +343,16 @@ alloy:
       runAsNonRoot: true
       runAsUser: 65535
       runAsGroup: 65535
+
+  service:
+    enabled: true
+    ports:
+      - name: otlp-grpc
+        port: 4317
+        targetPort: 4317
+      - name: otlp-http
+        port: 4318
+        targetPort: 4318
 
 grafana-operator:
   podSecurityContext:
