@@ -19,7 +19,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      cnpg.io/cluster: immich-database-new
+      cnpg.io/cluster: immich-database
   ingress:
     - from:
         - namespaceSelector:
