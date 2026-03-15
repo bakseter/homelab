@@ -258,15 +258,16 @@ alloy:
               "traefik",
             ]
           }
-
-          selectors {
-            role  = "pod"
-            label = "logs.bakseter.net/scrape=true"
-          }
         }
 
         discovery.relabel "pod_logs" {
           targets = discovery.kubernetes.pod.targets
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_logs_bakseter_net_scrape"]
+            regex         = "false"
+            action        = "drop"
+          }
 
           rule {
             source_labels = ["__meta_kubernetes_namespace"]

@@ -4,8 +4,6 @@ traefik:
 
   deployment:
     replicas: 2
-    podLabels:
-      logs.bakseter.net/scrape: 'true'
 
   providers:
     kubernetesCRD:
