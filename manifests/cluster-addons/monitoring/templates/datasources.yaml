@@ -9,11 +9,15 @@ spec:
   allowCrossNamespaceImport: true
   datasource:
     name: loki
+    uid: loki
     type: loki
     access: proxy
     basicAuth: false
-    url: http://monitoring-loki-gateway.monitoring.svc.cluster.local:80
+    url: http://monitoring-loki-gateway.monitoring.svc.cluster.local
     isDefault: false
+    jsonData:
+      httpMethod: GET
+      maxLines: 1000
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource
@@ -26,6 +30,7 @@ spec:
   allowCrossNamespaceImport: true
   datasource:
     name: prometheus
+    uid: prometheus
     type: prometheus
     access: proxy
     basicAuth: false
