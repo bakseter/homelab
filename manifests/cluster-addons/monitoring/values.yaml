@@ -334,6 +334,18 @@ alloy:
           }
 
           output {
+            logs = [otelcol.processor.attributes.otlp_hints.input]
+          }
+        }
+
+        otelcol.processor.attributes "otlp_hints" {
+          action {
+            key    = "loki.resource.labels"
+            action = "insert"
+            value  = "service.name,service.namespace"
+          }
+
+          output {
             logs = [otelcol.processor.batch.apps.input]
           }
         }
@@ -353,12 +365,6 @@ alloy:
             values = {
               cluster = "homelab",
               source  = "otlp",
-            }
-          }
-
-          stage.labels {
-            values = {
-              service_name = "service.name",
             }
           }
 
