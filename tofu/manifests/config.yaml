@@ -22,7 +22,6 @@ nodes:
     cores: 6
     ip: 192.168.1.28
     memory: 32
-    disk: 500
     virtualNodes:
       - hostname: m720q-controlplane-1
         type: controlplane
@@ -41,8 +40,9 @@ nodes:
         memory: 20
         disk: 100
         longhornDisk:
-          size: 500
+          size: 465
           fileFormat: raw
+          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNL0Y702707H' # ls -l /dev/disk/by-id/
         ip: 192.168.1.101
         extraConfigPatches: |-
           machine:
@@ -73,7 +73,6 @@ nodes:
   m715q:
     cores: 4
     memory: 16
-    disk: 500
     ip: 192.168.1.27
     virtualNodes:
       - hostname: m715q-controlplane-1
@@ -97,8 +96,9 @@ nodes:
         memory: 8
         disk: 100
         longhornDisk:
-          size: 500
+          size: 465
           fileFormat: raw
+          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S7EWNL0X362167X' # ls -l /dev/disk/by-id/
         ip: 192.168.1.111
         extraConfigPatches: |-
           machine:
@@ -151,6 +151,7 @@ nodes:
         longhornDisk:
           size: 238
           fileFormat: raw
+          pathInDatastore: '/dev/disk/by-id/ata-Micron_MTFDDAK256TDL_193823DF41CD' # ls -l /dev/disk/by-id/
         ip: 192.168.1.121
         extraConfigPatches: |-
           machine:

@@ -135,7 +135,8 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
     for_each = try(each.value.longhornDisk, null) != null ? [1] : []
 
     content {
-      datastore_id = "local-lvm"
+      datastore_id      = ""
+      path_in_datastore = each.value.longhornDisk.pathInDatastore
 
       interface   = "scsi1"
       size        = each.value.longhornDisk.size
@@ -160,12 +161,5 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
         gateway = "192.168.1.1"
       }
     }
-  }
-
-  lifecycle {
-    ignore_changes = [
-      disk[0].datastore_id,
-      disk[1].datastore_id,
-    ]
   }
 }
