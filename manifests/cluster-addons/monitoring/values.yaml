@@ -138,19 +138,24 @@ loki:
   deploymentMode: Distributed
 
   ingester:
-    replicas: 1
+    replicas: 3
     zoneAwareReplication:
       enabled: false
 
+  querier:
+    replicas: 3 # Improve query performance via parallelism
+    maxUnavailable: 2
+
   queryFrontend:
-    replicas: 1
+    replicas: 2
+    maxUnavailable: 1
 
   queryScheduler:
-    replicas: 1
+    replicas: 2
 
   distributor:
-    replicas: 1
-    maxUnavailable: 1
+    replicas: 3
+    maxUnavailable: 2
 
   compactor:
     replicas: 1
@@ -161,7 +166,7 @@ loki:
     retention_delete_worker_count: 5
 
   indexGateway:
-    replicas: 1
+    replicas: 2
     maxUnavailable: 1
 
   chunksCache:
