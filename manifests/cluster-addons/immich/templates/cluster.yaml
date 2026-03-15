@@ -1,7 +1,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: immich-database-new
+  name: immich-database
   namespace: immich
 spec:
   instances: 1
@@ -15,10 +15,17 @@ spec:
   postgresql:
     shared_preload_libraries:
       - 'vchord.so'
+  # bootstrap:
+  #   initdb:
+  #     # TODO: Use managed extensions (pg 18)
+  #     postInitApplicationSQL:
+  #       # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
+  #       - CREATE EXTENSION vchord CASCADE;
+  #       - CREATE EXTENSION earthdistance CASCADE;
   bootstrap:
-    initdb:
-      # TODO: Use managed extensions (pg 18)
-      postInitApplicationSQL:
-        # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
-        - CREATE EXTENSION vchord CASCADE;
-        - CREATE EXTENSION earthdistance CASCADE;
+    recovery:
+      volumeSnapshots:
+        storage:
+          name: immich-database-backup
+          kind: PersistentVolumeClaim
+          apiGroup: ''
