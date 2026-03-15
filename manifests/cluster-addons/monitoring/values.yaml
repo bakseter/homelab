@@ -358,7 +358,7 @@ alloy:
 
           stage.labels {
             values = {
-              service_name = "service.name"
+              service_name = "service.name",
             }
           }
 
