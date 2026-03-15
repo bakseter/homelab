@@ -197,12 +197,28 @@ alloy:
       seccompProfile:
         type: RuntimeDefault
 
+  configReloader:
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsUser: 65535
+      runAsGroup: 65535
+
   alloy:
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
           - ALL
+
+    extraPorts:
+      - name: otlp-grpc
+        containerPort: 4317
+        protocol: TCP
 
     configMap:
       content: |
@@ -328,10 +344,6 @@ alloy:
             endpoint = "0.0.0.0:4317"
           }
 
-          http {
-            endpoint = "0.0.0.0:4318"
-          }
-
           output {
             logs = [otelcol.processor.attributes.otlp_hints.input]
           }
@@ -369,27 +381,6 @@ alloy:
 
           forward_to = [loki.write.default.receiver]
         }
-
-  configReloader:
-    securityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-      readOnlyRootFilesystem: true
-      runAsNonRoot: true
-      runAsUser: 65535
-      runAsGroup: 65535
-
-  service:
-    enabled: true
-    ports:
-      - name: otlp-grpc
-        port: 4317
-        targetPort: 4317
-      - name: otlp-http
-        port: 4318
-        targetPort: 4318
 
 grafana-operator:
   podSecurityContext:
