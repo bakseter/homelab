@@ -18,3 +18,10 @@ spec:
     limits:
       cpu: 500m
       memory: 1Gi
+  bootstrap:
+    recovery:
+      volumeSnapshots:
+        storage:
+          name: authentik-database-backup
+          kind: PersistentVolumeClaim
+          apiGroup: ''
