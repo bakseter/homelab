@@ -15,17 +15,10 @@ spec:
   postgresql:
     shared_preload_libraries:
       - 'vchord.so'
-  # bootstrap:
-  #   initdb:
-  #     # TODO: Use managed extensions (pg 18)
-  #     postInitApplicationSQL:
-  #       # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
-  #       - CREATE EXTENSION vchord CASCADE;
-  #       - CREATE EXTENSION earthdistance CASCADE;
   bootstrap:
-    recovery:
-      volumeSnapshots:
-        storage:
-          name: immich-database-1
-          kind: PersistentVolumeClaim
-          apiGroup: ''
+    initdb:
+      # TODO: Use managed extensions (pg 18)
+      postInitApplicationSQL:
+        # Commands based on: https://immich.app/docs/administration/postgres-standalone/#without-superuser-permission
+        - CREATE EXTENSION vchord CASCADE;
+        - CREATE EXTENSION earthdistance CASCADE;
