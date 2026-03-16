@@ -2,11 +2,11 @@ kyverno:
   admissionController:
     replicas: 3
 
-  backgroundController:
-    replicas: 0
-
-  cleanupController:
-    replicas: 0
-
   reportsController:
     replicas: 1
+
+  backgroundController:
+    enabled: false
+
+  cleanupController:
+    enabled: false
