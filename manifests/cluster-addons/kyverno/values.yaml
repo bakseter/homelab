@@ -3,10 +3,10 @@ kyverno:
     replicas: 3
 
   backgroundController:
-    replicas: 3
+    replicas: 0
 
   cleanupController:
-    replicas: 3
+    replicas: 0
 
   reportsController:
-    replicas: 3
+    replicas: 1
