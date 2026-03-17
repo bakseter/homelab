@@ -1,8 +1,6 @@
 keel:
   image:
-    # TODO: Replace with upstream when keel fixes their shit
-    repository: ghcr.io/bakseter/keel/keel
-    tag: latest
+    tag: 0.21.1
 
   helmProvider:
     enabled: false
