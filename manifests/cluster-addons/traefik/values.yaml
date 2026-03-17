@@ -36,7 +36,9 @@ traefik:
       exposedPort: 9000
       forwardedHeaders:
         trustedIPs:
-          - '10.244.0.0/16'
+          - '10.244.0.0/16' # trusts internal pod network
+      middlewares:
+        - redirect-https
 
   api:
     dashboard: false
