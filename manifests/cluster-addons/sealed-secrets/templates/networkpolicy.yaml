@@ -17,5 +17,5 @@ spec:
         - rules:
             http: []
           ports:
-            - port: 6443
+            - port: '6443'
               protocol: TCP
