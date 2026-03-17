@@ -6,6 +6,7 @@ longhorn:
   defaultSettings:
     defaultDataPath: /var/lib/longhorn
     createDefaultDiskLabeledNodes: true
+    replicaAutoBalance: least-effort
     snapshotDataIntegrity: disabled
 
   defaultBackupStore:
