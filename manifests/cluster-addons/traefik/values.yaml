@@ -39,7 +39,7 @@ traefik:
           - '10.244.0.0/16' # trusts internal pod network
       http:
         middlewares:
-          - redirect-https
+          - redirect-https@kubernetescrd
 
   api:
     dashboard: false
