@@ -105,6 +105,19 @@ spec:
               protocol: TCP
 
   egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - rules:
+            http: []
+          ports:
+            - port: '53'
+              protocol: TCP
+            - port: '53'
+              protocol: UDP
+
     - toEntities:
         - world
       toPorts:
