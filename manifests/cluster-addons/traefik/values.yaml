@@ -38,6 +38,18 @@ traefik:
         trustedIPs:
           - '10.244.0.0/16' # trusts internal pod network
 
+    test:
+      expose:
+        default: true
+      port: 9999
+      exposedPort: 9999
+      forwardedHeaders:
+        trustedIPs:
+          - '10.244.0.0/16' # trusts internal pod network
+      http:
+        middlewares:
+          - redirect-https@kubernetescrd
+
   api:
     dashboard: false
 
