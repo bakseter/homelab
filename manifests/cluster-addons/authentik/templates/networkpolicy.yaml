@@ -81,6 +81,15 @@ spec:
           ports:
             - port: '5432'
               protocol: TCP
+
+    - toFQDNs:
+        - matchName: 'version.goauthentik.io'
+      toPorts:
+        - rules:
+            http: []
+          ports:
+            - port: '443'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
