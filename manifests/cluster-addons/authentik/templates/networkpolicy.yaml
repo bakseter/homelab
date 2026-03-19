@@ -90,6 +90,9 @@ spec:
           ports:
             - port: '443'
               protocol: TCP
+
+    - toEntities:
+        - kube-apiserver
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
