@@ -67,6 +67,12 @@ spec:
 
     - group: 'monitoring.coreos.com'
       kind: ServiceMonitor
+
+    - group: 'batch'
+      kind: Job
+
+    - group: 'batch'
+      kind: CronJob
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
