@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: mandagsmiddag
+    app.kubernetes.io/name: authentik-proxy
+    app.kubernetes.io/version: 2026.2.1
+    goauthentik.io/outpost-name: mandagsmiddag
+    goauthentik.io/outpost-type: proxy
+    goauthentik.io/outpost-uuid: 5013cba8372b4587b926a49a737b22a2
+  name: ak-outpost-mandagsmiddag
+  namespace: authentik
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: authentik-outpost-proxy
+      goauthentik.io/outpost-name: mandagsmiddag
+      goauthentik.io/outpost-type: proxy
+      goauthentik.io/outpost-uuid: 5013cba8372b4587b926a49a737b22a2
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: authentik-outpost
+        app.kubernetes.io/name: authentik-outpost-proxy
+        app.kubernetes.io/version: 2026.2.1
+        goauthentik.io/outpost-name: mandagsmiddag
+        goauthentik.io/outpost-type: proxy
+        goauthentik.io/outpost-uuid: 5013cba8372b4587b926a49a737b22a2
+        version: 2026.2.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: authentik-outpost-proxy
+                  goauthentik.io/outpost-name: mandagsmiddag
+                  goauthentik.io/outpost-type: proxy
+                  goauthentik.io/outpost-uuid: 5013cba8372b4587b926a49a737b22a2
+              topologyKey: bakseter.net/physical-node
+      containers:
+        - env:
+            - name: AUTHENTIK_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: authentik_host
+                  name: ak-outpost-mandagsmiddag
+            - name: AUTHENTIK_HOST_BROWSER
+              valueFrom:
+                secretKeyRef:
+                  key: authentik_host_browser
+                  name: ak-outpost-mandagsmiddag
+            - name: AUTHENTIK_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: ak-outpost-mandagsmiddag
+            - name: AUTHENTIK_INSECURE
+              valueFrom:
+                secretKeyRef:
+                  key: authentik_host_insecure
+                  name: ak-outpost-mandagsmiddag
+          image: ghcr.io/goauthentik/proxy:2026.2.1
+          imagePullPolicy: IfNotPresent
+          name: proxy
+          ports:
+            - containerPort: 9000
+              name: http
+              protocol: TCP
+            - containerPort: 9300
+              name: http-metrics
+              protocol: TCP
+            - containerPort: 9443
+              name: https
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
