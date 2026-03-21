@@ -1,9 +1,5 @@
 kube-prometheus-stack:
   prometheus:
-    networkPolicy:
-      enabled: true
-      flavor: cilium
-
     prometheusSpec:
       scrapeInterval: 30s
 
@@ -34,11 +30,6 @@ kube-prometheus-stack:
         - sourceLabels: [__name__]
           regex: '.*_bucket'
           action: drop
-
-  prometheusOperator:
-    networkPolicy:
-      enabled: true
-      flavor: cilium
 
   defaultRules:
     create: true
