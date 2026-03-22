@@ -14,6 +14,7 @@ resource "helm_release" "cilium" {
   repository = "https://helm.cilium.io/"
   chart      = "cilium"
   namespace  = "kube-system"
+  version    = "1.19.1"
 
   atomic       = true
   force_update = true

@@ -11,12 +11,12 @@ terraform {
 
     talos = {
       source  = "siderolabs/talos"
-      version = "~> 0.9"
+      version = "0.10.1"
     }
 
     proxmox = {
       source  = "bpg/proxmox"
-      version = "~> 0.89"
+      version = "0.99.0"
     }
 
     null = {
