@@ -1,30 +1,36 @@
-- name: Manage Proxmox hosts
+- name: Configure Proxmox repositories
   hosts: all
-  gather_facts: true
-
+  become: true
   tasks:
-    - name: Ensure useful packages are installed
-      ansible.builtin.apt:
-        name:
-          - curl
-          - vim
-          - htop
+    - name: Disable enterprise repository
+      ansible.builtin.lineinfile:
+        path: /etc/apt/sources.list.d/pve-enterprise.sources
+        line: 'Enabled: no'
+        insertafter: EOF
         state: present
-        update_cache: true
-#   - name: Example cron job
-#     ansible.builtin.cron:
-#       name: 'example-maintenance'
-#       user: root
-#       hour: '2'
-#       minute: '0'
-#       job: '/usr/bin/echo hello from ansible'
 
-#   - name: Drop example config file
-#     ansible.builtin.copy:
-#       dest: /etc/example.conf
-#       content: |
-#         managed_by = ansible
-#         cluster = proxmox
-#       owner: root
-#       group: root
-#       mode: '0644'
+    - name: Add proxmox no-subscription repository
+      ansible.builtin.copy:
+        dest: /etc/apt/sources.list.d/proxmox.sources
+        content: |
+          Types: deb
+          URIs: http://download.proxmox.com/debian/pve
+          Suites: trixie
+          Components: pve-no-subscription
+          Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Configure ceph no-subscription repository
+      ansible.builtin.copy:
+        dest: /etc/apt/sources.list.d/ceph.sources
+        content: |
+          Types: deb
+          URIs: http://download.proxmox.com/debian/ceph-squid
+          Suites: trixie
+          Components: no-subscription
+          Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
+        owner: root
+        group: root
+        mode: '0644'
