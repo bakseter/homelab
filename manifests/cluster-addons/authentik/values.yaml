@@ -15,16 +15,16 @@ authentik:
         - 65534
 
   server:
-    replicas: 2
+    replicas: 1
 
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app.kubernetes.io/instance: authentik
-                app.kubernetes.io/component: server
-            topologyKey: bakseter.net/physical-node
+    #   affinity:
+    #     podAntiAffinity:
+    #       requiredDuringSchedulingIgnoredDuringExecution:
+    #         - labelSelector:
+    #             matchLabels:
+    #               app.kubernetes.io/instance: authentik
+    #               app.kubernetes.io/component: server
+    #           topologyKey: bakseter.net/physical-node
 
     containerSecurityContext:
       allowPrivilegeEscalation: false
