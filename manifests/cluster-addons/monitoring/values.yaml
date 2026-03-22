@@ -6,6 +6,9 @@ kube-prometheus-stack:
       retention: 168h
       retentionSize: 20GB # https://prometheus.io/docs/prometheus/latest/storage/#right-sizing-retention-size
 
+      image:
+        tag: v3.10.0-distroless
+
       serviceMonitorNamespaceSelector:
         matchExpressions:
           - key: kubernetes.io/metadata.name
