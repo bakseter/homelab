@@ -6,7 +6,7 @@ metadata:
 spec:
   endpointSelector: {}
 
-  ingress: {}
+  ingress: []
 
   egress:
     - toEntities:
