@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  namespace: kube-system
+spec:
+  destination:
+    namespace: kube-system
+    name: admin@homelab
+  project: default
+  source:
+    path: manifests/cluster-addons/cilium
+    repoURL: https://github.com/bakseter/homelab.git
+    targetRevision: HEAD
+  syncPolicy:
+    #   automated:
+    #     prune: true
+    #     selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
