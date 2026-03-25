@@ -36,7 +36,7 @@ kube-prometheus-stack:
 
   defaultRules:
     create: true
-    reules:
+    rules:
       alertmanager: false
       etcd: false
       kubeControllerManager: false
@@ -51,7 +51,7 @@ kube-prometheus-stack:
     forceDeployDashboards: true
 
   alertmanager:
-    enabled: false
+    enabled: true
 
   kubeEtcd:
     enabled: false
