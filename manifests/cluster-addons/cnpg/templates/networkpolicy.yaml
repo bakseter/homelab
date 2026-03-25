@@ -13,5 +13,10 @@ spec:
         - kube-apiserver
 
     - toEndpoints:
-        - matchLabels:
-            app.kubernetes.io/managed-by: cloudnative-pg
+        - matchExpressions:
+            - key: 'k8s:io.kubernetes.pod.namespace'
+              operator: Exists
+            - key: 'k8s:app.kubernetes.io/managed-by'
+              operator: In
+              values:
+                - cloudnative-pg
