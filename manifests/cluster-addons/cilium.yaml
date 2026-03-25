@@ -15,8 +15,13 @@ spec:
   ignoreDifferences:
     - kind: Secret
       name: cilium-ca
+      namespace: kube-system
     - kind: Secret
       name: hubble-relay-client-certs
+      namespace: kube-system
+    - kind: Secret
+      name: hubble-server-certs
+      namespace: kube-system
   syncPolicy:
     #   automated:
     #     prune: true
