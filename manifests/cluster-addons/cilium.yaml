@@ -12,6 +12,11 @@ spec:
     path: manifests/cluster-addons/cilium
     repoURL: https://github.com/bakseter/homelab.git
     targetRevision: HEAD
+  ignoreDifferences:
+    - kind: Secret
+      name: cilium-ca
+    - kind: Secret
+      name: hubble-relay-client-certs
   syncPolicy:
     #   automated:
     #     prune: true
