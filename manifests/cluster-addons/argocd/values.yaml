@@ -24,6 +24,37 @@ argo-cd:
             config:
               userHeader: Tailscale-User-Login
 
+      resource.exclusions: |
+        - apiGroups:
+            - ''
+          kinds:
+            - Secret
+          clusters:
+            - '*'
+          namespaces:
+            - kube-system
+          name: cilium-ca
+
+        - apiGroups:
+            - ''
+          kinds:
+            - Secret
+          clusters:
+            - '*'
+          namespaces:
+            - kube-system
+          name: hubble-relay-client-certs
+
+        - apiGroups:
+            - ''
+          kinds:
+            - Secret
+          clusters:
+            - '*'
+          namespaces:
+            - kube-system
+          name: hubble-server-certs
+
     rbac:
       scopes: '[groups, email]'
       policy.default: ''
