@@ -251,6 +251,7 @@ alloy:
 
           namespaces {
             names = [
+              "authentik",
               "bakseter-net",
               "cloudflared",
               "immich",
