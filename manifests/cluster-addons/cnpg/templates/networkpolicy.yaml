@@ -1,0 +1,17 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cnpg
+  namespace: cnpg-system
+spec:
+  endpointSelector: {}
+
+  ingress: {}
+
+  egress:
+    - toEntities:
+        - kube-apiserver
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/managed-by: cloudnative-pg
