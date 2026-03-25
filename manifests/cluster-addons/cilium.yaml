@@ -18,21 +18,21 @@ spec:
       name: cilium-ca
       namespace: kube-system
       jsonPointers:
-        - /
+        - /data
 
     - group: ''
       kind: Secret
       name: hubble-server-certs
       namespace: kube-system
       jsonPointers:
-        - /
+        - /data
 
     - group: ''
       kind: Secret
       name: hubble-relay-client-certs
       namespace: kube-system
       jsonPointers:
-        - /
+        - /data
   syncPolicy:
     #   automated:
     #     prune: true
