@@ -8,6 +8,11 @@ traefik:
   providers:
     kubernetesCRD:
       allowCrossNamespace: true
+    kubernetesGateway:
+      enabled: true
+
+  gateway:
+    namespacePolicy: All
 
   resources:
     requests:
