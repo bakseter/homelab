@@ -13,6 +13,7 @@ spec:
   egress:
     - toEntities:
         - world
+        - kube-apiserver
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -30,6 +31,7 @@ spec:
   egress:
     - toEntities:
         - world
+        - kube-apiserver
 
     - toEndpoints:
         - matchLabels:
