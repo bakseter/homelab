@@ -12,7 +12,10 @@ traefik:
       enabled: true
 
   gateway:
-    namespacePolicy: All
+    listeners:
+      public:
+        port: 9000
+        namespacePolicy: All
 
   resources:
     requests:
