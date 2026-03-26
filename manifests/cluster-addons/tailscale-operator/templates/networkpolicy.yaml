@@ -1,9 +1,50 @@
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
 metadata:
-  name: block-all-ingress
+  name: operator
   namespace: tailscale
 spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
+  endpointSelector:
+    matchLabels:
+      app: operator
+
+  ingress: []
+
+  egress:
+    - toEntities:
+        - world
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: ts-ingress
+  namespace: tailscale
+spec:
+  endpointSelector:
+    matchLabels:
+      tailscale.com/managed: 'true'
+      tailscale.com/parent-resource-type: ingress
+
+  ingress: []
+
+  egress:
+    - toEntities:
+        - world
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - rules:
+            http: []
+          ports:
+            - port: '53'
+              protocol: TCP
+            - port: '53'
+              protocol: UDP
+
+    - toEndpoints:
+        - matchExpressions:
+            - key: 'k8s:io.kubernetes.pod.namespace'
+              operator: Exists
