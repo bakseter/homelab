@@ -13,7 +13,25 @@ spec:
   egress:
     - toEntities:
         - world
+
+    - toEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: '1900'
+              protocol: UDP
+            - port: '5351'
+              protocol: UDP
+
+    - toEntities:
         - kube-apiserver
+      toPorts:
+        - rules:
+            http: []
+          ports:
+            - port: '6443'
+              protocol: TCP
+
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -31,7 +49,15 @@ spec:
   egress:
     - toEntities:
         - world
-        - kube-apiserver
+
+    - toEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: '1900'
+              protocol: UDP
+            - port: '5351'
+              protocol: UDP
 
     - toEndpoints:
         - matchLabels:
