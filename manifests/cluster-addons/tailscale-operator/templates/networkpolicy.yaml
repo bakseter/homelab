@@ -44,7 +44,6 @@ spec:
           ports:
             - port: '6443'
               protocol: TCP
-
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -84,6 +83,15 @@ spec:
               protocol: TCP
             - port: '53'
               protocol: UDP
+
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - rules:
+            http: []
+          ports:
+            - port: '6443'
+              protocol: TCP
 
     - toEndpoints:
         - matchExpressions:
