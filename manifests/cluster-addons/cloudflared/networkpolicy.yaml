@@ -23,8 +23,9 @@ spec:
       toPorts:
         - rules:
             http: []
-          protocol: TCP
-          port: '9000'
+          ports:
+            - port: '9000'
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
