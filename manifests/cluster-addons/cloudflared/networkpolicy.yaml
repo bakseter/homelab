@@ -17,14 +17,14 @@ spec:
               protocol: UDP
 
     - toEndpoints:
-        matchLabels:
-          k8s:io.kubernetes.pod.namespace: traefik
-          app.kubernetes.io/name: traefik
-        toPorts:
-          - rules:
-              http: []
-            protocol: TCP
-            port: '9000'
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: traefik
+            app.kubernetes.io/name: traefik
+      toPorts:
+        - rules:
+            http: []
+          protocol: TCP
+          port: '9000'
 
     - toEndpoints:
         - matchLabels:
