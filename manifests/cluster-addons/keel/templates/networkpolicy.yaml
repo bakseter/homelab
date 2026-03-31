@@ -32,8 +32,7 @@ spec:
               protocol: UDP
 
     - toFQDNs:
-        - matchName: 'ghcr.io'
-        - matchName: '*.github.com'
+        - matchPattern: '*.ghcr.io'
       toPorts:
         - rules:
             http: []
