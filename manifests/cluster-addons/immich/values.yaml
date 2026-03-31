@@ -50,7 +50,7 @@ immich:
         containers:
           main:
             image:
-              tag: v2.4.1
+              tag: v2.6.3
             env:
               DB_HOSTNAME:
                 valueFrom:
