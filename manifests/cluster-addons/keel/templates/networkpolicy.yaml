@@ -30,18 +30,10 @@ spec:
               protocol: TCP
             - port: '53'
               protocol: UDP
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: keel-egress-fqdn
-  namespace: keel
-spec:
-  endpointSelector: {}
 
-  egress:
     - toFQDNs:
         - matchName: 'ghcr.io'
+        - matchName: '*.github.com'
       toPorts:
         - rules:
             http: []
