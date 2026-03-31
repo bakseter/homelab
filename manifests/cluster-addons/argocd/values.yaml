@@ -43,7 +43,7 @@ argo-cd:
     enabled: true
 
   controller:
-    replicas: 1
+    replicas: 2
     resouces:
       requests:
         cpu: 100m
