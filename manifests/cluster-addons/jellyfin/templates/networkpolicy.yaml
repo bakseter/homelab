@@ -1,21 +1,24 @@
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
 metadata:
   name: jellyfin
   namespace: jellyfin
 spec:
-  policyTypes:
-    - Ingress
-  podSelector: {}
+  endpointSelector: {}
+
   ingress:
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: tailscale
-          podSelector:
-            matchLabels:
-              tailscale.com/parent-resource: jellyfin
-              tailscale.com/parent-resource-ns: jellyfin
-      ports:
-        - protocol: TCP
-          port: 8096
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tailscale
+            tailscale.com/parent-resource: jellyfin
+            tailscale.com/parent-resource-ns: jellyfin
+      toPorts:
+        - rules:
+            http: []
+          ports:
+            - port: '8096'
+              protocol: TCP
+
+  egress:
+    - toEntities:
+        - world
