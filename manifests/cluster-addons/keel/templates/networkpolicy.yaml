@@ -41,7 +41,7 @@ spec:
 
   egress:
     - toFQDNs:
-        - matchName: 'ghcr.io/bakseter/*'
+        - matchName: 'ghcr.io'
       toPorts:
         - rules:
             http: []
