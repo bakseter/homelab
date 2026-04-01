@@ -21,7 +21,7 @@ resource "talos_image_factory_schematic" "talos" {
   )
 }
 
-resource "proxmox_virtual_environment_download_file" "talos-nocloud-image" {
+resource "proxmox_download_file" "talos-nocloud-image" {
   for_each = local.nodes
 
   content_type = "iso"
@@ -62,7 +62,7 @@ resource "proxmox_virtual_environment_vm" "talos-controlplane" {
   disk {
     datastore_id = "local-lvm"
 
-    file_id     = proxmox_virtual_environment_download_file.talos-nocloud-image[each.value.parent_node].id
+    file_id     = proxmox_download_file.talos-nocloud-image[each.value.parent_node].id
     file_format = "raw"
 
     interface = "scsi0"
@@ -120,7 +120,7 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
   disk {
     datastore_id = "local-lvm"
 
-    file_id     = proxmox_virtual_environment_download_file.talos-nocloud-image[each.value.parent_node].id
+    file_id     = proxmox_download_file.talos-nocloud-image[each.value.parent_node].id
     file_format = "raw"
 
     interface = "scsi0"
