@@ -1,0 +1,76 @@
+- name: Configure /etc/hosts
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configure /etc/resolv.conf
+  copy:
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      search lan
+      nameserver 1.1.1.1
+
+- name: Disable enterprise repository
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list.d/pve-enterprise.sources
+    line: 'Enabled: no'
+    insertafter: EOF
+    state: present
+
+- name: Add proxmox no-subscription repository
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/proxmox.sources
+    content: |
+      Types: deb
+      URIs: http://download.proxmox.com/debian/pve
+      Suites: trixie
+      Components: pve-no-subscription
+      Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configure ceph no-subscription repository
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/ceph.sources
+    content: |
+      Types: deb
+      URIs: http://download.proxmox.com/debian/ceph-squid
+      Suites: trixie
+      Components: no-subscription
+      Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Install useful packages
+  apt:
+    name:
+      - vim
+    state: present
+    update_cache: true
+
+- name: Disable SSH password authentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+    state: present
+  loop:
+    - { regexp: '^#?PasswordAuthentication', line: 'PasswordAuthentication no' }
+    - {
+        regexp: '^#?PermitRootLogin',
+        line: 'PermitRootLogin prohibit-password',
+      }
+    - { regexp: '^#?PubkeyAuthentication', line: 'PubkeyAuthentication yes' }
+  notify: restart sshd
+
+- name: Disable EEE and NIC offloading
+  include_tasks: nic_eee_offloading.yaml
+  when: nic_offload_interface is defined

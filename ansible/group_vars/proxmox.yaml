@@ -1,0 +1,16 @@
+proxmox_hosts:
+  - ip: 192.168.1.27
+    fqdn: m715q.lan
+    short: m715q
+
+  - ip: 192.168.1.28
+    fqdn: m720q.lan
+    short: m720q
+
+  - ip: 192.168.1.29
+    fqdn: m715q2.lan
+    short: m715q2
+
+  - ip: 192.168.1.30
+    fqdn: m920q.lan
+    short: m920q

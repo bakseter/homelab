@@ -1,0 +1,11 @@
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted
+
+- name: reload and enable offloading service
+  systemd:
+    name: disable-offloading.service
+    enabled: yes
+    daemon_reload: yes
+    state: started

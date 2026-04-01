@@ -2,19 +2,13 @@
 
 This repository contains everything needed to replicate the software side of my homelab.
 
-Everything except for the OS install of Proxmox itsself
-is managed either via OpenTofu, (Ansible) or Argo CD.
-
-...exceeeeept for the ones below (TODO):
-
-- [ ] Cloudflare configuration (OpenTofu)
-- [ ] Tailscale configuration (OpenTofu)
-- [ ] Hetzner Cloud backup for Longhorn (OpenTofu)
-- [ ] Misc. OS fixes for stubborn M720q ethernet controller (Ansible)
+Everything except for the OS install of Proxmox itsself is managed either via OpenTofu, Ansible or Argo CD.
 
 ## Components
 
-- Proxmox VE is installed on (three, currently) bare metal servers
+- Proxmox VE is installed on (four, currently) bare metal servers.
+
+- Ansible is used for configuring the Proxmox hosts. See the `/ansible` directory.
 
 - OpenTofu is used to manage the Proxmox configuration, including VMs, storage,
   and networking. See the `tofu/` directory. VMs are running Talos Linux.
@@ -26,7 +20,7 @@ is managed either via OpenTofu, (Ansible) or Argo CD.
 
 - Proxmox VE for virtualization
 - Talos Linux for the VM OS
-- OpenTofu for infrastructure as code
+- OpenTofu and Ansible for infrastructure as code
 - Argo CD for GitOps
 - Cilium for networking and service mesh
 - Longhorn for distributed block storage
@@ -36,3 +30,8 @@ is managed either via OpenTofu, (Ansible) or Argo CD.
 - Keel for automatic image updates
 - Sealed Secrets for managing secrets
 - Cloudnative PG for PostgreSQL
+
+## TODO
+
+- [ ] Manage Cloudflare configuration with OpenTofu
+- [ ] Manage Tailscale configuration with OpenTofu

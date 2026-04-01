@@ -1,0 +1,22 @@
+- name: Disable EEE and NIC offloading
+  copy:
+    dest: /etc/systemd/system/disable-offloading.service
+    content: |
+      [Unit]
+      Description=Disable EEE and NIC offloading
+      After=network.target
+
+      [Service]
+      Type=oneshot
+      ExecStart=/bin/sh -c '/sbin/ethtool --set-eee {{ nic_offload_interface | default('') }} eee off && /sbin/ethtool -K {{ nic_offload_interface | default ('') }} gso off gro off tso off tx off rx off rxvlan off txvlan off sg off'
+      RemainAfterExit=true
+
+      [Install]
+      WantedBy=multi-user.target
+    notify: reload and enable offloading service
+
+- name: Enable NIC service
+  systemd:
+    name: disable-offloading.service
+    enabled: yes
+    daemon_reload: yes

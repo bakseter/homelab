@@ -1,10 +1,15 @@
 all:
-  hosts:
-    m715q:
-      ansible_host: 192.168.1.27
-    m720q:
-      ansible_host: 192.168.1.28
-    m715q2:
-      ansible_host: 192.168.1.29
-  vars:
-    ansible_user: root
+  children:
+    proxmox:
+      hosts:
+        m715q:
+          ansible_host: 192.168.1.27
+        m720q:
+          ansible_host: 192.168.1.28
+        m715q2:
+          ansible_host: 192.168.1.29
+        m920q:
+          ansible_host: 192.168.1.30
+      vars:
+        ansible_user: root
+        ansible_ssh_private_key_file: ~/.ssh/ansible_homelab
