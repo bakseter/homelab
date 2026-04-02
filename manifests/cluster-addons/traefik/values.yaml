@@ -15,6 +15,7 @@ traefik:
     listeners:
       public:
         port: 9000
+        protocol: HTTP
         namespacePolicy:
           from: Selector
           selector:
