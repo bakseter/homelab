@@ -15,7 +15,16 @@ traefik:
     listeners:
       public:
         port: 9000
-        namespacePolicy: All
+        namespacePolicy:
+          from: Selector
+          selector:
+            matchExpressions:
+              - key: kubernetes.io/metadata.name
+                operator: In
+                values:
+                  - authentik
+                  - bakseter-net
+                  - mandagsmiddag
 
   resources:
     requests:
