@@ -8,6 +8,8 @@ traefik:
   providers:
     kubernetesCRD:
       allowCrossNamespace: true
+    kubernetesIngress:
+      enabled: true
     kubernetesGateway:
       enabled: true
 
