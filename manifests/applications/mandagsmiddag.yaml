@@ -56,6 +56,9 @@ spec:
     - group: 'traefik.io'
       kind: IngressRoute
 
+    - group: 'gateway.networking.k8s.io'
+      kind: HTTPRoute
+
     - group: 'postgresql.cnpg.io'
       kind: Cluster
 
