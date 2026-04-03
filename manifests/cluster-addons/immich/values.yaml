@@ -2,7 +2,7 @@ immich:
   immich:
     persistence:
       library:
-        existingClaim: immich-library
+        existingClaim: immich-library-encrypted
 
   machine-learning:
     enabled: false
