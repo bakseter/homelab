@@ -9,7 +9,7 @@ jellyfin:
 
   deploymentStrategy:
     type: Recreate
-    rollingUpdate: {}
+    rollingUpdate: null
 
   ingress:
     enabled: true
