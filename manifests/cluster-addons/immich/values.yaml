@@ -52,8 +52,6 @@ immich:
             image:
               tag: v2.6.3
             env:
-              IMMICH_IGNORE_MOUNT_CHECK_ERRORS:
-                value: 'true'
               DB_HOSTNAME:
                 valueFrom:
                   secretKeyRef:
