@@ -62,6 +62,7 @@ kube-prometheus-stack:
 
       route:
         receiver: pushover
+        routes: []
 
       receivers:
         - name: pushover
