@@ -33,5 +33,12 @@
 		"tag:k8s-operator": [],
 		"tag:k8s":          ["tag:k8s-operator"],
         "tag:media":        ["tag:k8s-operator"]
-	}
+	},
+
+    // For kube-apiserver Proxy Group
+    "autoApprovers": {
+        "services": {
+            "tag:k8s": ["tag:k8s"]
+        }
+    }
 }
