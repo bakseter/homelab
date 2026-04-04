@@ -1,0 +1,11 @@
+apiVersion: tailscale.com/v1alpha1
+kind: ProxyGroup
+metadata:
+  name: homelab
+  namespace: tailscale
+spec:
+  type: kube-apiserver
+  replicas: 3
+  tags: ['tag:k8s']
+  kubeAPIServer:
+    mode: auth
