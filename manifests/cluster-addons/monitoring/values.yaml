@@ -49,12 +49,12 @@ kube-prometheus-stack:
       kubeSchedulerAlerting: false
       kubeSchedulerRecording: false
 
+  alertmanager:
+    enabled: true
+
   grafana:
     enabled: false
     forceDeployDashboards: true
-
-  alertmanager:
-    enabled: true
 
   kubeEtcd:
     enabled: false
