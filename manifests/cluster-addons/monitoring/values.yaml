@@ -52,6 +52,26 @@ kube-prometheus-stack:
   alertmanager:
     enabled: true
 
+    alertmanagerSpec:
+      secrets:
+        - alertmanager-pushover
+
+    config:
+      global:
+        resolve_timeout: 5m
+
+      route:
+        receiver: pushover
+
+      receivers:
+        - name: pushover
+          pushover_configs:
+            - user_key_file: /etc/alertmanager/secrets/alertmanager-pushover/user_key
+              token_file_file: /etc/alertmanager/secrets/alertmanager-pushover/token
+              title: '{{ .CommonAnnotations.summary }}'
+              message: '{{ .CommonAnnotations.description }}'
+              send_resolved: true
+
   grafana:
     enabled: false
     forceDeployDashboards: true
