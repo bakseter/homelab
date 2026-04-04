@@ -30,3 +30,5 @@ longhorn:
   metrics:
     serviceMonitor:
       enabled: true
+      additionalLabels:
+        release: monitoring
