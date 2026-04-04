@@ -1,5 +1,14 @@
 kube-prometheus-stack:
   prometheus:
+    ingress:
+      enabled: true
+      ingressClassName: tailscale
+      hosts:
+        - prometheus
+      tls:
+        - hosts:
+            - prometheus
+
     prometheusSpec:
       scrapeInterval: 30s
 
@@ -72,6 +81,15 @@ kube-prometheus-stack:
               title: '{{ .CommonAnnotations.summary }}'
               message: '{{ .CommonAnnotations.description }}'
               send_resolved: true
+
+    ingress:
+      enabled: true
+      ingressClassName: tailscale
+      hosts:
+        - alertmanager
+      tls:
+        - hosts:
+            - alertmanager
 
   grafana:
     enabled: false
