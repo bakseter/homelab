@@ -7,6 +7,9 @@ jellyfin:
     media:
       size: 100Gi
 
+  deploymentStrategy:
+    type: Recreate
+
   ingress:
     enabled: true
     className: tailscale
