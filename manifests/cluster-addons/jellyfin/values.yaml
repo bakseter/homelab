@@ -9,6 +9,7 @@ jellyfin:
 
   deploymentStrategy:
     type: Recreate
+    rollingUpdate: {}
 
   ingress:
     enabled: true
