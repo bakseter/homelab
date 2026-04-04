@@ -26,3 +26,7 @@ longhorn:
     tls:
       - hosts:
           - longhorn
+
+  metrics:
+    serviceMonitor:
+      enabled: true

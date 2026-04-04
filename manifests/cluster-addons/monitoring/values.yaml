@@ -14,8 +14,11 @@ kube-prometheus-stack:
           - key: kubernetes.io/metadata.name
             operator: In
             values:
+              - authentik
+              - longhorn-system
               - monitoring
               - mandagsmiddag
+              - spenn
 
       storageSpec:
         volumeClaimTemplate:
