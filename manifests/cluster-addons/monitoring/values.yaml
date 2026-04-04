@@ -71,7 +71,11 @@ kube-prometheus-stack:
 
       route:
         receiver: pushover
-        routes: []
+        group_by: ['alertname', 'namespace']
+        routes:
+          - matchers:
+              - alertname=~"Watchdog|InfoInhibitor
+            receiver: null
 
       receivers:
         - name: pushover
