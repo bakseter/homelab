@@ -77,7 +77,7 @@ kube-prometheus-stack:
         group_by: ['alertname', 'namespace']
         routes:
           - matchers:
-              - alertname=~"Watchdog|InfoInhibitor"
+              - alertname=~"Watchdog|InfoInhibitor|NodeSystemSaturation"
             receiver: 'null'
 
       receivers:
