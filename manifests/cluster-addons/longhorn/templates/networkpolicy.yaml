@@ -16,7 +16,7 @@ spec:
             tailscale.com/parent-resource-ns: longhorn-system
       toPorts:
         - ports:
-            - port: '8096'
+            - port: '8000'
               protocol: TCP
 
   egress: []
