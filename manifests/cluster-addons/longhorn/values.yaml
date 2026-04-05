@@ -7,6 +7,7 @@ longhorn:
     createDefaultDiskLabeledNodes: true
     replicaAutoBalance: best-effort
     snapshotDataIntegrity: disabled
+    storageReservedPercentageForDefaultDisk: 20
 
   defaultBackupStore:
     backupTarget: s3://bakseter-homelab-longhorn@hel1/
