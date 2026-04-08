@@ -17,7 +17,10 @@ spec:
         - name: vllm
           image: public.ecr.aws/q9t5s3a7/vllm-cpu-release-repo:v0.19.0@sha256:afb39fca138b51d019d986229d546531b45a2a3deb73bcf59bd42406e13fbba0
           command: ['/bin/sh', '-c']
-          args: ['vllm serve google/gemma-4-E2B-it']
+          args:
+            [
+              'vllm serve TinyLlama/TinyLlama-1.1B-Chat-v1.0 --dtype=bfloat16 --max-model-len 2048',
+            ]
           env:
             - name: HF_TOKEN
               valueFrom:
@@ -28,6 +31,8 @@ spec:
               value: /data/huggingface
             - name: HOME
               value: /data/home
+            - name: VLLM_CPU_KVCACHE_SPACE
+              value: '8'
           ports:
             - containerPort: 8000
           securityContext:
