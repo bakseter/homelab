@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: hf-token-secret
+  namespace: vllm
+spec:
+  encryptedData:
+    token: AgA+W4GRQfLjQ3lOgI7tuUFy5VmAmgmQu1hByqfDrZP+b77ADKdKzlh4SV0i0R6Gcuqkv5CZubk6VVjNaX2madC5HORP0sA51cLGbcEHk5QZzE0bwIxageiCGW30x/Jwh+V+58Fow4dQ6BKAuD9GjnM6qI2DwZhX7xJUmmxnY7ZyOQqI/E0Uqaqx+YK9E2xU5NxkGuWgP6o6kVLOR815Ov45kFfesKXbBCqcy1AlCDcITLuKwYqz7mQLEs22+rWiHRXkmzEUeaqBytUFW7l2AXEziy2Jmle27DT8Tsd6G8OLtxp43WzvO2D9ZyRwjuaqa5DO5msc+ANU+0G6sSYAuyIrzZPNpJ7eIdGoMIdYDkGs2XJPh2oogSej5JvNpoRj9Rws71PDVebcVDIX5PornnPNSlul9/EjugZU6d13Zc7GKLsO83pyUND57uiK98FWNZnmRzbmMLXe3WM1Eb/1pA35W/fFkinA23DmSio+UELTvWZ0l/KnpjCSC3cmkg2LObwYxNaz0mtWhhcb/HrBYXarnVJf0bJ0xOOhdUtPZxeQmOyII/+6hJXpZR/aH70xBvvXG4SeC/wmlQy6gjZwI7M/1/9MAoWDh1r2LmrOEcwdUVRWO25s5svbiyFXA8nsEUldGer3b6CARZv5BJQcdisBWd19S/ShXGrOOvoUXpAoAgwKGp1mgZ8N/Bv0Xb86uHGL25+hd0EMAZP1kXvzPRwABD0+rOr9poFHT1QUzwWFfDkGY/Mu
+  template:
+    metadata:
+      name: hf-token-secret
+      namespace: vllm
