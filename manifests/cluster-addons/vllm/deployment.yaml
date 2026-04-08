@@ -35,6 +35,13 @@ spec:
               value: '8'
           ports:
             - containerPort: 8000
+          resources:
+            requests:
+              cpu: 1
+              memory: 4Gi
+            limits:
+              cpu: 4
+              memory: 8Gi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
