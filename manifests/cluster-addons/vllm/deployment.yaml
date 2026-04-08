@@ -31,12 +31,10 @@ spec:
             capabilities:
               drop:
                 - ALL
-            readOnlyRootFilesystem: true
+            readOnlyRootFilesystem: false
           volumeMounts:
             - name: llama-storage
               mountPath: /root/.cache/huggingface
-            - name: tmp
-              mountPath: /tmp
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
@@ -50,5 +48,3 @@ spec:
         - name: llama-storage
           persistentVolumeClaim:
             claimName: vllm-models
-        - name: tmp
-          emptyDir: {}
