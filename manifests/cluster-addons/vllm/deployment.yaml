@@ -47,4 +47,4 @@ spec:
       volumes:
         - name: llama-storage
           persistentVolumeClaim:
-            claimName: vllm-models
+            claimName: vllm-models-2
