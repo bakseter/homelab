@@ -24,6 +24,10 @@ spec:
                 secretKeyRef:
                   name: hf-token-secret
                   key: token
+            - name: HF_HOME
+              value: /data/huggingface
+            - name: HOME
+              value: /data/home
           ports:
             - containerPort: 8000
           securityContext:
@@ -34,7 +38,7 @@ spec:
             readOnlyRootFilesystem: false
           volumeMounts:
             - name: llama-storage
-              mountPath: /root/.cache/huggingface
+              mountPath: /data/huggingface
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
