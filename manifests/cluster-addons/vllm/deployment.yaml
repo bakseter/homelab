@@ -30,9 +30,9 @@ spec:
             - name: HF_HOME
               value: /data/huggingface
             - name: HOME
-              value: /data/home
+              value: /data/huggingface
             - name: VLLM_CPU_KVCACHE_SPACE
-              value: '8'
+              value: '4'
           ports:
             - containerPort: 8000
           resources:
