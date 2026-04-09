@@ -21,6 +21,12 @@ ollama:
       memory: 8Gi
 
   securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+
+  podSecurityContext:
     runAsNonRoot: true
     runAsUser: 65534
     runAsGroup: 65534
@@ -29,9 +35,3 @@ ollama:
       - 65534
     seccompProfile:
       type: RuntimeDefault
-
-  podSecurityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-        - ALL
