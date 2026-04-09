@@ -1,5 +1,7 @@
 ollama:
   ollama:
+    mountPath: /data/ollama
+
     models:
       pull:
         - gemma3:1b
@@ -7,6 +9,12 @@ ollama:
   image:
     repository: ollama/ollama
     tag: 0.20.3@sha256:87d71eb588a28c747094ca5d011392a3790f6ea9bd9c87594780ad7c65cc7ed1
+
+  extraEnv:
+    - name: HOME
+      value: /data/ollama
+    - name: OLLAMA_MODELS
+      value: /data/ollama/models
 
   persistentVolume:
     enabled: true
