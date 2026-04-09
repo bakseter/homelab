@@ -1,0 +1,21 @@
+ollama:
+  ollama:
+    models:
+      pull:
+        - gemma3:1b
+
+  image:
+    repository: ollama/ollama
+    tag: 0.20.3@sha256:87d71eb588a28c747094ca5d011392a3790f6ea9bd9c87594780ad7c65cc7ed1
+
+  persistentVolume:
+    enabled: true
+    size: 30Gi
+
+  resources:
+    requests:
+      cpu: 2
+      memory: 4Gi
+    limits:
+      cpu: 8
+      memory: 8Gi
