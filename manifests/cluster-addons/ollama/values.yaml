@@ -19,3 +19,19 @@ ollama:
     limits:
       cpu: 8
       memory: 8Gi
+
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    runAsGroup: 65534
+    fsGroup: 65534
+    supplementalGroups:
+      - 65534
+    seccompProfile:
+      type: RuntimeDefault
+
+  podSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
