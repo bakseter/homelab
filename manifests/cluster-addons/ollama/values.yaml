@@ -15,6 +15,12 @@ ollama:
       value: /data/ollama
     - name: OLLAMA_MODELS
       value: /data/ollama/models
+    - name: OLLAMA_NUM_PARALLEL
+      value: '1'
+    - name: OLLAMA_MAX_LOADED_MODELS
+      value: '1'
+    - name: GOMLOCKALL
+      value: '1'
 
   persistentVolume:
     enabled: true
@@ -25,7 +31,7 @@ ollama:
       cpu: 2
       memory: 4Gi
     limits:
-      cpu: 8
+      cpu: 4
       memory: 8Gi
 
   securityContext:
