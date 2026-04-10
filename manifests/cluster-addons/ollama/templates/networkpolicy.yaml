@@ -1,0 +1,19 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: ollama
+  namespace: ollama
+spec:
+  endpointSelector: {}
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: mandagsmiddag
+            app.kubernetes.io/name: backend
+      toPorts:
+        - rules:
+            http: []
+          ports:
+            - port: '11434'
+              protocol: TCP

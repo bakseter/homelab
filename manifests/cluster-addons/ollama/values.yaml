@@ -5,6 +5,7 @@ ollama:
     models:
       pull:
         - gemma3:1b
+        - gemma3:4b
 
   image:
     repository: ollama/ollama
