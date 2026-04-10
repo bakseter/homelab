@@ -44,3 +44,8 @@ cilium:
     metrics:
       enabled:
         - http
+
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          release: monitoring
