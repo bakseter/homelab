@@ -43,9 +43,17 @@ cilium:
 
     metrics:
       enabled:
+        - dns:query;ignoreAAAA
+        - drop
+        - tcp
+        - flow
+        - icmp
         - http
 
       serviceMonitor:
         enabled: true
         labels:
           release: monitoring
+
+      dashboards:
+        enabled: true
