@@ -57,3 +57,4 @@ cilium:
 
       dashboards:
         enabled: true
+        namespace: monitoring
