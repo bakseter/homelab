@@ -47,5 +47,5 @@ cilium:
 
       serviceMonitor:
         enabled: true
-        additionalLabels:
+        labels:
           release: monitoring
