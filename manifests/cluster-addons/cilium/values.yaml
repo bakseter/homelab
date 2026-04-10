@@ -42,15 +42,80 @@ cilium:
       enabled: true
 
     metrics:
-      enabled:
-        - dns:query;ignoreAAAA
-        - drop
-        - tcp
-        - flow
-        - flows-to-world
-        - port-distribution
-        - icmp
-        - httpV2
+      dynamic:
+        enabled: true
+
+        config:
+          content:
+            - name: dns
+
+            - name: flow
+              contextOptions:
+                - name: sourceContext
+                  values:
+                    - workload-name
+                    - reserved-identity
+                - name: destinationContext
+                  values:
+                    - workload-name
+                    - reserved-identity
+
+            - name: drop
+
+            - name: tcp
+
+            - name: icmp
+              contextOptions:
+                - name: sourceContext
+                  values:
+                    - workload-name
+                    - reserved-identity
+
+            - name: httpV2
+              contextOptions:
+                - name: exemplars
+                  values:
+                    - true
+                - name: labelsContext
+                  values:
+                    - source_ip
+                    - source_namespace
+                    - source_workload
+                    - destination_ip
+                    - destination_namespace
+                    - destination_workload
+                    - traffic_direction
+                - name: sourceContext
+                  values:
+                    - workload-name
+                    - reserved-identity
+                - name: destinationContext
+                  values:
+                    - workload-name
+                    - reserved-identity
+
+            - name: policy
+              contextOptions:
+                - name: sourceContext
+                  values:
+                    - app
+                    - workload-name
+                    - pod
+                    - reserved-identity
+                - name: destinationContext
+                  values:
+                    - app
+                    - workload-name
+                    - pod
+                    - dns
+                    - reserved-identity
+                - name: labelsContext
+                  values:
+                    - source_namespace
+                    - destination_namespace
+              excludeFilters:
+                - destination_pod:
+                    - default/
 
       serviceMonitor:
         enabled: true
