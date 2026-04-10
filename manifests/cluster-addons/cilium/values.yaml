@@ -42,4 +42,5 @@ cilium:
       enabled: true
 
     metrics:
-      enabled: true
+      enabled:
+        - http
