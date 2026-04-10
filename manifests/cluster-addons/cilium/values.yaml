@@ -47,8 +47,10 @@ cilium:
         - drop
         - tcp
         - flow
+        - flows-to-world
+        - port-distribution
         - icmp
-        - http
+        - httpV2
 
       serviceMonitor:
         enabled: true
