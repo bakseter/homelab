@@ -9,6 +9,7 @@ spec:
     labels:
       recurring-job.longhorn.io/source: enabled
       recurring-job-group.longhorn.io/hetzner-backup: enabled
+      recurring-job-group.longhorn.io/fstrim: enabled
   affinity:
     nodeSelector:
       node.longhorn.io/create-default-disk: 'true'
