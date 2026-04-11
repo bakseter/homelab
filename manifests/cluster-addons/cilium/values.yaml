@@ -34,14 +34,49 @@ cilium:
   socketLB:
     hostNamespaceOnly: true
 
+  ### END talos
+
+  prometheus:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: monitoring
+
+  dashboards:
+    enabled: true
+    namespace: monitoring
+
+  operator:
+    dashboards:
+      enabled: true
+      namespace: monitoring
+
+    prometheus:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        labels:
+          release: monitoring
+
   hubble:
     relay:
       enabled: true
+
+      prometheus:
+        enabled: true
+
+        serviceMonitor:
+          enabled: true
+          labels:
+            release: monitoring
 
     ui:
       enabled: true
 
     metrics:
+      enableOpenMetrics: true
+
       dynamic:
         enabled: true
 
@@ -93,6 +128,8 @@ cilium:
                   values:
                     - workload-name
                     - reserved-identity
+
+            - name: port-distribution
 
             - name: policy
               contextOptions:
