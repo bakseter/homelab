@@ -188,34 +188,34 @@ nodes:
         type: worker
         cores: 6
         memory: 24
-        disk: 100
-        #       longhornDisk:
-        #         size: 128
-        #         fileFormat: raw
-        #         pathInDatastore: '/dev/disk/by-id/ata-SAMSUNG_MZ7LN128HAHQ-000L1_S3R4NX0M706028' # ls -l /dev/disk/by-id/
+        disk: 200
+        longhornDisk:
+          size: 932
+          fileFormat: raw
+          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_1TB_S75CNS0Y903567P' # ls -l /dev/disk/by-id/
         ip: 192.168.1.131
-#       extraConfigPatches: |-
-#         machine:
-#           nodeLabels:
-#             bakseter.net/physical-node: m920q
-#             node.longhorn.io/create-default-disk: "true"
-#           disks:
-#             - device: /dev/sdb
-#               partitions:
-#                 - mountpoint: /var/lib/longhorn
-#           kubelet:
-#             extraMounts:
-#               - destination: /var/lib/longhorn
-#                 type: bind
-#                 source: /var/lib/longhorn
-#                 options:
-#                   - bind
-#                   - rshared
-#                   - rw
-#           %{~ if length(extension_image_refs) > 0 ~}
-#           install:
-#             extensions:
-#             %{~ for image_ref in extension_image_refs ~}
-#               - image: ${image_ref}
-#             %{~ endfor ~}
-#           %{~ endif ~}
+        extraConfigPatches: |-
+          machine:
+            nodeLabels:
+              bakseter.net/physical-node: m920q
+              node.longhorn.io/create-default-disk: "true"
+            disks:
+              - device: /dev/sdb
+                partitions:
+                  - mountpoint: /var/lib/longhorn
+            kubelet:
+              extraMounts:
+                - destination: /var/lib/longhorn
+                  type: bind
+                  source: /var/lib/longhorn
+                  options:
+                    - bind
+                    - rshared
+                    - rw
+            %{~ if length(extension_image_refs) > 0 ~}
+            install:
+              extensions:
+              %{~ for image_ref in extension_image_refs ~}
+                - image: ${image_ref}
+              %{~ endfor ~}
+            %{~ endif ~}
