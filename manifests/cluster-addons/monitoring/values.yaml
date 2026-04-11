@@ -12,8 +12,8 @@ kube-prometheus-stack:
     prometheusSpec:
       scrapeInterval: 30s
 
-      retention: 168h
-      retentionSize: 20GB # https://prometheus.io/docs/prometheus/latest/storage/#right-sizing-retention-size
+      retention: 14d
+      retentionSize: 40GB # https://prometheus.io/docs/prometheus/latest/storage/#right-sizing-retention-size
 
       image:
         tag: v3.10.0-distroless
@@ -42,7 +42,7 @@ kube-prometheus-stack:
             accessModes: ['ReadWriteOnce']
             resources:
               requests:
-                storage: 25Gi
+                storage: 50Gi
 
       metricRelabelings:
         - sourceLabels: [__name__]
