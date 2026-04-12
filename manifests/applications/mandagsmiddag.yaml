@@ -13,6 +13,12 @@ spec:
   clusterResourceWhitelist:
     - group: ''
       kind: Namespace
+  roles:
+    - name: mandagsmiddag-developer
+      groups:
+        - emilaukner@github
+      policies:
+        - p, proj:mandagsmiddag:mandagsmiddag-developer, applications, *, *, allow
   namespaceResourceWhitelist:
     - group: 'apps'
       kind: Deployment
