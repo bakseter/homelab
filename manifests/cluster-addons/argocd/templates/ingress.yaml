@@ -18,6 +18,8 @@ kind: Ingress
 metadata:
   name: argocd-server
   namespace: argocd
+  annotations:
+    tailscale.com/tags: 'tag:k8s,tag:sre'
 spec:
   ingressClassName: tailscale
   rules:
