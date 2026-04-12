@@ -6,7 +6,12 @@
             "ip": ["*"]
         },
         {
-            "src": ["autogroup:member"],
+            "src": ["emilaukner@github"],
+            "dst": ["tag:sre"],
+            "ip": ["*"]
+        },
+        {
+            "src": ["nliseth@icloud.com"],
             "dst": ["tag:media"],
             "ip": ["*"]
         }
