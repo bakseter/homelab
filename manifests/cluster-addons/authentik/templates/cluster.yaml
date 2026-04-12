@@ -4,7 +4,7 @@ metadata:
   name: authentik-database
   namespace: authentik
 spec:
-  instances: 1
+  instances: 3
   inheritedMetadata:
     labels:
       recurring-job.longhorn.io/source: enabled
@@ -17,7 +17,7 @@ spec:
     topologyKey: bakseter.net/physical-node
     podAntiAffinityType: required
   storage:
-    size: 2Gi
+    size: 6Gi
   resources:
     requests:
       cpu: 50m
@@ -29,6 +29,6 @@ spec:
     recovery:
       volumeSnapshots:
         storage:
-          name: authentik-database-old-1
+          name: authentik-database-1
           kind: PersistentVolumeClaim
           apiGroup: ''
