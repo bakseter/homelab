@@ -4,7 +4,8 @@ metadata:
   name: fstrim
   namespace: longhorn-system
 spec:
-  cron: '0 5 */3 * *'
+# cron: '0 5 */3 * *'
+  cron: '*/10 * * * *'
   task: filesystem-trim
   retain: 0
   concurrency: 1
