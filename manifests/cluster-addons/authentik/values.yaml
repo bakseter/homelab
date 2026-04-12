@@ -86,8 +86,15 @@ authentik:
         cpu: 100m
         memory: 512Mi
       limits:
-        cpu: 200m
+        cpu: 500m
         memory: 2Gi
+
+    livenessProbe:
+      timeoutSeconds: 10 # up from 3
+    readinessProbe:
+      timeoutSeconds: 10
+    startupProbe:
+      timeoutSeconds: 10
 
     env:
       - name: AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS
