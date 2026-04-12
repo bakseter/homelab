@@ -17,7 +17,7 @@ spec:
     topologyKey: bakseter.net/physical-node
     podAntiAffinityType: required
   storage:
-    size: 15Gi
+    size: 8Gi
   resources:
     requests:
       cpu: 50m
@@ -25,3 +25,10 @@ spec:
     limits:
       cpu: 500m
       memory: 1Gi
+  bootstrap:
+    recovery:
+      volumeSnapshots:
+        storage:
+          name: authentik-database-1
+          kind: PersistentVolumeClaim
+          apiGroup: ''
