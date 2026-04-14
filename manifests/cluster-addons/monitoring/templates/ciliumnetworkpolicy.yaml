@@ -140,6 +140,39 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
+  name: grafana-operator
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana-operator
+
+  ingress: []
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            app: grafana
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
   name: alloy
   namespace: monitoring
 spec:
@@ -158,3 +191,33 @@ spec:
         - ports:
             - port: '8080'
               protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kube-state-metrics
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kube-state-metrics
+
+  ingress:
+    - fromEndpoints:
+        matchLabels:
+          app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
+
+  #   - fromEntities:
+  #       - host
+  #     toPorts:
+  #       - ports:
+  #           - port: '8080'
+  #             protocol: TCP
+  #           - port: '8081'
+  #             protocol: TCP
+
+  egress: []
