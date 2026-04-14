@@ -28,20 +28,19 @@ spec:
             k8s:io.kubernetes.pod.namespace: kube-system
             k8s-app: kube-dns
       toPorts:
-        - rules:
-            http: []
-          ports:
+        - ports:
             - port: '53'
               protocol: TCP
             - port: '53'
               protocol: UDP
+          rules:
+            dns:
+              - matchPattern: '*'
 
     - toEntities:
         - kube-apiserver
       toPorts:
-        - rules:
-            http: []
-          ports:
+        - ports:
             - port: '6443'
               protocol: TCP
 ---
@@ -76,20 +75,19 @@ spec:
             k8s:io.kubernetes.pod.namespace: kube-system
             k8s-app: kube-dns
       toPorts:
-        - rules:
-            http: []
-          ports:
+        - ports:
             - port: '53'
               protocol: TCP
             - port: '53'
               protocol: UDP
+          rules:
+            dns:
+              - matchPattern: '*'
 
     - toEntities:
         - kube-apiserver
       toPorts:
-        - rules:
-            http: []
-          ports:
+        - ports:
             - port: '6443'
               protocol: TCP
 
