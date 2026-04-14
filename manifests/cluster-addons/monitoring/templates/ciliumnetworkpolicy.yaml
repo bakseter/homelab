@@ -341,6 +341,15 @@ spec:
             - port: '8080'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: canary
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
