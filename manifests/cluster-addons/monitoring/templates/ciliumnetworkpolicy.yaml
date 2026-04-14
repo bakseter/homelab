@@ -345,6 +345,24 @@ spec:
               protocol: TCP
             - port: '51326'
               protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: distributor
+      toPorts:
+        - ports:
+            - port: '7946'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: compactor
+      toPorts:
+        - ports:
+            - port: '7946'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -499,4 +517,27 @@ spec:
       toPorts:
         - ports:
             - port: '3100'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: distributor
+      toPorts:
+        - ports:
+            - port: '7946'
+              protocol: TCP
+            - port: '40658'
+              protocol: TCP
+            - port: '47376'
+              protocol: TCP
+            - port: '60030'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app: minio
+      toPorts:
+        - ports:
+            - port: '9000'
               protocol: TCP
