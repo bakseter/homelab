@@ -327,11 +327,10 @@ spec:
   ingress:
     - fromEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: gateway
+            app.kubernetes.io/name: alloy
       toPorts:
         - ports:
-            - port: '3100'
+            - port: '8080'
               protocol: TCP
 
   egress:
