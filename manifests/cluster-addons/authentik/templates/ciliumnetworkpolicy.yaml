@@ -123,8 +123,8 @@ spec:
             dns:
               - matchPattern: '*'
 
-    - toEntities:
-        - world
+    - toFQDNs:
+        - matchPattern: '*'
       toPorts:
         - ports:
             - port: '443'

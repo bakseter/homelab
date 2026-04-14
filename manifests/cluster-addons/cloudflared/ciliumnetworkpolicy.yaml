@@ -9,8 +9,8 @@ spec:
   ingress: []
 
   egress:
-    - toEntities:
-        - world
+    - toFQDNs:
+        - matchPattern: '*'
       toPorts:
         - ports:
             - port: '7844'
