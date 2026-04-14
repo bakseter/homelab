@@ -225,8 +225,8 @@ spec:
 
   ingress:
     - fromEndpoints:
-        matchLabels:
-          app.kubernetes.io/name: prometheus
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
       toPorts:
         - ports:
             - port: '8080'
