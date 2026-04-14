@@ -1,0 +1,67 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tailscale
+            tailscale.com/parent-resource: monitoring-kube-prometheus-prometheus
+            tailscale.com/parent-resource-ns: monitoring
+      toPorts:
+        - ports:
+            - port: '9090'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '9153'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+       - matchLabels:
+           app.kubernetes.io/name: alertmanager
+      toPorts:
+        - ports:
+            - port: '9093'
+              protocol: TCP
+            - port: '8080'
+              protocol: TCP
+
+    - toEndpoints:
+       - matchLabels:
+           app.kubernetes.io/name: kube-state-metrics
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
+
+    - toEndpoints:
+       - matchLabels:
+           app.kubernetes.io/component: prometheus-operator
+      toPorts:
+        - ports:
+            - port: '10250'
+              protocol: TCP
+
+    # Any pod in any other namespace
+    - toEndpoints:
+        - matchExpressions:
+            - key: 'k8s:io.kubernetes.pod.namespace'
+              operator: NotIn
+              values:
+                - monitoring
