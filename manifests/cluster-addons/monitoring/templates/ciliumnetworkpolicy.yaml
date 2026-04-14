@@ -30,18 +30,6 @@ spec:
   egress:
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: kube-dns
-      toPorts:
-        - ports:
-            - port: '9153'
-              protocol: ANY
-          rules:
-            dns:
-              - matchPattern: '*'
-
-    - toEndpoints:
-        - matchLabels:
             app.kubernetes.io/name: alertmanager
       toPorts:
         - ports:
@@ -243,14 +231,5 @@ spec:
         - ports:
             - port: '8080'
               protocol: TCP
-
-  #   - fromEntities:
-  #       - host
-  #     toPorts:
-  #       - ports:
-  #           - port: '8080'
-  #             protocol: TCP
-  #           - port: '8081'
-  #             protocol: TCP
 
   egress: []
