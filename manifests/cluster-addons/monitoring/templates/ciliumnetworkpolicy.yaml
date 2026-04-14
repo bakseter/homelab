@@ -488,6 +488,15 @@ spec:
             - port: '8080'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: distributor
+      toPorts:
+        - ports:
+            - port: '7946'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
