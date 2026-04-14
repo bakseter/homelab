@@ -30,6 +30,9 @@ spec:
               protocol: TCP
             - port: '53'
               protocol: UDP
+          rules:
+            - dns:
+                matchPattern: '*'
 
     - toEndpoints:
         - matchLabels:
@@ -63,6 +66,9 @@ spec:
               protocol: TCP
             - port: '53'
               protocol: UDP
+          rules:
+            - dns:
+                matchPattern: '*'
 
     - toEndpoints:
         - matchLabels:
@@ -113,6 +119,9 @@ spec:
               protocol: TCP
             - port: '53'
               protocol: UDP
+          rules:
+            - dns:
+                matchPattern: '*'
 
     - toEntities:
         - world
@@ -189,6 +198,9 @@ spec:
               protocol: TCP
             - port: '53'
               protocol: UDP
+          rules:
+            - dns:
+                matchPattern: '*'
 
     - toEntities:
         - kube-apiserver
