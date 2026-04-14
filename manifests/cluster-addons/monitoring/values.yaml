@@ -315,8 +315,26 @@ alloy:
           }
         }
 
+        discovery.kubernetes "cilium" {
+          role = "pod"
+
+          namespaces {
+            names = [
+              "kube-system",
+            ]
+          }
+
+          selectors {
+            role = "pod"
+            label = "app.kubernetes.io/part-of=cilium"
+          }
+        }
+
         discovery.relabel "pod_logs" {
-          targets = discovery.kubernetes.pod.targets
+          targets = [
+            discovery.kubernetes.pod.targets,
+            discovery.kubernetes.cilium.targets
+          ]
 
           rule {
             source_labels = ["__meta_kubernetes_pod_label_logs_bakseter_net_scrape"]
