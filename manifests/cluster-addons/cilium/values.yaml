@@ -83,6 +83,9 @@ cilium:
         config:
           content:
             - name: dns
+              contextOptions:
+                - name: query
+                - name: ignoreAAAA
 
             - name: flow
               contextOptions:
