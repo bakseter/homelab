@@ -263,6 +263,10 @@ spec:
         - ports:
             - port: '9095'
               protocol: TCP
+            - port: '39202'
+              protocol: TCP
+            - port: '51326'
+              protocol: TCP
 
   egress:
     - toEndpoints:
@@ -284,6 +288,62 @@ spec:
       toPorts:
         - ports:
             - port: '9095'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: querier
+      toPorts:
+        - ports:
+            - port: '3100'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: loki-querier
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: loki
+      app.kubernetes.io/component: querier
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: query-frontend
+      toPorts:
+        - ports:
+            - port: '3100'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: query-frontend
+      toPorts:
+        - ports:
+            - port: '9095'
+              protocol: TCP
+            - port: '39202'
+              protocol: TCP
+            - port: '51326'
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
@@ -331,6 +391,66 @@ spec:
     matchLabels:
       app.kubernetes.io/name: loki
       app.kubernetes.io/component: gateway
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: canary
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: distributor
+      toPorts:
+        - ports:
+            - port: '3100'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: query-frontend
+      toPorts:
+        - ports:
+            - port: '3100'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: loki-ingester
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: loki
+      app.kubernetes.io/component: ingester
 
   ingress:
     - fromEndpoints:
