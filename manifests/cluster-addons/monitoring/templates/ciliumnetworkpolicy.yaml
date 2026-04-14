@@ -69,6 +69,7 @@ spec:
     - toEntities:
         - kube-apiserver
         - host
+        - remote-node
 
     # Any pod in any other namespace
     - toEndpoints:
