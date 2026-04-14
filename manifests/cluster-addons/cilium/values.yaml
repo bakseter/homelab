@@ -84,8 +84,16 @@ cilium:
           content:
             - name: dns
               contextOptions:
-                - name: query
-                - name: ignoreAAAA
+                - name: query # adds the queried domain as a label
+                - name: ignoreAAAA # drops AAAA queries to reduce cardinality
+                - name: sourceContext
+                  values:
+                    - workload-name
+                    - reserved-identity
+                - name: destinationContext
+                  values:
+                    - workload-name
+                    - reserved-identity
 
             - name: flow
               contextOptions:
@@ -99,12 +107,35 @@ cilium:
                     - reserved-identity
 
             - name: drop
+              contextOptions:
+                - name: any-drop # counts ALL drop reasons, not just policy-denied
+                - name: sourceContext
+                  values:
+                    - workload-name
+                    - reserved-identity
+                - name: destinationContext
+                  values:
+                    - workload-name
+                    - reserved-identity
 
             - name: tcp
+              contextOptions:
+                - name: sourceContext
+                  values:
+                    - workload-name
+                    - reserved-identity
+                - name: destinationContext
+                  values:
+                    - workload-name
+                    - reserved-identity
 
             - name: icmp
               contextOptions:
                 - name: sourceContext
+                  values:
+                    - workload-name
+                    - reserved-identity
+                - name: destinationContext
                   values:
                     - workload-name
                     - reserved-identity
