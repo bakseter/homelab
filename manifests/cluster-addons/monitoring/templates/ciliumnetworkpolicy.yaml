@@ -21,7 +21,7 @@ spec:
 
     - fromEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: grafana
+            app: grafana
       toPorts:
         - ports:
             - port: '9090'
@@ -82,7 +82,7 @@ metadata:
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: grafana
+      app: grafana
 
   ingress:
     - fromEndpoints:
@@ -123,4 +123,26 @@ spec:
       toPorts:
         - ports:
             - port: '9090'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: alloy
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: alloy
+
+  ingress: []
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: gateway
+      toPorts:
+        - ports:
+            - port: '8080'
               protocol: TCP
