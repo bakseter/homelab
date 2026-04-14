@@ -332,7 +332,7 @@ alloy:
         discovery.relabel "pod_logs" {
           targets = [
             discovery.kubernetes.pod.targets,
-            discovery.kubernetes.cilium.targets
+            discovery.kubernetes.cilium.targets,
           ]
 
           rule {
