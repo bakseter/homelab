@@ -66,6 +66,9 @@ spec:
             - port: '10250'
               protocol: TCP
 
+    - toEntities:
+      - kube-apiserver
+
     # Any pod in any other namespace
     - toEndpoints:
         - matchExpressions:
