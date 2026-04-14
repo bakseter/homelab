@@ -33,8 +33,8 @@ spec:
               - matchPattern: '*'
 
     - toEndpoints:
-       - matchLabels:
-           app.kubernetes.io/name: alertmanager
+        - matchLabels:
+            app.kubernetes.io/name: alertmanager
       toPorts:
         - ports:
             - port: '9093'
@@ -43,16 +43,16 @@ spec:
               protocol: TCP
 
     - toEndpoints:
-       - matchLabels:
-           app.kubernetes.io/name: kube-state-metrics
+        - matchLabels:
+            app.kubernetes.io/name: kube-state-metrics
       toPorts:
         - ports:
             - port: '8080'
               protocol: TCP
 
     - toEndpoints:
-       - matchLabels:
-           app.kubernetes.io/component: prometheus-operator
+        - matchLabels:
+            app.kubernetes.io/component: prometheus-operator
       toPorts:
         - ports:
             - port: '10250'

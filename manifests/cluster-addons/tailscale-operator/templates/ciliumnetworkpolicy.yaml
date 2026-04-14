@@ -91,7 +91,10 @@ spec:
             - port: '6443'
               protocol: TCP
 
+    # Any pod in any namespace
     - toEndpoints:
         - matchExpressions:
             - key: 'k8s:io.kubernetes.pod.namespace'
-              operator: Exists
+              operator: NotIn
+              values:
+                - tailscale
