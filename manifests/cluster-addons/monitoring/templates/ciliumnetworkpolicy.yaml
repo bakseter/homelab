@@ -304,7 +304,7 @@ spec:
             dns:
               - matchPattern: '*'
 
-    - fromEndpoints:
+    - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: gateway
@@ -346,7 +346,7 @@ spec:
             dns:
               - matchPattern: '*'
 
-    - fromEndpoints:
+    - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: distributor
@@ -355,7 +355,7 @@ spec:
             - port: '3100'
               protocol: TCP
 
-    - fromEndpoints:
+    - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: query-frontend
