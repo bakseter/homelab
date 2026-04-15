@@ -225,6 +225,69 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
+  name: minio
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app: minio
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: compactor
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: distributor
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: index-gateway
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: ingester
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: query-frontend
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: query-scheduler
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: querier
+        - matchLabels:
+            app: minio-job
+      toPorts:
+        - ports:
+            - port: '9000'
+              protocol: TCP
+
+  egress: []
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: minio-job
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app: minio-job
+
+  ingress: []
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app: minio
+      toPorts:
+        - ports:
+            - port: '9000'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
   name: loki-query-frontend
   namespace: monitoring
 spec:
@@ -829,46 +892,6 @@ spec:
         - ports:
             - port: '9000'
               protocol: TCP
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: minio
-  namespace: monitoring
-spec:
-  endpointSelector:
-    matchLabels:
-      app: minio
-
-  ingress:
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: compactor
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: distributor
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: index-gateway
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: ingester
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: query-frontend
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: query-scheduler
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: querier
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
-
-  egress: []
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
