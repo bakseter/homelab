@@ -13,15 +13,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: tailscale
             tailscale.com/parent-resource: monitoring-kube-prometheus-prometheus
-            tailscale.com/parent-resource-ns: monitoring
-      toPorts:
-        - ports:
-            - port: '9090'
-              protocol: TCP
-
-    - fromEndpoints:
         - matchLabels:
             app: grafana
+            tailscale.com/parent-resource-ns: monitoring
       toPorts:
         - ports:
             - port: '9090'
@@ -89,12 +83,6 @@ spec:
             k8s:io.kubernetes.pod.namespace: tailscale
             tailscale.com/parent-resource: grafana-ingress
             tailscale.com/parent-resource-ns: monitoring
-      toPorts:
-        - ports:
-            - port: '3000'
-              protocol: TCP
-
-    - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: grafana-operator
       toPorts:
@@ -122,7 +110,7 @@ spec:
       toPorts:
         - ports:
             - port: '8080'
-              protocol: ANY
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
@@ -130,13 +118,6 @@ spec:
       toPorts:
         - ports:
             - port: '9090'
-              protocol: TCP
-
-    - toFQDNs:
-        - matchName: grafana.com
-      toPorts:
-        - ports:
-            - port: '443'
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
@@ -219,13 +200,6 @@ spec:
         - ports:
             - port: '6443'
               protocol: TCP
-
-    - toFQDNs:
-        - matchName: stats.grafana.org
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -298,15 +272,6 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: query-scheduler
-      toPorts:
-        - ports:
-            - port: '9095'
-              protocol: TCP
-
-    - toEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
             app.kubernetes.io/component: querier
       toPorts:
         - ports:
@@ -317,6 +282,9 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: compactor
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: query-scheduler
       toPorts:
         - ports:
             - port: '9095'
@@ -349,36 +317,17 @@ spec:
       toPorts:
         - ports:
             - port: '3100'
-              protocol: TCP
-
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: distributor
-      toPorts:
-        - ports:
-            - port: '7946'
-              protocol: TCP
-
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: querier
-      toPorts:
-        - ports:
-            - port: '7946'
-              protocol: TCP
 
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: compactor
-      toPorts:
-        - ports:
-            - port: '7946'
-              protocol: TCP
-
-    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: distributor
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: querier
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: ingester
@@ -417,6 +366,9 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: distributor
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: querier
       toPorts:
         - ports:
             - port: '7946'
@@ -426,14 +378,6 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: compactor
-      toPorts:
-        - ports:
-            - port: '7946'
-              protocol: TCP
-            - port: '9095'
-              protocol: TCP
-
-    - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: ingester
@@ -447,25 +391,10 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: querier
-      toPorts:
-        - ports:
-            - port: '7946'
-              protocol: TCP
-
-    - toEndpoints:
+            app.kubernetes.io/component: index-gateway
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: query-scheduler
-      toPorts:
-        - ports:
-            - port: '9095'
-              protocol: TCP
-
-    - toEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: index-gateway
       toPorts:
         - ports:
             - port: '9095'
@@ -549,7 +478,7 @@ spec:
       toPorts:
         - ports:
             - port: '8080'
-              protocol: ANY
+              protocol: TCP
 
   egress:
     - toEndpoints:
@@ -568,12 +497,6 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: distributor
-      toPorts:
-        - ports:
-            - port: '3100'
-              protocol: TCP
-
-    - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: query-frontend
@@ -669,15 +592,6 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: ingester
-      toPorts:
-        - ports:
-            - port: '7946'
-              protocol: TCP
-
-    - toEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
             app.kubernetes.io/component: query-frontend
       toPorts:
         - ports:
@@ -704,16 +618,13 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: querier
-      toPorts:
-        - ports:
-            - port: '7946'
-              protocol: TCP
-
-    - toEndpoints:
+            app.kubernetes.io/component: compactor
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: compactor
+            app.kubernetes.io/component: ingester
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: querier
       toPorts:
         - ports:
             - port: '7946'
@@ -768,25 +679,13 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: querier
-      toPorts:
-        - ports:
-            - port: '7946'
-              protocol: TCP
-
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
             app.kubernetes.io/component: compactor
-      toPorts:
-        - ports:
-            - port: '7946'
-              protocol: TCP
-
-    - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: distributor
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: querier
       toPorts:
         - ports:
             - port: '7946'
@@ -808,25 +707,13 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: querier
-      toPorts:
-        - ports:
-            - port: '7946'
-              protocol: TCP
-
-    - toEndpoints:
+            app.kubernetes.io/component: compactor
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: distributor
-      toPorts:
-        - ports:
-            - port: '7946'
-              protocol: TCP
-
-    - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: compactor
+            app.kubernetes.io/component: querier
       toPorts:
         - ports:
             - port: '7946'
@@ -850,13 +737,6 @@ spec:
         - ports:
             - port: '9000'
               protocol: TCP
-
-    - toEntities:
-        - world
-      toPorts:
-        - ports:
-            - port: '9095'
-              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -873,13 +753,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: query-frontend
-      toPorts:
-        - ports:
-            - port: '9095'
-              protocol: TCP
-
-    - fromEndpoints:
+            app.kubernetes.io/component: distributor
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: ingester
@@ -891,10 +765,10 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: distributor
+            app.kubernetes.io/component: query-frontend
       toPorts:
         - ports:
-            - port: '7946'
+            - port: '9095'
               protocol: TCP
 
     - fromEndpoints:
@@ -971,60 +845,24 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: compactor
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
-
-    - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: distributor
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
-
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: ingester
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
-
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: query-frontend
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
-
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: querier
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
-
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: query-scheduler
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
-
-    - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: index-gateway
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: ingester
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: query-frontend
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: query-scheduler
+        - matchLabels:
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: querier
       toPorts:
         - ports:
             - port: '9000'
@@ -1047,16 +885,10 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: querier
-      toPorts:
-        - ports:
-            - port: '9095'
-              protocol: TCP
-
-    - fromEndpoints:
+            app.kubernetes.io/component: query-frontend
         - matchLabels:
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: query-frontend
+            app.kubernetes.io/component: querier
       toPorts:
         - ports:
             - port: '9095'
