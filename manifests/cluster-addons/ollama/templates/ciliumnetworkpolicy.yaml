@@ -17,3 +17,12 @@ spec:
           ports:
             - port: '11434'
               protocol: TCP
+
+    - fromEntities:
+        - host
+      toPorts:
+        - rules:
+            http: []
+          ports:
+            - port: '11434'
+              protocol: TCP
