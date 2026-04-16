@@ -6,6 +6,7 @@ ollama:
       pull:
         - gemma3:1b
         - gemma3:4b
+        - gemma4:e2b
 
   image:
     repository: ollama/ollama
@@ -30,10 +31,10 @@ ollama:
   resources:
     requests:
       cpu: 2
-      memory: 4Gi
+      memory: 6Gi
     limits:
       cpu: 4
-      memory: 8Gi
+      memory: 12Gi
 
   securityContext:
     allowPrivilegeEscalation: false
