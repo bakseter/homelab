@@ -7,9 +7,8 @@ jellyfin:
     media:
       size: 100Gi
 
-  # deploymentStrategy:
-  #   type: Recreate
-  #   rollingUpdate: null
+  deploymentStrategy:
+    type: Recreate
 
   ingress:
     enabled: true
