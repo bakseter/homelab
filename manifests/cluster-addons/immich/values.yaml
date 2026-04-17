@@ -47,6 +47,8 @@ immich:
             capabilities:
               drop: [ALL]
 
+        strategy: Recreate
+
         containers:
           main:
             image:
