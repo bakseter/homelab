@@ -11,10 +11,10 @@ spec:
 
   ingress:
     - fromEndpoints:
-        matchLabels:
-          k8s:io.kubernetes.pod.namespace: tailscale
-          tailscale.com/parent-resource: immich-server
-          tailscale.com/parent-resource-ns: immich
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tailscale
+            tailscale.com/parent-resource: immich-server
+            tailscale.com/parent-resource-ns: immich
       toPorts:
         - ports:
             - port: '2283'
@@ -63,9 +63,9 @@ spec:
 
   ingress:
     - fromEndpoints:
-        matchLabels:
-          app.kubernetes.io/instance: immich
-          app.kubernetes.io/name: server
+        - matchLabels:
+            app.kubernetes.io/instance: immich
+            app.kubernetes.io/name: server
       toPorts:
         - ports:
             - port: '6379'
@@ -85,9 +85,9 @@ spec:
 
   ingress:
     - fromEndpoints:
-        matchLabels:
-          app.kubernetes.io/instance: immich
-          app.kubernetes.io/name: server
+        - matchLabels:
+            app.kubernetes.io/instance: immich
+            app.kubernetes.io/name: server
       toPorts:
         - ports:
             - port: '5432'
