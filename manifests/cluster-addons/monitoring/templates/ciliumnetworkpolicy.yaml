@@ -13,9 +13,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: tailscale
             tailscale.com/parent-resource: monitoring-kube-prometheus-prometheus
+            tailscale.com/parent-resource-ns: monitoring
         - matchLabels:
             app: grafana
-            tailscale.com/parent-resource-ns: monitoring
       toPorts:
         - ports:
             - port: '9090'
