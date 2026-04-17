@@ -104,4 +104,10 @@ spec:
             - port: '8000'
               protocol: TCP
 
-  egress: []
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
