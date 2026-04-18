@@ -29,11 +29,8 @@ spec:
               protocol: ANY
 
     - toFQDNs:
-        - matchName: 'ghcr.io'
+        - matchPattern: 'ghcr.io/v2/bakseter/*'
       toPorts:
         - ports:
             - port: '443'
               protocol: TCP
-          rules:
-            http:
-              - host: 'ghcr\.io'
