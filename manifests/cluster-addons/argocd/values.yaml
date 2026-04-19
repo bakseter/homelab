@@ -24,6 +24,8 @@ argo-cd:
             config:
               userHeader: Tailscale-User-Login
 
+      kustomize.buildOptions: --enable-helm
+
     rbac:
       scopes: '[groups, email]'
       policy.default: ''
