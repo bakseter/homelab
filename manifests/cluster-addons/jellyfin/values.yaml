@@ -1,51 +1,49 @@
-jellyfin:
-  image:
-    tag: 10.10.7
+image:
+  tag: 10.10.7
 
-  # TODO: add recurringjobs label
-  persistence:
-    media:
-      size: 100Gi
+persistence:
+  media:
+    size: 100Gi
 
-  deploymentStrategy:
-    type: Recreate
+deploymentStrategy:
+  type: Recreate
 
-  ingress:
-    enabled: true
-    className: tailscale
-    annotations:
-      tailscale.com/tags: 'tag:k8s,tag:media'
-    hosts:
-      - host: jellyfin
-        paths:
-          - path: /
-            pathType: ImplementationSpecific
-    tls:
-      - hosts:
-          - jellyfin
+ingress:
+  enabled: true
+  className: tailscale
+  annotations:
+    tailscale.com/tags: 'tag:k8s,tag:media'
+  hosts:
+    - host: jellyfin
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - jellyfin
 
-  podSecurityContext:
-    runAsNonRoot: true
-    runAsUser: 65534
-    runAsGroup: 65534
-    fsGroup: 65534
-    seccompProfile:
-      type: RuntimeDefault
-    supplementalGroups:
-      - 65534
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65534
+  runAsGroup: 65534
+  fsGroup: 65534
+  seccompProfile:
+    type: RuntimeDefault
+  supplementalGroups:
+    - 65534
 
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-        - ALL
-    readOnlyRootFilesystem: true
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
 
-  volumes:
-    - name: tmp
-      emptyDir: {}
+volumes:
+  - name: tmp
+    emptyDir: {}
 
-  volumeMounts:
-    - name: tmp
-      mountPath: /tmp
-      readOnly: false
+volumeMounts:
+  - name: tmp
+    mountPath: /tmp
+    readOnly: false

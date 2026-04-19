@@ -8,6 +8,9 @@ helmCharts:
     releaseName: jellyfin
     valuesFile: values.yaml
 
+resources:
+  - ciliumnetworkpolicy.yaml
+
 patches:
   - target:
       kind: PersistentVolume
