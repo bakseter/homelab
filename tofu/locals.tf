@@ -1,6 +1,7 @@
 locals {
   cluster_name            = "homelab"
-  talos_version           = "v1.12.1"
+  initial_talos_version   = "v1.12.1"
+  talos_version           = "v1.12.6"
   virtual_ip_controlplane = "192.168.1.190"
 
   config = yamldecode(file("${path.module}/manifests/config.yaml"))
