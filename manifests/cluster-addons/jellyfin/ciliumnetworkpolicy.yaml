@@ -13,9 +13,7 @@ spec:
             tailscale.com/parent-resource: jellyfin
             tailscale.com/parent-resource-ns: jellyfin
       toPorts:
-        - rules:
-            http: []
-          ports:
+        - ports:
             - port: '8096'
               protocol: TCP
 
