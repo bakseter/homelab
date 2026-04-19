@@ -189,7 +189,6 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
   }
 }
 
-/*
 resource "proxmox_virtual_environment_cluster_firewall" "datacenter" {
   enabled       = true
   input_policy  = "DROP"
@@ -202,16 +201,18 @@ resource "proxmox_virtual_environment_cluster_firewall" "datacenter" {
   }
 }
 
-resource "proxmox_virtual_environment_node_firewall" "node" {
-  for_each = local.virtual_nodes
+resource "proxmox_node_firewall" "node" {
+  for_each = local.nodes
   depends_on = [
     proxmox_virtual_environment_cluster_firewall.datacenter,
     proxmox_virtual_environment_vm.talos-controlplane,
     proxmox_virtual_environment_vm.talos-worker,
   ]
 
-  node_name = each.value
-  enabled   = true
+  node_name     = each.key
+  enabled       = true
+  log_level_in  = "warning"
+  log_level_out = "warning"
 }
 
 resource "proxmox_virtual_environment_firewall_ipset" "management" {
@@ -225,15 +226,30 @@ resource "proxmox_virtual_environment_firewall_ipset" "cluster_nodes" {
   name    = "cluster-nodes"
   comment = "All Proxmox nodes"
 
+  # TODO: use config.yaml for this
+  # Physical nodes
   cidr { name = "192.168.1.27" }
   cidr { name = "192.168.1.28" }
   cidr { name = "192.168.1.29" }
   cidr { name = "192.168.1.30" }
+
+  # TODO: use config.yaml for this
+  # Controlplane VMs
+  cidr { name = "192.168.1.100" }
+  cidr { name = "192.168.1.110" }
+  cidr { name = "192.168.1.120" }
+
+  # TODO: use config.yaml for this
+  # Worker VMs
+  cidr { name = "192.168.1.101" }
+  cidr { name = "192.168.1.111" }
+  cidr { name = "192.168.1.121" }
+  cidr { name = "192.168.1.131" }
 }
 
 resource "proxmox_virtual_environment_firewall_rules" "node" {
-  for_each   = local.virtual_nodes
-  depends_on = [proxmox_virtual_environment_node_firewall.node]
+  for_each   = local.nodes
+  depends_on = [proxmox_node_firewall.node]
 
   node_name = each.key
 
@@ -272,6 +288,24 @@ resource "proxmox_virtual_environment_firewall_rules" "node" {
     proto   = "tcp"
     comment = "Live migration"
   }
+
+  rule {
+    type    = "in"
+    action  = "ACCEPT"
+    source  = "+cluster-nodes"
+    dport   = "8472"
+    proto   = "udp"
+    comment = "Cilium VXLAN"
+  }
+
+  rule {
+    type    = "in"
+    action  = "ACCEPT"
+    source  = "+cluster-nodes"
+    dport   = "4240"
+    proto   = "tcp"
+    comment = "Cilium healthcheck"
+  }
 }
 
 resource "proxmox_virtual_environment_firewall_rules" "talos-controlplane" {
@@ -279,8 +313,7 @@ resource "proxmox_virtual_environment_firewall_rules" "talos-controlplane" {
   depends_on = [proxmox_virtual_environment_vm.talos-controlplane]
 
   node_name = each.key
-  vm_id     = proxmox_virtual_environment_vm.talos-controlplane[each.key]
-
+  vm_id     = proxmox_virtual_environment_vm.talos-controlplane[each.key].vm_id
 
   rule {
     type    = "in"
@@ -308,5 +341,66 @@ resource "proxmox_virtual_environment_firewall_rules" "talos-controlplane" {
     proto   = "tcp"
     comment = "etcd"
   }
+
+  rule {
+    type    = "in"
+    action  = "ACCEPT"
+    source  = "+cluster-nodes"
+    dport   = "8472"
+    proto   = "udp"
+    comment = "Cilium VXLAN"
+  }
+
+  rule {
+    type    = "in"
+    action  = "ACCEPT"
+    source  = "+cluster-nodes"
+    dport   = "4240"
+    proto   = "tcp"
+    comment = "Cilium healthcheck"
+  }
 }
-*/
+
+resource "proxmox_virtual_environment_firewall_rules" "talos-worker" {
+  for_each   = local.virtual_worker_nodes
+  depends_on = [proxmox_virtual_environment_vm.talos-worker]
+
+  node_name = each.key
+  vm_id     = proxmox_virtual_environment_vm.talos-worker[each.key].vm_id
+
+  rule {
+    type    = "in"
+    action  = "ACCEPT"
+    source  = "+cluster-nodes"
+    dport   = "50000"
+    proto   = "tcp"
+    comment = "Talos API"
+  }
+
+  rule {
+    type    = "in"
+    action  = "ACCEPT"
+    source  = "+cluster-nodes"
+    dport   = "10250"
+    proto   = "tcp"
+    comment = "kubelet API"
+  }
+
+  rule {
+    type    = "in"
+    action  = "ACCEPT"
+    source  = "+cluster-nodes"
+    dport   = "8472"
+    proto   = "udp"
+    comment = "Cilium VXLAN"
+  }
+
+  rule {
+    type    = "in"
+    action  = "ACCEPT"
+    source  = "+cluster-nodes"
+    dport   = "4240"
+    proto   = "tcp"
+    comment = "Cilium healthcheck"
+  }
+}
