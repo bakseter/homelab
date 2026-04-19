@@ -1,0 +1,33 @@
+cluster:
+  controlPlane:
+    endpoint: https://${virtual_ip_controlplane}:6443
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true
+
+machine:
+  install:
+    image: factory.talos.dev/installer/${talos_schematic_id}:${talos_version}
+  kubelet:
+    extraArgs:
+      rotate-server-certificates: true
+  nodeLabels:
+    bakseter.net/physical-node: ${physical_node_name}
+  network:
+    interfaces:
+      - deviceSelector:
+          busPath: '0*'
+          driver: 'virtio_net'
+        dhcp: false
+        addresses:
+          - ${node_ip}/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.1.1
+        %{~ if node_type == "controlplane" ~}
+        vip:
+          ip: ${virtual_ip_controlplane}
+        %{~ endif ~}
+

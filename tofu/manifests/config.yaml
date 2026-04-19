@@ -1,20 +1,3 @@
-default:
-  configPatches: |-
-    cluster:
-      controlPlane:
-        endpoint: https://${virtual_ip_controlplane}:6443
-      network:
-        cni:
-          name: none
-      proxy:
-        disabled: true
-    machine:
-      install:
-        image: factory.talos.dev/installer/${talos_schematic_id}:${talos_version}
-      kubelet:
-        extraArgs:
-          rotate-server-certificates: true
-
 # TODO: Verify virtualNodes use no more than available resources on physical nodes
 
 nodes:
@@ -29,46 +12,17 @@ nodes:
         memory: 4
         disk: 100
         ip: 192.168.1.100
-        extraConfigPatches: |-
-          machine:
-            nodeLabels:
-              bakseter.net/physical-node: m720q
 
       - hostname: m720q-worker-1
         type: worker
         cores: 6
         memory: 20
         disk: 100
-        longhornDisk:
-          size: 465
-          fileFormat: raw
-          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNL0Y702707H' # ls -l /dev/disk/by-id/
         ip: 192.168.1.101
-        extraConfigPatches: |-
-          machine:
-            nodeLabels:
-              bakseter.net/physical-node: m720q
-              node.longhorn.io/create-default-disk: "true"
-            disks:
-              - device: /dev/sdb
-                partitions:
-                  - mountpoint: /var/lib/longhorn
-            kubelet:
-              extraMounts:
-                - destination: /var/lib/longhorn
-                  type: bind
-                  source: /var/lib/longhorn
-                  options:
-                    - bind
-                    - rshared
-                    - rw
-            %{~ if length(extension_image_refs) > 0 ~}
-            install:
-              extensions:
-              %{~ for image_ref in extension_image_refs ~}
-                - image: ${image_ref}
-              %{~ endfor ~}
-            %{~ endif ~}
+        longhorn:
+          enabled: true
+          diskSize: 465
+          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNL0Y702707H' # ls -l /dev/disk/by-id/
 
   m715q:
     cores: 4
@@ -77,54 +31,22 @@ nodes:
     virtualNodes:
       - hostname: m715q-controlplane-1
         type: controlplane
+        mainControlplane: true
         cores: 4
         memory: 4
         disk: 100
         ip: 192.168.1.110
-        extraConfigPatches: |-
-          machine:
-            nodeLabels:
-              bakseter.net/physical-node: m715q
-          cluster:
-            extraManifests:
-              - 'https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml'
-              - 'https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml'
 
       - hostname: m715q-worker-1
         type: worker
         cores: 4
         memory: 20
         disk: 100
-        longhornDisk:
-          size: 465
-          fileFormat: raw
-          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S7EWNL0X362167X' # ls -l /dev/disk/by-id/
         ip: 192.168.1.111
-        extraConfigPatches: |-
-          machine:
-            nodeLabels:
-              bakseter.net/physical-node: m715q
-              node.longhorn.io/create-default-disk: "true"
-            disks:
-              - device: /dev/sdb
-                partitions:
-                  - mountpoint: /var/lib/longhorn
-            kubelet:
-              extraMounts:
-                - destination: /var/lib/longhorn
-                  type: bind
-                  source: /var/lib/longhorn
-                  options:
-                    - bind
-                    - rshared
-                    - rw
-            %{~ if length(extension_image_refs) > 0 ~}
-            install:
-              extensions:
-              %{~ for image_ref in extension_image_refs ~}
-                - image: ${image_ref}
-              %{~ endfor ~}
-            %{~ endif ~}
+        longhorn:
+          enabled: true
+          diskSize: 465
+          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S7EWNL0X362167X' # ls -l /dev/disk/by-id/
 
   m715q2:
     cores: 4
@@ -138,46 +60,17 @@ nodes:
         memory: 4
         disk: 50
         ip: 192.168.1.120
-        extraConfigPatches: |-
-          machine:
-            nodeLabels:
-              bakseter.net/physical-node: m715q2
 
       - hostname: m715q2-worker-1
         type: worker
         cores: 4
         memory: 8
         disk: 50
-        longhornDisk:
-          size: 238
-          fileFormat: raw
-          pathInDatastore: '/dev/disk/by-id/ata-Micron_MTFDDAK256TDL_193823DF41CD' # ls -l /dev/disk/by-id/
         ip: 192.168.1.121
-        extraConfigPatches: |-
-          machine:
-            nodeLabels:
-              bakseter.net/physical-node: m715q2
-              node.longhorn.io/create-default-disk: "true"
-            disks:
-              - device: /dev/sdb
-                partitions:
-                  - mountpoint: /var/lib/longhorn
-            kubelet:
-              extraMounts:
-                - destination: /var/lib/longhorn
-                  type: bind
-                  source: /var/lib/longhorn
-                  options:
-                    - bind
-                    - rshared
-                    - rw
-            %{~ if length(extension_image_refs) > 0 ~}
-            install:
-              extensions:
-              %{~ for image_ref in extension_image_refs ~}
-                - image: ${image_ref}
-              %{~ endfor ~}
-            %{~ endif ~}
+        longhorn:
+          enabled: true
+          diskSize: 238
+          pathInDatastore: '/dev/disk/by-id/ata-Micron_MTFDDAK256TDL_193823DF41CD' # ls -l /dev/disk/by-id/
 
   m920q:
     cores: 6
@@ -189,33 +82,8 @@ nodes:
         cores: 6
         memory: 24
         disk: 200
-        longhornDisk:
-          size: 932
-          fileFormat: raw
-          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_1TB_S75CNS0Y903567P' # ls -l /dev/disk/by-id/
         ip: 192.168.1.131
-        extraConfigPatches: |-
-          machine:
-            nodeLabels:
-              bakseter.net/physical-node: m920q
-              node.longhorn.io/create-default-disk: "true"
-            disks:
-              - device: /dev/sdb
-                partitions:
-                  - mountpoint: /var/lib/longhorn
-            kubelet:
-              extraMounts:
-                - destination: /var/lib/longhorn
-                  type: bind
-                  source: /var/lib/longhorn
-                  options:
-                    - bind
-                    - rshared
-                    - rw
-            %{~ if length(extension_image_refs) > 0 ~}
-            install:
-              extensions:
-              %{~ for image_ref in extension_image_refs ~}
-                - image: ${image_ref}
-              %{~ endfor ~}
-            %{~ endif ~}
+        longhorn:
+          enabled: true
+          diskSize: 931
+          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_1TB_S75CNS0Y903567P' # ls -l /dev/disk/by-id/
