@@ -1,6 +1,3 @@
-default:
-  configPatches: |-
-
 # TODO: Verify virtualNodes use no more than available resources on physical nodes
 
 nodes:
@@ -88,5 +85,5 @@ nodes:
         ip: 192.168.1.131
         longhorn:
           enabled: true
-          diskSize: 932
+          diskSize: 931
           pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_1TB_S75CNS0Y903567P' # ls -l /dev/disk/by-id/

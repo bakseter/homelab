@@ -1,9 +1,11 @@
 locals {
-  cluster_name            = "homelab"
-  talos_version           = "v1.12.1"
+  cluster_name  = "homelab"
+  talos_version = "v1.12.1"
+  # TODO: Find way to not hardcode this value, cannot use output from resource because of for_each (maybe fixed now?)
+  talos_schematic_id      = "88d1f7a5c4f1d3aba7df787c448c1d3d008ed29cfb34af53fa0df4336a56040b"
   virtual_ip_controlplane = "192.168.1.190"
 
-  config = yamldecode("${path.module}/manifests/config.yaml")
+  config = yamldecode(file("${path.module}/manifests/config.yaml"))
 
   nodes = { for name, node in local.config.nodes : name => node }
   virtual_nodes = merge([

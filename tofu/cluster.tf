@@ -28,13 +28,15 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
   node                        = each.value.ip
 
   config_patches = compact([
-    local.config.default.configPatches,
     templatefile(
-      "${path.module}/manifests/patches.yaml",
+      "${path.module}/manifests/default-patches.yaml.tmpl",
       {
-        node_ip   = each.value.ip
-        node_type = each.value.type
-        vip_ip    = local.virtual_ip_controlplane
+        physical_node_name      = split("-", each.key)[0]
+        node_ip                 = each.value.ip
+        node_type               = each.value.type
+        virtual_ip_controlplane = local.virtual_ip_controlplane
+        talos_schematic_id      = local.talos_schematic_id
+        talos_version           = local.talos_version
       }
     )
   ])
@@ -59,15 +61,21 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
   node                        = each.value.ip
 
   config_patches = compact([
-    local.config.default.configPatches,
-    try(each.value.extraConfigPatches, null),
-    templatefile(
-      "${path.module}/manifests/default-patches.yaml",
+    try(each.value.longhorn.enabled, false) ? templatefile(
+      "${path.module}/manifests/longhorn-patches.yaml.tmpl",
       {
-        node_name = each.value.name
-        node_ip   = each.value.ip
-        node_type = each.value.type
-        vip_ip    = local.virtual_ip_controlplane
+        extension_image_refs = data.talos_image_factory_extensions_versions.talos.extensions_info.*.ref
+      },
+    ) : "",
+    templatefile(
+      "${path.module}/manifests/default-patches.yaml.tmpl",
+      {
+        physical_node_name      = split("-", each.key)[0]
+        node_ip                 = each.value.ip
+        node_type               = each.value.type
+        virtual_ip_controlplane = local.virtual_ip_controlplane
+        talos_schematic_id      = local.talos_schematic_id
+        talos_version           = local.talos_version
       }
     )
   ])

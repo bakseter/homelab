@@ -3,6 +3,10 @@ machine:
     - device: /dev/sdb
       partitions:
         - mountpoint: /var/lib/longhorn
+
+  nodeLabels:
+    node.longhorn.io/create-default-disk: "true"
+
   kubelet:
     extraMounts:
       - destination: /var/lib/longhorn

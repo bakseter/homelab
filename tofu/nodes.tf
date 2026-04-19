@@ -133,15 +133,15 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
   }
 
   dynamic "disk" {
-    for_each = try(each.value.longhornDisk, null) != null ? [1] : []
+    for_each = try(each.value.longhorn.enabled, null) != null ? [1] : []
 
     content {
       datastore_id      = ""
-      path_in_datastore = each.value.longhornDisk.pathInDatastore
+      path_in_datastore = each.value.longhorn.pathInDatastore
 
       interface   = "scsi1"
-      size        = each.value.longhornDisk.size
-      file_format = try(each.value.longhornDisk.fileFormat, null)
+      size        = each.value.longhorn.diskSize
+      file_format = "raw"
 
       cache    = "none"
       discard  = "on"

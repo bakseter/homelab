@@ -14,7 +14,7 @@ machine:
     extraArgs:
       rotate-server-certificates: true
   nodeLabels:
-    bakseter.net/physical-node: %{node_name}
+    bakseter.net/physical-node: ${physical_node_name}
   network:
     interfaces:
       - deviceSelector:
@@ -28,6 +28,6 @@ machine:
             gateway: 192.168.1.1
         %{~ if node_type == "controlplane" ~}
         vip:
-          ip: ${vip_ip}
+          ip: ${virtual_ip_controlplane}
         %{~ endif ~}
 
