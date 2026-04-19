@@ -1,4 +1,20 @@
+cluster:
+  controlPlane:
+    endpoint: https://${virtual_ip_controlplane}:6443
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true
+
 machine:
+  install:
+    image: factory.talos.dev/installer/${talos_schematic_id}:${talos_version}
+  kubelet:
+    extraArgs:
+      rotate-server-certificates: true
+  nodeLabels:
+    bakseter.net/physical-node: %{node_name}
   network:
     interfaces:
       - deviceSelector:

@@ -29,7 +29,6 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
 
   config_patches = compact([
     local.config.default.configPatches,
-    try(each.value.extraConfigPatches, null),
     templatefile(
       "${path.module}/manifests/patches.yaml",
       {
@@ -63,8 +62,9 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
     local.config.default.configPatches,
     try(each.value.extraConfigPatches, null),
     templatefile(
-      "${path.module}/manifests/patches.yaml",
+      "${path.module}/manifests/default-patches.yaml",
       {
+        node_name = each.value.name
         node_ip   = each.value.ip
         node_type = each.value.type
         vip_ip    = local.virtual_ip_controlplane
