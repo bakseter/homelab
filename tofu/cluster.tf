@@ -35,7 +35,7 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
         node_ip                 = each.value.ip
         node_type               = each.value.type
         virtual_ip_controlplane = local.virtual_ip_controlplane
-        talos_schematic_id      = local.talos_schematic_id
+        talos_schematic_id      = talos_image_factory_schematic.talos.id
         talos_version           = local.talos_version
       }
     )
@@ -74,7 +74,7 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
         node_ip                 = each.value.ip
         node_type               = each.value.type
         virtual_ip_controlplane = local.virtual_ip_controlplane
-        talos_schematic_id      = local.talos_schematic_id
+        talos_schematic_id      = talos_image_factory_schematic.talos.id
         talos_version           = local.talos_version
       }
     )
