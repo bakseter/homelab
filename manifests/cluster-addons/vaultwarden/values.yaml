@@ -18,6 +18,11 @@ vaultwarden:
 
   domain: https://vaultwarden.tail79d70a.ts.net
 
+  image:
+    registry: docker.io
+    repository: vaultwarden/server
+    tag: 1.35.7-alpine@sha256:9a54dad95452412afb959664dc5d6c3c3ca7c4131116ca7667888b0376320b03
+
   ingress:
     enabled: true
 
