@@ -33,3 +33,5 @@ vaultwarden:
     type: postgresql
     existingSecret: vaultwarden-database-app
     existingSecretKey: uri
+
+  replicas: 0 # TODO: remove
