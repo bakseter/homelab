@@ -1,11 +1,11 @@
 vaultwarden:
   podSecurityContext:
     runAsNonRoot: true
-    runAsUser: 65534
-    runAsGroup: 65534
-    fsGroup: 65534
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
     supplementalGroups:
-      - 65534
+      - 1001
     seccompProfile:
       type: RuntimeDefault
 
@@ -14,6 +14,7 @@ vaultwarden:
     capabilities:
       drop:
         - ALL
+    readOnlyRootFilesystem: true
 
   domain: https://vaultwarden.tail79d70a.ts.net
 
