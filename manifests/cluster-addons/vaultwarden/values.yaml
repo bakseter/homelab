@@ -23,3 +23,8 @@ vaultwarden:
 
     class: tailscale
     hostname: vaultwarden
+
+  database:
+    type: postgresql
+    existingSecret: vaultwarden-database-app
+    existingSecretKey: uri

@@ -1,0 +1,13 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: vaultwarden-database
+  namespace: vaultwarden
+spec:
+  instances: 1
+  inheritedMetadata:
+    labels:
+      recurring-job.longhorn.io/source: enabled
+      recurring-job-group.longhorn.io/hetzner-backup: enabled
+  storage:
+    size: 2Gi
