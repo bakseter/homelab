@@ -19,4 +19,6 @@ vaultwarden:
 
   ingress:
     enabled: true
+
     class: tailscale
+    hostname: vaultwarden
