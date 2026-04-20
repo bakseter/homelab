@@ -274,6 +274,8 @@ alloy:
         targetPort: 4317
         protocol: TCP
 
+    enableReporting: false
+
     configMap:
       content: |
         loki.write "default" {
