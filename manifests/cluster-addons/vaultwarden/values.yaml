@@ -14,3 +14,9 @@ vaultwarden:
     capabilities:
       drop:
         - ALL
+
+  domain: https://vaultwarden.tail79d70a.ts.net
+
+  ingress:
+    enabled: true
+    class: tailscale
