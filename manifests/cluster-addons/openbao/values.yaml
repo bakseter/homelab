@@ -1,0 +1,77 @@
+immich:
+  immich:
+    persistence:
+      library:
+        existingClaim: immich-library-encrypted
+
+  machine-learning:
+    enabled: false
+
+  valkey:
+    enabled: true
+
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 65534
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+
+    controllers:
+      main:
+        defaultContainerOptions:
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+
+  server:
+    enabled: true
+
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 65534
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+
+    controllers:
+      main:
+        defaultContainerOptions:
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+
+        strategy: Recreate
+        rollingUpdate: {}
+
+        containers:
+          main:
+            image:
+              tag: v2.7.5
+            env:
+              DB_HOSTNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-database-app
+                    key: host
+              DB_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-database-app
+                    key: user
+              DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-database-app
+                    key: password
+              DB_DATABASE_NAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-database-app
+                    key: dbname
