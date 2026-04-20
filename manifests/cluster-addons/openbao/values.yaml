@@ -3,6 +3,7 @@ openbao:
     statefulSet:
       securityContext:
         container:
+          allowPrivilegeEscalation: false
           capabilities:
             drop:
               - ALL
