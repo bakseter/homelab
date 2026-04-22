@@ -10,7 +10,7 @@ spec:
       recurring-job.longhorn.io/source: enabled
       recurring-job-group.longhorn.io/hetzner-backup: enabled
   storage:
-    size: 2Gi
+    size: 3Gi
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
   postgresql:
     shared_preload_libraries:
