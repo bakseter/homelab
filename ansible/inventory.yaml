@@ -3,13 +3,13 @@ all:
     proxmox:
       hosts:
         m715q:
-          ansible_host: 192.168.1.27
-        m720q:
-          ansible_host: 192.168.1.28
+          ansible_host: 192.168.10.20
         m715q2:
-          ansible_host: 192.168.1.29
+          ansible_host: 192.168.10.21
+        m720q:
+          ansible_host: 192.168.10.22
         m920q:
-          ansible_host: 192.168.1.30
+          ansible_host: 192.168.10.23
       vars:
         ansible_user: root
         ansible_ssh_private_key_file: ~/.ssh/ansible_homelab

@@ -1,33 +1,8 @@
-# TODO: Verify virtualNodes use no more than available resources on physical nodes
-
 nodes:
-  m720q:
-    cores: 6
-    ip: 192.168.1.28
-    memory: 32
-    virtualNodes:
-      - hostname: m720q-controlplane-1
-        type: controlplane
-        cores: 6
-        memory: 4
-        disk: 100
-        ip: 192.168.1.100
-
-      - hostname: m720q-worker-1
-        type: worker
-        cores: 6
-        memory: 20
-        disk: 100
-        ip: 192.168.1.101
-        longhorn:
-          enabled: true
-          diskSize: 465
-          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNL0Y702707H' # ls -l /dev/disk/by-id/
-
   m715q:
     cores: 4
     memory: 32
-    ip: 192.168.1.27
+    ip: 192.168.10.20
     virtualNodes:
       - hostname: m715q-controlplane-1
         type: controlplane
@@ -35,14 +10,14 @@ nodes:
         cores: 4
         memory: 4
         disk: 100
-        ip: 192.168.1.110
+        ip: 192.168.30.110
 
       - hostname: m715q-worker-1
         type: worker
         cores: 4
         memory: 20
         disk: 100
-        ip: 192.168.1.111
+        ip: 192.168.30.111
         longhorn:
           enabled: true
           diskSize: 465
@@ -52,29 +27,53 @@ nodes:
     cores: 4
     memory: 16
     disk: 120
-    ip: 192.168.1.29
+    ip: 192.168.10.21
     virtualNodes:
       - hostname: m715q2-controlplane-1
         type: controlplane
         cores: 4
         memory: 4
         disk: 50
-        ip: 192.168.1.120
+        ip: 192.168.30.120
 
       - hostname: m715q2-worker-1
         type: worker
         cores: 4
         memory: 8
         disk: 50
-        ip: 192.168.1.121
+        ip: 192.168.30.121
         longhorn:
           enabled: true
           diskSize: 238
           pathInDatastore: '/dev/disk/by-id/ata-Micron_MTFDDAK256TDL_193823DF41CD' # ls -l /dev/disk/by-id/
 
+  m720q:
+    cores: 6
+    ip: 192.168.10.22
+    memory: 32
+    virtualNodes:
+      - hostname: m720q-controlplane-1
+        type: controlplane
+        cores: 6
+        memory: 4
+        disk: 100
+        ip: 192.168.30.100
+
+      - hostname: m720q-worker-1
+        type: worker
+        cores: 6
+        memory: 20
+        disk: 100
+        ip: 192.168.30.101
+        longhorn:
+          enabled: true
+          diskSize: 465
+          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNL0Y702707H' # ls -l /dev/disk/by-id/
+
+
   m920q:
     cores: 6
-    ip: 192.168.1.30
+    ip: 192.168.10.23
     memory: 32
     virtualNodes:
       - hostname: m920q-worker-1
@@ -82,7 +81,7 @@ nodes:
         cores: 6
         memory: 24
         disk: 200
-        ip: 192.168.1.131
+        ip: 192.168.30.131
         longhorn:
           enabled: true
           diskSize: 931
