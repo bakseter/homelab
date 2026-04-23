@@ -77,11 +77,12 @@ resource "proxmox_virtual_environment_vm" "talos-controlplane" {
   }
 
   agent {
-    enabled = true
+    enabled = false
   }
 
   network_device {
-    bridge = "vmbr0"
+    bridge  = "vmbr0"
+    vlan_id = 30
   }
 
   disk {
@@ -139,7 +140,8 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
   }
 
   network_device {
-    bridge = "vmbr0"
+    bridge  = "vmbr0"
+    vlan_id = 30
   }
 
   disk {
@@ -220,31 +222,34 @@ resource "proxmox_virtual_environment_firewall_ipset" "management" {
   comment = "Admin workstations and management VLAN"
 
   cidr { name = "192.168.10.0/24" }
+  cidr { name = "192.168.40.0/24" } # desktop VLAN
 }
 
 resource "proxmox_virtual_environment_firewall_ipset" "cluster_nodes" {
   name    = "cluster-nodes"
-  comment = "All Proxmox nodes"
+  comment = "All Proxmox nodes and Talos VMs"
 
   # TODO: use config.yaml for this
   # Physical nodes
-  cidr { name = "192.168.1.27" }
-  cidr { name = "192.168.1.28" }
-  cidr { name = "192.168.1.29" }
-  cidr { name = "192.168.1.30" }
+  cidr { name = "192.168.10.20" }
+  cidr { name = "192.168.10.21" }
+  cidr { name = "192.168.10.22" }
+  cidr { name = "192.168.10.33" }
 
   # TODO: use config.yaml for this
   # Controlplane VMs
-  cidr { name = "192.168.1.100" }
-  cidr { name = "192.168.1.110" }
-  cidr { name = "192.168.1.120" }
+  cidr { name = "192.168.30.100" }
+  cidr { name = "192.168.30.110" }
+  cidr { name = "192.168.30.120" }
+  cidr { name = "192.168.30.190" }
+
 
   # TODO: use config.yaml for this
   # Worker VMs
-  cidr { name = "192.168.1.101" }
-  cidr { name = "192.168.1.111" }
-  cidr { name = "192.168.1.121" }
-  cidr { name = "192.168.1.131" }
+  cidr { name = "192.168.30.101" }
+  cidr { name = "192.168.30.111" }
+  cidr { name = "192.168.30.121" }
+  cidr { name = "192.168.30.131" }
 }
 
 resource "proxmox_virtual_environment_firewall_rules" "node" {

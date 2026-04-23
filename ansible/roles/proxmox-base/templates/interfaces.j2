@@ -1,0 +1,26 @@
+auto lo
+iface lo inet loopback
+
+iface nic0 inet manual
+
+# VLAN-aware bridge
+auto vmbr0
+iface vmbr0 inet manual
+    bridge-ports nic0
+    bridge-stp off
+    bridge-fd 0
+    bridge-vlan-aware yes
+    bridge-vids {{ vlan_management }} {{ vlan_cluster }} {{ vlan_talos }}
+
+# VLAN {{ vlan_management }} - Management
+auto vmbr0.{{ vlan_management }}
+iface vmbr0.{{ vlan_management }} inet static
+    address {{ host_ip }}/24
+    gateway {{ gateway_vlan10 }}
+
+# VLAN {{ vlan_cluster }} - Cluster (Corosync, live migration)
+auto vmbr0.{{ vlan_cluster }}
+iface vmbr0.{{ vlan_cluster }} inet static
+    address {{ host_ip_cluster }}/24
+
+source /etc/network/interfaces.d/*

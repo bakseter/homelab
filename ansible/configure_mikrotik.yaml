@@ -1,0 +1,507 @@
+---
+- name: Configure MikroTik hAP ax3
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  module_defaults:
+    group/community.routeros.api:
+      hostname: "{{ mikrotik_host }}"
+      username: "{{ mikrotik_user }}"
+      password: "{{ mikrotik_password }}"
+      tls: false  # enable later once certs are set up
+
+  vars:
+    vlans:
+      - id: 10
+        name: management
+        subnet: 192.168.10.0/24
+        gateway: 192.168.10.1
+        dhcp: false
+      - id: 20
+        name: cluster
+        subnet: 192.168.20.0/24
+        gateway: 192.168.20.1
+        dhcp: false
+      - id: 30
+        name: talos
+        subnet: 192.168.30.0/24
+        gateway: 192.168.30.1
+        dhcp: false
+      - id: 40
+        name: desktop
+        subnet: 192.168.40.0/24
+        gateway: 192.168.40.1
+        dhcp: true
+        dhcp_pool_start: 192.168.40.100
+        dhcp_pool_end: 192.168.40.200
+      - id: 50
+        name: wifi
+        subnet: 192.168.50.0/24
+        gateway: 192.168.50.1
+        dhcp: true
+        dhcp_pool_start: 192.168.50.100
+        dhcp_pool_end: 192.168.50.200
+
+    wifi_ssid: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          35623832393930653938326435373935313835663333343631626231356533663064383666346533
+          6335643931396635343733656162633236356161616165330a346331323636346634313665353766
+          63353036383634393061393038396461633735316437306230306139313862646436623562343532
+          6666653231613830380a316562653432306135396263636237333366366564633733633234373062
+          6665
+    wifi_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          65656630396262323830383036376633623763346139353135343465393730333032383235323061
+          3234623166343537626665613333623339653466646263370a626137666638326631343333306338
+          32313234373534613336663036313163393361393438346566666531323433306164333766383165
+          3731383566303661330a316662376563363439643336353335666335383037333334333831316161
+          6362
+
+    mikrotik_host: 192.168.40.1
+    mikrotik_user: admin
+    mikrotik_password: !vault |
+              $ANSIBLE_VAULT;1.1;AES256
+              61343537333038623565316439346531656432363631643434363638363130636266643139393165
+              3064613637383464333565363933323036613432346164350a663961346163623461303136313132
+              64313039633836353964303433663666656531316361376366333133383436656236333930373465
+              6239343266626134340a373663383462663065396165326166336639316666336237376233323038
+              6262
+
+
+
+  tasks:
+    # -------------------------
+    # Bridge ports
+    # -------------------------
+    - name: Set ether2 as trunk to SG108E
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: ether2
+        values:
+          pvid: "1"
+          frame-types: admit-all
+
+    - name: Set ether3 as access port for desktop VLAN 40
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: ether3
+        values:
+          pvid: "40"
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    - name: Set ether4 as access port VLAN 40 spare
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: ether4
+        values:
+          pvid: "40"
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    - name: Set ether5 as access port VLAN 40 spare
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: ether5
+        values:
+          pvid: "40"
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    - name: Set wifi1 bridge port to VLAN 50
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: wifi1
+        values:
+          pvid: "50"
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    - name: Set wifi2 bridge port to VLAN 50
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: wifi2
+        values:
+          pvid: "50"
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    # -------------------------
+    # Cleanup DHCP and Firewall
+    # -------------------------
+    - name: Gather DHCP servers
+      community.routeros.api:
+        path: ip dhcp-server
+        cmd: "print"
+      register: dhcp_cleanup
+
+    - name: Remove defconf DHCP server
+      community.routeros.api:
+        path: ip dhcp-server
+        remove: "{{ item['.id'] }}"
+      loop: "{{ dhcp_cleanup.msg | selectattr('name', 'equalto', 'defconf') | list }}"
+      ignore_errors: true
+
+    - name: Gather existing firewall rules
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "print"
+      register: fw_cleanup
+
+    - name: Clean duplicate firewall rules
+      community.routeros.api:
+        path: ip firewall filter
+        remove: "{{ item['.id'] }}"
+      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|desktop-to-proxmox|desktop-to-talos|proxmox-to-talos|allow-to-internet|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-wifi-router-access|drop-wifi-router-mgmt') | list }}"
+
+    # -------------------------
+    # Bridge VLAN membership
+    # -------------------------
+    - name: Keep default VLAN 88 during migration
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=88 tagged=bridge untagged=ether2,ether3,ether4,ether5"
+      ignore_errors: true
+
+    - name: Add VLAN 10 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=10 tagged=bridge,ether2"
+      ignore_errors: true
+
+    - name: Add VLAN 20 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=20 tagged=bridge,ether2"
+      ignore_errors: true
+
+    - name: Add VLAN 30 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=30 tagged=bridge,ether2"
+      ignore_errors: true
+
+    - name: Add VLAN 40 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=40 tagged=bridge,ether2 untagged=ether3,ether4,ether5"
+      ignore_errors: true
+
+    - name: Add VLAN 50 to bridge with wifi as untagged
+      community.routeros.api_find_and_modify:
+        path: interface bridge vlan
+        find:
+          vlan-ids: "50"
+        values:
+          tagged: bridge,ether2
+          untagged: wifi1,wifi2
+      ignore_errors: true
+
+    # -------------------------
+    # VLAN interfaces
+    # -------------------------
+    - name: Add VLAN 10 interface
+      community.routeros.api:
+        path: interface vlan
+        cmd: "add name=vlan10 vlan-id=10 interface=bridge comment=management"
+      ignore_errors: true
+
+    - name: Add VLAN 20 interface
+      community.routeros.api:
+        path: interface vlan
+        cmd: "add name=vlan20 vlan-id=20 interface=bridge comment=cluster"
+      ignore_errors: true
+
+    - name: Add VLAN 30 interface
+      community.routeros.api:
+        path: interface vlan
+        cmd: "add name=vlan30 vlan-id=30 interface=bridge comment=talos"
+      ignore_errors: true
+
+    - name: Add VLAN 40 interface
+      community.routeros.api:
+        path: interface vlan
+        cmd: "add name=vlan40 vlan-id=40 interface=bridge comment=desktop"
+      ignore_errors: true
+
+    - name: Add VLAN 50 interface
+      community.routeros.api:
+        path: interface vlan
+        cmd: "add name=vlan50 vlan-id=50 interface=bridge comment=wifi"
+      ignore_errors: true
+
+    # -------------------------
+    # IP addresses
+    # -------------------------
+    - name: Set IP on VLAN 10 management
+      community.routeros.api:
+        path: ip address
+        cmd: "add address=192.168.10.1/24 interface=vlan10 comment=management"
+      ignore_errors: true
+
+    - name: Set IP on VLAN 20 cluster
+      community.routeros.api:
+        path: ip address
+        cmd: "add address=192.168.20.1/24 interface=vlan20 comment=cluster"
+      ignore_errors: true
+
+    - name: Set IP on VLAN 30 talos
+      community.routeros.api:
+        path: ip address
+        cmd: "add address=192.168.30.1/24 interface=vlan30 comment=talos"
+      ignore_errors: true
+
+    - name: Set IP on VLAN 40 desktop
+      community.routeros.api:
+        path: ip address
+        cmd: "add address=192.168.40.1/24 interface=vlan40 comment=desktop"
+      ignore_errors: true
+
+    - name: Set IP on VLAN 50 wifi
+      community.routeros.api:
+        path: ip address
+        cmd: "add address=192.168.50.1/24 interface=vlan50 comment=wifi"
+      ignore_errors: true
+
+    # -------------------------
+    # DHCP pools
+    # -------------------------
+    - name: Add DHCP pool for VLAN 40
+      community.routeros.api:
+        path: ip pool
+        cmd: "add name=dhcp-vlan40 ranges=192.168.40.100-192.168.40.200"
+      ignore_errors: true
+
+    - name: Add DHCP pool for VLAN 50
+      community.routeros.api:
+        path: ip pool
+        cmd: "add name=dhcp-vlan50 ranges=192.168.50.100-192.168.50.200"
+      ignore_errors: true
+
+    # -------------------------
+    # DHCP servers
+    # -------------------------
+    - name: Add DHCP server for VLAN 40
+      community.routeros.api:
+        path: ip dhcp-server
+        cmd: "add name=dhcp-vlan40 interface=vlan40 address-pool=dhcp-vlan40 disabled=no"
+      ignore_errors: true
+
+    - name: Add DHCP server for VLAN 50
+      community.routeros.api:
+        path: ip dhcp-server
+        cmd: "add name=dhcp-vlan50 interface=vlan50 address-pool=dhcp-vlan50 disabled=no"
+      ignore_errors: true
+
+    - name: Add DHCP network for VLAN 40
+      community.routeros.api:
+        path: ip dhcp-server network
+        cmd: "add address=192.168.40.0/24 gateway=192.168.40.1 dns-server=192.168.40.1 comment=desktop"
+      ignore_errors: true
+
+    - name: Add DHCP network for VLAN 50
+      community.routeros.api:
+        path: ip dhcp-server network
+        cmd: "add address=192.168.50.0/24 gateway=192.168.50.1 dns-server=192.168.50.1 comment=wifi"
+      ignore_errors: true
+
+    # -------------------------
+    # NAT
+    # -------------------------
+    - name: Add masquerade rule
+      community.routeros.api:
+        path: ip firewall nat
+        cmd: "add chain=srcnat out-interface=ether1 action=masquerade comment=masquerade-to-wan"
+      ignore_errors: true
+
+    # -------------------------
+    # Add VLAN interfaces to LAN list - BEFORE enabling VLAN filtering
+    # -------------------------
+    - name: Add vlan10 to LAN interface list
+      community.routeros.api:
+        path: interface list member
+        cmd: "add interface=vlan10 list=LAN comment=management"
+      ignore_errors: true
+
+    - name: Add vlan20 to LAN interface list
+      community.routeros.api:
+        path: interface list member
+        cmd: "add interface=vlan20 list=LAN comment=cluster"
+      ignore_errors: true
+
+    - name: Add vlan30 to LAN interface list
+      community.routeros.api:
+        path: interface list member
+        cmd: "add interface=vlan30 list=LAN comment=talos"
+      ignore_errors: true
+
+    - name: Add vlan40 to LAN interface list
+      community.routeros.api:
+        path: interface list member
+        cmd: "add interface=vlan40 list=LAN comment=desktop"
+      ignore_errors: true
+
+    - name: Add vlan50 to LAN interface list
+      community.routeros.api:
+        path: interface list member
+        cmd: "add interface=vlan50 list=LAN comment=wifi"
+      ignore_errors: true
+
+    # -------------------------
+    # Firewall forward rules
+    # -------------------------
+    - name: Allow established and related
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=forward connection-state=established,related action=accept comment=allow-established"
+      ignore_errors: true
+
+    - name: Allow desktop to Proxmox
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=forward src-address=192.168.40.0/24 dst-address=192.168.10.0/24 action=accept comment=desktop-to-proxmox"
+      ignore_errors: true
+
+    - name: Allow desktop to Talos
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=forward src-address=192.168.40.0/24 dst-address=192.168.30.0/24 action=accept comment=desktop-to-talos"
+      ignore_errors: true
+
+    - name: Allow Proxmox to Talos
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=forward src-address=192.168.10.0/24 dst-address=192.168.30.0/24 action=accept comment=proxmox-to-talos"
+      ignore_errors: true
+
+    - name: Allow all VLANs to internet
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=forward out-interface=ether1 action=accept comment=allow-to-internet"
+      ignore_errors: true
+
+    - name: Drop WiFi to internal VLANs
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=forward src-address=192.168.50.0/24 dst-address=192.168.0.0/16 action=drop comment=drop-wifi-to-internal"
+      ignore_errors: true
+
+    - name: Drop Talos to management
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=forward src-address=192.168.30.0/24 dst-address=192.168.10.0/24 action=drop comment=drop-talos-to-mgmt"
+      ignore_errors: true
+
+    - name: Drop cluster VLAN outbound
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=forward src-address=192.168.20.0/24 action=drop comment=drop-cluster-outbound"
+      ignore_errors: true
+
+    # -------------------------
+    # Firewall input rules
+    # -------------------------
+    - name: Drop WiFi access to router management ports only
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=input src-address=192.168.50.0/24 dst-port=22,80,8291,8728,8729 protocol=tcp action=drop comment=drop-wifi-router-mgmt"
+      ignore_errors: true
+
+    # -------------------------
+    # WiFi SSID and security
+    # -------------------------
+    - name: Configure wifi1 5GHz
+      community.routeros.api_find_and_modify:
+        path: interface wifi
+        find:
+          default-name: wifi1
+        values:
+          configuration.ssid: "{{ wifi_ssid }}"
+          configuration.mode: ap
+          security.authentication-types: wpa2-psk,wpa3-psk
+          security.passphrase: "{{ wifi_password }}"
+          disabled: "no"
+
+    - name: Configure wifi2 2.4GHz
+      community.routeros.api_find_and_modify:
+        path: interface wifi
+        find:
+          default-name: wifi2
+        values:
+          configuration.ssid: "{{ wifi_ssid }}"
+          configuration.mode: ap
+          security.authentication-types: wpa2-psk,wpa3-psk
+          security.passphrase: "{{ wifi_password }}"
+          disabled: "no"
+
+    - name: Remove default defconf DHCP server
+      community.routeros.api:
+        path: ip dhcp-server
+        cmd: "remove [find name=defconf]"
+      ignore_errors: true
+
+    # -------------------------
+    # Enable VLAN filtering LAST
+    # -------------------------
+    - name: Enable bridge VLAN filtering
+      community.routeros.api_find_and_modify:
+        path: interface bridge
+        find:
+          name: bridge
+        values:
+          vlan-filtering: "yes"
+          pvid: "10"
+
+    # -------------------------
+    # Disable default 192.168.88.1 LAST
+    # -------------------------
+    - name: Disable default 192.168.88.1 address
+      community.routeros.api_find_and_modify:
+        path: ip address
+        find:
+          address: 192.168.88.1/24
+        values:
+          disabled: "yes"
+
+  post_tasks:
+    - name: Verify VLAN interfaces
+      community.routeros.api:
+        path: interface vlan
+        cmd: "print"
+      register: vlan_result
+
+    - name: Show VLANs
+      debug:
+        var: vlan_result
+
+    - name: Verify DHCP servers
+      community.routeros.api:
+        path: ip dhcp-server
+        cmd: "print"
+      register: dhcp_result
+
+    - name: Show DHCP servers
+      debug:
+        var: dhcp_result
+
+    - name: Verify firewall rules
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "print"
+      register: fw_result
+
+    - name: Show firewall rules
+      debug:
+        var: fw_result
+
+    - name: Verify interface list members
+      community.routeros.api:
+        path: interface list member
+        cmd: "print"
+      register: list_members
+
+    - name: Show interface list members
+      debug:
+        var: list_members
