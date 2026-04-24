@@ -16,3 +16,15 @@ spec:
       enabled: true
       severity: debug
   priority: 50
+---
+apiVersion: artifact.falcosecurity.dev/v1alpha1
+kind: Config
+metadata:
+  name: suppress-tailscale
+  namespace: falco
+spec:
+  config:
+    rules:
+      - rule: 'Contact K8S API Server From Container'
+        enabled: false
+  priority: 70

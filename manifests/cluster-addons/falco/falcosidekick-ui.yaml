@@ -72,3 +72,7 @@ spec:
           env:
             - name: FALCOSIDEKICK_UI_REDIS_URL
               value: 'falcosidekick-ui-redis:6379'
+            - name: FALCOSIDEKICK_UI_LOGLEVEL
+              value: 'debug'
+            - name: FALCOSIDEKICK_UI_RATELIMIT
+              value: '500' # requests per second, default is very low
