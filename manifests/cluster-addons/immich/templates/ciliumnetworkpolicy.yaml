@@ -120,6 +120,7 @@ spec:
         - matchName: www.modelscope.cn
         - matchName: huggingface.co
         - matchName: cas-server.xethub.hf.co # huggingface storage
+        - matchName: transfer.xethub.hf.co # huggingface storage
       toPorts:
         - ports:
             - port: '443'
