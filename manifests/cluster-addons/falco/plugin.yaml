@@ -2,6 +2,7 @@ apiVersion: artifact.falcosecurity.dev/v1alpha1
 kind: Plugin
 metadata:
   name: container
+  namespace: falco
 spec:
   ociArtifact:
     image:

@@ -2,6 +2,7 @@ apiVersion: artifact.falcosecurity.dev/v1alpha1
 kind: Rulesfile
 metadata:
   name: falco-rules
+  namespace: falco
 spec:
   ociArtifact:
     image:
