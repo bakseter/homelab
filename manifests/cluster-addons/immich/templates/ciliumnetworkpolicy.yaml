@@ -117,7 +117,8 @@ spec:
               - matchPattern: '*'
 
     - toFQDNs:
-        - matchName: 'www.modelscope.cn'
+        - matchName: www.modelscope.cn
+        - matchName: huggingface.co
       toPorts:
         - ports:
             - port: '443'
