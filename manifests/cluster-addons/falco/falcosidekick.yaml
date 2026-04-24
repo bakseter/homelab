@@ -14,9 +14,9 @@ spec:
         - name: falcosidekick
           env:
             - name: REDIS_ADDRESS
-              value: 'falcosidekick-ui-redis:6379'
-            - name: REDIS_STORAGETYPE
-              value: 'hashmap'
+              value: ''
+            - name: WEBUI_URL
+              value: 'http://falcosidekick-ui:2802'
 ---
 apiVersion: artifact.falcosecurity.dev/v1alpha1
 kind: Config
