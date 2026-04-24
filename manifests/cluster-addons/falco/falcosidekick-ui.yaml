@@ -58,7 +58,7 @@ spec:
 apiVersion: instance.falcosecurity.dev/v1alpha1
 kind: Component
 metadata:
-  name: sidekick-ui
+  name: falcosidekick-ui
   namespace: falco
 spec:
   component:
