@@ -55,18 +55,6 @@ spec:
   selector:
     app.kubernetes.io/name: falcosidekick-ui-redis
 ---
-apiVersion: artifact.falcosecurity.dev/v1alpha1
-kind: Config
-metadata:
-  name: falcosidekick-redis
-  namespace: falco
-spec:
-  config:
-    redis:
-      url: 'falcosidekick-ui-redis:6379' # your Redis service
-      password: '' # if no auth
-  priority: 61
----
 apiVersion: instance.falcosecurity.dev/v1alpha1
 kind: Component
 metadata:
@@ -77,3 +65,10 @@ spec:
     type: falcosidekick-ui
     version: '2.2.0'
   replicas: 2
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: falcosidekick-ui
+          env:
+            - name: FALCOSIDEKICK_UI_REDIS_URL
+              value: 'falcosidekick-ui-redis:6379'
