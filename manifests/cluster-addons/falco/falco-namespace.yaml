@@ -4,5 +4,5 @@ metadata:
   name: falco
   labels:
     # Needs access
-    pod-security.kubernetes.io/restricted: warn
+    pod-security.kubernetes.io/enforce: privileged
 spec: {}
