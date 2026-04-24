@@ -7,6 +7,24 @@ immich:
   machine-learning:
     enabled: true
 
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 65534
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+
+    controllers:
+      main:
+        defaultContainerOptions:
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
   valkey:
     enabled: true
 
@@ -25,7 +43,8 @@ immich:
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
-              drop: [ALL]
+              drop:
+                - ALL
 
   server:
     enabled: true
@@ -45,7 +64,8 @@ immich:
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
-              drop: [ALL]
+              drop:
+                - ALL
 
         strategy: Recreate
         rollingUpdate: {}
