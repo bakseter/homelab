@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: falco-operator
+  namespace: argocd
+spec:
+  destination:
+    namespace: falco-operator
+    name: admin@homelab
+  project: default
+  source:
+    path: manifests/cluster-addons/falco-operator
+    repoURL: https://github.com/bakseter/homelab.git
+    targetRevision: HEAD
+  syncPolicy:
+    #   automated:
+    #     prune: true
+    #     selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: restricted
+    syncOptions:
+      - ServerSideApply=true
