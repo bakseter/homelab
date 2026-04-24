@@ -33,3 +33,17 @@ spec:
       url: 'http://falcosidekick-ui:2802'
     prometheus: {}
   priority: 60
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: falcosidekick
+  namespace: falco
+  labels:
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: falcosidekick
+  endpoints:
+    - port: http

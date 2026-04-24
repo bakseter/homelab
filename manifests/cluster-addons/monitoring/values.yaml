@@ -10,7 +10,7 @@ kube-prometheus-stack:
             - prometheus
 
     prometheusSpec:
-      scrapeInterval: 30s
+      scrapeInterval: 60s
 
       retention: 14d
       retentionSize: 40GB # https://prometheus.io/docs/prometheus/latest/storage/#right-sizing-retention-size
@@ -26,6 +26,7 @@ kube-prometheus-stack:
             operator: In
             values:
               - authentik
+              - falco
               - kube-system # cilium hubble
               - longhorn-system
               - monitoring
