@@ -19,5 +19,7 @@ spec:
     json_output: true
     http_output:
       enabled: true
-      url: 'http://sidekick:2801'
+      url: 'http://falcosidekick:2801'
+    webui:
+      url: 'http://falcosidekick:2802'
   priority: 60
