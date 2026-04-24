@@ -7,7 +7,7 @@ resources:
 patches:
   - target:
       kind: Namespace
-      name: jellyfin-config
+      name: falco-operator
     patch: |-
       - op: add
         path: /metadata/labels/pod-security.kubernetes.io~1enforce
