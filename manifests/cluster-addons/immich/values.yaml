@@ -5,7 +5,7 @@ immich:
         existingClaim: immich-library-encrypted
 
   machine-learning:
-    enabled: false
+    enabled: true
 
   valkey:
     enabled: true
