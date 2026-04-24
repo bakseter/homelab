@@ -1,0 +1,21 @@
+apiVersion: instance.falcosecurity.dev/v1alpha1
+kind: Component
+metadata:
+  name: falcosidekick
+  namespace: falco
+spec:
+  component:
+    type: falcosidekick
+    version: '2.33.0'
+  replicas: 1
+---
+apiVersion: artifact.falcosecurity.dev/v1alpha1
+kind: Config
+metadata:
+  name: falcosidekick-output
+  namespace: falco
+spec:
+  config:
+    webui:
+      url: 'http://sidekick:2801'
+  priority: 60
