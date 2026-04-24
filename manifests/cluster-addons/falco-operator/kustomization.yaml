@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - https://github.com/falcosecurity/falco-operator/releases/download/v0.2.1/install.yaml
+  - falco.yaml
 
 patches:
   - target:
