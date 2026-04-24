@@ -16,6 +16,8 @@ metadata:
   namespace: falco
 spec:
   config:
-    webui:
+    json_output: true
+    http_output:
+      enabled: true
       url: 'http://sidekick:2801'
   priority: 60
