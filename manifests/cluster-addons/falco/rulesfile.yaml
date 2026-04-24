@@ -13,12 +13,12 @@ spec:
   priority: 50
 ---
 apiVersion: artifact.falcosecurity.dev/v1alpha1
-kind: RulesFile
+kind: Rulesfile
 metadata:
   name: cilium-exceptions
   namespace: falco
 spec:
-  content: |
+  inlineRules:
     - rule: Drop and execute new binary in container
       exceptions:
         - name: known_cni_binaries
@@ -28,12 +28,12 @@ spec:
   priority: 70
 ---
 apiVersion: artifact.falcosecurity.dev/v1alpha1
-kind: RulesFile
+kind: Rulesfile
 metadata:
   name: tailscale-exceptions
   namespace: falco
 spec:
-  content: |
+  inlineRules:
     - rule: Contact K8S API Server From Container
       exceptions:
         - name: known_k8s_clients
