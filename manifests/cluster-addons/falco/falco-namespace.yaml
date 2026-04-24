@@ -3,5 +3,6 @@ kind: Namespace
 metadata:
   name: falco
   labels:
-    pod-security.kubernetes.io/enforce: baseline
+    # Needs access
+    pod-security.kubernetes.io/restricted: warn
 spec: {}
