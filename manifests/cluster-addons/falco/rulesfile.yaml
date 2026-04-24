@@ -15,6 +15,17 @@ spec:
 apiVersion: artifact.falcosecurity.dev/v1alpha1
 kind: Rulesfile
 metadata:
+  name: global-exceptions
+  namespace: falco
+spec:
+  inlineRules:
+    - rule: Contact K8S API Server From Container
+      enabled: false
+  priority: 70
+---
+apiVersion: artifact.falcosecurity.dev/v1alpha1
+kind: Rulesfile
+metadata:
   name: cilium-exceptions
   namespace: falco
 spec:
@@ -25,19 +36,4 @@ spec:
           fields: [proc.name, proc.exepath]
           values:
             - [cilium-cni, /opt/cni/bin/cilium-cni]
-  priority: 70
----
-apiVersion: artifact.falcosecurity.dev/v1alpha1
-kind: Rulesfile
-metadata:
-  name: tailscale-exceptions
-  namespace: falco
-spec:
-  inlineRules:
-    - rule: Contact K8S API Server From Container
-      exceptions:
-        - name: known_k8s_clients
-          fields: [container.image.repository]
-          values:
-            - [docker.io/tailscale/k8s-proxy]
   priority: 70
