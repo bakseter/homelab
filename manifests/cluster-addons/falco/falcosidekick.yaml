@@ -20,6 +20,4 @@ spec:
     http_output:
       enabled: true
       url: 'http://falcosidekick:2801'
-    webui:
-      url: 'http://falcosidekick:2802'
   priority: 60
