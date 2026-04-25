@@ -3,10 +3,8 @@ name: Sync Tailscale ACLs
 on:
   push:
     branches: [master]
-    paths: ['policy.hujson']
   pull_request:
     branches: [master]
-    paths: ['policy.hujson']
 
 jobs:
   acls:
@@ -15,6 +13,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Get policy file from GitHub Secrets
+        run: echo "$TS_POLICY_FILE" > policy.husjon
+        env:
+          TS_POLICY_FILE: ${{ secrets.TS_POLICY_FILE }}
 
       - name: Deploy ACL
         if: ${{ github.event_name == 'push' }}
