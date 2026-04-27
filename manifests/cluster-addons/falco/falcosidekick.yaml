@@ -35,7 +35,7 @@ spec:
   priority: 60
 ---
 apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+kind: PodMonitor
 metadata:
   name: falcosidekick
   namespace: falco
@@ -45,5 +45,3 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: falcosidekick
-  endpoints:
-    - port: http
