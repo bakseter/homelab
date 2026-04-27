@@ -1,0 +1,88 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: amex
+  namespace: argocd
+spec:
+  description: Amex application
+  destinations:
+    - namespace: amex
+      name: admin@homelab
+  sourceRepos:
+    - https://github.com/bakseter/amex.git
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: 'apps'
+      kind: Deployment
+
+    - group: 'apps'
+      kind: ReplicaSet
+
+    - group: ''
+      kind: Pod
+
+    - group: ''
+      kind: Service
+
+    - group: ''
+      kind: ConfigMap
+
+    - group: ''
+      kind: Secret
+
+    - group: ''
+      kind: ServiceAccount
+
+    - group: ''
+      kind: PersistentVolumeClaim
+
+    - group: 'policy'
+      kind: PodDisruptionBudget
+
+    - group: 'rbac.authorization.k8s.io'
+      kind: Role
+
+    - group: 'rbac.authorization.k8s.io'
+      kind: RoleBinding
+
+    - group: 'cilium.io'
+      kind: CiliumNetworkPolicy
+
+    - group: 'networking.k8s.io'
+      kind: Ingress
+
+    - group: 'postgresql.cnpg.io'
+      kind: Cluster
+
+    - group: 'postgresql.cnpg.io'
+      kind: Database
+
+    - group: 'monitoring.coreos.com'
+      kind: ServiceMonitor
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: amex
+  namespace: argocd
+spec:
+  destination:
+    namespace: amex
+    name: admin@homelab
+  project: amex
+  source:
+    path: manifests
+    repoURL: https://github.com/bakseter/amex.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: restricted
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
