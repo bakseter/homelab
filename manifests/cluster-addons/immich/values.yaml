@@ -29,6 +29,13 @@ immich:
           main:
             image:
               tag: v2.7.5@sha256:a2501141440f10516d329fdfba2c68082e19eb9ba6016c061ac80d23beadf7f3
+            resources:
+              limits:
+                cpu: 4
+                memory: 2Gi
+              requests:
+                cpu: 500m
+                memory: 256Mi
 
   valkey:
     enabled: true
