@@ -32,4 +32,4 @@ longhorn:
     serviceMonitor:
       enabled: true
       additionalLabels:
-        release: monitoring
+        release: kube-prometheus-stack

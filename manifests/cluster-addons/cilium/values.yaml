@@ -41,7 +41,7 @@ cilium:
     serviceMonitor:
       enabled: true
       labels:
-        release: monitoring
+        release: kube-prometheus-stack
 
   dashboards:
     enabled: true
@@ -57,7 +57,7 @@ cilium:
       serviceMonitor:
         enabled: true
         labels:
-          release: monitoring
+          release: kube-prometheus-stack
 
   hubble:
     relay:
@@ -69,7 +69,7 @@ cilium:
         serviceMonitor:
           enabled: true
           labels:
-            release: monitoring
+            release: kube-prometheus-stack
 
     ui:
       enabled: true
@@ -191,7 +191,7 @@ cilium:
       serviceMonitor:
         enabled: true
         labels:
-          release: monitoring
+          release: kube-prometheus-stack
 
       dashboards:
         enabled: true
