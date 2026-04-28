@@ -64,6 +64,8 @@ immich:
     defaultPodOptions:
       securityContext:
         fsGroup: 65534
+        # https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods
+        fsGroupChangePolicy: OnRootMismatch
         runAsUser: 65534
         runAsGroup: 65534
         runAsNonRoot: true
