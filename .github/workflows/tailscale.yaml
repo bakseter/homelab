@@ -21,7 +21,7 @@ jobs:
 
       - name: Deploy ACL
         if: ${{ github.event_name == 'push' }}
-        uses: tailscale/gitops-acl-action@4105afd651aa659e0eec9031a10360c39fbc0804 # v1.5.1
+        uses: tailscale/gitops-acl-action@5a4a17f5708e9bf96f4ee915a95e9f83c2eebe1a # v1.5.2
         with:
           action: 'apply'
           oauth-client-id: ${{ secrets.TS_OAUTH_ID }}
@@ -30,7 +30,7 @@ jobs:
 
       - name: Test ACL
         if: ${{ github.event_name == 'pull_request' }}
-        uses: tailscale/gitops-acl-action@4105afd651aa659e0eec9031a10360c39fbc0804 # v1.5.1
+        uses: tailscale/gitops-acl-action@5a4a17f5708e9bf96f4ee915a95e9f83c2eebe1a # v1.5.2
         with:
           action: 'test'
           oauth-client-id: ${{ secrets.TS_OAUTH_ID }}
