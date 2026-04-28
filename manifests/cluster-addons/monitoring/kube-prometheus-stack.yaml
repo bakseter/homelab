@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+spec:
+  destination:
+    namespace: monitoring
+    name: admin@homelab
+  project: default
+  source:
+    path: manifests/cluster-addons/monitoring/kube-prometheus-stack
+    repoURL: https://github.com/bakseter/homelab.git
+    targetRevision: HEAD
+  syncPolicy:
+    #   automated:
+    #      prune: true
+    #      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        # Needs root for node-exporter
+        pod-security.kubernetes.io/enforce: privileged
+        pod-security.kubernetes.io/warn: restricted
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

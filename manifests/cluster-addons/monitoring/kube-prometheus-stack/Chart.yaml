@@ -1,0 +1,7 @@
+apiVersion: v2
+name: kube-prometheus-stack-umbrella
+version: 0.1.0
+dependencies:
+  - name: kube-prometheus-stack
+    version: 84.0.1
+    repository: oci://ghcr.io/prometheus-community/charts

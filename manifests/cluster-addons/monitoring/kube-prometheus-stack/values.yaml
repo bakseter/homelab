@@ -1,0 +1,132 @@
+kube-prometheus-stack:
+  prometheus:
+    ingress:
+      enabled: true
+      ingressClassName: tailscale
+      hosts:
+        - prometheus
+      tls:
+        - hosts:
+            - prometheus
+
+    prometheusSpec:
+      scrapeInterval: 60s
+
+      retention: 14d
+      retentionSize: 40GB # https://prometheus.io/docs/prometheus/latest/storage/#right-sizing-retention-size
+
+      image:
+        registry: quay.io
+        repository: prometheus/prometheus
+        tag: v3.11.2-distroless
+        sha: abe6a0652b5ca58b6c2d377483485678c8c472671deed21536f53b59d795c032
+
+      externalUrl: https://prometheus.tail79d70a.ts.net
+
+      serviceMonitorNamespaceSelector:
+        matchExpressions:
+          - key: kubernetes.io/metadata.name
+            operator: In
+            values:
+              - authentik
+              - kube-system # cilium hubble
+              - longhorn-system
+              - monitoring
+              - mandagsmiddag
+              - spenn
+
+      podMonitorNamespaceSelector:
+        matchExpressions:
+          - key: kubernetes.io/metadata.name
+            operator: In
+            values:
+              - falco
+
+      storageSpec:
+        volumeClaimTemplate:
+          metadata:
+            labels:
+              recurring-job.longhorn.io/source: enabled
+              recurring-job-group.longhorn.io/fstrim: enabled
+          spec:
+            accessModes: ['ReadWriteOnce']
+            resources:
+              requests:
+                storage: 50Gi
+
+      metricRelabelings:
+        - sourceLabels: [__name__]
+          regex: '.*_bucket'
+          action: drop
+
+  defaultRules:
+    create: true
+    rules:
+      alertmanager: false
+      etcd: false
+      kubeControllerManager: false
+      kubeScheduler: false
+      kubeProxy: false
+      windows: false
+      kubeSchedulerAlerting: false
+      kubeSchedulerRecording: false
+
+  alertmanager:
+    enabled: true
+
+    alertmanagerSpec:
+      image:
+        registry: quay.io
+        repository: prometheus/alertmanager
+        tag: v0.32.0
+        sha: 58e117eabccebbff04e6643a3432d6315a2cc3a8c24ab5849bc628886bf08857
+
+      externalUrl: https://alertmanager.tail79d70a.ts.net
+      secrets:
+        - alertmanager-pushover
+
+    config:
+      global:
+        resolve_timeout: 5m
+
+      route:
+        receiver: pushover
+        group_by: ['alertname', 'namespace']
+        routes:
+          - matchers:
+              - alertname=~"Watchdog|InfoInhibitor|NodeSystemSaturation"
+            receiver: 'null'
+
+      receivers:
+        - name: 'null'
+        - name: pushover
+          pushover_configs:
+            - user_key_file: /etc/alertmanager/secrets/alertmanager-pushover/user_key
+              token_file: /etc/alertmanager/secrets/alertmanager-pushover/token
+              title: '{{ .CommonAnnotations.summary }}'
+              message: '{{ .CommonAnnotations.description }}'
+              send_resolved: true
+
+    ingress:
+      enabled: true
+      ingressClassName: tailscale
+      hosts:
+        - alertmanager
+      tls:
+        - hosts:
+            - alertmanager
+
+  grafana:
+    enabled: false
+    forceDeployDashboards: true
+
+  coreDns:
+    enabled: false
+  kubeEtcd:
+    enabled: false
+  kubeControllerManager:
+    enabled: false
+  kubeScheduler:
+    enabled: false
+  kubeProxy:
+    enabled: false

@@ -1,0 +1,7 @@
+apiVersion: v2
+name: monitoring-umbrella
+version: 0.1.0
+dependencies:
+  - name: loki
+    version: 13.2.0
+    repository: oci://ghcr.io/grafana-community/helm-charts

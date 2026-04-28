@@ -1,0 +1,207 @@
+alloy:
+  image:
+    registry: docker.io
+    repository: grafana/alloy
+    tag: v1.16.0 # overriden by digest, but left for clarity
+    digest: 6e00cf7c5a692ff5f24844529416ed017d76fce922f8199004e73d5eca46b6b8
+
+  global:
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault
+
+  configReloader:
+    image:
+      registry: quay.io
+      repository: prometheus-operator/prometheus-config-reloader
+      tag: v0.81.0 # overriden by digest, but left for clarity
+      digest: 959d47672fbff2776a04ec62b8afcec89e8c036af84dc5fade50019dab212746
+
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsUser: 65535
+      runAsGroup: 65535
+
+  alloy:
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+
+    extraPorts:
+      - name: otlp-grpc
+        port: 4317
+        targetPort: 4317
+        protocol: TCP
+
+    enableReporting: false
+
+    configMap:
+      content: |
+        loki.write "default" {
+          endpoint {
+            url = "http://monitoring-loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push"
+          }
+        }
+
+        local.file_match "node_logs" {
+          path_targets = [{
+            __path__  = "/var/log/syslog",
+            job       = "node/syslog",
+            node_name = sys.env("HOSTNAME"),
+            cluster   = "homelab",
+          }]
+        }
+
+        loki.source.file "node_logs" {
+          targets    = local.file_match.node_logs.targets
+          forward_to = [loki.write.default.receiver]
+        }
+
+        discovery.kubernetes "pod" {
+          role = "pod"
+
+          namespaces {
+            names = [
+              "authentik",
+              "bakseter-net",
+              "cloudflared",
+              "immich",
+              "jellyfin",
+              "longhorn-system",
+              "mandagsmiddag",
+              "tailscale",
+              "traefik",
+            ]
+          }
+        }
+
+        discovery.relabel "pod_logs" {
+          targets = discovery.kubernetes.pod.targets
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_logs_bakseter_net_scrape"]
+            regex         = "false"
+            action        = "drop"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_namespace"]
+            action        = "replace"
+            target_label  = "namespace"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_name"]
+            action        = "replace"
+            target_label  = "pod"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_container_name"]
+            action        = "replace"
+            target_label  = "container"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_node_name"]
+            action        = "replace"
+            target_label  = "node_name"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+            action        = "replace"
+            target_label  = "app"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_container_name"]
+            action        = "replace"
+            target_label  = "job"
+            separator     = "/"
+            replacement   = "$1/$2"
+          }
+        }
+
+        loki.source.kubernetes "pod_logs" {
+          targets    = discovery.relabel.pod_logs.output
+          forward_to = [loki.process.pod_logs.receiver]
+        }
+
+        loki.process "pod_logs" {
+          stage.static_labels {
+            values = {
+              cluster = "homelab",
+              source  = "kubernetes",
+            }
+          }
+
+          forward_to = [loki.write.default.receiver]
+        }
+
+        loki.source.kubernetes_events "cluster_events" {
+          job_name   = "integrations/kubernetes/eventhandler"
+          log_format = "logfmt"
+          forward_to = [loki.process.cluster_events.receiver]
+        }
+
+        loki.process "cluster_events" {
+          stage.static_labels {
+            values = {
+              cluster = "homelab",
+              source  = "k8s_events",
+            }
+          }
+
+          forward_to = [loki.write.default.receiver]
+        }
+
+        otelcol.receiver.otlp "apps" {
+          grpc {
+            endpoint = "0.0.0.0:4317"
+          }
+
+          output {
+            logs = [otelcol.processor.attributes.otlp_hints.input]
+          }
+        }
+
+        otelcol.processor.attributes "otlp_hints" {
+          action {
+            key    = "loki.resource.labels"
+            action = "insert"
+            value  = "service.name,service.namespace"
+          }
+
+          output {
+            logs = [otelcol.processor.batch.apps.input]
+          }
+        }
+
+        otelcol.processor.batch "apps" {
+          output {
+            logs = [otelcol.exporter.loki.apps.input]
+          }
+        }
+
+        otelcol.exporter.loki "apps" {
+          forward_to = [loki.process.otel_logs.receiver]
+        }
+
+        loki.process "otel_logs" {
+          stage.static_labels {
+            values = {
+              cluster = "homelab",
+              source  = "otlp",
+            }
+          }
+
+          forward_to = [loki.write.default.receiver]
+        }

@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alloy
+  namespace: argocd
+spec:
+  destination:
+    namespace: monitoring
+    name: admin@homelab
+  project: default
+  source:
+    path: manifests/cluster-addons/monitoring/alloy
+    repoURL: https://github.com/bakseter/homelab.git
+    targetRevision: HEAD
+  syncPolicy:
+    #   automated:
+    #      prune: true
+    #      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
