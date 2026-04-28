@@ -61,3 +61,28 @@ spec:
 
     - group: 'monitoring.coreos.com'
       kind: ServiceMonitor
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: spenn
+  namespace: argocd
+spec:
+  destination:
+    namespace: spenn
+    name: admin@homelab
+  project: spenn
+  source:
+    path: manifests
+    repoURL: https://github.com/bakseter/spenn.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: restricted
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
