@@ -117,7 +117,8 @@ spec:
               - matchPattern: '*'
 
     - toFQDNs:
-        - matchName: www.modelscope.cn
+        - matchName: www.modelscope.cn # model website
+        - matchName: cdn-lfs-cn-1.modelscope.cn # modelscope cdn (?)
         - matchName: huggingface.co
         - matchName: cas-server.xethub.hf.co # huggingface storage
         - matchName: transfer.xethub.hf.co # huggingface storage
