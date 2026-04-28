@@ -67,6 +67,8 @@ kind: Application
 metadata:
   name: spenn
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     namespace: spenn
