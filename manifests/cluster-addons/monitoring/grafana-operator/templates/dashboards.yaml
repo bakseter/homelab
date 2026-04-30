@@ -8,7 +8,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-alertmanager-overview
+    name: kube-prometheus-stack-alertmanager-overview
     key: alertmanager-overview.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -21,7 +21,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-apiserver
+    name: kube-prometheus-stack-apiserver
     key: apiserver.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -34,7 +34,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-cluster-total
+    name: kube-prometheus-stack-cluster-total
     key: cluster-total.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -47,7 +47,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-controller-manager
+    name: kube-prometheus-stack-controller-manager
     key: controller-manager.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -60,7 +60,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-etcd
+    name: kube-prometheus-stack-etcd
     key: etcd.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -73,7 +73,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-grafana-overview
+    name: kube-prometheus-stack-grafana-overview
     key: grafana-overview.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -86,7 +86,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-k8s-coredns
+    name: kube-prometheus-stack-k8s-coredns
     key: k8s-coredns.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -99,7 +99,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-k8s-resources-cluster
+    name: kube-prometheus-stack-k8s-resources-cluster
     key: k8s-resources-cluster.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -112,7 +112,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-k8s-resources-multicluster
+    name: kube-prometheus-stack-k8s-resources-multicluster
     key: k8s-resources-multicluster.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -125,7 +125,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-k8s-resources-namespace
+    name: kube-prometheus-stack-k8s-resources-namespace
     key: k8s-resources-namespace.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -138,7 +138,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-k8s-resources-node
+    name: kube-prometheus-stack-k8s-resources-node
     key: k8s-resources-node.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -151,7 +151,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-k8s-resources-pod
+    name: kube-prometheus-stack-k8s-resources-pod
     key: k8s-resources-pod.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -164,7 +164,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-k8s-resources-workload
+    name: kube-prometheus-stack-k8s-resources-workload
     key: k8s-resources-workload.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -177,7 +177,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-k8s-resources-workloads-namespace
+    name: kube-prometheus-stack-k8s-resources-workloads-namespace
     key: k8s-resources-workloads-namespace.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -190,7 +190,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-kubelet
+    name: kube-prometheus-stack-kubelet
     key: kubelet.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -203,7 +203,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-namespace-by-pod
+    name: kube-prometheus-stack-namespace-by-pod
     key: namespace-by-pod.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -216,7 +216,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-namespace-by-workload
+    name: kube-prometheus-stack-namespace-by-workload
     key: namespace-by-workload.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -229,7 +229,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-node-cluster-rsc-use
+    name: kube-prometheus-stack-node-cluster-rsc-use
     key: node-cluster-rsc-use.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -242,7 +242,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-node-rsc-use
+    name: kube-prometheus-stack-node-rsc-use
     key: node-rsc-use.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -255,7 +255,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-nodes
+    name: kube-prometheus-stack-nodes
     key: nodes.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -268,7 +268,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-nodes-aix
+    name: kube-prometheus-stack-nodes-aix
     key: nodes-aix.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -281,7 +281,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-nodes-darwin
+    name: kube-prometheus-stack-nodes-darwin
     key: nodes-darwin.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -294,7 +294,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-nodes-persistentvolumesusage
+    name: kube-prometheus-stack-nodes-persistentvolumesusage
     key: nodes-persistentvolumesusage.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -307,7 +307,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-pod-total
+    name: kube-prometheus-stack-pod-total
     key: pod-total.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -320,7 +320,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-prometheus
+    name: kube-prometheus-stack-prometheus
     key: prometheus.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -333,7 +333,7 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-proxy
+    name: kube-prometheus-stack-proxy
     key: proxy.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
@@ -346,5 +346,5 @@ spec:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-scheduler
+    name: kube-prometheus-stack-scheduler
     key: scheduler.json
