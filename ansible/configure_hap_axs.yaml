@@ -1,0 +1,167 @@
+---
+- name: Configure MikroTik hAP ax S
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars_files:
+    - group_vars/all/hap_axs.yaml
+    - group_vars/all/hap_ax3.yaml
+
+  module_defaults:
+    group/community.routeros.api:
+      hostname: "{{ hap_axs_host }}"
+      username: "{{ hap_axs_username }}"
+      password: "{{ hap_axs_password }}"
+      tls: false  # enable later once certs are set up
+
+  tasks:
+    # -------------------------
+    # Identity
+    # -------------------------
+    - name: Set identity
+      community.routeros.api:
+        path: system identity
+        cmd: "set name=hap-ax-s"
+
+    # -------------------------
+    # WiFi - wifi2 (5GHz) = station uplink
+    #        wifi1 (2.4GHz) = AP for clients
+    #        wifi3 = virtual 2.4GHz AP on wifi2
+    # -------------------------
+    - name: Set wifi2 5GHz as station-bridge uplink
+      community.routeros.api_find_and_modify:
+        path: interface wifi
+        find:
+          default-name: wifi2
+        values:
+          configuration.mode: station-bridge
+          configuration.ssid: "{{ wifi_ssid }}"
+          configuration.country: Norway
+          security.authentication-types: wpa2-psk,wpa3-psk
+          security.passphrase: "{{ wifi_password }}"
+          security.ft: "no"
+          security.ft-over-ds: "no"
+          disabled: "no"
+
+    - name: Set wifi1 2.4GHz as AP for clients
+      community.routeros.api_find_and_modify:
+        path: interface wifi
+        find:
+          default-name: wifi1
+        values:
+          configuration.mode: ap
+          configuration.ssid: "{{ wifi_ssid }}"
+          configuration.country: Norway
+          security.authentication-types: wpa2-psk,wpa3-psk
+          security.passphrase: "{{ wifi_password }}"
+          security.ft: "no"
+          security.ft-over-ds: "no"
+          disabled: "no"
+
+    - name: Remove existing wifi3 if any
+      community.routeros.api:
+        path: interface wifi
+        cmd: "remove [find name=wifi3]"
+      ignore_errors: true
+
+    - name: Add virtual wifi3 AP on wifi2 station
+      community.routeros.api:
+        path: interface wifi
+        cmd: "add name=wifi3 configuration.mode=ap configuration.ssid={{ wifi_ssid }} master-interface=wifi2 security.authentication-types=wpa2-psk,wpa3-psk security.passphrase={{ wifi_password }} disabled=no"
+      ignore_errors: true
+
+    # -------------------------
+    # Bridge - add ALL interfaces per docs
+    # -------------------------
+    - name: Add all interfaces to bridge
+      community.routeros.api:
+        path: interface bridge port
+        cmd: "add interface=all bridge=bridge"
+
+    # -------------------------
+    # Interface list - bridge in LAN
+    # so firewall allows management
+    # -------------------------
+    - name: Add bridge to LAN list
+      community.routeros.api:
+        path: interface list member
+        cmd: "add interface=bridge list=LAN comment=defconf"
+      ignore_errors: true
+
+    # -------------------------
+    # DHCP client on bridge per docs
+    # -------------------------
+    - name: Add DHCP client on bridge
+      community.routeros.api:
+        path: ip dhcp-client
+        cmd: "add interface=bridge disabled=no"
+      ignore_errors: true
+
+    # -------------------------
+    # Disable DHCP server
+    # -------------------------
+    - name: Gather DHCP servers
+      community.routeros.api:
+        path: ip dhcp-server
+        cmd: "print"
+      register: dhcp_servers
+
+    - name: Disable all DHCP servers
+      community.routeros.api:
+        path: ip dhcp-server
+        remove: "{{ item['.id'] }}"
+      loop: "{{ dhcp_servers.msg | list }}"
+      ignore_errors: true
+
+    # -------------------------
+    # Disable default 192.168.88.1 IP
+    # -------------------------
+    - name: Disable default IP address
+      community.routeros.api_find_and_modify:
+        path: ip address
+        find:
+          address: 192.168.88.1/24
+        values:
+          disabled: "yes"
+      ignore_errors: true
+
+  post_tasks:
+    - name: Check wifi interfaces
+      community.routeros.api:
+        path: interface wifi
+        cmd: "print"
+      register: wifi
+
+    - name: Show wifi
+      debug:
+        var: wifi
+
+    - name: Check bridge ports
+      community.routeros.api:
+        path: interface bridge port
+        cmd: "print"
+      register: ports
+
+    - name: Show bridge ports
+      debug:
+        var: ports
+
+    - name: Check DHCP clients
+      community.routeros.api:
+        path: ip dhcp-client
+        cmd: "print"
+      register: dhcp
+
+    - name: Show DHCP clients
+      debug:
+        var: dhcp
+
+    - name: Check interface list members
+      community.routeros.api:
+        path: interface list member
+        cmd: "print"
+      register: members
+
+    - name: Show members
+      debug:
+        var: members

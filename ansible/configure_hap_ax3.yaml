@@ -3,74 +3,24 @@
   hosts: localhost
   gather_facts: false
   become: false
+  vars_files:
+    - group_vars/all/hap_ax3.yaml
 
   module_defaults:
     group/community.routeros.api:
-      hostname: "{{ mikrotik_host }}"
-      username: "{{ mikrotik_user }}"
-      password: "{{ mikrotik_password }}"
-      tls: false  # enable later once certs are set up
-
-  vars:
-    vlans:
-      - id: 10
-        name: management
-        subnet: 192.168.10.0/24
-        gateway: 192.168.10.1
-        dhcp: false
-      - id: 20
-        name: cluster
-        subnet: 192.168.20.0/24
-        gateway: 192.168.20.1
-        dhcp: false
-      - id: 30
-        name: talos
-        subnet: 192.168.30.0/24
-        gateway: 192.168.30.1
-        dhcp: false
-      - id: 40
-        name: desktop
-        subnet: 192.168.40.0/24
-        gateway: 192.168.40.1
-        dhcp: true
-        dhcp_pool_start: 192.168.40.100
-        dhcp_pool_end: 192.168.40.200
-      - id: 50
-        name: wifi
-        subnet: 192.168.50.0/24
-        gateway: 192.168.50.1
-        dhcp: true
-        dhcp_pool_start: 192.168.50.100
-        dhcp_pool_end: 192.168.50.200
-
-    wifi_ssid: !vault |
-          $ANSIBLE_VAULT;1.1;AES256
-          35623832393930653938326435373935313835663333343631626231356533663064383666346533
-          6335643931396635343733656162633236356161616165330a346331323636346634313665353766
-          63353036383634393061393038396461633735316437306230306139313862646436623562343532
-          6666653231613830380a316562653432306135396263636237333366366564633733633234373062
-          6665
-    wifi_password: !vault |
-          $ANSIBLE_VAULT;1.1;AES256
-          65656630396262323830383036376633623763346139353135343465393730333032383235323061
-          3234623166343537626665613333623339653466646263370a626137666638326631343333306338
-          32313234373534613336663036313163393361393438346566666531323433306164333766383165
-          3731383566303661330a316662376563363439643336353335666335383037333334333831316161
-          6362
-
-    mikrotik_host: 192.168.40.1
-    mikrotik_user: admin
-    mikrotik_password: !vault |
-              $ANSIBLE_VAULT;1.1;AES256
-              61343537333038623565316439346531656432363631643434363638363130636266643139393165
-              3064613637383464333565363933323036613432346164350a663961346163623461303136313132
-              64313039633836353964303433663666656531316361376366333133383436656236333930373465
-              6239343266626134340a373663383462663065396165326166336639316666336237376233323038
-              6262
-
-
+      hostname: "{{ hap_ax3_host }}"
+      username: "{{ hap_ax3_username }}"
+      password: "{{ hap_ax3_password }}"
+      tls: false
 
   tasks:
+    # -------------------------
+    # Identity
+    # -------------------------
+    - name: Set identity
+      community.routeros.api:
+        path: system identity
+        cmd: "set name=hap-ax3"
     # -------------------------
     # Bridge ports
     # -------------------------
@@ -83,7 +33,7 @@
           pvid: "1"
           frame-types: admit-all
 
-    - name: Set ether3 as access port for desktop VLAN 40
+    - name: Set ether3 as access port VLAN 40 desktop
       community.routeros.api_find_and_modify:
         path: interface bridge port
         find:
@@ -92,22 +42,22 @@
           pvid: "40"
           frame-types: admit-only-untagged-and-priority-tagged
 
-    - name: Set ether4 as access port VLAN 40 spare
+    - name: Set ether4 as access port VLAN 50
       community.routeros.api_find_and_modify:
         path: interface bridge port
         find:
           interface: ether4
         values:
-          pvid: "40"
+          pvid: "50"
           frame-types: admit-only-untagged-and-priority-tagged
 
-    - name: Set ether5 as access port VLAN 40 spare
+    - name: Set ether5 as access port VLAN 50
       community.routeros.api_find_and_modify:
         path: interface bridge port
         find:
           interface: ether5
         values:
-          pvid: "40"
+          pvid: "50"
           frame-types: admit-only-untagged-and-priority-tagged
 
     - name: Set wifi1 bridge port to VLAN 50
@@ -129,7 +79,7 @@
           frame-types: admit-only-untagged-and-priority-tagged
 
     # -------------------------
-    # Cleanup DHCP and Firewall
+    # Cleanup - DHCP
     # -------------------------
     - name: Gather DHCP servers
       community.routeros.api:
@@ -144,6 +94,9 @@
       loop: "{{ dhcp_cleanup.msg | selectattr('name', 'equalto', 'defconf') | list }}"
       ignore_errors: true
 
+    # -------------------------
+    # Cleanup - duplicate firewall rules
+    # -------------------------
     - name: Gather existing firewall rules
       community.routeros.api:
         path: ip firewall filter
@@ -154,12 +107,44 @@
       community.routeros.api:
         path: ip firewall filter
         remove: "{{ item['.id'] }}"
-      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|desktop-to-proxmox|desktop-to-talos|proxmox-to-talos|allow-to-internet|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-wifi-router-access|drop-wifi-router-mgmt') | list }}"
+      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|desktop-to-proxmox|desktop-to-talos|proxmox-to-talos|allow-to-internet|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-wifi-router-mgmt') | list }}"
+      ignore_errors: true
+
+    # -------------------------
+    # Cleanup - duplicate NAT rules
+    # -------------------------
+    - name: Gather NAT rules
+      community.routeros.api:
+        path: ip firewall nat
+        cmd: "print"
+      register: nat_cleanup
+
+    - name: Remove duplicate masquerade rules
+      community.routeros.api:
+        path: ip firewall nat
+        remove: "{{ item['.id'] }}"
+      loop: "{{ nat_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'equalto', 'masquerade-to-wan') | list }}"
+      ignore_errors: true
 
     # -------------------------
     # Bridge VLAN membership
+    # Remove all VLAN 50 entries first (dynamic ones cant be modified)
+    # then add static ones
     # -------------------------
-    - name: Keep default VLAN 88 during migration
+    - name: Gather all bridge VLAN entries
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "print"
+      register: bridge_vlans
+
+    - name: Remove all VLAN 50 entries
+      community.routeros.api:
+        path: interface bridge vlan
+        remove: "{{ item['.id'] }}"
+      loop: "{{ bridge_vlans.msg | selectattr('vlan-ids', 'equalto', '50') | list }}"
+      ignore_errors: true
+
+    - name: Add VLAN 88 to bridge
       community.routeros.api:
         path: interface bridge vlan
         cmd: "add bridge=bridge vlan-ids=88 tagged=bridge untagged=ether2,ether3,ether4,ether5"
@@ -186,17 +171,13 @@
     - name: Add VLAN 40 to bridge
       community.routeros.api:
         path: interface bridge vlan
-        cmd: "add bridge=bridge vlan-ids=40 tagged=bridge,ether2 untagged=ether3,ether4,ether5"
+        cmd: "add bridge=bridge vlan-ids=40 tagged=bridge,ether2 untagged=ether3"
       ignore_errors: true
 
-    - name: Add VLAN 50 to bridge with wifi as untagged
-      community.routeros.api_find_and_modify:
+    - name: Add VLAN 50 to bridge
+      community.routeros.api:
         path: interface bridge vlan
-        find:
-          vlan-ids: "50"
-        values:
-          tagged: bridge,ether2
-          untagged: wifi1,wifi2
+        cmd: "add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether4,ether5,wifi1,wifi2"
       ignore_errors: true
 
     # -------------------------
@@ -317,7 +298,7 @@
       ignore_errors: true
 
     # -------------------------
-    # Add VLAN interfaces to LAN list - BEFORE enabling VLAN filtering
+    # Interface list members
     # -------------------------
     - name: Add vlan10 to LAN interface list
       community.routeros.api:
@@ -436,12 +417,6 @@
           security.passphrase: "{{ wifi_password }}"
           disabled: "no"
 
-    - name: Remove default defconf DHCP server
-      community.routeros.api:
-        path: ip dhcp-server
-        cmd: "remove [find name=defconf]"
-      ignore_errors: true
-
     # -------------------------
     # Enable VLAN filtering LAST
     # -------------------------
@@ -505,3 +480,23 @@
     - name: Show interface list members
       debug:
         var: list_members
+
+    - name: Verify bridge ports
+      community.routeros.api:
+        path: interface bridge port
+        cmd: "print"
+      register: ports
+
+    - name: Show ports
+      debug:
+        var: ports
+
+    - name: Verify VLAN membership
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "print"
+      register: vlans
+
+    - name: Show bridge VLANs
+      debug:
+        var: vlans
