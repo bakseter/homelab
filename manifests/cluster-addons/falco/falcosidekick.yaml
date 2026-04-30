@@ -8,15 +8,6 @@ spec:
     type: falcosidekick
     version: '2.33.0'
   replicas: 1
-# podTemplateSpec:
-#   spec:
-#     containers:
-#       - name: falcosidekick
-#         env:
-#           - name: REDIS_ADDRESS
-#             value: ''
-#           - name: WEBUI_URL
-#             value: 'http://falcosidekick-ui:2802'
 ---
 apiVersion: artifact.falcosecurity.dev/v1alpha1
 kind: Config
