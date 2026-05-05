@@ -18,8 +18,13 @@ spec:
               protocol: TCP
 
   egress:
-    - toEntities:
-        - world
+    - toFQDNs:
+        - matchPattern: '*.jellyfin.org'
+        - matchName: 'www.theaudiodb.com'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
