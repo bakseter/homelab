@@ -1,0 +1,9 @@
+- name: Upgrade packages for Proxmox hosts
+  hosts: proxmox
+  tasks:
+  - name: Update and upgrade apt packages
+    become: true
+    apt:
+      upgrade: yes
+      update_cache: yes
+      cache_valid_time: 86400 # 24h

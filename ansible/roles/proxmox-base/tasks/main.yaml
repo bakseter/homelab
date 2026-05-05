@@ -115,4 +115,4 @@
 
 - name: Show sensors install output
   debug:
-    var: sensors_install_result.stdout_lines
+    var: sensors_install_result
