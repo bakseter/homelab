@@ -1,3 +1,72 @@
+data "talos_image_factory_extensions_versions" "initial-talos" {
+  talos_version = local.initial_talos_version
+
+  filters = {
+    names = [
+      "siderolabs/iscsi-tools",
+      "siderolabs/qemu-guest-agent",
+      "siderolabs/util-linux-tools",
+    ]
+  }
+}
+
+resource "talos_image_factory_schematic" "initial-talos" {
+  schematic = yamlencode(
+    {
+      customization = {
+        systemExtensions = {
+          officialExtensions = data.talos_image_factory_extensions_versions.initial-talos.extensions_info.*.name
+        }
+      }
+    }
+  )
+}
+
+data "talos_image_factory_extensions_versions" "talos-controlplane" {
+  talos_version = local.talos_version
+
+  filters = {
+    names = [
+      "siderolabs/qemu-guest-agent",
+    ]
+  }
+}
+
+resource "talos_image_factory_schematic" "talos-controlplane" {
+  schematic = yamlencode(
+    {
+      customization = {
+        systemExtensions = {
+          officialExtensions = data.talos_image_factory_extensions_versions.talos-controlplane.extensions_info.*.name
+        }
+      }
+    }
+  )
+}
+
+data "talos_image_factory_extensions_versions" "talos-worker" {
+  talos_version = local.talos_version
+
+  filters = {
+    names = [
+      "siderolabs/iscsi-tools",
+      "siderolabs/util-linux-tools",
+    ]
+  }
+}
+
+resource "talos_image_factory_schematic" "talos-worker" {
+  schematic = yamlencode(
+    {
+      customization = {
+        systemExtensions = {
+          officialExtensions = data.talos_image_factory_extensions_versions.talos-worker.extensions_info.*.name
+        }
+      }
+    }
+  )
+}
+
 resource "talos_machine_secrets" "machine_secrets" {
   talos_version = local.talos_version
 }
@@ -35,8 +104,9 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
         node_ip                 = each.value.ip
         node_type               = each.value.type
         virtual_ip_controlplane = local.virtual_ip_controlplane
-        talos_schematic_id      = talos_image_factory_schematic.talos.id
+        talos_schematic_id      = talos_image_factory_schematic.talos-controlplane.id
         talos_version           = local.talos_version
+        extension_image_refs    = data.talos_image_factory_extensions_versions.talos-controlplane.extensions_info.*.ref
       }
     )
   ])
@@ -64,7 +134,7 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
     try(each.value.longhorn.enabled, false) ? templatefile(
       "${path.module}/manifests/longhorn-patches.yaml.tmpl",
       {
-        extension_image_refs = data.talos_image_factory_extensions_versions.talos.extensions_info.*.ref
+        extension_image_refs = data.talos_image_factory_extensions_versions.talos-worker.extensions_info.*.ref
       },
     ) : "",
     templatefile(
@@ -74,8 +144,9 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
         node_ip                 = each.value.ip
         node_type               = each.value.type
         virtual_ip_controlplane = local.virtual_ip_controlplane
-        talos_schematic_id      = talos_image_factory_schematic.talos.id
+        talos_schematic_id      = talos_image_factory_schematic.talos-worker.id
         talos_version           = local.talos_version
+        extension_image_refs    = data.talos_image_factory_extensions_versions.talos-controlplane.extensions_info.*.ref
       }
     )
   ])

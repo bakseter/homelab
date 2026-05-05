@@ -10,6 +10,12 @@ cluster:
 machine:
   install:
     image: factory.talos.dev/installer/${talos_schematic_id}:${talos_version}
+    %{~ if length(extension_image_refs) > 0 ~}
+      extensions:
+      %{~ for image_ref in extension_image_refs ~}
+        - image: ${image_ref}
+      %{~ endfor ~}
+    %{~ endif ~}
   kubelet:
     extraArgs:
       rotate-server-certificates: true
