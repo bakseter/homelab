@@ -1,3 +1,2 @@
 host_ip: 192.168.10.20
 host_ip_cluster: 192.168.20.20
-ansible_host_new: 192.168.10.20

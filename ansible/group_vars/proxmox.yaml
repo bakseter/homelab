@@ -1,27 +1,22 @@
 proxmox_hosts:
   - short: m715q
     fqdn: m715q.lan
-    ip_old: 192.168.1.27
     ip: 192.168.10.20
     ip_cluster: 192.168.20.20
   - short: m715q2
     fqdn: m715q2.lan
-    ip_old: 192.168.1.29
     ip: 192.168.10.21
     ip_cluster: 192.168.20.21
   - short: m720q
     fqdn: m720q.lan
-    ip_old: 192.168.1.28
     ip: 192.168.10.22
     ip_cluster: 192.168.20.22
   - short: m920q
     fqdn: m920q.lan
-    ip_old: 192.168.1.30
     ip: 192.168.10.23
     ip_cluster: 192.168.20.23
 
 vlan_management: 10
 vlan_cluster: 20
 vlan_talos: 30
-gateway_old: 192.168.1.1
 gateway_vlan10: 192.168.10.1

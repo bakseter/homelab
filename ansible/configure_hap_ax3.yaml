@@ -21,6 +21,7 @@
       community.routeros.api:
         path: system identity
         cmd: "set name=hap-ax3"
+
     # -------------------------
     # Bridge ports
     # -------------------------
@@ -183,109 +184,61 @@
     # -------------------------
     # VLAN interfaces
     # -------------------------
-    - name: Add VLAN 10 interface
+    - name: Add VLAN {{ vlan.id }} interface
       community.routeros.api:
         path: interface vlan
-        cmd: "add name=vlan10 vlan-id=10 interface=bridge comment=management"
-      ignore_errors: true
-
-    - name: Add VLAN 20 interface
-      community.routeros.api:
-        path: interface vlan
-        cmd: "add name=vlan20 vlan-id=20 interface=bridge comment=cluster"
-      ignore_errors: true
-
-    - name: Add VLAN 30 interface
-      community.routeros.api:
-        path: interface vlan
-        cmd: "add name=vlan30 vlan-id=30 interface=bridge comment=talos"
-      ignore_errors: true
-
-    - name: Add VLAN 40 interface
-      community.routeros.api:
-        path: interface vlan
-        cmd: "add name=vlan40 vlan-id=40 interface=bridge comment=desktop"
-      ignore_errors: true
-
-    - name: Add VLAN 50 interface
-      community.routeros.api:
-        path: interface vlan
-        cmd: "add name=vlan50 vlan-id=50 interface=bridge comment=wifi"
+        cmd: "add name=vlan{{ vlan.id }} vlan-id={{ vlan.id }} interface=bridge comment={{ vlan.name }}"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
       ignore_errors: true
 
     # -------------------------
     # IP addresses
     # -------------------------
-    - name: Set IP on VLAN 10 management
+    - name: Set IP on VLAN {{ vlan.id }} {{ vlan.name }}
       community.routeros.api:
         path: ip address
-        cmd: "add address=192.168.10.1/24 interface=vlan10 comment=management"
-      ignore_errors: true
-
-    - name: Set IP on VLAN 20 cluster
-      community.routeros.api:
-        path: ip address
-        cmd: "add address=192.168.20.1/24 interface=vlan20 comment=cluster"
-      ignore_errors: true
-
-    - name: Set IP on VLAN 30 talos
-      community.routeros.api:
-        path: ip address
-        cmd: "add address=192.168.30.1/24 interface=vlan30 comment=talos"
-      ignore_errors: true
-
-    - name: Set IP on VLAN 40 desktop
-      community.routeros.api:
-        path: ip address
-        cmd: "add address=192.168.40.1/24 interface=vlan40 comment=desktop"
-      ignore_errors: true
-
-    - name: Set IP on VLAN 50 wifi
-      community.routeros.api:
-        path: ip address
-        cmd: "add address=192.168.50.1/24 interface=vlan50 comment=wifi"
+        cmd: "add address={{ vlan.gateway }}/24 interface=vlan{{ vlan.id }} comment={{ vlan.name }}"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
       ignore_errors: true
 
     # -------------------------
     # DHCP pools
     # -------------------------
-    - name: Add DHCP pool for VLAN 40
+    - name: Add DHCP pool for VLAN {{ vlan.id }}
       community.routeros.api:
         path: ip pool
-        cmd: "add name=dhcp-vlan40 ranges=192.168.40.100-192.168.40.200"
-      ignore_errors: true
-
-    - name: Add DHCP pool for VLAN 50
-      community.routeros.api:
-        path: ip pool
-        cmd: "add name=dhcp-vlan50 ranges=192.168.50.100-192.168.50.200"
+        cmd: "add name=dhcp-vlan{{ vlan.id }} ranges={{ vlan.dhcp_pool_start }}-{{ vlan.dhcp_pool_end }}"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
+      when: vlan.dhcp
       ignore_errors: true
 
     # -------------------------
     # DHCP servers
     # -------------------------
-    - name: Add DHCP server for VLAN 40
+    - name: Add DHCP server for VLAN {{ vlan.id }}
       community.routeros.api:
         path: ip dhcp-server
-        cmd: "add name=dhcp-vlan40 interface=vlan40 address-pool=dhcp-vlan40 disabled=no"
+        cmd: "add name=dhcp-vlan{{ vlan.id }} interface=vlan{{ vlan.id }} address-pool=dhcp-vlan{{ vlan.id }} disabled=no"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
+      when: vlan.dhcp
       ignore_errors: true
 
-    - name: Add DHCP server for VLAN 50
-      community.routeros.api:
-        path: ip dhcp-server
-        cmd: "add name=dhcp-vlan50 interface=vlan50 address-pool=dhcp-vlan50 disabled=no"
-      ignore_errors: true
-
-    - name: Add DHCP network for VLAN 40
+    - name: Add DHCP network for VLAN {{ vlan.id }}
       community.routeros.api:
         path: ip dhcp-server network
-        cmd: "add address=192.168.40.0/24 gateway=192.168.40.1 dns-server=192.168.40.1 comment=desktop"
-      ignore_errors: true
-
-    - name: Add DHCP network for VLAN 50
-      community.routeros.api:
-        path: ip dhcp-server network
-        cmd: "add address=192.168.50.0/24 gateway=192.168.50.1 dns-server=192.168.50.1 comment=wifi"
+        cmd: "add address={{ vlan.subnet }} gateway={{ vlan.gateway }} dns-server={{ vlan.gateway }} comment={{ vlan.name }}"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
+      when: vlan.dhcp
       ignore_errors: true
 
     # -------------------------
@@ -300,34 +253,13 @@
     # -------------------------
     # Interface list members
     # -------------------------
-    - name: Add vlan10 to LAN interface list
+    - name: Add vlan{{ vlan.id }} to LAN interface list
       community.routeros.api:
         path: interface list member
-        cmd: "add interface=vlan10 list=LAN comment=management"
-      ignore_errors: true
-
-    - name: Add vlan20 to LAN interface list
-      community.routeros.api:
-        path: interface list member
-        cmd: "add interface=vlan20 list=LAN comment=cluster"
-      ignore_errors: true
-
-    - name: Add vlan30 to LAN interface list
-      community.routeros.api:
-        path: interface list member
-        cmd: "add interface=vlan30 list=LAN comment=talos"
-      ignore_errors: true
-
-    - name: Add vlan40 to LAN interface list
-      community.routeros.api:
-        path: interface list member
-        cmd: "add interface=vlan40 list=LAN comment=desktop"
-      ignore_errors: true
-
-    - name: Add vlan50 to LAN interface list
-      community.routeros.api:
-        path: interface list member
-        cmd: "add interface=vlan50 list=LAN comment=wifi"
+        cmd: "add interface=vlan{{ vlan.id }} list=LAN comment={{ vlan.name }}"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
       ignore_errors: true
 
     # -------------------------
