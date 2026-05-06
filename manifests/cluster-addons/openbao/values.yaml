@@ -1,9 +1,0 @@
-openbao:
-  server:
-    statefulSet:
-      securityContext:
-        container:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
