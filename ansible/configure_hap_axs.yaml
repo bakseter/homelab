@@ -12,7 +12,7 @@
       hostname: "{{ hap_axs_host }}"
       username: "{{ hap_axs_username }}"
       password: "{{ hap_axs_password }}"
-      tls: false  # enable later once certs are set up
+      tls: false
 
   tasks:
     # -------------------------
@@ -24,17 +24,18 @@
         cmd: "set name=hap-ax-s"
 
     # -------------------------
-    # WiFi - wifi2 (5GHz) = station uplink
-    #        wifi1 (2.4GHz) = AP for clients
-    #        wifi3 = virtual 2.4GHz AP on wifi2
+    # WiFi - all radios as APs now
+    # wifi1 = 2.4GHz AP
+    # wifi2 = 5GHz AP
+    # wifi3 = virtual AP (optional, remove if not needed)
     # -------------------------
-    - name: Set wifi2 5GHz as station-bridge uplink
+    - name: Set wifi1 2.4GHz as AP
       community.routeros.api_find_and_modify:
         path: interface wifi
         find:
-          default-name: wifi2
+          default-name: wifi1
         values:
-          configuration.mode: station-bridge
+          configuration.mode: ap
           configuration.ssid: "{{ wifi_ssid }}"
           configuration.country: Norway
           security.authentication-types: wpa2-psk,wpa3-psk
@@ -43,11 +44,11 @@
           security.ft-over-ds: "no"
           disabled: "no"
 
-    - name: Set wifi1 2.4GHz as AP for clients
+    - name: Set wifi2 5GHz as AP
       community.routeros.api_find_and_modify:
         path: interface wifi
         find:
-          default-name: wifi1
+          default-name: wifi2
         values:
           configuration.mode: ap
           configuration.ssid: "{{ wifi_ssid }}"
@@ -64,23 +65,37 @@
         cmd: "remove [find name=wifi3]"
       ignore_errors: true
 
-    - name: Add virtual wifi3 AP on wifi2 station
+    # -------------------------
+    # Bridge - ethernet uplink + all wifi APs in same bridge
+    # The hAP ax S has ether1 only; it connects to a port on
+    # the hAP ax3 that carries VLAN 50 (wifi) untagged.
+    # -------------------------
+    - name: Remove all existing bridge ports to start clean
       community.routeros.api:
-        path: interface wifi
-        cmd: "add name=wifi3 configuration.mode=ap configuration.ssid={{ wifi_ssid }} master-interface=wifi2 security.authentication-types=wpa2-psk,wpa3-psk security.passphrase={{ wifi_password }} disabled=no"
+        path: interface bridge port
+        cmd: "remove [find]"
+      ignore_errors: true
+
+    - name: Add ether1 to bridge (uplink to hAP ax3)
+      community.routeros.api:
+        path: interface bridge port
+        cmd: "add interface=ether1 bridge=bridge"
+      ignore_errors: true
+
+    - name: Add wifi1 to bridge
+      community.routeros.api:
+        path: interface bridge port
+        cmd: "add interface=wifi1 bridge=bridge"
+      ignore_errors: true
+
+    - name: Add wifi2 to bridge
+      community.routeros.api:
+        path: interface bridge port
+        cmd: "add interface=wifi2 bridge=bridge"
       ignore_errors: true
 
     # -------------------------
-    # Bridge - add ALL interfaces per docs
-    # -------------------------
-    - name: Add all interfaces to bridge
-      community.routeros.api:
-        path: interface bridge port
-        cmd: "add interface=all bridge=bridge"
-
-    # -------------------------
     # Interface list - bridge in LAN
-    # so firewall allows management
     # -------------------------
     - name: Add bridge to LAN list
       community.routeros.api:
@@ -89,8 +104,15 @@
       ignore_errors: true
 
     # -------------------------
-    # DHCP client on bridge per docs
+    # DHCP client on bridge
+    # Gets IP from hAP ax3 VLAN 50 DHCP (192.168.50.x)
     # -------------------------
+    - name: Remove existing DHCP clients
+      community.routeros.api:
+        path: ip dhcp-client
+        cmd: "remove [find]"
+      ignore_errors: true
+
     - name: Add DHCP client on bridge
       community.routeros.api:
         path: ip dhcp-client
