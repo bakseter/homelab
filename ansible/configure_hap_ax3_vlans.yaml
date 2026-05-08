@@ -1,0 +1,393 @@
+---
+- name: Configure MikroTik hAP ax3 - VLANs and DHCP
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars_files:
+    - group_vars/all/hap_ax3.yaml
+
+  module_defaults:
+    group/community.routeros.api:
+      hostname: "{{ hap_ax3_host }}"
+      username: "{{ hap_ax3_username }}"
+      password: "{{ hap_ax3_password }}"
+      tls: false
+
+  tasks:
+    # -------------------------
+    # Identity
+    # -------------------------
+    - name: Set identity
+      community.routeros.api:
+        path: system identity
+        cmd: "set name=hap-ax3"
+
+    # -------------------------
+    # Bridge ports
+    # -------------------------
+    - name: Set ether2 as trunk to SG108E
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: ether2
+        values:
+          pvid: "1"
+          frame-types: admit-all
+
+    - name: Set ether3 as access port VLAN 40 desktop
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: ether3
+        values:
+          pvid: "40"
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    - name: Set ether4 as access port VLAN 50
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: ether4
+        values:
+          pvid: "50"
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    - name: Set ether5 as access port VLAN 50
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: ether5
+        values:
+          pvid: "50"
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    - name: Set wifi1 bridge port to VLAN 50
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: wifi1
+        values:
+          pvid: "50"
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    - name: Set wifi2 bridge port to VLAN 50
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: wifi2
+        values:
+          pvid: "50"
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    # -------------------------
+    # Cleanup - DHCP
+    # -------------------------
+    - name: Gather DHCP servers
+      community.routeros.api:
+        path: ip dhcp-server
+        cmd: "print"
+      register: dhcp_cleanup
+
+    - name: Remove defconf DHCP server
+      community.routeros.api:
+        path: ip dhcp-server
+        remove: "{{ item['.id'] }}"
+      loop: "{{ dhcp_cleanup.msg | selectattr('name', 'equalto', 'defconf') | list }}"
+      ignore_errors: true
+
+    # -------------------------
+    # Cleanup - Bridge VLANs
+    # -------------------------
+    - name: Gather all bridge VLAN entries
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "print"
+      register: bridge_vlan_cleanup
+
+    - name: Remove all static bridge VLAN entries
+      community.routeros.api:
+        path: interface bridge vlan
+        remove: "{{ item['.id'] }}"
+      loop: "{{ bridge_vlan_cleanup.msg | selectattr('dynamic', 'equalto', false) | list }}"
+      ignore_errors: true
+
+    # -------------------------
+    # Cleanup - VLAN interfaces
+    # -------------------------
+    - name: Gather VLAN interfaces
+      community.routeros.api:
+        path: interface vlan
+        cmd: "print"
+      register: vlan_iface_cleanup
+
+    - name: Remove existing VLAN interfaces
+      community.routeros.api:
+        path: interface vlan
+        remove: "{{ item['.id'] }}"
+      loop: "{{ vlan_iface_cleanup.msg | selectattr('name', 'match', '^vlan\\d+$') | list }}"
+      ignore_errors: true
+
+    # -------------------------
+    # Cleanup - IP addresses
+    # -------------------------
+    - name: Gather IP addresses
+      community.routeros.api:
+        path: ip address
+        cmd: "print"
+      register: ip_addr_cleanup
+
+    - name: Remove existing VLAN IP addresses
+      community.routeros.api:
+        path: ip address
+        remove: "{{ item['.id'] }}"
+      loop: "{{ ip_addr_cleanup.msg | selectattr('interface', 'match', '^vlan\\d+$') | list }}"
+      ignore_errors: true
+
+    # -------------------------
+    # Cleanup - DHCP pools
+    # -------------------------
+    - name: Gather DHCP pools
+      community.routeros.api:
+        path: ip pool
+        cmd: "print"
+      register: dhcp_pool_cleanup
+
+    - name: Remove existing VLAN DHCP pools
+      community.routeros.api:
+        path: ip pool
+        remove: "{{ item['.id'] }}"
+      loop: "{{ dhcp_pool_cleanup.msg | selectattr('name', 'match', '^dhcp-vlan\\d+$') | list }}"
+      ignore_errors: true
+
+    # -------------------------
+    # Cleanup - DHCP servers
+    # -------------------------
+    - name: Gather DHCP servers for cleanup
+      community.routeros.api:
+        path: ip dhcp-server
+        cmd: "print"
+      register: dhcp_server_cleanup
+
+    - name: Remove existing VLAN DHCP servers
+      community.routeros.api:
+        path: ip dhcp-server
+        remove: "{{ item['.id'] }}"
+      loop: "{{ dhcp_server_cleanup.msg | selectattr('name', 'match', '^dhcp-vlan\\d+$') | list }}"
+      ignore_errors: true
+
+    # -------------------------
+    # Cleanup - DHCP networks
+    # -------------------------
+    - name: Gather DHCP networks
+      community.routeros.api:
+        path: ip dhcp-server network
+        cmd: "print"
+      register: dhcp_network_cleanup
+
+    - name: Remove existing VLAN DHCP networks
+      community.routeros.api:
+        path: ip dhcp-server network
+        remove: "{{ item['.id'] }}"
+      loop: "{{ dhcp_network_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'management|cluster|talos|desktop|wifi') | list }}"
+      ignore_errors: true
+
+    # -------------------------
+    # Cleanup - Interface list members
+    # -------------------------
+    - name: Gather interface list members
+      community.routeros.api:
+        path: interface list member
+        cmd: "print"
+      register: iface_list_cleanup
+
+    - name: Remove existing VLAN interface list members
+      community.routeros.api:
+        path: interface list member
+        remove: "{{ item['.id'] }}"
+      loop: "{{ iface_list_cleanup.msg | selectattr('interface', 'match', '^vlan\\d+$') | list }}"
+      ignore_errors: true
+
+    # -------------------------
+    # Bridge VLAN membership
+    # -------------------------
+    - name: Add VLAN 88 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=88 tagged=bridge untagged=ether2,ether3,ether4,ether5"
+      ignore_errors: true
+
+    - name: Add VLAN 10 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=10 tagged=bridge,ether2"
+      ignore_errors: true
+
+    - name: Add VLAN 20 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=20 tagged=bridge,ether2"
+      ignore_errors: true
+
+    - name: Add VLAN 30 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=30 tagged=bridge,ether2"
+      ignore_errors: true
+
+    - name: Add VLAN 40 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=40 tagged=bridge,ether2 untagged=ether3"
+      ignore_errors: true
+
+    - name: Add VLAN 50 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether4,ether5,wifi1,wifi2"
+      ignore_errors: true
+
+    # -------------------------
+    # VLAN interfaces
+    # -------------------------
+    - name: Add VLAN {{ vlan.id }} interface
+      community.routeros.api:
+        path: interface vlan
+        cmd: "add name=vlan{{ vlan.id }} vlan-id={{ vlan.id }} interface=bridge comment={{ vlan.name }}"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
+      ignore_errors: true
+
+    # -------------------------
+    # IP addresses
+    # -------------------------
+    - name: Set IP on VLAN {{ vlan.id }} {{ vlan.name }}
+      community.routeros.api:
+        path: ip address
+        cmd: "add address={{ vlan.gateway }}/24 interface=vlan{{ vlan.id }} comment={{ vlan.name }}"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
+      ignore_errors: true
+
+    # -------------------------
+    # DHCP pools
+    # -------------------------
+    - name: Add DHCP pool for VLAN {{ vlan.id }}
+      community.routeros.api:
+        path: ip pool
+        cmd: "add name=dhcp-vlan{{ vlan.id }} ranges={{ vlan.dhcp_pool_start }}-{{ vlan.dhcp_pool_end }}"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
+      when: vlan.dhcp
+      ignore_errors: true
+
+    # -------------------------
+    # DHCP servers
+    # -------------------------
+    - name: Add DHCP server for VLAN {{ vlan.id }}
+      community.routeros.api:
+        path: ip dhcp-server
+        cmd: "add name=dhcp-vlan{{ vlan.id }} interface=vlan{{ vlan.id }} address-pool=dhcp-vlan{{ vlan.id }} disabled=no"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
+      when: vlan.dhcp
+      ignore_errors: true
+
+    - name: Add DHCP network for VLAN {{ vlan.id }}
+      community.routeros.api:
+        path: ip dhcp-server network
+        cmd: "add address={{ vlan.subnet }} gateway={{ vlan.gateway }} dns-server={{ vlan.gateway }} comment={{ vlan.name }}"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
+      when: vlan.dhcp
+      ignore_errors: true
+
+    # -------------------------
+    # Interface list members
+    # -------------------------
+    - name: Add vlan{{ vlan.id }} to LAN interface list
+      community.routeros.api:
+        path: interface list member
+        cmd: "add interface=vlan{{ vlan.id }} list=LAN comment={{ vlan.name }}"
+      loop: "{{ vlans }}"
+      loop_control:
+        loop_var: vlan
+      ignore_errors: true
+
+    # -------------------------
+    # Enable VLAN filtering LAST
+    # -------------------------
+    - name: Enable bridge VLAN filtering
+      community.routeros.api_find_and_modify:
+        path: interface bridge
+        find:
+          name: bridge
+        values:
+          vlan-filtering: "yes"
+          pvid: "10"
+
+    # -------------------------
+    # Disable default 192.168.88.1 LAST
+    # -------------------------
+    - name: Disable default 192.168.88.1 address
+      community.routeros.api_find_and_modify:
+        path: ip address
+        find:
+          address: 192.168.88.1/24
+        values:
+          disabled: "yes"
+
+  post_tasks:
+    - name: Verify VLAN interfaces
+      community.routeros.api:
+        path: interface vlan
+        cmd: "print"
+      register: vlan_result
+
+    - name: Show VLANs
+      debug:
+        var: vlan_result
+
+    - name: Verify DHCP servers
+      community.routeros.api:
+        path: ip dhcp-server
+        cmd: "print"
+      register: dhcp_result
+
+    - name: Show DHCP servers
+      debug:
+        var: dhcp_result
+
+    - name: Verify VLAN membership
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "print"
+      register: vlans_result
+
+    - name: Show bridge VLANs
+      debug:
+        var: vlans_result
+
+    - name: Verify bridge ports
+      community.routeros.api:
+        path: interface bridge port
+        cmd: "print"
+      register: ports
+
+    - name: Show ports
+      debug:
+        var: ports
+
+    - name: Verify interface list members
+      community.routeros.api:
+        path: interface list member
+        cmd: "print"
+      register: list_members
+
+    - name: Show interface list members
+      debug:
+        var: list_members

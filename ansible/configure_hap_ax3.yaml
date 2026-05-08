@@ -1,5 +1,5 @@
 ---
-- name: Configure MikroTik hAP ax3
+- name: Configure MikroTik hAP ax3 - Firewall, NordVPN, WiFi
   hosts: localhost
   gather_facts: false
   become: false
@@ -15,88 +15,7 @@
 
   tasks:
     # -------------------------
-    # Identity
-    # -------------------------
-    - name: Set identity
-      community.routeros.api:
-        path: system identity
-        cmd: "set name=hap-ax3"
-
-    # -------------------------
-    # Bridge ports
-    # -------------------------
-    - name: Set ether2 as trunk to SG108E
-      community.routeros.api_find_and_modify:
-        path: interface bridge port
-        find:
-          interface: ether2
-        values:
-          pvid: "1"
-          frame-types: admit-all
-
-    - name: Set ether3 as access port VLAN 40 desktop
-      community.routeros.api_find_and_modify:
-        path: interface bridge port
-        find:
-          interface: ether3
-        values:
-          pvid: "40"
-          frame-types: admit-only-untagged-and-priority-tagged
-
-    - name: Set ether4 as access port VLAN 50
-      community.routeros.api_find_and_modify:
-        path: interface bridge port
-        find:
-          interface: ether4
-        values:
-          pvid: "50"
-          frame-types: admit-only-untagged-and-priority-tagged
-
-    - name: Set ether5 as access port VLAN 50
-      community.routeros.api_find_and_modify:
-        path: interface bridge port
-        find:
-          interface: ether5
-        values:
-          pvid: "50"
-          frame-types: admit-only-untagged-and-priority-tagged
-
-    - name: Set wifi1 bridge port to VLAN 50
-      community.routeros.api_find_and_modify:
-        path: interface bridge port
-        find:
-          interface: wifi1
-        values:
-          pvid: "50"
-          frame-types: admit-only-untagged-and-priority-tagged
-
-    - name: Set wifi2 bridge port to VLAN 50
-      community.routeros.api_find_and_modify:
-        path: interface bridge port
-        find:
-          interface: wifi2
-        values:
-          pvid: "50"
-          frame-types: admit-only-untagged-and-priority-tagged
-
-    # -------------------------
-    # Cleanup - DHCP
-    # -------------------------
-    - name: Gather DHCP servers
-      community.routeros.api:
-        path: ip dhcp-server
-        cmd: "print"
-      register: dhcp_cleanup
-
-    - name: Remove defconf DHCP server
-      community.routeros.api:
-        path: ip dhcp-server
-        remove: "{{ item['.id'] }}"
-      loop: "{{ dhcp_cleanup.msg | selectattr('name', 'equalto', 'defconf') | list }}"
-      ignore_errors: true
-
-    # -------------------------
-    # Cleanup - duplicate firewall rules
+    # Cleanup - firewall rules
     # -------------------------
     - name: Gather existing firewall rules
       community.routeros.api:
@@ -104,15 +23,22 @@
         cmd: "print"
       register: fw_cleanup
 
+    - name: Remove vpn-debug and ks-debug log rules
+      community.routeros.api:
+        path: ip firewall filter
+        remove: "{{ item['.id'] }}"
+      loop: "{{ fw_cleanup.msg | selectattr('log-prefix', 'defined') | selectattr('log-prefix', 'in', ['vpn-debug', 'ks-debug']) | list }}"
+      ignore_errors: true
+
     - name: Clean duplicate firewall rules
       community.routeros.api:
         path: ip firewall filter
         remove: "{{ item['.id'] }}"
-      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|desktop-to-proxmox|desktop-to-talos|proxmox-to-talos|allow-to-internet|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-wifi-router-mgmt') | list }}"
+      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|desktop-to-proxmox|desktop-to-talos|proxmox-to-talos|nordvpn-killswitch|allow-to-internet|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-wifi-router-mgmt') | list }}"
       ignore_errors: true
 
     # -------------------------
-    # Cleanup - duplicate NAT rules
+    # Cleanup - NAT rules
     # -------------------------
     - name: Gather NAT rules
       community.routeros.api:
@@ -128,118 +54,148 @@
       ignore_errors: true
 
     # -------------------------
-    # Bridge VLAN membership
-    # Remove all VLAN 50 entries first (dynamic ones cant be modified)
-    # then add static ones
+    # Cleanup - mangle rules
     # -------------------------
-    - name: Gather all bridge VLAN entries
+    - name: Gather mangle rules
       community.routeros.api:
-        path: interface bridge vlan
+        path: ip firewall mangle
         cmd: "print"
-      register: bridge_vlans
+      register: mangle_cleanup
 
-    - name: Remove all VLAN 50 entries
+    - name: Remove existing ipsec-mss-fix mangle rule
       community.routeros.api:
-        path: interface bridge vlan
+        path: ip firewall mangle
         remove: "{{ item['.id'] }}"
-      loop: "{{ bridge_vlans.msg | selectattr('vlan-ids', 'equalto', '50') | list }}"
-      ignore_errors: true
-
-    - name: Add VLAN 88 to bridge
-      community.routeros.api:
-        path: interface bridge vlan
-        cmd: "add bridge=bridge vlan-ids=88 tagged=bridge untagged=ether2,ether3,ether4,ether5"
-      ignore_errors: true
-
-    - name: Add VLAN 10 to bridge
-      community.routeros.api:
-        path: interface bridge vlan
-        cmd: "add bridge=bridge vlan-ids=10 tagged=bridge,ether2"
-      ignore_errors: true
-
-    - name: Add VLAN 20 to bridge
-      community.routeros.api:
-        path: interface bridge vlan
-        cmd: "add bridge=bridge vlan-ids=20 tagged=bridge,ether2"
-      ignore_errors: true
-
-    - name: Add VLAN 30 to bridge
-      community.routeros.api:
-        path: interface bridge vlan
-        cmd: "add bridge=bridge vlan-ids=30 tagged=bridge,ether2"
-      ignore_errors: true
-
-    - name: Add VLAN 40 to bridge
-      community.routeros.api:
-        path: interface bridge vlan
-        cmd: "add bridge=bridge vlan-ids=40 tagged=bridge,ether2 untagged=ether3"
-      ignore_errors: true
-
-    - name: Add VLAN 50 to bridge
-      community.routeros.api:
-        path: interface bridge vlan
-        cmd: "add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether4,ether5,wifi1,wifi2"
+      loop: "{{ mangle_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'equalto', 'ipsec-mss-fix') | list }}"
       ignore_errors: true
 
     # -------------------------
-    # VLAN interfaces
+    # Cleanup - address lists
     # -------------------------
-    - name: Add VLAN {{ vlan.id }} interface
+    - name: Gather all address list entries
       community.routeros.api:
-        path: interface vlan
-        cmd: "add name=vlan{{ vlan.id }} vlan-id={{ vlan.id }} interface=bridge comment={{ vlan.name }}"
-      loop: "{{ vlans }}"
-      loop_control:
-        loop_var: vlan
+        path: ip firewall address-list
+        cmd: "print"
+      register: addr_list_cleanup
+
+    - name: Remove nordvpn-local address list entries
+      community.routeros.api:
+        path: ip firewall address-list
+        remove: "{{ item['.id'] }}"
+      loop: "{{ addr_list_cleanup.msg | selectattr('list', 'equalto', 'nordvpn-local') | list }}"
+      ignore_errors: true
+
+    - name: Remove nordvpn-servers address list entries
+      community.routeros.api:
+        path: ip firewall address-list
+        remove: "{{ item['.id'] }}"
+      loop: "{{ addr_list_cleanup.msg | selectattr('list', 'equalto', 'nordvpn-servers') | list }}"
       ignore_errors: true
 
     # -------------------------
-    # IP addresses
+    # Cleanup - ALL NordVPN IPsec config
     # -------------------------
-    - name: Set IP on VLAN {{ vlan.id }} {{ vlan.name }}
+    - name: Gather IPsec identities
       community.routeros.api:
-        path: ip address
-        cmd: "add address={{ vlan.gateway }}/24 interface=vlan{{ vlan.id }} comment={{ vlan.name }}"
-      loop: "{{ vlans }}"
-      loop_control:
-        loop_var: vlan
+        path: ip ipsec identity
+        cmd: "print"
+      register: ipsec_identity_cleanup
+
+    - name: Remove all non-dynamic IPsec identities
+      community.routeros.api:
+        path: ip ipsec identity
+        remove: "{{ item['.id'] }}"
+      loop: "{{ ipsec_identity_cleanup.msg | selectattr('dynamic', 'equalto', false) | list }}"
+      ignore_errors: true
+
+    - name: Gather IPsec peers
+      community.routeros.api:
+        path: ip ipsec peer
+        cmd: "print"
+      register: ipsec_peer_cleanup
+
+    - name: Remove existing NordVPN peer
+      community.routeros.api:
+        path: ip ipsec peer
+        remove: "{{ item['.id'] }}"
+      loop: "{{ ipsec_peer_cleanup.msg | selectattr('name', 'equalto', 'NordVPN') | list }}"
+      ignore_errors: true
+
+    - name: Gather IPsec policies
+      community.routeros.api:
+        path: ip ipsec policy
+        cmd: "print"
+      register: ipsec_policy_cleanup
+
+    - name: Remove non-default IPsec policy templates
+      community.routeros.api:
+        path: ip ipsec policy
+        remove: "{{ item['.id'] }}"
+      loop: "{{ ipsec_policy_cleanup.msg | selectattr('template', 'equalto', true) | selectattr('default', 'equalto', false) | list }}"
+      ignore_errors: true
+
+    - name: Gather IPsec mode-configs
+      community.routeros.api:
+        path: ip ipsec mode-config
+        cmd: "print"
+      register: ipsec_modeconfig_cleanup
+
+    - name: Remove NordVPN mode-config
+      community.routeros.api:
+        path: ip ipsec mode-config
+        remove: "{{ item['.id'] }}"
+      loop: "{{ ipsec_modeconfig_cleanup.msg | selectattr('name', 'equalto', 'NordVPN') | list }}"
+      ignore_errors: true
+
+    - name: Gather IPsec policy groups
+      community.routeros.api:
+        path: ip ipsec policy group
+        cmd: "print"
+      register: ipsec_policygroup_cleanup
+
+    - name: Remove NordVPN policy group
+      community.routeros.api:
+        path: ip ipsec policy group
+        remove: "{{ item['.id'] }}"
+      loop: "{{ ipsec_policygroup_cleanup.msg | selectattr('name', 'equalto', 'NordVPN') | list }}"
+      ignore_errors: true
+
+    - name: Gather IPsec proposals
+      community.routeros.api:
+        path: ip ipsec proposal
+        cmd: "print"
+      register: ipsec_proposal_cleanup
+
+    - name: Remove NordVPN proposal
+      community.routeros.api:
+        path: ip ipsec proposal
+        remove: "{{ item['.id'] }}"
+      loop: "{{ ipsec_proposal_cleanup.msg | selectattr('name', 'equalto', 'NordVPN') | list }}"
+      ignore_errors: true
+
+    - name: Gather IPsec profiles
+      community.routeros.api:
+        path: ip ipsec profile
+        cmd: "print"
+      register: ipsec_profile_cleanup
+
+    - name: Remove NordVPN profile
+      community.routeros.api:
+        path: ip ipsec profile
+        remove: "{{ item['.id'] }}"
+      loop: "{{ ipsec_profile_cleanup.msg | selectattr('name', 'equalto', 'NordVPN') | list }}"
       ignore_errors: true
 
     # -------------------------
-    # DHCP pools
+    # Fasttrack - disable for IPSec compatibility
     # -------------------------
-    - name: Add DHCP pool for VLAN {{ vlan.id }}
-      community.routeros.api:
-        path: ip pool
-        cmd: "add name=dhcp-vlan{{ vlan.id }} ranges={{ vlan.dhcp_pool_start }}-{{ vlan.dhcp_pool_end }}"
-      loop: "{{ vlans }}"
-      loop_control:
-        loop_var: vlan
-      when: vlan.dhcp
-      ignore_errors: true
-
-    # -------------------------
-    # DHCP servers
-    # -------------------------
-    - name: Add DHCP server for VLAN {{ vlan.id }}
-      community.routeros.api:
-        path: ip dhcp-server
-        cmd: "add name=dhcp-vlan{{ vlan.id }} interface=vlan{{ vlan.id }} address-pool=dhcp-vlan{{ vlan.id }} disabled=no"
-      loop: "{{ vlans }}"
-      loop_control:
-        loop_var: vlan
-      when: vlan.dhcp
-      ignore_errors: true
-
-    - name: Add DHCP network for VLAN {{ vlan.id }}
-      community.routeros.api:
-        path: ip dhcp-server network
-        cmd: "add address={{ vlan.subnet }} gateway={{ vlan.gateway }} dns-server={{ vlan.gateway }} comment={{ vlan.name }}"
-      loop: "{{ vlans }}"
-      loop_control:
-        loop_var: vlan
-      when: vlan.dhcp
-      ignore_errors: true
+    - name: Disable fasttrack for IPSec compatibility
+      community.routeros.api_find_and_modify:
+        path: ip firewall filter
+        find:
+          comment: "defconf: fasttrack"
+        values:
+          disabled: "yes"
 
     # -------------------------
     # NAT
@@ -251,16 +207,101 @@
       ignore_errors: true
 
     # -------------------------
-    # Interface list members
+    # NordVPN IKEv2 - Certificate
     # -------------------------
-    - name: Add vlan{{ vlan.id }} to LAN interface list
+    - name: Fetch NordVPN root certificate locally
+      ansible.builtin.get_url:
+        url: https://downloads.nordcdn.com/certificates/root.der
+        dest: /tmp/root.der
+        force: true
+
+    - name: Upload certificate via SCP
+      ansible.builtin.command:
+        cmd: >
+          sshpass -p {{ hap_ax3_password }}
+          scp -O
+          -o StrictHostKeyChecking=no
+          -o UserKnownHostsFile=/dev/null
+          /tmp/root.der
+          {{ hap_ax3_username }}@{{ hap_ax3_host }}:root.der
+
+    - name: Import NordVPN root certificate
       community.routeros.api:
-        path: interface list member
-        cmd: "add interface=vlan{{ vlan.id }} list=LAN comment={{ vlan.name }}"
+        path: certificate
+        cmd: "import file-name=root.der"
+
+    # -------------------------
+    # NordVPN IKEv2 - IPsec config
+    # -------------------------
+    - name: Add IPsec profile for NordVPN
+      community.routeros.api:
+        path: ip ipsec profile
+        cmd: "add name=NordVPN enc-algorithm=aes-256 hash-algorithm=sha256 dh-group=modp2048"
+
+    - name: Add IPsec proposal for NordVPN
+      community.routeros.api:
+        path: ip ipsec proposal
+        cmd: "add name=NordVPN pfs-group=none enc-algorithms=aes-256-cbc auth-algorithms=sha256"
+
+    - name: Add IPsec policy group for NordVPN
+      community.routeros.api:
+        path: ip ipsec policy group
+        cmd: "add name=NordVPN"
+
+    - name: Add IPsec policy template for NordVPN
+      community.routeros.api:
+        path: ip ipsec policy
+        cmd: "add dst-address=0.0.0.0/0 group=NordVPN proposal=NordVPN src-address=0.0.0.0/0 template=yes"
+
+    - name: Add IPsec mode-config for NordVPN
+      community.routeros.api:
+        path: ip ipsec mode-config
+        cmd: "add name=NordVPN responder=no"
+
+    - name: Add NordVPN peer
+      community.routeros.api:
+        path: ip ipsec peer
+        cmd: "add address={{ nordvpn_server }} exchange-mode=ike2 name=NordVPN profile=NordVPN"
+
+    - name: Add NordVPN identity
+      community.routeros.api:
+        path: ip ipsec identity
+        cmd: "add auth-method=eap certificate=\"\" eap-methods=eap-mschapv2 generate-policy=port-strict mode-config=NordVPN peer=NordVPN policy-template-group=NordVPN username={{ nordvpn_username | trim | replace('\n', '') }} password={{ nordvpn_password | trim | replace('\n', '') }}"
+
+    # -------------------------
+    # NordVPN - Address lists
+    # -------------------------
+    - name: Add VLAN subnets to nordvpn-local address list
+      community.routeros.api:
+        path: ip firewall address-list
+        cmd: "add address={{ vlan.subnet }} list=nordvpn-local comment={{ vlan.name }}"
       loop: "{{ vlans }}"
       loop_control:
         loop_var: vlan
-      ignore_errors: true
+
+    - name: Assign address list to NordVPN mode-config
+      community.routeros.api_find_and_modify:
+        path: ip ipsec mode-config
+        find:
+          name: NordVPN
+        values:
+          src-address-list: nordvpn-local
+
+    # -------------------------
+    # NordVPN - MSS clamp
+    # -------------------------
+    - name: Add MSS clamp for IPSec MTU fix
+      community.routeros.api:
+        path: ip firewall mangle
+        cmd: "add chain=forward protocol=tcp tcp-flags=syn action=change-mss new-mss=1360 passthrough=yes comment=ipsec-mss-fix"
+
+    # -------------------------
+    # NordVPN - DNS leak prevention
+    # -------------------------
+    - name: Set NordVPN DNS servers
+      community.routeros.api:
+        path: ip dns
+        cmd: "set servers=103.86.96.100,103.86.99.100 allow-remote-requests=yes"
 
     # -------------------------
     # Firewall forward rules
@@ -269,49 +310,41 @@
       community.routeros.api:
         path: ip firewall filter
         cmd: "add chain=forward connection-state=established,related action=accept comment=allow-established"
-      ignore_errors: true
 
     - name: Allow desktop to Proxmox
       community.routeros.api:
         path: ip firewall filter
         cmd: "add chain=forward src-address=192.168.40.0/24 dst-address=192.168.10.0/24 action=accept comment=desktop-to-proxmox"
-      ignore_errors: true
 
     - name: Allow desktop to Talos
       community.routeros.api:
         path: ip firewall filter
         cmd: "add chain=forward src-address=192.168.40.0/24 dst-address=192.168.30.0/24 action=accept comment=desktop-to-talos"
-      ignore_errors: true
 
     - name: Allow Proxmox to Talos
       community.routeros.api:
         path: ip firewall filter
         cmd: "add chain=forward src-address=192.168.10.0/24 dst-address=192.168.30.0/24 action=accept comment=proxmox-to-talos"
-      ignore_errors: true
 
     - name: Allow all VLANs to internet
       community.routeros.api:
         path: ip firewall filter
         cmd: "add chain=forward out-interface=ether1 action=accept comment=allow-to-internet"
-      ignore_errors: true
 
     - name: Drop WiFi to internal VLANs
       community.routeros.api:
         path: ip firewall filter
         cmd: "add chain=forward src-address=192.168.50.0/24 dst-address=192.168.0.0/16 action=drop comment=drop-wifi-to-internal"
-      ignore_errors: true
 
     - name: Drop Talos to management
       community.routeros.api:
         path: ip firewall filter
         cmd: "add chain=forward src-address=192.168.30.0/24 dst-address=192.168.10.0/24 action=drop comment=drop-talos-to-mgmt"
-      ignore_errors: true
 
     - name: Drop cluster VLAN outbound
       community.routeros.api:
         path: ip firewall filter
         cmd: "add chain=forward src-address=192.168.20.0/24 action=drop comment=drop-cluster-outbound"
-      ignore_errors: true
 
     # -------------------------
     # Firewall input rules
@@ -320,7 +353,6 @@
       community.routeros.api:
         path: ip firewall filter
         cmd: "add chain=input src-address=192.168.50.0/24 dst-port=22,80,8291,8728,8729 protocol=tcp action=drop comment=drop-wifi-router-mgmt"
-      ignore_errors: true
 
     # -------------------------
     # WiFi SSID and security
@@ -349,50 +381,7 @@
           security.passphrase: "{{ wifi_password }}"
           disabled: "no"
 
-    # -------------------------
-    # Enable VLAN filtering LAST
-    # -------------------------
-    - name: Enable bridge VLAN filtering
-      community.routeros.api_find_and_modify:
-        path: interface bridge
-        find:
-          name: bridge
-        values:
-          vlan-filtering: "yes"
-          pvid: "10"
-
-    # -------------------------
-    # Disable default 192.168.88.1 LAST
-    # -------------------------
-    - name: Disable default 192.168.88.1 address
-      community.routeros.api_find_and_modify:
-        path: ip address
-        find:
-          address: 192.168.88.1/24
-        values:
-          disabled: "yes"
-
   post_tasks:
-    - name: Verify VLAN interfaces
-      community.routeros.api:
-        path: interface vlan
-        cmd: "print"
-      register: vlan_result
-
-    - name: Show VLANs
-      debug:
-        var: vlan_result
-
-    - name: Verify DHCP servers
-      community.routeros.api:
-        path: ip dhcp-server
-        cmd: "print"
-      register: dhcp_result
-
-    - name: Show DHCP servers
-      debug:
-        var: dhcp_result
-
     - name: Verify firewall rules
       community.routeros.api:
         path: ip firewall filter
@@ -403,32 +392,12 @@
       debug:
         var: fw_result
 
-    - name: Verify interface list members
+    - name: Verify IPsec active peers
       community.routeros.api:
-        path: interface list member
+        path: ip ipsec active-peers
         cmd: "print"
-      register: list_members
+      register: ipsec_peers
 
-    - name: Show interface list members
+    - name: Show IPsec active peers
       debug:
-        var: list_members
-
-    - name: Verify bridge ports
-      community.routeros.api:
-        path: interface bridge port
-        cmd: "print"
-      register: ports
-
-    - name: Show ports
-      debug:
-        var: ports
-
-    - name: Verify VLAN membership
-      community.routeros.api:
-        path: interface bridge vlan
-        cmd: "print"
-      register: vlans
-
-    - name: Show bridge VLANs
-      debug:
-        var: vlans
+        var: ipsec_peers
