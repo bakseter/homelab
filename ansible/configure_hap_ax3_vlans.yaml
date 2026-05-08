@@ -237,13 +237,13 @@
     - name: Add VLAN 40 to bridge
       community.routeros.api:
         path: interface bridge vlan
-        cmd: "add bridge=bridge vlan-ids=40 tagged=bridge,ether2 untagged=ether3"
+        cmd: "add bridge=bridge vlan-ids=40 tagged=bridge,ether2 untagged=ether4"
       ignore_errors: true
 
     - name: Add VLAN 50 to bridge
       community.routeros.api:
         path: interface bridge vlan
-        cmd: "add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether4,ether5,wifi1,wifi2"
+        cmd: "add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether5,wifi1,wifi2"
       ignore_errors: true
 
     - name: Add VLAN 60 to bridge
