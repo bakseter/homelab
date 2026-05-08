@@ -2,7 +2,7 @@ alloy:
   image:
     registry: docker.io
     repository: grafana/alloy
-    tag: v1.16.0 # overriden by digest, but left for clarity
+    tag: v1.16.1 # overriden by digest, but left for clarity
     digest: 6e00cf7c5a692ff5f24844529416ed017d76fce922f8199004e73d5eca46b6b8
 
   global:
