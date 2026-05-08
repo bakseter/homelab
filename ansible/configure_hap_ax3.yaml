@@ -34,7 +34,7 @@
       community.routeros.api:
         path: ip firewall filter
         remove: "{{ item['.id'] }}"
-      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|desktop-to-proxmox|desktop-to-talos|proxmox-to-talos|nordvpn-killswitch|allow-to-internet|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-wifi-router-mgmt') | list }}"
+      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|desktop-to-proxmox|desktop-to-talos|desktop-to-infra|infra-to-proxmox|infra-to-talos|proxmox-to-talos|nordvpn-killswitch|allow-to-internet|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-wifi-router-mgmt') | list }}"
       ignore_errors: true
 
     # -------------------------
@@ -321,15 +321,25 @@
         path: ip firewall filter
         cmd: "add chain=forward src-address=192.168.40.0/24 dst-address=192.168.30.0/24 action=accept comment=desktop-to-talos"
 
+    - name: Allow desktop to infra
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=forward src-address=192.168.40.0/24 dst-address=192.168.60.0/24 action=accept comment=desktop-to-infra"
+
+    - name: Allow infra to Proxmox
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=forward src-address=192.168.60.0/24 dst-address=192.168.10.0/24 action=accept comment=infra-to-proxmox"
+
+    - name: Allow infra to Talos
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: "add chain=forward src-address=192.168.60.0/24 dst-address=192.168.30.0/24 action=accept comment=infra-to-talos"
+
     - name: Allow Proxmox to Talos
       community.routeros.api:
         path: ip firewall filter
         cmd: "add chain=forward src-address=192.168.10.0/24 dst-address=192.168.30.0/24 action=accept comment=proxmox-to-talos"
-
-    - name: Allow all VLANs to internet
-      community.routeros.api:
-        path: ip firewall filter
-        cmd: "add chain=forward out-interface=ether1 action=accept comment=allow-to-internet"
 
     - name: Drop WiFi to internal VLANs
       community.routeros.api:

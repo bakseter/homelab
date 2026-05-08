@@ -28,6 +28,13 @@ vlans:
     dhcp: true
     dhcp_pool_start: 192.168.50.100
     dhcp_pool_end: 192.168.50.200
+  - id: 60
+    name: infra
+    subnet: 192.168.60.0/24
+    gateway: 192.168.60.1
+    dhcp: true
+    dhcp_pool_start: 192.168.60.100
+    dhcp_pool_end: 192.168.60.200
 
 hap_ax3_host: 192.168.40.1
 hap_ax3_username: admin

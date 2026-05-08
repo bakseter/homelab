@@ -34,22 +34,22 @@
           pvid: "1"
           frame-types: admit-all
 
-    - name: Set ether3 as access port VLAN 40 desktop
+    - name: Set ether3 as access port VLAN 60 infra
       community.routeros.api_find_and_modify:
         path: interface bridge port
         find:
           interface: ether3
         values:
-          pvid: "40"
+          pvid: "60"
           frame-types: admit-only-untagged-and-priority-tagged
 
-    - name: Set ether4 as access port VLAN 50
+    - name: Set ether4 as access port VLAN 40 desktop
       community.routeros.api_find_and_modify:
         path: interface bridge port
         find:
           interface: ether4
         values:
-          pvid: "50"
+          pvid: "40"
           frame-types: admit-only-untagged-and-priority-tagged
 
     - name: Set ether5 as access port VLAN 50
@@ -244,6 +244,12 @@
       community.routeros.api:
         path: interface bridge vlan
         cmd: "add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether4,ether5,wifi1,wifi2"
+      ignore_errors: true
+
+    - name: Add VLAN 60 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids=60 tagged=bridge,ether2 untagged=ether3"
       ignore_errors: true
 
     # -------------------------
