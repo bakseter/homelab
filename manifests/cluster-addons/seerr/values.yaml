@@ -1,0 +1,9 @@
+seerr:
+  ingress:
+    enabled: true
+    ingressClassName: tailscale
+    hosts:
+      - host: seerr
+    tls:
+      - hosts:
+          - seerr
