@@ -10,6 +10,7 @@ helmCharts:
 
 resources:
   - ciliumnetworkpolicy.yaml
+  - persistentvolume.yaml
 
 patches:
   - target:
