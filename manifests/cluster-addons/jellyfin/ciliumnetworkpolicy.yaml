@@ -17,6 +17,15 @@ spec:
             - port: '8096'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: seerr
+            app.kubernetes.io/name: seerr
+      toPorts:
+        - ports:
+            - port: '8096'
+              protocol: TCP
+
   egress:
     - toFQDNs:
         - matchPattern: '*.jellyfin.org'
