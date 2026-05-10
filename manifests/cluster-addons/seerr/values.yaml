@@ -4,6 +4,9 @@ seerr:
     ingressClassName: tailscale
     hosts:
       - host: seerr
+        paths:
+          - path: /
+            pathType: Prefix
     tls:
       - hosts:
           - seerr
