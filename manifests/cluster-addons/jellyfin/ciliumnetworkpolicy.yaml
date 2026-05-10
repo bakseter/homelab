@@ -39,6 +39,8 @@ spec:
     - toFQDNs:
         - matchPattern: '*.jellyfin.org'
         - matchName: 'www.theaudiodb.com'
+        - matchName: 'musicbrainz.org'
+        - matchName: 'api.themoviedb.org'
       toPorts:
         - ports:
             - port: '443'
