@@ -1,6 +1,7 @@
 traefik:
   service:
-    type: ClusterIP
+    spec:
+      type: ClusterIP
 
   deployment:
     replicas: 3
