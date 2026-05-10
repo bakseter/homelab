@@ -48,6 +48,12 @@ spec:
             failureThreshold: 3
             timeoutSeconds: 1
             periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
           startupProbe:
             tcpSocket:
               port: 8080
@@ -55,6 +61,15 @@ spec:
             failureThreshold: 30
             timeoutSeconds: 1
             periodSeconds: 5
+      securityContext:
+        fsGroup: 65534
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+        supplementalGroups:
+          - 65534
       volumes:
         - name: config
           persistentVolumeClaim:
