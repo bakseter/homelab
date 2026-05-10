@@ -64,7 +64,6 @@ spec:
           volumeMounts:
             - name: tmp
               mountPath: /run
-              subPath: /run
             - name: config
               mountPath: /config
       securityContext:
