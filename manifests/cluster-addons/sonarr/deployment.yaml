@@ -61,6 +61,12 @@ spec:
             failureThreshold: 30
             timeoutSeconds: 1
             periodSeconds: 5
+          volumeMounts:
+            - name: tmp
+              mountPath: /run
+              subPath: /run
+            - name: config
+              mountPath: /config
       securityContext:
         fsGroup: 65534
         runAsUser: 65534
@@ -70,3 +76,9 @@ spec:
           type: RuntimeDefault
         supplementalGroups:
           - 65534
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: config
+          persistentVolumeClaim:
+            claimName: sonarr-config
