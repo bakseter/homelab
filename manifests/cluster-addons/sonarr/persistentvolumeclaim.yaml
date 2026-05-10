@@ -23,4 +23,4 @@ spec:
     requests:
       storage: 100Gi
   storageClassName: longhorn
-  volumeName: jellyfin-media
+  volumeName: sonarr-media
