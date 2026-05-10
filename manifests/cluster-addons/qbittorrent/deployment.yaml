@@ -30,8 +30,6 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: downloads
-              mountPath: /downloads
             - name: media
               mountPath: /media
           livenessProbe:
@@ -74,9 +72,6 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: qbittorrent-config
-        - name: downloads
-          persistentVolumeClaim:
-            claimName: qbittorrent-downloads
         - name: media
           persistentVolumeClaim:
             claimName: qbittorrent-media

@@ -14,20 +14,6 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: qbittorrent-downloads
-  namespace: qbittorrent
-  labels:
-    app.kubernetes.io/name: qbittorrent
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 30Gi
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
   name: qbittorrent-media
   labels:
     app.kubernetes.io/name: qbittorrent
