@@ -42,6 +42,7 @@ spec:
         - matchName: 'musicbrainz.org'
         - matchName: 'api.themoviedb.org'
         - matchName: 'www.omdbapi.com'
+        - matchName: 'image.tmdb.org'
       toPorts:
         - ports:
             - port: '443'
