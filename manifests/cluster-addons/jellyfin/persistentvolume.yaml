@@ -9,4 +9,6 @@ spec:
     storage: 100Gi
   storageClassName: longhorn
   csi:
+    driver: driver.longhorn.io
+    fsType: ext4
     volumeHandle: pvc-4fc35202-89d4-4dbb-ab11-96ee4697a943
