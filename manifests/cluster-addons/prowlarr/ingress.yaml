@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prowlarr
+  namespace: prowlarr
+  labels:
+    app.kubernetes.io/name: prowlarr
+spec:
+  ingressClassName: tailscale
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: prowlarr
+                port:
+                  number: 9696
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - prowlarr
