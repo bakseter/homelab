@@ -25,10 +25,6 @@ patches:
         path: /metadata/labels/recurring-job-group.longhorn.io~1hetzner-backup
         value: 'enabled'
 
-      - op: add
-        path: /spec/volumeName
-        vale: 'jellyfin-media'
-
   - target:
       kind: PersistentVolumeClaim
       name: jellyfin-media
@@ -40,3 +36,7 @@ patches:
       - op: add
         path: /metadata/labels/recurring-job-group.longhorn.io~1hetzner-backup
         value: 'enabled'
+
+      - op: add
+        path: /spec/volumeName
+        vale: 'jellyfin-media'
