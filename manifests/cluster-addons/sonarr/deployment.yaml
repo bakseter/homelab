@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: sonarr
-          image: ghcr.io/linuxserver/sonarr:4.0.17
+          image: ghcr.io/home-operations/sonarr:4.0.17.2967@sha256:4ff5667a371e08b098858fa2457a99a5fef5f6a32640eb8567efe979d13ac9fc
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
@@ -62,8 +62,6 @@ spec:
             timeoutSeconds: 1
             periodSeconds: 5
           volumeMounts:
-            - name: tmp
-              mountPath: /run
             - name: config
               mountPath: /config
       securityContext:
@@ -76,8 +74,6 @@ spec:
         supplementalGroups:
           - 65534
       volumes:
-        - name: tmp
-          emptyDir: {}
         - name: config
           persistentVolumeClaim:
             claimName: sonarr-config
