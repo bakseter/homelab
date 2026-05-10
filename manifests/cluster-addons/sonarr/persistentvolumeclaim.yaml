@@ -10,3 +10,17 @@ spec:
     requests:
       storage: 2Gi
   storageClassName: longhorn
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonarr-media
+  namespace: sonarr
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: longhorn
+  volumeName: jellyfin-media
