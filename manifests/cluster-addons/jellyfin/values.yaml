@@ -3,6 +3,7 @@ image:
 
 persistence:
   media:
+    accessMode: ReadWriteMany
     size: 100Gi
 
 deploymentStrategy:
