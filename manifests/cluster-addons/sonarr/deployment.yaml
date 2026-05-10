@@ -66,6 +66,8 @@ spec:
               mountPath: /config
             - name: media
               mountPath: /media
+            - name: tmp
+              mountPath: /tmp
       securityContext:
         fsGroup: 65534
         runAsUser: 65534
@@ -82,3 +84,5 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: sonarr-media
+        - name: tmp
+          emptyDir: {}
