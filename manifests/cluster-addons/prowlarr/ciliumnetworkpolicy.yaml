@@ -23,7 +23,7 @@ spec:
             app.kubernetes.io/name: lidarr
       toPorts:
         - ports:
-            - port: '8686'
+            - port: '9696'
               protocol: TCP
 
   egress:
