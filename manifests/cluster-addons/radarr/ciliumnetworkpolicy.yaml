@@ -12,6 +12,12 @@ spec:
             k8s:io.kubernetes.pod.namespace: tailscale
             tailscale.com/parent-resource: radarr
             tailscale.com/parent-resource-ns: radarr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: prowlarr
+            app.kubernetes.io/name: prowlarr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: seerr
+            app.kubernetes.io/name: seerr
       toPorts:
         - ports:
             - port: '7878'

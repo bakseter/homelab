@@ -13,6 +13,9 @@ spec:
             tailscale.com/parent-resource: sonarr
             tailscale.com/parent-resource-ns: sonarr
         - matchLabels:
+            k8s:io.kubernetes.pod.namespace: prowlarr
+            app.kubernetes.io/name: prowlarr
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: seerr
             app.kubernetes.io/name: seerr
       toPorts:
