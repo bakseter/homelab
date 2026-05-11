@@ -2,6 +2,8 @@ seerr:
   ingress:
     enabled: true
     ingressClassName: tailscale
+    annotations:
+      tailscale.com/tags: 'tag:k8s,tag:media'
     hosts:
       - host: seerr
         paths:
