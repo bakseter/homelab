@@ -1,15 +1,15 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: qbittorrent
+  name: sabnzbd
   namespace: argocd
 spec:
   destination:
-    namespace: qbittorrent
+    namespace: sabnzbd
     name: admin@homelab
   project: default
   source:
-    path: manifests/cluster-addons/qbittorrent
+    path: manifests/cluster-addons/sabnzbd
     repoURL: https://github.com/bakseter/homelab.git
     targetRevision: HEAD
   syncPolicy:
