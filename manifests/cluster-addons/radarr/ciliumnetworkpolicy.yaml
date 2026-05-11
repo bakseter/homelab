@@ -68,6 +68,7 @@ spec:
 
     - toFQDNs:
         - matchName: 'api.radarr.video'
+        - matchName: 'sentry.servarr.com'
       toPorts:
         - ports:
             - port: '443'
