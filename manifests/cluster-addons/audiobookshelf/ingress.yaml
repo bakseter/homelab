@@ -12,7 +12,7 @@ spec:
               service:
                 name: audiobookshelf
                 port:
-                  number: 13378
+                  number: 80
             path: /
             pathType: Prefix
   tls:
