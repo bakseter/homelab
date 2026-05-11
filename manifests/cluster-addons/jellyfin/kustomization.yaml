@@ -24,15 +24,3 @@ patches:
       - op: add
         path: /metadata/labels/recurring-job-group.longhorn.io~1hetzner-backup
         value: 'enabled'
-
-  - target:
-      kind: PersistentVolumeClaim
-      name: jellyfin-media
-    patch: |-
-      - op: add
-        path: /metadata/labels/recurring-job.longhorn.io~1source
-        value: 'enabled'
-
-      - op: add
-        path: /metadata/labels/recurring-job-group.longhorn.io~1hetzner-backup
-        value: 'enabled'
