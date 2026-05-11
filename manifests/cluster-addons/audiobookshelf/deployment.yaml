@@ -18,6 +18,13 @@ spec:
         env:
         - name: TZ
           value: UTC
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
         readinessProbe:
           failureThreshold: 3
           periodSeconds: 10
@@ -41,6 +48,15 @@ spec:
           name: podcasts
         - mountPath: /audiobooks
           name: audiobooks
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 65534
+        runAsUser: 65534
+        runAsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+        supplementalGroups:
+          - 65534
       volumes:
       - name: config
         persistentVolumeClaim:
