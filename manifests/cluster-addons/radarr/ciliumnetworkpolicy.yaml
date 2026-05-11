@@ -69,6 +69,8 @@ spec:
     - toFQDNs:
         - matchName: 'api.radarr.video'
         - matchName: 'sentry.servarr.com'
+        - matchName: 'image.tmdb.org'
+        - matchName: 'api.nzbgeek.info'
       toPorts:
         - ports:
             - port: '443'
