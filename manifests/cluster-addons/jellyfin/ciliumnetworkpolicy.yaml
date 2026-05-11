@@ -35,9 +35,19 @@ spec:
             - port: '8096'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: lidarr
+            app.kubernetes.io/name: lidarr
+      toPorts:
+        - ports:
+            - port: '8686'
+              protocol: TCP
+
   egress:
     - toFQDNs:
         - matchPattern: '*.jellyfin.org'
+        #
         - matchPattern: '*.theaudiodb.com'
         - matchName: 'musicbrainz.org'
         #
