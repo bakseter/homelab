@@ -47,3 +47,12 @@ spec:
         - ports:
             - port: '8989'
               protocol: ANY
+
+    - toFQDNs:
+        - matchName: 'api.themoviedb.org'
+        - matchName: 'api.github.com'
+        - matchName: 'gravatar.com'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
