@@ -62,3 +62,10 @@ spec:
         - ports:
             - port: '8080'
               protocol: TCP
+
+    - toFQDNs:
+        - matchName: 'api.lidarr.audio'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
