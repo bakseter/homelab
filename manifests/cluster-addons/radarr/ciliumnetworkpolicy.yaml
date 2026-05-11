@@ -65,3 +65,10 @@ spec:
         - ports:
             - port: '8080'
               protocol: TCP
+
+    - toFQDNs:
+        - matchName: 'api.radarr.video'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
