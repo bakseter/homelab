@@ -38,8 +38,9 @@ spec:
   egress:
     - toFQDNs:
         - matchPattern: '*.jellyfin.org'
-        - matchName: 'www.theaudiodb.com'
+        - matchPattern: '*.theaudiodb.com'
         - matchName: 'musicbrainz.org'
+        #
         - matchName: 'api.themoviedb.org'
         - matchName: 'www.omdbapi.com'
         - matchName: 'image.tmdb.org'
