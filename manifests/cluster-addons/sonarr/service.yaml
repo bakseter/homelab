@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: sonarr
   namespace: sonarr
-  labels:
-    app.kubernetes.io/name: sonarr
 spec:
   type: ClusterIP
   ports:
@@ -12,5 +10,3 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-  selector:
-    app.kubernetes.io/name: sonarr

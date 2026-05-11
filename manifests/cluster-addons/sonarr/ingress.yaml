@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: sonarr
   namespace: sonarr
-  labels:
-    app.kubernetes.io/name: sonarr
 spec:
   ingressClassName: tailscale
   rules:
