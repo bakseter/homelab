@@ -21,6 +21,9 @@ spec:
           ports:
             - containerPort: 8080
               name: http
+          env:
+            - name: SABNZBD__MISC__HOST_WHITELIST
+              value: 'sabnzbd.tail79d70a.ts.net'
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
