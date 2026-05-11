@@ -30,5 +30,14 @@ spec:
             dns:
               - matchPattern: '*'
 
-    - toEntities:
-        - world
+    - toFQDNs:
+        - matchName: 'www.podtrac.com'
+        - matchName: 'pdst.fm'
+        - matchName: 'claritaspod.com'
+        - matchName: 'verifi.podscribe.com'
+        - matchName: 'tracking.swap.fm'
+        - matchPattern: '*.megaphone.fm'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
