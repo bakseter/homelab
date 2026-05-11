@@ -19,12 +19,11 @@ spec:
         - name: TZ
           value: UTC
         securityContext:
+          allowPrivilegeEscalation: false
           capabilities:
             drop:
             - ALL
           readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 65534
         readinessProbe:
           failureThreshold: 3
           periodSeconds: 10
