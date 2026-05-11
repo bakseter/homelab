@@ -65,3 +65,10 @@ spec:
         - ports:
             - port: '8686'
               protocol: TCP
+
+    - toFQDNs:
+        - matchName: 'api.nzbgeek.info'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
