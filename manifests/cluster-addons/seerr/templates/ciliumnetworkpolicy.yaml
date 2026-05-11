@@ -37,7 +37,16 @@ spec:
       toPorts:
         - ports:
             - port: '8096'
-              protocol: ANY
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: radarr
+            app.kubernetes.io/name: radarr
+      toPorts:
+        - ports:
+            - port: '7878'
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
@@ -46,7 +55,7 @@ spec:
       toPorts:
         - ports:
             - port: '8989'
-              protocol: ANY
+              protocol: TCP
 
     - toFQDNs:
         - matchName: 'api.themoviedb.org'
