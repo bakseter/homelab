@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: lidarr
   namespace: lidarr
-  labels:
-    app.kubernetes.io/name: lidarr
 spec:
   ingressClassName: tailscale
   rules:

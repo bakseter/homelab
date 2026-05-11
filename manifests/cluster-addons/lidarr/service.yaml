@@ -4,8 +4,6 @@ metadata:
   name: lidarr
   namespace: lidarr
 spec:
-  selector:
-    app.kubernetes.io/name: lidarr
   ports:
     - port: 8686
       targetPort: 8686
