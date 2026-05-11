@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: prowlarr
   namespace: prowlarr
-  labels:
-    app.kubernetes.io/name: prowlarr
 spec:
   type: ClusterIP
   ports:
@@ -12,5 +10,3 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-  selector:
-    app.kubernetes.io/name: prowlarr
