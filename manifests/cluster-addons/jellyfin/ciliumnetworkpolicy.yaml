@@ -12,30 +12,15 @@ spec:
             k8s:io.kubernetes.pod.namespace: tailscale
             tailscale.com/parent-resource: jellyfin
             tailscale.com/parent-resource-ns: jellyfin
-      toPorts:
-        - ports:
-            - port: '8096'
-              protocol: TCP
-
-    - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: seerr
             app.kubernetes.io/name: seerr
-      toPorts:
-        - ports:
-            - port: '8096'
-              protocol: TCP
-
-    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: radarr
+            app.kubernetes.io/name: radarr
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: sonarr
             app.kubernetes.io/name: sonarr
-      toPorts:
-        - ports:
-            - port: '8096'
-              protocol: TCP
-
-    - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: lidarr
             app.kubernetes.io/name: lidarr
