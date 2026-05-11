@@ -68,10 +68,7 @@ spec:
             - port: '8686'
               protocol: TCP
 
-    - toEndpoints:
-        - matchLabels:
-            app.kubernetes.io/part-of: arr
-      toPorts:
+    - toPorts:
         - ports:
             - port: '6969'
               protocol: TCP
