@@ -1,4 +1,6 @@
 ollama:
+  replicaCount: 0
+
   ollama:
     mountPath: /data/ollama
 
