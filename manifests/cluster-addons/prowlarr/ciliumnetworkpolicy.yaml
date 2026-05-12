@@ -73,9 +73,16 @@ spec:
             - port: '6969'
               protocol: TCP
 
-    - toFQDNs:
-        - matchName: 'api.nzbgeek.info'
+    - toEntities:
+        - world
       toPorts:
         - ports:
             - port: '443'
               protocol: TCP
+
+#   - toFQDNs:
+#       - matchName: 'api.nzbgeek.info'
+#     toPorts:
+#       - ports:
+#           - port: '443'
+#             protocol: TCP
