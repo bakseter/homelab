@@ -27,6 +27,10 @@ data "talos_image_factory_extensions_versions" "talos" {
 
   filters = {
     names = [
+      # TODO: don't install for AMD hosts
+      "siderolabs/i915",
+      "siderolabs/intel-ucode",
+      #
       "siderolabs/iscsi-tools",
       "siderolabs/qemu-guest-agent",
       "siderolabs/util-linux-tools",
