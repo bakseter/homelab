@@ -18,7 +18,9 @@ spec:
     #     selfHeal: true
     managedNamespaceMetadata:
       labels:
-        pod-security.kubernetes.io/enforce: restricted
+        pod-security.kubernetes.io/warn: restricted
+        # worker needs volumes
+        pod-security.kubernetes.io/enforce: baseline
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
