@@ -1,0 +1,16 @@
+node-feature-discovery:
+  gc:
+    securityContext:
+      seccompProfile:
+        - RuntimeDefault
+
+  master:
+    securityContext:
+      seccompProfile:
+        - RuntimeDefault
+
+  worker:
+    securityContext:
+      seccompProfile:
+        - RuntimeDefault
+
