@@ -83,7 +83,7 @@ resource "null_resource" "argocd-add-cluster" {
 
   provisioner "local-exec" {
     command     = "echo \"$SCRIPT\" > /tmp/argocd-add-cluster.sh && chmod +x /tmp/argocd-add-cluster.sh && bash /tmp/argocd-add-cluster.sh"
-    interpreter = ["/bin/bash", "-c"]
+    interpreter = ["/usr/bin/env", "bash", "-c"]
     environment = {
       KUBECONFIG = base64encode(talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw)
       SCRIPT     = file("${path.module}/scripts/argocd-add-cluster.sh")
@@ -105,7 +105,7 @@ resource "null_resource" "kubectl-apply-root" {
 
   provisioner "local-exec" {
     command     = "kubectl apply --force --kubeconfig <(echo \"$KUBECONFIG\" | base64 -d) -f <(echo \"$MANIFEST\" | base64 -d)"
-    interpreter = ["/bin/bash", "-c"]
+    interpreter = ["/usr/bin/env", "bash", "-c"]
     environment = {
       KUBECONFIG = base64encode(talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw)
       MANIFEST   = base64encode(local.root_app_manifest)
