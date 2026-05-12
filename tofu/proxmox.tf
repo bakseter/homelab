@@ -222,7 +222,7 @@ resource "proxmox_virtual_environment_firewall_ipset" "management" {
   comment = "Admin workstations and management VLAN"
 
   cidr { name = "192.168.10.0/24" }
-  cidr { name = "192.168.40.0/24" } # desktop VLAN
+  cidr { name = "192.168.60.0/24" } # infra VLAN
 }
 
 resource "proxmox_virtual_environment_firewall_ipset" "cluster_nodes" {
