@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: intel-device-plugins-gpu
+  namespace: argocd
+spec:
+  destination:
+    namespace: inteldeviceplugins-system
+    name: admin@homelab
+  project: default
+  source:
+    path: manifests/cluster-addons/intel-device-plugins-gpu
+    repoURL: https://github.com/bakseter/homelab.git
+    targetRevision: HEAD
+  syncPolicy:
+    #   automated:
+    #     prune: true
+    #     selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: restricted
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
