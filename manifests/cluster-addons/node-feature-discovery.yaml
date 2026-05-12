@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: node-feature-discovery
+  namespace: argocd
+spec:
+  destination:
+    namespace: node-feature-discovery
+    name: admin@homelab
+  project: default
+  source:
+    path: manifests/cluster-addons/node-feature-discovery
+    repoURL: https://github.com/bakseter/homelab.git
+    targetRevision: HEAD
+  syncPolicy:
+    #   automated:
+    #     prune: true
+    #     selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: restricted
+    syncOptions:
+      - ServerSideApply=true
