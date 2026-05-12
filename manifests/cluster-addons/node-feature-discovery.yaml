@@ -19,8 +19,8 @@ spec:
     managedNamespaceMetadata:
       labels:
         pod-security.kubernetes.io/warn: restricted
-        # worker needs volumes
-        pod-security.kubernetes.io/enforce: baseline
+        # worker needs hostPath volumes
+        pod-security.kubernetes.io/enforce: privileged
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
