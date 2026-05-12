@@ -57,7 +57,7 @@ resource "proxmox_download_file" "talos-nocloud-image" {
   datastore_id = "local"
   node_name    = each.key
 
-  url       = "https://factory.talos.dev/image/${talos_image_factory_schematic.talos.id}/${local.initial_talos_version}/nocloud-amd64.iso"
+  url       = "https://factory.talos.dev/image/${talos_image_factory_schematic.initial-talos.id}/${local.initial_talos_version}/nocloud-amd64.iso"
   overwrite = false
 }
 
