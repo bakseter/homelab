@@ -1,0 +1,6 @@
+machine:
+  kernel:
+    modules:
+      - name: i915
+  sysctls:
+    dev.i915.perf_stream_paranoid: "0"

@@ -116,3 +116,7 @@
 - name: Show sensors install output
   debug:
     var: sensors_install_result
+
+- name: Setup Intel iGPU
+  include_tasks: intel_igpu.yaml
+  when: intel_igpu_enabled is defined

@@ -1,0 +1,28 @@
+- name: Blacklist i915 driver
+  ansible.builtin.lineinfile:
+    path: /etc/modprobe.d/blacklist.conf
+    line: "blacklist i915"
+    create: true
+    state: present
+
+- name: Load VFIO modules at boot
+  ansible.builtin.lineinfile:
+    path: /etc/modules-load.d/vfio.conf
+    line: "{{ item }}"
+    create: true
+    state: present
+  loop:
+    - vfio
+    - vfio_iommu_type1
+    - vfio_pci
+    - vfio_virqfd
+
+- name: Update initramfs
+  ansible.builtin.command: update-initramfs -u
+  changed_when: true
+
+- name: Reboot host
+  ansible.builtin.reboot:
+    reboot_timeout: 300
+    post_reboot_delay: 30
+    msg: "Rebooting for VFIO/iGPU passthrough changes"

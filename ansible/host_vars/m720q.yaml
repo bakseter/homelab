@@ -1,3 +1,4 @@
 nic_offload_interface: nic0
 host_ip: 192.168.10.22
 host_ip_cluster: 192.168.20.22
+intel_igpu_enabled: true

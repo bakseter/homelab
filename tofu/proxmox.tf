@@ -175,6 +175,18 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
     }
   }
 
+  dynamic "hostpci" {
+    for_each = try(each.value.igpu.enabled, false) ? [each.value.igpu] : []
+
+    content {
+      device  = "hostpci0"
+      id      = hostpci.value.pci_id # e.g. "0000:00:02.0"
+      pcie    = try(hostpci.value.pcie, false)
+      rombar  = try(hostpci.value.rombar, true)
+      mapping = null
+    }
+  }
+
   operating_system {
     type = "l26"
   }
