@@ -1,0 +1,7 @@
+apiVersion: v2
+name: intel-device-plugins-operator-umbrella
+version: 0.1.0
+dependencies:
+  - name: intel-device-plugins-operator
+    version: 0.35.0
+    repository: https://intel.github.io/helm-charts
