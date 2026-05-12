@@ -2,15 +2,14 @@ node-feature-discovery:
   gc:
     securityContext:
       seccompProfile:
-        - RuntimeDefault
+        type: RuntimeDefault
 
   master:
     securityContext:
       seccompProfile:
-        - RuntimeDefault
+        type: RuntimeDefault
 
   worker:
     securityContext:
       seccompProfile:
-        - RuntimeDefault
-
+        type: RuntimeDefault
