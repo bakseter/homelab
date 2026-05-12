@@ -65,6 +65,8 @@ spec:
 
     - toFQDNs:
         - matchName: 'api.lidarr.audio'
+        - matchName: 'api.nzbgeek.info'
+        - matchName: 'ninjacentral.co.za'
       toPorts:
         - ports:
             - port: '443'

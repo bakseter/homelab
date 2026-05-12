@@ -71,6 +71,7 @@ spec:
         - matchName: 'sentry.servarr.com'
         - matchName: 'image.tmdb.org'
         - matchName: 'api.nzbgeek.info'
+        - matchName: 'ninjacentral.co.za'
       toPorts:
         - ports:
             - port: '443'

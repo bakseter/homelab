@@ -69,6 +69,8 @@ spec:
     - toFQDNs:
         - matchName: 'services.sonarr.tv'
         - matchName: 'thexem.info'
+        - matchName: 'api.nzbgeek.info'
+        - matchName: 'ninjacentral.co.za'
       toPorts:
         - ports:
             - port: '443'

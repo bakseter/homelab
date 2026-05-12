@@ -3,6 +3,8 @@ kind: Ingress
 metadata:
   name: sonarr
   namespace: sonarr
+  annotations:
+    tailscale.com/tags: 'tag:k8s,tag:media'
 spec:
   ingressClassName: tailscale
   rules:
