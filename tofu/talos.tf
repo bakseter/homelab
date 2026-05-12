@@ -67,6 +67,9 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
         extension_image_refs = data.talos_image_factory_extensions_versions.talos.extensions_info.*.ref
       },
     ) : "",
+    try(each.value.igpu.enabled, false) ? file(
+      "${path.module}/manifests/igpu-patches.yaml",
+    ) : "",
     templatefile(
       "${path.module}/manifests/default-patches.yaml.tmpl",
       {
