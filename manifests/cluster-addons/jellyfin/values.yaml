@@ -1,6 +1,10 @@
 image:
   tag: 10.10.7
 
+resources:
+  limits:
+    gpu.intel.com/i915: '1'
+
 persistence:
   media:
     accessMode: ReadWriteMany
