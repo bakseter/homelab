@@ -1,6 +1,6 @@
 node-feature-discovery:
   gc:
-    securityContext:
+    podSecurityContext:
       seccompProfile:
         type: RuntimeDefault
 
