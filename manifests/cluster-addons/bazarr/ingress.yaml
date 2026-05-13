@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bazarr
+  namespace: bazarr
+  annotations:
+    tailscale.com/tags: 'tag:k8s,tag:media'
+spec:
+  ingressClassName: tailscale
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: bazarr
+                port:
+                  number: 6767
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - bazarr
