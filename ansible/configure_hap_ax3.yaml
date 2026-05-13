@@ -8,9 +8,9 @@
 
   module_defaults:
     group/community.routeros.api:
-      hostname: "{{ hap_ax3_host }}"
-      username: "{{ hap_ax3_username }}"
-      password: "{{ hap_ax3_password }}"
+      hostname: '{{ hap_ax3_host }}'
+      username: '{{ hap_ax3_username }}'
+      password: '{{ hap_ax3_password }}'
       tls: false
 
   tasks:
@@ -20,7 +20,7 @@
     - name: Gather existing firewall rules
       community.routeros.api:
         path: ip firewall filter
-        cmd: "print"
+        cmd: 'print'
       register: fw_cleanup
 
     - name: Remove vpn-debug and ks-debug log rules
@@ -43,7 +43,7 @@
     - name: Gather NAT rules
       community.routeros.api:
         path: ip firewall nat
-        cmd: "print"
+        cmd: 'print'
       register: nat_cleanup
 
     - name: Remove duplicate masquerade rules
@@ -59,7 +59,7 @@
     - name: Gather mangle rules
       community.routeros.api:
         path: ip firewall mangle
-        cmd: "print"
+        cmd: 'print'
       register: mangle_cleanup
 
     - name: Remove existing ipsec-mss-fix mangle rule
@@ -75,7 +75,7 @@
     - name: Gather all address list entries
       community.routeros.api:
         path: ip firewall address-list
-        cmd: "print"
+        cmd: 'print'
       register: addr_list_cleanup
 
     - name: Remove nordvpn-local address list entries
@@ -98,7 +98,7 @@
     - name: Gather IPsec identities
       community.routeros.api:
         path: ip ipsec identity
-        cmd: "print"
+        cmd: 'print'
       register: ipsec_identity_cleanup
 
     - name: Remove all non-dynamic IPsec identities
@@ -111,7 +111,7 @@
     - name: Gather IPsec peers
       community.routeros.api:
         path: ip ipsec peer
-        cmd: "print"
+        cmd: 'print'
       register: ipsec_peer_cleanup
 
     - name: Remove existing NordVPN peer
@@ -124,7 +124,7 @@
     - name: Gather IPsec policies
       community.routeros.api:
         path: ip ipsec policy
-        cmd: "print"
+        cmd: 'print'
       register: ipsec_policy_cleanup
 
     - name: Remove non-default IPsec policy templates
@@ -137,7 +137,7 @@
     - name: Gather IPsec mode-configs
       community.routeros.api:
         path: ip ipsec mode-config
-        cmd: "print"
+        cmd: 'print'
       register: ipsec_modeconfig_cleanup
 
     - name: Remove NordVPN mode-config
@@ -150,7 +150,7 @@
     - name: Gather IPsec policy groups
       community.routeros.api:
         path: ip ipsec policy group
-        cmd: "print"
+        cmd: 'print'
       register: ipsec_policygroup_cleanup
 
     - name: Remove NordVPN policy group
@@ -163,7 +163,7 @@
     - name: Gather IPsec proposals
       community.routeros.api:
         path: ip ipsec proposal
-        cmd: "print"
+        cmd: 'print'
       register: ipsec_proposal_cleanup
 
     - name: Remove NordVPN proposal
@@ -176,7 +176,7 @@
     - name: Gather IPsec profiles
       community.routeros.api:
         path: ip ipsec profile
-        cmd: "print"
+        cmd: 'print'
       register: ipsec_profile_cleanup
 
     - name: Remove NordVPN profile
@@ -193,9 +193,9 @@
       community.routeros.api_find_and_modify:
         path: ip firewall filter
         find:
-          comment: "defconf: fasttrack"
+          comment: 'defconf: fasttrack'
         values:
-          disabled: "yes"
+          disabled: 'yes'
 
     # -------------------------
     # NAT
@@ -203,7 +203,7 @@
     - name: Add masquerade rule
       community.routeros.api:
         path: ip firewall nat
-        cmd: "add chain=srcnat out-interface=ether1 action=masquerade comment=masquerade-to-wan"
+        cmd: 'add chain=srcnat out-interface=ether1 action=masquerade comment=masquerade-to-wan'
       ignore_errors: true
 
     # -------------------------
@@ -228,7 +228,7 @@
     - name: Import NordVPN root certificate
       community.routeros.api:
         path: certificate
-        cmd: "import file-name=root.der"
+        cmd: 'import file-name=root.der'
 
     # -------------------------
     # NordVPN IKEv2 - IPsec config
@@ -236,32 +236,32 @@
     - name: Add IPsec profile for NordVPN
       community.routeros.api:
         path: ip ipsec profile
-        cmd: "add name=NordVPN enc-algorithm=aes-256 hash-algorithm=sha256 dh-group=modp2048"
+        cmd: 'add name=NordVPN enc-algorithm=aes-256 hash-algorithm=sha256 dh-group=modp2048'
 
     - name: Add IPsec proposal for NordVPN
       community.routeros.api:
         path: ip ipsec proposal
-        cmd: "add name=NordVPN pfs-group=none enc-algorithms=aes-256-cbc auth-algorithms=sha256"
+        cmd: 'add name=NordVPN pfs-group=none enc-algorithms=aes-256-cbc auth-algorithms=sha256'
 
     - name: Add IPsec policy group for NordVPN
       community.routeros.api:
         path: ip ipsec policy group
-        cmd: "add name=NordVPN"
+        cmd: 'add name=NordVPN'
 
     - name: Add IPsec policy template for NordVPN
       community.routeros.api:
         path: ip ipsec policy
-        cmd: "add dst-address=0.0.0.0/0 group=NordVPN proposal=NordVPN src-address=0.0.0.0/0 template=yes"
+        cmd: 'add dst-address=0.0.0.0/0 group=NordVPN proposal=NordVPN src-address=0.0.0.0/0 template=yes'
 
     - name: Add IPsec mode-config for NordVPN
       community.routeros.api:
         path: ip ipsec mode-config
-        cmd: "add name=NordVPN responder=no"
+        cmd: 'add name=NordVPN responder=no'
 
     - name: Add NordVPN peer
       community.routeros.api:
         path: ip ipsec peer
-        cmd: "add address={{ nordvpn_server }} exchange-mode=ike2 name=NordVPN profile=NordVPN"
+        cmd: 'add address={{ nordvpn_server }} exchange-mode=ike2 name=NordVPN profile=NordVPN'
 
     - name: Add NordVPN identity
       community.routeros.api:
@@ -274,8 +274,8 @@
     - name: Add VLAN subnets to nordvpn-local address list
       community.routeros.api:
         path: ip firewall address-list
-        cmd: "add address={{ vlan.subnet }} list=nordvpn-local comment={{ vlan.name }}"
-      loop: "{{ vlans }}"
+        cmd: 'add address={{ vlan.subnet }} list=nordvpn-local comment={{ vlan.name }}'
+      loop: "{{ vlans | selectattr('vpn', 'equalto', true) | list }}"
       loop_control:
         loop_var: vlan
 
@@ -293,7 +293,7 @@
     - name: Add MSS clamp for IPSec MTU fix
       community.routeros.api:
         path: ip firewall mangle
-        cmd: "add chain=forward protocol=tcp tcp-flags=syn action=change-mss new-mss=1360 passthrough=yes comment=ipsec-mss-fix"
+        cmd: 'add chain=forward protocol=tcp tcp-flags=syn action=change-mss new-mss=1360 passthrough=yes comment=ipsec-mss-fix'
 
     # -------------------------
     # NordVPN - DNS leak prevention
@@ -301,7 +301,7 @@
     - name: Set NordVPN DNS servers
       community.routeros.api:
         path: ip dns
-        cmd: "set servers=103.86.96.100,103.86.99.100 allow-remote-requests=yes"
+        cmd: 'set servers=103.86.96.100,103.86.99.100 allow-remote-requests=yes'
 
     # -------------------------
     # Firewall forward rules
@@ -309,42 +309,42 @@
     - name: Allow established and related
       community.routeros.api:
         path: ip firewall filter
-        cmd: "add chain=forward connection-state=established,related action=accept comment=allow-established"
+        cmd: 'add chain=forward connection-state=established,related action=accept comment=allow-established'
 
     - name: Allow infra to Proxmox
       community.routeros.api:
         path: ip firewall filter
-        cmd: "add chain=forward src-address=192.168.60.0/24 dst-address=192.168.10.0/24 action=accept comment=infra-to-proxmox"
+        cmd: 'add chain=forward src-address=192.168.60.0/24 dst-address=192.168.10.0/24 action=accept comment=infra-to-proxmox'
 
     - name: Allow infra to Talos
       community.routeros.api:
         path: ip firewall filter
-        cmd: "add chain=forward src-address=192.168.60.0/24 dst-address=192.168.30.0/24 action=accept comment=infra-to-talos"
+        cmd: 'add chain=forward src-address=192.168.60.0/24 dst-address=192.168.30.0/24 action=accept comment=infra-to-talos'
 
     - name: Allow Proxmox to Talos
       community.routeros.api:
         path: ip firewall filter
-        cmd: "add chain=forward src-address=192.168.10.0/24 dst-address=192.168.30.0/24 action=accept comment=proxmox-to-talos"
+        cmd: 'add chain=forward src-address=192.168.10.0/24 dst-address=192.168.30.0/24 action=accept comment=proxmox-to-talos'
 
     - name: Drop WiFi to internal VLANs
       community.routeros.api:
         path: ip firewall filter
-        cmd: "add chain=forward src-address=192.168.50.0/24 dst-address=192.168.0.0/16 action=drop comment=drop-wifi-to-internal"
+        cmd: 'add chain=forward src-address=192.168.50.0/24 dst-address=192.168.0.0/16 action=drop comment=drop-wifi-to-internal'
 
     - name: Drop Talos to management
       community.routeros.api:
         path: ip firewall filter
-        cmd: "add chain=forward src-address=192.168.30.0/24 dst-address=192.168.10.0/24 action=drop comment=drop-talos-to-mgmt"
+        cmd: 'add chain=forward src-address=192.168.30.0/24 dst-address=192.168.10.0/24 action=drop comment=drop-talos-to-mgmt'
 
     - name: Drop cluster VLAN outbound
       community.routeros.api:
         path: ip firewall filter
-        cmd: "add chain=forward src-address=192.168.20.0/24 action=drop comment=drop-cluster-outbound"
+        cmd: 'add chain=forward src-address=192.168.20.0/24 action=drop comment=drop-cluster-outbound'
 
     - name: Drop all other inter-VLAN forward traffic
       community.routeros.api:
         path: ip firewall filter
-        cmd: "add chain=forward src-address=192.168.0.0/16 dst-address=192.168.0.0/16 action=drop comment=drop-all-inter-vlan"
+        cmd: 'add chain=forward src-address=192.168.0.0/16 dst-address=192.168.0.0/16 action=drop comment=drop-all-inter-vlan'
 
     # -------------------------
     # Firewall input rules
@@ -352,7 +352,7 @@
     - name: Drop WiFi access to router management ports only
       community.routeros.api:
         path: ip firewall filter
-        cmd: "add chain=input src-address=192.168.50.0/24 dst-port=22,80,8291,8728,8729 protocol=tcp action=drop comment=drop-wifi-router-mgmt"
+        cmd: 'add chain=input src-address=192.168.50.0/24 dst-port=22,80,8291,8728,8729 protocol=tcp action=drop comment=drop-wifi-router-mgmt'
 
     # -------------------------
     # WiFi SSID and security
@@ -363,11 +363,11 @@
         find:
           default-name: wifi1
         values:
-          configuration.ssid: "{{ wifi_ssid }}"
+          configuration.ssid: '{{ wifi_ssid }}'
           configuration.mode: ap
           security.authentication-types: wpa2-psk,wpa3-psk
-          security.passphrase: "{{ wifi_password }}"
-          disabled: "no"
+          security.passphrase: '{{ wifi_password }}'
+          disabled: 'no'
 
     - name: Configure wifi2 2.4GHz
       community.routeros.api_find_and_modify:
@@ -375,17 +375,32 @@
         find:
           default-name: wifi2
         values:
-          configuration.ssid: "{{ wifi_ssid }}"
+          configuration.ssid: '{{ wifi_ssid }}'
           configuration.mode: ap
           security.authentication-types: wpa2-psk,wpa3-psk
-          security.passphrase: "{{ wifi_password }}"
-          disabled: "no"
+          security.passphrase: '{{ wifi_password }}'
+          disabled: 'no'
+
+    - name: Add wifi1 virtual AP for media SSID
+      community.routeros.api:
+        path: interface wifi
+        cmd: 'add name=wifi1-media master-interface=wifi1 configuration.ssid={{ media_ssid }} security.authentication-types=wpa2-psk,wpa3-psk security.passphrase={{ media_wifi_password }} disabled=no'
+      ignore_errors: true
+
+    - name: Set media wifi bridge port to VLAN 70
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: wifi1-media
+        values:
+          pvid: '70'
+          frame-types: admit-only-untagged-and-priority-tagged
 
   post_tasks:
     - name: Verify firewall rules
       community.routeros.api:
         path: ip firewall filter
-        cmd: "print"
+        cmd: 'print'
       register: fw_result
 
     - name: Show firewall rules
@@ -395,7 +410,7 @@
     - name: Verify IPsec active peers
       community.routeros.api:
         path: ip ipsec active-peers
-        cmd: "print"
+        cmd: 'print'
       register: ipsec_peers
 
     - name: Show IPsec active peers
