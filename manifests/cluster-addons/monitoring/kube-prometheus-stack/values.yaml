@@ -120,11 +120,5 @@ kube-prometheus-stack:
     enabled: false
     forceDeployDashboards: true
 
-  coreDns:
-    enabled: false
-  kubeControllerManager:
-    enabled: false
-  kubeScheduler:
-    enabled: false
   kubeProxy:
     enabled: false
