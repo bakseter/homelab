@@ -56,6 +56,7 @@ authentik:
       enabled: true
       serviceMonitor:
         enabled: true
+        interval: 60s
         labels:
           release: kube-prometheus-stack
 
@@ -119,6 +120,7 @@ authentik:
       enabled: true
       serviceMonitor:
         enabled: true
+        interval: 60s
         labels:
           release: kube-prometheus-stack
 
