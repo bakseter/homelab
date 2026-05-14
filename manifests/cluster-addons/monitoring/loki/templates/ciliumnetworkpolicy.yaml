@@ -32,12 +32,47 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: querier
+        - matchLabels:
+            app.kubernetes.io/instance: loki
+            app.kubernetes.io/name: create-s3-buckets
+    - ports:
+        - port: '9000'
+          protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tailscale
+            tailscale.com/parent-resource-ns: monitoring
+            tailscale.com/parent-resource: loki-rustfs
+      toPorts:
+        - ports:
+            - port: '9001'
+              protocol: TCP
+
+  egress: []
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: loki-create-s3-buckets
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: loki
+      app.kubernetes.io/name: create-s3-buckets
+
+  ingress: []
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: loki
+            app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
             - port: '9000'
               protocol: TCP
-
-  egress: []
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

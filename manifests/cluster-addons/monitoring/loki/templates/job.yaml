@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: loki-create-s3-buckets
+  namespace: monitoring
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: '-5'
+    helm.sh/hook-delete-policy: before-hook-creation
+  labels:
+    app.kubernetes.io/instance: loki
+    app.kubernetes.io/name: create-s3-buckets
+spec:
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: loki
+        app.kubernetes.io/name: create-s3-buckets
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: create-s3-buckets
+          image: amazon/aws-cli:2.34.46@sha256:c9756d3e11fdfc02497e980c1cb94c678c31b6e38c93f6443291e52f71493720
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              value: 'rustfsloki'
+            - name: AWS_SECRET_ACCESS_KEY
+              value: 'rustfsloki'
+            - name: AWS_DEFAULT_REGION
+              value: 'us-east-1'
+          command:
+            - /bin/sh
+            - -c
+            - |
+              ENDPOINT="http://loki-rustfs-svc.monitoring.svc.cluster.local:9000"
+              BUCKETS="loki-chunks loki-ruler loki-admin"
+
+              for BUCKET in $BUCKETS; do
+                echo "Creating bucket: $BUCKET"
+                aws --endpoint-url "$ENDPOINT" s3api create-bucket --bucket "$BUCKET" && \
+                  echo "✓ $BUCKET created" || \
+                  echo "⚠ $BUCKET may already exist, skipping"
+              done
+
+              echo "Done."
