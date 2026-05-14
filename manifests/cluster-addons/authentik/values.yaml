@@ -7,7 +7,7 @@ authentik:
     image:
       repository: ghcr.io/goauthentik/server
       tag: 2026.2.3
-      digest: 7806ae1ae3423624fe90331e8b3dcca0afc155fac890c696dd92ddac6dc3a384
+      digest: sha256:7806ae1ae3423624fe90331e8b3dcca0afc155fac890c696dd92ddac6dc3a384
 
     securityContext:
       runAsNonRoot: true
