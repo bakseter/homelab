@@ -32,14 +32,21 @@ spec:
             - /bin/sh
             - -c
             - |
+              set -e
               ENDPOINT="http://loki-rustfs-svc.monitoring.svc.cluster.local:9000"
               BUCKETS="loki-chunks loki-ruler loki-admin"
 
+              echo "Testing connectivity..."
+              aws --endpoint-url "$ENDPOINT" s3 ls || echo "FATAL: cannot reach endpoint"
+
               for BUCKET in $BUCKETS; do
                 echo "Creating bucket: $BUCKET"
-                aws --endpoint-url "$ENDPOINT" s3api create-bucket --bucket "$BUCKET" && \
-                  echo "✓ $BUCKET created" || \
-                  echo "⚠ $BUCKET may already exist, skipping"
+                if aws --endpoint-url "$ENDPOINT" s3api create-bucket --bucket "$BUCKET" 2>&1; then
+                  echo "✓ $BUCKET created"
+                else
+                  echo "checking if $BUCKET already exists..."
+                  aws --endpoint-url "$ENDPOINT" s3api head-bucket --bucket "$BUCKET" 2>&1 && \
+                    echo "✓ $BUCKET already exists, OK" || \
+                    echo "✗ $BUCKET failed and does not exist — real error"
+                fi
               done
-
-              echo "Done."
