@@ -27,9 +27,9 @@ spec:
             app.kubernetes.io/name: alertmanager
       toPorts:
         - ports:
-            - port: '9093'
-              protocol: TCP
             - port: '8080'
+              protocol: TCP
+            - port: '9093'
               protocol: TCP
 
     - toEndpoints:
@@ -84,10 +84,20 @@ spec:
             tailscale.com/parent-resource: kube-prometheus-stack-alertmanager
             tailscale.com/parent-resource-ns: monitoring
         - matchLabels:
+            app.kubernetes.io/name: prometheus
+        - matchLabels:
             app: grafana
       toPorts:
         - ports:
             - port: '9093'
+              protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '8080'
               protocol: TCP
 
   egress:
