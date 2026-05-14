@@ -53,6 +53,7 @@ spec:
 
     - toFQDNs:
         - matchName: 'grafana.com' # plugins
+        - matchName: 'storage.googleapis.com' # plugins
       toPorts:
         - ports:
             - port: '443'
