@@ -12,7 +12,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: tailscale
-            tailscale.com/parent-resource: kube-prometheus-prometheus
+            tailscale.com/parent-resource: kube-prometheus-stack-prometheus
             tailscale.com/parent-resource-ns: monitoring
         - matchLabels:
             app: grafana
@@ -81,7 +81,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: tailscale
-            tailscale.com/parent-resource: kube-prometheus-alertmanager
+            tailscale.com/parent-resource: kube-prometheus-stack-alertmanager
             tailscale.com/parent-resource-ns: monitoring
         - matchLabels:
             app: grafana
