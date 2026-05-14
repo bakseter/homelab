@@ -6,5 +6,6 @@ dependencies:
     version: 13.2.0
     repository: oci://ghcr.io/grafana-community/helm-charts
   - name: rustfs
+    alias: rustfs
     version: 0.3.0
     repository: https://charts.rustfs.com
