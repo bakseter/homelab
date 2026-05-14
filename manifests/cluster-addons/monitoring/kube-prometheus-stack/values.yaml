@@ -119,8 +119,12 @@ kube-prometheus-stack:
 
   kubeEtcd:
     enabled: true
-    service:
-      enabled: false
+
+    # Controlplane IPs
+    endpoints:
+      - 192.168.30.100
+      - 192.168.30.110
+      - 192.168.30.120
 
   kubeControllerManager:
     enabled: false
