@@ -19,6 +19,13 @@ authentik:
       supplementalGroups:
         - 65534
 
+  prometheus:
+    rules:
+      enabled: true
+      namespace: monitoring
+      labels:
+        release: kube-prometheus-stack
+
   server:
     replicas: 1
 
@@ -44,6 +51,13 @@ authentik:
       limits:
         cpu: 200m
         memory: 1536Mi
+
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        labels:
+          release: kube-prometheus-stack
 
     env:
       - name: AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS
@@ -100,6 +114,13 @@ authentik:
       timeoutSeconds: 10
     startupProbe:
       timeoutSeconds: 10
+
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        labels:
+          release: kube-prometheus-stack
 
     env:
       - name: AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS
