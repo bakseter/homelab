@@ -14,7 +14,7 @@ alloy:
     image:
       registry: quay.io
       repository: prometheus-operator/prometheus-config-reloader
-      tag: v0.81.0 # overriden by digest, but left for clarity
+      tag: v0.91.0 # overriden by digest, but left for clarity
       digest: 959d47672fbff2776a04ec62b8afcec89e8c036af84dc5fade50019dab212746
 
     securityContext:
