@@ -1,6 +1,6 @@
 keel:
   image:
-    tag: 0.21.1
+    tag: 0.21.1@sha256:a6a7ab0785989ecb43b6e2810ef225656a59eaf5dd6e8c65c37b16ebc9974c60
 
   helmProvider:
     enabled: false
