@@ -222,28 +222,28 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: node-cluster-rsc-use
+  name: node-cluster-rsrc-use
   namespace: monitoring
 spec:
   instanceSelector:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-stack-node-cluster-rsc-use
-    key: node-cluster-rsc-use.json
+    name: kube-prometheus-stack-node-cluster-rsrc-use
+    key: node-cluster-rsrc-use.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: node-rsc-use
+  name: node-rsrc-use
   namespace: monitoring
 spec:
   instanceSelector:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-stack-node-rsc-use
-    key: node-rsc-use.json
+    name: kube-prometheus-stack-node-rsrc-use
+    key: node-rsrc-use.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
