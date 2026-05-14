@@ -113,6 +113,9 @@ spec:
             dns:
               - matchPattern: '*'
 
-    # TODO: harden
-    - toEntities:
-        - world
+    - toFQDNs:
+        - matchName: 'api.pushover.net'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
