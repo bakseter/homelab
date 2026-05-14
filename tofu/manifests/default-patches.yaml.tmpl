@@ -6,6 +6,11 @@ cluster:
       name: none
   proxy:
     disabled: true
+  %{~ if node_type == "controlplane" ~}
+  etcd:
+    extraArgs:
+      listen-metrics-urls: http://0.0.0.0:2381
+  %{~ endif ~}
 
 machine:
   install:
@@ -30,4 +35,3 @@ machine:
         vip:
           ip: ${virtual_ip_controlplane}
         %{~ endif ~}
-
