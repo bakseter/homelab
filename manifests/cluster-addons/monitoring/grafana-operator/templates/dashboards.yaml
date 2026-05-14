@@ -287,15 +287,15 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: nodes-persistentvolumesusage
+  name: persistentvolumesusage
   namespace: monitoring
 spec:
   instanceSelector:
     matchLabels:
       dashboards: 'grafana'
   configMapRef:
-    name: kube-prometheus-stack-nodes-persistentvolumesusage
-    key: nodes-persistentvolumesusage.json
+    name: kube-prometheus-stack-persistentvolumesusage
+    key: persistentvolumesusage.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
