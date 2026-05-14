@@ -3,13 +3,13 @@ loki:
     auth_enabled: false
 
     storage:
-      type: s3
-
       bucketNames:
         chunks: loki-chunks
         ruler: loki-ruler
 
       object_store:
+        type: s3
+
         s3:
           endpoint: loki-rustfs-svc.monitoring.svc.cluster.local:9000
           access_key_id: rustfsloki
