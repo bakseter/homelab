@@ -1,12 +1,13 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: minio
+  name: rustfs
   namespace: monitoring
 spec:
   endpointSelector:
     matchLabels:
-      app: minio
+      app.kubernetes.io/instance: loki
+      app.kubernetes.io/name: rustfs
 
   ingress:
     - fromEndpoints:
@@ -31,47 +32,12 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: querier
-        - matchLabels:
-            app: minio-job
       toPorts:
         - ports:
             - port: '9000'
               protocol: TCP
 
   egress: []
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: minio-job
-  namespace: monitoring
-spec:
-  endpointSelector:
-    matchLabels:
-      app: minio-job
-
-  ingress: []
-
-  egress:
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: kube-dns
-      toPorts:
-        - ports:
-            - port: '53'
-              protocol: ANY
-          rules:
-            dns:
-              - matchPattern: '*'
-
-    - toEndpoints:
-        - matchLabels:
-            app: minio
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -143,7 +109,8 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app: minio
+            app.kubernetes.io/instance: loki
+            app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
             - port: '9000'
@@ -253,7 +220,8 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app: minio
+            app.kubernetes.io/instance: loki
+            app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
             - port: '9000'
@@ -483,7 +451,8 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app: minio
+            app.kubernetes.io/instance: loki
+            app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
             - port: '9000'
@@ -583,7 +552,8 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app: minio
+            app.kubernetes.io/instance: loki
+            app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
             - port: '9000'
@@ -675,7 +645,8 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app: minio
+            app.kubernetes.io/instance: loki
+            app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
             - port: '9000'
@@ -742,7 +713,8 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app: minio
+            app.kubernetes.io/instance: loki
+            app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
             - port: '9000'
