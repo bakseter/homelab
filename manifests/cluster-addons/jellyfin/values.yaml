@@ -8,7 +8,7 @@ resources:
 persistence:
   media:
     accessMode: ReadWriteMany
-    size: 100Gi
+    size: 150Gi
 
 deploymentStrategy:
   type: Recreate
