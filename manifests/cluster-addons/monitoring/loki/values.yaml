@@ -136,6 +136,8 @@ rustfs:
     distributed:
       enabled: false
 
+  replicaCount: 2
+
   secret:
     rustfs:
       access_key: rustfsloki
@@ -151,5 +153,8 @@ rustfs:
     className: tailscale
     hosts:
       - host: rustfs
-
-  replicaCount: 2
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      enabled: true
