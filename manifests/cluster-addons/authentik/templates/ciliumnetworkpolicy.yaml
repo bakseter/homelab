@@ -60,7 +60,15 @@ spec:
       app.kubernetes.io/instance: authentik
       app.kubernetes.io/component: worker
 
-  ingress: []
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '9300'
+              protocol: TCP
 
   egress:
     - toEndpoints:
@@ -111,15 +119,6 @@ spec:
       toPorts:
         - ports:
             - port: '9000'
-              protocol: TCP
-
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: monitoring
-            app.kubernetes.io/name: prometheus
-      toPorts:
-        - ports:
-            - port: '9300'
               protocol: TCP
 
   egress:
