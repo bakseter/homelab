@@ -10,9 +10,9 @@ loki:
         ruler: loki-ruler
 
       s3:
-        endpoint: loki-monio-svc.monitoring.svc.cluster.local:9000
-        access_key_id: minio
-        secret_access_key: minio123
+        endpoint: rustfs.monitoring.svc.cluster.local:9000
+        access_key_id: rustfsloki
+        secret_access_key: rustfsloki
         insecure: true
 
     commonConfig:
@@ -123,6 +123,11 @@ rustfs:
 
     distributed:
       enabled: false
+
+  secret:
+    rustfs:
+      access_key: rustfsloki
+      secret_key: rustfsloki
 
   storageClass:
     name: longhorn
