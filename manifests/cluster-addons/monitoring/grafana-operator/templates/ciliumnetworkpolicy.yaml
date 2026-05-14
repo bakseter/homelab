@@ -50,6 +50,13 @@ spec:
         - ports:
             - port: '9090'
               protocol: TCP
+
+    - toFQDNs:
+        - matchName: 'grafana.com' # plugins
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
