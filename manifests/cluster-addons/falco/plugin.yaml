@@ -7,6 +7,6 @@ spec:
   ociArtifact:
     image:
       repository: falcosecurity/plugins/plugin/container
-      tag: latest
+      tag: 0.7.0@sha256:4df154dedb0042671d9e4268bc439343a9e189d440ef4c6d01aea8176a552274
     registry:
       name: ghcr.io
