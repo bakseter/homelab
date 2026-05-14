@@ -120,11 +120,23 @@ kube-prometheus-stack:
   kubeEtcd:
     enabled: true
 
-    # Controlplane IPs
-    endpoints:
-      - 192.168.30.100
-      - 192.168.30.110
-      - 192.168.30.120
+    # https://github.com/siderolabs/talos/discussions/7214#discussioncomment-10345376
+
+    service:
+      selector:
+        k8s-app: kube-controller-manager # Fix selector for kube-etcd for Talos (set itentionally to kube-controller-manager because all master nodes has the same roles)
+
+    serviceMonitor:
+      relabelings: # Add nodename label
+        - sourceLabels: [__meta_kubernetes_pod_node_name]
+          separator: ;
+          regex: ^(.*)$
+          targetLabel: nodename
+          replacement: $1
+          action: replace
+      metricRelabelings: # Remove pod label
+        - action: labeldrop
+          regex: pod
 
   kubeControllerManager:
     enabled: false
