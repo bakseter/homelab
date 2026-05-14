@@ -40,19 +40,6 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: controller-manager
-  namespace: monitoring
-spec:
-  instanceSelector:
-    matchLabels:
-      dashboards: 'grafana'
-  configMapRef:
-    name: kube-prometheus-stack-controller-manager
-    key: controller-manager.json
----
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
   name: etcd
   namespace: monitoring
 spec:
@@ -322,19 +309,6 @@ spec:
   configMapRef:
     name: kube-prometheus-stack-prometheus
     key: prometheus.json
----
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: scheduler
-  namespace: monitoring
-spec:
-  instanceSelector:
-    matchLabels:
-      dashboards: 'grafana'
-  configMapRef:
-    name: kube-prometheus-stack-scheduler
-    key: scheduler.json
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard

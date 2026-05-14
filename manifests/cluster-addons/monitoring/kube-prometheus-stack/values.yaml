@@ -62,14 +62,11 @@ kube-prometheus-stack:
   defaultRules:
     create: true
     rules:
-      alertmanager: false
-      etcd: false
       kubeControllerManager: false
-      kubeScheduler: false
       kubeProxy: false
-      windows: false
       kubeSchedulerAlerting: false
       kubeSchedulerRecording: false
+      windows: false
 
   alertmanager:
     enabled: true
@@ -120,5 +117,9 @@ kube-prometheus-stack:
     enabled: false
     forceDeployDashboards: true
 
+  kubeControllerManager:
+    enabled: false
   kubeProxy:
+    enabled: false
+  kubeScheduler:
     enabled: false
