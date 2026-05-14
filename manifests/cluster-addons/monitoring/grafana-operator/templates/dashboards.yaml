@@ -322,29 +322,3 @@ spec:
   configMapRef:
     name: kube-prometheus-stack-prometheus
     key: prometheus.json
----
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: proxy
-  namespace: monitoring
-spec:
-  instanceSelector:
-    matchLabels:
-      dashboards: 'grafana'
-  configMapRef:
-    name: kube-prometheus-stack-proxy
-    key: proxy.json
----
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: scheduler
-  namespace: monitoring
-spec:
-  instanceSelector:
-    matchLabels:
-      dashboards: 'grafana'
-  configMapRef:
-    name: kube-prometheus-stack-scheduler
-    key: scheduler.json
