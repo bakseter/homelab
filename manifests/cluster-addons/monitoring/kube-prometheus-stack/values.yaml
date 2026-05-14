@@ -122,8 +122,6 @@ kube-prometheus-stack:
 
   coreDns:
     enabled: false
-  kubeEtcd:
-    enabled: false
   kubeControllerManager:
     enabled: false
   kubeScheduler:
