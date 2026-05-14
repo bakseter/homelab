@@ -19,6 +19,15 @@ spec:
             - port: '9000'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '9300'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
@@ -104,6 +113,15 @@ spec:
             - port: '9000'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '9300'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
@@ -171,13 +189,6 @@ spec:
         - ports:
             - port: '5432'
               protocol: TCP
-            - port: '8000'
-              protocol: TCP
-
-    - fromEntities:
-        - remote-node
-      toPorts:
-        - ports:
             - port: '8000'
               protocol: TCP
 
