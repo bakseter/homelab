@@ -15,20 +15,24 @@ spec:
       targetPort: 2381
   type: ClusterIP
 ---
-apiVersion: v1
-kind: Endpoints
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
 metadata:
   name: kube-prometheus-stack-kube-etcd
   namespace: kube-system
   labels:
     app: kube-prometheus-stack-kube-etcd
     release: kube-prometheus-stack
-subsets:
+    kubernetes.io/service-name: kube-prometheus-stack-kube-etcd  # links to the Service
+addressType: IPv4
+endpoints:
   - addresses:
-      - ip: 192.168.30.100
-      - ip: 192.168.30.110
-      - ip: 192.168.30.120
-    ports:
-      - name: http-metrics
-        port: 2381
-        protocol: TCP
+      - 192.168.30.100
+  - addresses:
+      - 192.168.30.110
+  - addresses:
+      - 192.168.30.120
+ports:
+  - name: http-metrics
+    port: 2381
+    protocol: TCP
