@@ -52,3 +52,10 @@ volumeMounts:
   - name: tmp
     mountPath: /tmp
     readOnly: false
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack
