@@ -41,6 +41,9 @@ spec:
                 capabilities:
                   drop:
                     - ALL
+              env:
+                - name: GF_INSTALL_PLUGINS
+                  value: "grafana-lokiexplore-app,grafana-metricsdrilldown-app"
   config:
     log:
       mode: 'console'
