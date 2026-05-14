@@ -75,8 +75,8 @@ kube-prometheus-stack:
       image:
         registry: quay.io
         repository: prometheus/alertmanager
-        tag: v0.32.0
-        sha: 58e117eabccebbff04e6643a3432d6315a2cc3a8c24ab5849bc628886bf08857
+        tag: v0.32.1
+        sha: 51a825c2a40acc3e338fdd00d622e01ec090f72be2b3ea46be0839cd47a4d286
 
       externalUrl: https://alertmanager.tail79d70a.ts.net
       secrets:
