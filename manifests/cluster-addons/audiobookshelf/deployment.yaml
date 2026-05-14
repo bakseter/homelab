@@ -10,43 +10,43 @@ spec:
   template:
     spec:
       containers:
-      - name: audiobookshelf
-        image: ghcr.io/advplyr/audiobookshelf:latest
-        ports:
-        - containerPort: 80
-          name: http
-        env:
-        - name: TZ
-          value: UTC
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-          readOnlyRootFilesystem: true
-        readinessProbe:
-          failureThreshold: 3
-          periodSeconds: 10
-          successThreshold: 1
-          tcpSocket:
-            port: 80
-          timeoutSeconds: 1
-        startupProbe:
-          failureThreshold: 30
-          periodSeconds: 5
-          successThreshold: 1
-          tcpSocket:
-            port: 80
-          timeoutSeconds: 1
-        volumeMounts:
-        - mountPath: /config
-          name: config
-        - mountPath: /metadata
-          name: metadata
-        - mountPath: /podcasts
-          name: podcasts
-        - mountPath: /audiobooks
-          name: audiobooks
+        - name: audiobookshelf
+          image: ghcr.io/advplyr/audiobookshelf:latest
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: TZ
+              value: UTC
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          readinessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 1
+          startupProbe:
+            failureThreshold: 30
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 1
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /metadata
+              name: metadata
+            - mountPath: /podcasts
+              name: podcasts
+            - mountPath: /audiobooks
+              name: audiobooks
       securityContext:
         runAsNonRoot: true
         fsGroup: 65534
@@ -57,15 +57,15 @@ spec:
         supplementalGroups:
           - 65534
       volumes:
-      - name: config
-        persistentVolumeClaim:
-          claimName: audiobookshelf-config
-      - name: metadata
-        persistentVolumeClaim:
-          claimName: audiobookshelf-metadata
-      - name: podcasts
-        persistentVolumeClaim:
-          claimName: audiobookshelf-podcasts
-      - name: audiobooks
-        persistentVolumeClaim:
-          claimName: audiobookshelf-audiobooks
+        - name: config
+          persistentVolumeClaim:
+            claimName: audiobookshelf-config
+        - name: metadata
+          persistentVolumeClaim:
+            claimName: audiobookshelf-metadata
+        - name: podcasts
+          persistentVolumeClaim:
+            claimName: audiobookshelf-podcasts
+        - name: audiobooks
+          persistentVolumeClaim:
+            claimName: audiobookshelf-audiobooks

@@ -14,8 +14,8 @@ spec:
     targetRevision: HEAD
   syncPolicy:
     automated:
-       prune: true
-       selfHeal: true
+      prune: true
+      selfHeal: true
     managedNamespaceMetadata:
       labels:
         # Needs root for node-exporter
