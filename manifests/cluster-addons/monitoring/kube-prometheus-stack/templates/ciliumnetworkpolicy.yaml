@@ -59,10 +59,50 @@ spec:
         - host
         - remote-node
 
-    # Any pod in any other namespace
+    # Any pod in any other namespace, for scrape
     - toEndpoints:
         - matchExpressions:
             - key: 'k8s:io.kubernetes.pod.namespace'
               operator: NotIn
               values:
                 - monitoring
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: alertmanager
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: alertmanager
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tailscale
+            tailscale.com/parent-resource: kube-prometheus-alertmanager
+            tailscale.com/parent-resource-ns: monitoring
+        - matchLabels:
+            app: grafana
+      toPorts:
+        - ports:
+            - port: '9093'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    # TODO: harden
+    - toEntities:
+        - world
