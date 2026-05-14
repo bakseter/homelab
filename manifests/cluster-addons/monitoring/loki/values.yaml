@@ -10,7 +10,7 @@ loki:
         ruler: loki-ruler
 
       s3:
-        endpoint: minio.minio.svc.cluster.local:9000
+        endpoint: loki-monio-svc.monitoring.svc.cluster.local:9000
         access_key_id: minio
         secret_access_key: minio123
         insecure: true
