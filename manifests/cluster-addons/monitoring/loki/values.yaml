@@ -50,18 +50,7 @@ loki:
       enabled: true
 
   minio:
-    enabled: true
-
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-
-    securityContext:
-      runAsNonRoot: true
-      seccompProfile:
-        type: RuntimeDefault
+    enabled: false
 
   lokiCanary:
     enabled: true
@@ -126,3 +115,19 @@ loki:
     replicas: 0
   singleBinary:
     replicas: 0
+
+rustfs:
+  mode:
+    standalone:
+      enabled: true
+
+    distributed:
+      enabled: false
+
+  storageClass:
+    name: longhorn
+
+  ingress:
+    enabled: false
+
+  replicaCount: 2

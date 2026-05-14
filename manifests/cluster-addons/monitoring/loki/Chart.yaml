@@ -5,3 +5,6 @@ dependencies:
   - name: loki
     version: 13.2.0
     repository: oci://ghcr.io/grafana-community/helm-charts
+  - name: rustfs
+    version: 0.3.0
+    repository: https://charts.rustfs.com
