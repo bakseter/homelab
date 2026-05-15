@@ -118,8 +118,11 @@ authentik:
 
     metrics:
       enabled: true
+
+      # TODO: enable after upgrade to 2026.5.0
+      # https://github.com/goauthentik/authentik/issues/18292
       serviceMonitor:
-        enabled: true
+        enabled: false
         interval: 60s
         labels:
           release: kube-prometheus-stack
