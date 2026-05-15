@@ -27,6 +27,10 @@ spec:
         - ports:
             - port: '9300'
               protocol: TCP
+          rules:
+            http:
+              - path: /metrics
+                method: GET
 
   egress:
     - toEndpoints:
@@ -69,6 +73,10 @@ spec:
         - ports:
             - port: '9300'
               protocol: TCP
+          rules:
+            http:
+              - path: /metrics
+                method: GET
 
   egress:
     - toEndpoints:
