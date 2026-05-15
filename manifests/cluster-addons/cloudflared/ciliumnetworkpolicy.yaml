@@ -13,6 +13,9 @@ spec:
         - world
       toPorts:
         - ports:
+            - port: '443'
+              protocol: TCP
+        - ports:
             - port: '7844'
               protocol: UDP
 
@@ -32,9 +35,7 @@ spec:
       toPorts:
         - ports:
             - port: '53'
-              protocol: TCP
-            - port: '53'
-              protocol: UDP
+              protocol: ANY
           rules:
             dns:
               - matchPattern: '*'
