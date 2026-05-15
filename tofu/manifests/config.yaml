@@ -8,14 +8,14 @@ nodes:
         type: controlplane
         mainControlplane: true
         cores: 4
-        memory: 4
+        memory: 8
         disk: 100
         ip: 192.168.30.110
 
       - hostname: m715q-worker-1
         type: worker
         cores: 4
-        memory: 20
+        memory: 16
         disk: 100
         ip: 192.168.30.111
         longhorn:
@@ -55,14 +55,14 @@ nodes:
       - hostname: m720q-controlplane-1
         type: controlplane
         cores: 6
-        memory: 4
+        memory: 8
         disk: 100
         ip: 192.168.30.100
 
       - hostname: m720q-worker-1
         type: worker
         cores: 6
-        memory: 20
+        memory: 16
         disk: 100
         ip: 192.168.30.101
         longhorn:
