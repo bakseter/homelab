@@ -20,6 +20,10 @@ machine:
       rotate-server-certificates: true
   nodeLabels:
     bakseter.net/physical-node: ${physical_node_name}
+  features:
+    hostDNS:
+      enabled: true
+      forwardKubeDNSToHost: false
   network:
     interfaces:
       - deviceSelector:
