@@ -208,7 +208,7 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
 }
 
 resource "proxmox_virtual_environment_cluster_firewall" "datacenter" {
-  enabled       = true
+  enabled       = false
   input_policy  = "DROP"
   output_policy = "ACCEPT"
 
@@ -228,7 +228,7 @@ resource "proxmox_node_firewall" "node" {
   ]
 
   node_name     = each.key
-  enabled       = true
+  enabled       = false
   log_level_in  = "warning"
   log_level_out = "warning"
 }
@@ -250,7 +250,7 @@ resource "proxmox_virtual_environment_firewall_ipset" "cluster_nodes" {
   cidr { name = "192.168.10.20" }
   cidr { name = "192.168.10.21" }
   cidr { name = "192.168.10.22" }
-  cidr { name = "192.168.10.33" }
+  cidr { name = "192.168.10.23" }
 
   # TODO: use config.yaml for this
   # Controlplane VMs
