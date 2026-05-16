@@ -146,7 +146,7 @@ rustfs:
   storageclass:
     name: longhorn
     dataStorageSize: 20Gi
-    logStorageSize: 1Gi
+    logStorageSize: 2Gi
 
   ingress:
     enabled: true
