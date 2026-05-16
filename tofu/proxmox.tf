@@ -208,7 +208,7 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
 }
 
 resource "proxmox_virtual_environment_cluster_firewall" "datacenter" {
-  enabled       = false
+  enabled       = true
   input_policy  = "DROP"
   output_policy = "ACCEPT"
 
@@ -228,7 +228,7 @@ resource "proxmox_node_firewall" "node" {
   ]
 
   node_name     = each.key
-  enabled       = false
+  enabled       = true
   log_level_in  = "warning"
   log_level_out = "warning"
 }
