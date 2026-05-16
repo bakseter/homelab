@@ -113,7 +113,7 @@ resource "proxmox_virtual_environment_vm" "talos-controlplane" {
     ip_config {
       ipv4 {
         address = "${each.value.ip}/24"
-        gateway = "192.168.1.1"
+        gateway = "192.168.30.1"
       }
     }
   }
@@ -201,7 +201,7 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
     ip_config {
       ipv4 {
         address = "${each.value.ip}/24"
-        gateway = "192.168.1.1"
+        gateway = "192.168.30.1"
       }
     }
   }
