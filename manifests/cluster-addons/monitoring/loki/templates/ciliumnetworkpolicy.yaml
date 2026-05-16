@@ -35,9 +35,10 @@ spec:
         - matchLabels:
             app.kubernetes.io/instance: loki
             app.kubernetes.io/name: create-s3-buckets
-    - ports:
-        - port: '9000'
-          protocol: TCP
+      toPorts:
+        - ports:
+            - port: '9000'
+              protocol: TCP
 
     - fromEndpoints:
         - matchLabels:
