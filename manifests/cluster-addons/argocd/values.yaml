@@ -11,6 +11,7 @@ argo-cd:
 
     params:
       server.insecure: true
+      controller.diff.server.side: 'true'
 
     cm:
       url: https://argocd.tail79d70a.ts.net
