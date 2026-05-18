@@ -9,7 +9,7 @@ spec:
     name: admin@homelab
   project: default
   source:
-    path: manifests/cluster-addons/media/seer
+    path: manifests/cluster-addons/media/seerr
     repoURL: https://github.com/bakseter/homelab.git
     targetRevision: HEAD
   syncPolicy:
