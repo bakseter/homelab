@@ -5,7 +5,8 @@ metadata:
   namespace: media
 spec:
   endpointSelector:
-    app.kubernetes.io/name: sabnzbd
+    matchLabels:
+      app.kubernetes.io/name: sabnzbd
 
   ingress:
     - toPorts:
