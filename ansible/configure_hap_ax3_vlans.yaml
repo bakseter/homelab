@@ -284,7 +284,7 @@
     - name: Add VLAN 80 to bridge
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=80 tagged=bridge,ether2'
+        cmd: 'add bridge=bridge vlan-ids=80 tagged=bridge,ether2 untagged=wifi1-media'
       ignore_errors: true
 
     # -------------------------

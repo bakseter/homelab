@@ -23,18 +23,11 @@
         cmd: 'print'
       register: fw_cleanup
 
-    - name: Remove vpn-debug and ks-debug log rules
-      community.routeros.api:
-        path: ip firewall filter
-        remove: "{{ item['.id'] }}"
-      loop: "{{ fw_cleanup.msg | selectattr('log-prefix', 'defined') | selectattr('log-prefix', 'in', ['vpn-debug', 'ks-debug']) | list }}"
-      ignore_errors: true
-
     - name: Clean duplicate firewall rules
       community.routeros.api:
         path: ip firewall filter
         remove: "{{ item['.id'] }}"
-      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|desktop-to-proxmox|desktop-to-talos|desktop-to-infra|infra-to-proxmox|infra-to-talos|proxmox-to-talos|nordvpn-killswitch|allow-to-internet|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-wifi-router-mgmt|drop-all-inter-vlan') | list }}"
+      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|proxmox-to-talos|infra-to-proxmox|infra-to-talos|infra-to-storage|talos-to-storage|all-to-media|drop-wifi-to-interal|drop-media-to-internal|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-all-inter-vlan|drop-wifi-router-mgmt') | list }}"
       ignore_errors: true
 
     # -------------------------
@@ -346,6 +339,11 @@
         path: ip firewall filter
         cmd: 'add chain=forward src-address=192.168.50.0/24 dst-address=192.168.0.0/16 action=drop comment=drop-wifi-to-internal'
 
+    - name: Drop media to internal VLANs
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: 'add chain=forward src-address=192.168.80.0/24 dst-address=192.168.0.0/16 action=drop comment=drop-wifi-to-internal'
+
     - name: Drop Talos to management
       community.routeros.api:
         path: ip firewall filter
@@ -424,7 +422,6 @@
           vlan-ids: '80'
         values:
           untagged: wifi1-media
-
 
   post_tasks:
     - name: Verify firewall rules
