@@ -6,6 +6,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  capacity:
-    storage: 1Ti
+  resources:
+    requests:
+      storage: 1Ti
   storageClassName: truenas-nfs
