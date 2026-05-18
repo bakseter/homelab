@@ -399,7 +399,7 @@
     - name: Add wifi1 virtual AP for media SSID
       community.routeros.api:
         path: interface wifi
-        cmd: 'add name=wifi1-media master-interface=wifi1 configuration.ssid={{ media_ssid }} security.authentication-types="wpa2-psk,wpa3-psk" security.passphrase={{ media_password }} disabled=no'
+        cmd: 'add name=wifi1-media master-interface=wifi1 configuration.ssid="{{ media_ssid }}" security.authentication-types="wpa2-psk,wpa3-psk" security.passphrase="{{ media_password }}" disabled=no'
       ignore_errors: true
 
     - name: Set media wifi bridge port to VLAN 80
