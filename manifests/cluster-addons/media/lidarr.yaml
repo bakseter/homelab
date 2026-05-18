@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lidarr
+  namespace: argocd
+spec:
+  destination:
+    namespace: media
+    name: admin@homelab
+  project: default
+  source:
+    path: manifests/cluster-addons/media/lidarr
+    repoURL: https://github.com/bakseter/homelab.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

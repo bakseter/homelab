@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lidarr
+  namespace: media
+  annotations:
+    tailscale.com/tags: 'tag:k8s,tag:media'
+spec:
+  ingressClassName: tailscale
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: lidarr
+                port:
+                  number: 8686
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - lidarr

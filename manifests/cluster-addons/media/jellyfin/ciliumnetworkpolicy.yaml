@@ -1,0 +1,55 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: jellyfin
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tailscale
+            tailscale.com/parent-resource: jellyfin
+            tailscale.com/parent-resource-ns: jellyfin
+        - matchLabels:
+            app.kubernetes.io/name: seerr
+        - matchLabels:
+            app.kubernetes.io/name: radarr
+        - matchLabels:
+            app.kubernetes.io/name: sonarr
+        - matchLabels:
+            app.kubernetes.io/name: lidarr
+      toPorts:
+        - ports:
+            - port: '8096'
+              protocol: TCP
+
+  egress:
+    - toFQDNs:
+        - matchPattern: '*.jellyfin.org'
+        #
+        - matchPattern: '*.theaudiodb.com'
+        - matchName: 'musicbrainz.org'
+        #
+        - matchName: 'api.themoviedb.org'
+        - matchName: 'www.omdbapi.com'
+        - matchName: 'image.tmdb.org'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
