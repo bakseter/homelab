@@ -342,7 +342,7 @@
     - name: Drop media to internal VLANs
       community.routeros.api:
         path: ip firewall filter
-        cmd: 'add chain=forward src-address=192.168.80.0/24 dst-address=192.168.0.0/16 action=drop comment=drop-wifi-to-internal'
+        cmd: 'add chain=forward src-address=192.168.80.0/24 dst-address=192.168.0.0/16 action=drop comment=drop-media-to-internal'
 
     - name: Drop Talos to management
       community.routeros.api:
