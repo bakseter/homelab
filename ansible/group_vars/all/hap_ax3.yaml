@@ -42,13 +42,20 @@ vlans:
     dhcp_pool_end: 192.168.60.200
     vpn: true
   - id: 70
-    name: media
+    name: storage
     subnet: 192.168.70.0/24
     gateway: 192.168.70.1
     dhcp: true
     dhcp_pool_start: 192.168.70.100
     dhcp_pool_end: 192.168.70.200
     vpn: false
+  - id: 80
+    name: media
+    gateway: 192.168.80.1
+    subnet: 192.168.80.0/24
+    dhcp: true
+    dhcp_pool_start: 192.168.80.100
+    dhcp_pool_end: 192.168.80.200
 
 hap_ax3_host: 192.168.40.1
 hap_ax3_username: admin

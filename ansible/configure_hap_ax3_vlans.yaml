@@ -34,15 +34,6 @@
           pvid: '1'
           frame-types: admit-all
 
-    - name: Set ether3 as access port VLAN 60 infra
-      community.routeros.api_find_and_modify:
-        path: interface bridge port
-        find:
-          interface: ether3
-        values:
-          pvid: '60'
-          frame-types: admit-only-untagged-and-priority-tagged
-
     - name: Set ether4 as access port VLAN 40 desktop
       community.routeros.api_find_and_modify:
         path: interface bridge port
@@ -220,7 +211,7 @@
       community.routeros.api:
         path: ip dhcp-server network
         remove: "{{ item['.id'] }}"
-      loop: "{{ dhcp_network_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'management|cluster|talos|desktop|wifi|infra|media') | list }}"
+      loop: "{{ dhcp_network_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'management|cluster|talos|desktop|wifi|infra|storage|media') | list }}"
       ignore_errors: true
 
     # -------------------------
@@ -281,13 +272,19 @@
     - name: Add VLAN 60 to bridge
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=60 tagged=bridge,ether2 untagged=ether3'
+        cmd: 'add bridge=bridge vlan-ids=60 tagged=bridge,ether2'
       ignore_errors: true
 
     - name: Add VLAN 70 to bridge
       community.routeros.api:
         path: interface bridge vlan
         cmd: 'add bridge=bridge vlan-ids=70 tagged=bridge,ether2'
+      ignore_errors: true
+
+    - name: Add VLAN 80 to bridge
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: 'add bridge=bridge vlan-ids=80 tagged=bridge,ether2'
       ignore_errors: true
 
     # -------------------------
@@ -374,14 +371,14 @@
     - name: Add media virtual AP to bridge
       community.routeros.api:
         path: interface bridge port
-        cmd: 'add interface=wifi1-media bridge=bridge pvid=70 frame-types=admit-only-untagged-and-priority-tagged'
+        cmd: 'add interface=wifi1-media bridge=bridge pvid=80 frame-types=admit-only-untagged-and-priority-tagged'
       ignore_errors: true
 
-    - name: Add VLAN 70 untagged on media AP to bridge VLAN
+    - name: Add VLAN 80 untagged on media AP to bridge VLAN
       community.routeros.api_find_and_modify:
         path: interface bridge vlan
         find:
-          vlan-ids: '70'
+          vlan-ids: '80'
         values:
           untagged: wifi1-media
 

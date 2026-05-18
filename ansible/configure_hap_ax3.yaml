@@ -311,6 +311,11 @@
         path: ip firewall filter
         cmd: 'add chain=forward connection-state=established,related action=accept comment=allow-established'
 
+    - name: Allow Proxmox to Talos
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: 'add chain=forward src-address=192.168.10.0/24 dst-address=192.168.30.0/24 action=accept comment=proxmox-to-talos'
+
     - name: Allow infra to Proxmox
       community.routeros.api:
         path: ip firewall filter
@@ -321,10 +326,20 @@
         path: ip firewall filter
         cmd: 'add chain=forward src-address=192.168.60.0/24 dst-address=192.168.30.0/24 action=accept comment=infra-to-talos'
 
-    - name: Allow Proxmox to Talos
+    - name: Allow infra to storage
       community.routeros.api:
         path: ip firewall filter
-        cmd: 'add chain=forward src-address=192.168.10.0/24 dst-address=192.168.30.0/24 action=accept comment=proxmox-to-talos'
+        cmd: 'add chain=forward src-address=192.168.60.0/24 dst-address=192.168.70.0/24 action=accept comment=infra-to-storage'
+
+    - name: Allow Talos to storage
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: 'add chain=forward src-address=192.168.30.0/24 dst-address=192.168.70.0/24 action=accept comment=talos-to-storage'
+
+    - name: Allow all to media
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: 'add chain=forward src-address=192.168.0.0/16 dst-address=192.168.80.0/24 action=accept comment=all-to-media'
 
     - name: Drop WiFi to internal VLANs
       community.routeros.api:
@@ -336,7 +351,7 @@
         path: ip firewall filter
         cmd: 'add chain=forward src-address=192.168.30.0/24 dst-address=192.168.10.0/24 action=drop comment=drop-talos-to-mgmt'
 
-    - name: Drop cluster VLAN outbound
+    - name: Drop (Proxmox)-cluster VLAN outbound
       community.routeros.api:
         path: ip firewall filter
         cmd: 'add chain=forward src-address=192.168.20.0/24 action=drop comment=drop-cluster-outbound'
@@ -387,13 +402,13 @@
         cmd: 'add name=wifi1-media master-interface=wifi1 configuration.ssid={{ media_ssid }} security.authentication-types=wpa2-psk,wpa3-psk security.passphrase={{ media_wifi_password }} disabled=no'
       ignore_errors: true
 
-    - name: Set media wifi bridge port to VLAN 70
+    - name: Set media wifi bridge port to VLAN 80
       community.routeros.api_find_and_modify:
         path: interface bridge port
         find:
           interface: wifi1-media
         values:
-          pvid: '70'
+          pvid: '80'
           frame-types: admit-only-untagged-and-priority-tagged
 
   post_tasks:
