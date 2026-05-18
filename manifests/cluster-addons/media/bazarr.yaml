@@ -5,20 +5,16 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    namespace: bazarr
+    namespace: media
     name: admin@homelab
   project: default
   source:
-    path: manifests/cluster-addons/bazarr
+    path: manifests/cluster-addons/media/bazarr
     repoURL: https://github.com/bakseter/homelab.git
     targetRevision: HEAD
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    managedNamespaceMetadata:
-      labels:
-        pod-security.kubernetes.io/enforce: restricted
     syncOptions:
-      - CreateNamespace=true
       - ServerSideApply=true

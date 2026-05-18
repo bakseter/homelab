@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bazarr
-  namespace: bazarr
+  namespace: media
 spec:
   replicas: 1
   template:
@@ -60,6 +60,6 @@ spec:
             claimName: bazarr-config
         - name: media
           persistentVolumeClaim:
-            claimName: bazarr-media
+            claimName: shared-media
         - name: tmp
           emptyDir: {}

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: bazarr
-  namespace: bazarr
+  namespace: media
 spec:
   type: ClusterIP
   ports:
