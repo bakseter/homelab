@@ -9,7 +9,7 @@ spec:
     name: admin@homelab
   project: default
   source:
-    path: manifests/cluster-addons/media/media/sonarr
+    path: manifests/cluster-addons/media/sonarr
     repoURL: https://github.com/bakseter/homelab.git
     targetRevision: HEAD
   syncPolicy:
