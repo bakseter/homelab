@@ -64,6 +64,7 @@ spec:
         - matchName: 'api.lidarr.audio'
         - matchName: 'api.nzbgeek.info'
         - matchName: 'ninjacentral.co.za'
+        - matchName: 'lidarr.servarr.com'
       toPorts:
         - ports:
             - port: '443'

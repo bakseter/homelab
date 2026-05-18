@@ -57,6 +57,7 @@ spec:
               protocol: TCP
 
     - toFQDNs:
+        - matchName: 'prowlarr.servarr.com'
         - matchName: 'api.nzbgeek.info'
         - matchName: 'indexers.prowlarr.com'
         - matchName: 'ninjacentral.co.za'
