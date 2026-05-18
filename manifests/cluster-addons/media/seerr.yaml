@@ -9,7 +9,7 @@ spec:
     name: admin@homelab
   project: default
   source:
-    path: manifests/cluster-addons/media
+    path: manifests/cluster-addons/media/seer
     repoURL: https://github.com/bakseter/homelab.git
     targetRevision: HEAD
   syncPolicy:
@@ -17,4 +17,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+      - ServerSideApply=true
