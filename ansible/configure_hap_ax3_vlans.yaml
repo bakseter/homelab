@@ -360,29 +360,6 @@
       ignore_errors: true
 
     # -------------------------
-    # Media WiFi - virtual AP on wifi1 for VLAN 70
-    # -------------------------
-    - name: Create media virtual AP on wifi1
-      community.routeros.api:
-        path: interface wifi
-        cmd: 'add name=wifi1-media master-interface=wifi1 configuration.ssid={{ media_ssid }} security.authentication-types=wpa2-psk,wpa3-psk security.passphrase={{ media_wifi_password }} disabled=no'
-      ignore_errors: true
-
-    - name: Add media virtual AP to bridge
-      community.routeros.api:
-        path: interface bridge port
-        cmd: 'add interface=wifi1-media bridge=bridge pvid=80 frame-types=admit-only-untagged-and-priority-tagged'
-      ignore_errors: true
-
-    - name: Add VLAN 80 untagged on media AP to bridge VLAN
-      community.routeros.api_find_and_modify:
-        path: interface bridge vlan
-        find:
-          vlan-ids: '80'
-        values:
-          untagged: wifi1-media
-
-    # -------------------------
     # Enable VLAN filtering LAST
     # -------------------------
     - name: Enable bridge VLAN filtering
