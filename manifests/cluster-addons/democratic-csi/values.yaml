@@ -14,6 +14,7 @@ democratic-csi:
       mountOptions:
         - noatime
         - nfsvers=3
+        - nolock
       secrets:
         provisioner-secret:
         controller-publish-secret:
