@@ -10,6 +10,5 @@ resources:
   - deployment.yaml
   - service.yaml
   - ingress.yaml
-  - persistentvolume.yaml
   - persistentvolumeclaim.yaml
   - ciliumnetworkpolicy.yaml
