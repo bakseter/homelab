@@ -21,13 +21,6 @@ democratic-csi:
         node-publish-secret:
         controller-expand-secret:
 
-  volumeSnapshotClasses:
-    - name: truenas-nfs-snapshots
-      parameters:
-        detachedSnapshots: 'true'
-      secrets:
-        snapshotter-secret:
-
   driver:
     existingConfigSecret: freenas-api-nfs-secret
     config:
