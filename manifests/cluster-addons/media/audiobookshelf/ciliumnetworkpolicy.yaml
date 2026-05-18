@@ -13,7 +13,7 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: tailscale
             tailscale.com/parent-resource: audiobookshelf
-            tailscale.com/parent-resource-ns: audiobookshelf
+            tailscale.com/parent-resource-ns: media
       toPorts:
         - ports:
             - port: '80'

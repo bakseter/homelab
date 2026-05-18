@@ -13,7 +13,7 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: tailscale
             tailscale.com/parent-resource: bazarr
-            tailscale.com/parent-resource-ns: bazarr
+            tailscale.com/parent-resource-ns: media
       toPorts:
         - ports:
             - port: '6767'
