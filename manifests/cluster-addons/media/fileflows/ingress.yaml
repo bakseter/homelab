@@ -1,23 +1,23 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: tdarr
+  name: fileflows
   namespace: media
   annotations:
     tailscale.com/tags: tag:k8s,tag:media
 spec:
   ingressClassName: tailscale
   rules:
-    - host: tdarr
+    - host: fileflows
       http:
         paths:
           - path: /
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
-                name: tdarr
+                name: fileflows
                 port:
-                  number: 8265
+                  number: 5000
   tls:
     - hosts:
-        - tdarr
+        - fileflows

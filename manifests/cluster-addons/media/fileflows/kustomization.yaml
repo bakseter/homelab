@@ -4,7 +4,7 @@ kind: Kustomization
 labels:
   - includeSelectors: true
     pairs:
-      app.kubernetes.io/name: tdarr
+      app.kubernetes.io/name: fileflows
 
 resources:
   - deployment.yaml

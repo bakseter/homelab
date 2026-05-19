@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fileflows
+  namespace: media
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      nodeSelector:
+        intel.feature.node.kubernetes.io/gpu: 'true'
+      securityContext:
+        fsGroup: 65534
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: fileflows
+          image: revenz/fileflows:stable
+          env:
+            - name: TZ
+              value: Europe/Oslo
+            - name: PUID
+              value: '65534'
+            - name: PGID
+              value: '65534'
+            - name: TempPath
+              value: /temp
+            - name: DataDir
+              value: /app/data
+            - name: LogsDir
+              value: /app/logs
+          ports:
+            - name: http
+              containerPort: 5000
+          resources:
+            limits:
+              gpu.intel.com/i915: '1'
+            requests:
+              cpu: 2
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+            - name: logs
+              mountPath: /app/logs
+            - name: media
+              mountPath: /media
+            - name: temp
+              mountPath: /tmp
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: fileflows-data
+        - name: logs
+          persistentVolumeClaim:
+            claimName: fileflows-logs
+        - name: media
+          persistentVolumeClaim:
+            claimName: shared-media
+        - name: tmp
+          emptyDir: {}
