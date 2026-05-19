@@ -13,8 +13,14 @@ democratic-csi:
         detachedVolumesFromSnapshots: 'false'
       mountOptions:
         - noatime
-        - nfsvers=3
-        - nolock
+        - nodiratime
+        - nfsvers=4.1 # upgrade from v3
+        - rsize=131072 # 128k read buffer
+        - wsize=131072 # 128k write buffer
+        - hard
+        - timeo=600
+        - retrans=2
+        - nconnect=4
       secrets:
         provisioner-secret:
         controller-publish-secret:
