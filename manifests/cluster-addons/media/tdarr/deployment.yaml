@@ -5,15 +5,9 @@ metadata:
   namespace: media
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: tdarr
   strategy:
     type: Recreate
   template:
-    metadata:
-      labels:
-        app: tdarr
     spec:
       nodeSelector:
         intel.feature.node.kubernetes.io/gpu: 'true'
@@ -62,14 +56,16 @@ spec:
               cpu: 2
               memory: 2Gi
           volumeMounts:
-            - name: data
+            - name: config
               mountPath: /app/configs
+            - name: data
+              mountPath: /app/server
+            - name: logs
+              mountPath: /app/logs
             - name: media
               mountPath: /media
-            - name: transcode
-              mountPath: /transcode
             - name: tmp
-              mountPath: /tmp
+              mountPath: /temp
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -77,13 +73,17 @@ spec:
                 - ALL
             readOnlyRootFilesystem: true
       volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: tdarr-config
         - name: data
           persistentVolumeClaim:
             claimName: tdarr-data
+        - name: logs
+          persistentVolumeClaim:
+            claimName: tdarr-logs
         - name: media
           persistentVolumeClaim:
             claimName: shared-media
-        - name: transcode
-          emptyDir: {}
         - name: tmp
           emptyDir: {}
