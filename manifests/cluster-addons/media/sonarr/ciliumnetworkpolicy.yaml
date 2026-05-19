@@ -65,12 +65,13 @@ spec:
               protocol: TCP
 
     - toFQDNs:
+        - matchName: 'sentry.sonarr.tv'
         - matchName: 'services.sonarr.tv'
         - matchName: 'skyhook.sonarr.tv'
         - matchName: 'thexem.info'
         - matchName: 'api.nzbgeek.info'
         - matchName: 'api.nzb.life'
-        - matchPattern: '*.tvdb.com'
+        - matchName: 'artworks.thetvdb.com'
       toPorts:
         - ports:
             - port: '443'
