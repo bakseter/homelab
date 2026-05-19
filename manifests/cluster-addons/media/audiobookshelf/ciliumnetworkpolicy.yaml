@@ -39,6 +39,8 @@ spec:
         - matchName: 'verifi.podscribe.com'
         - matchName: 'tracking.swap.fm'
         - matchPattern: '*.megaphone.fm'
+        - matchName: 'itunes.apple.com'
+        - matchName: 'megaphone.imgix.net'
       toPorts:
         - ports:
             - port: '443'
