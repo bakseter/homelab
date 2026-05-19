@@ -29,7 +29,7 @@ spec:
             - name: PGID
               value: '65534'
             - name: TempPath
-              value: /temp
+              value: /tmp
             - name: DataDir
               value: /app/data
             - name: LogsDir
@@ -56,7 +56,7 @@ spec:
               mountPath: /app/logs
             - name: media
               mountPath: /media
-            - name: temp
+            - name: tmp
               mountPath: /tmp
       volumes:
         - name: data
