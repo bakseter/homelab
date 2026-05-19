@@ -70,21 +70,15 @@ alloy:
           namespaces {
             names = [
               "amex",
-              "audiobookshelf",
               "authentik",
               "bakseter-net",
-              "bazarr",
               "cloudflared",
               "five31",
               "immich",
               "jellyfin",
-              "lidarr",
               "longhorn-system",
               "mandagsmiddag",
-              "prowlarr",
-              "radarr",
-              "sabnzbd",
-              "sonarr",
+              "media",
               "tailscale",
               "traefik",
             ]
