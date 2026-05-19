@@ -68,6 +68,9 @@ spec:
             capabilities:
               drop:
                 - ALL
+              add:
+                - SETUID
+                - SETGUID
             readOnlyRootFilesystem: false
       volumes:
         - name: config
