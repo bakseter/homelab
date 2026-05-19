@@ -66,6 +66,7 @@ spec:
 
     - toFQDNs:
         - matchName: 'services.sonarr.tv'
+        - matchName: 'skyhook.sonarr.tv'
         - matchName: 'thexem.info'
         - matchName: 'api.nzbgeek.info'
         - matchName: 'api.nzb.life'
