@@ -25,8 +25,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
         supplementalGroups:
-          - 44
-          - 105
+          - 65534
       containers:
         - name: tdarr
           image: ghcr.io/haveagitgat/tdarr:latest
@@ -69,8 +68,8 @@ spec:
               mountPath: /media
             - name: transcode
               mountPath: /transcode
-            - name: dri
-              mountPath: /dev/dri
+            - name: tmp
+              mountPath: /tmp
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -86,7 +85,5 @@ spec:
             claimName: shared-media
         - name: transcode
           emptyDir: {}
-        - name: dri
-          hostPath:
-            path: /dev/dri
-            type: Directory
+        - name: tmp
+          emptyDir: {}
