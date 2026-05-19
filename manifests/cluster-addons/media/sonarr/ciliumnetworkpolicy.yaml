@@ -69,6 +69,7 @@ spec:
         - matchName: 'thexem.info'
         - matchName: 'api.nzbgeek.info'
         - matchName: 'api.nzb.life'
+        - matchPattern: '*.tvdb.com'
       toPorts:
         - ports:
             - port: '443'
