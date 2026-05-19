@@ -65,11 +65,11 @@ spec:
               protocol: TCP
 
     - toFQDNs:
-        - matchName: 'api.radarr.video'
         - matchName: 'sentry.servarr.com'
+        - matchName: 'api.radarr.video'
         - matchName: 'image.tmdb.org'
         - matchName: 'api.nzbgeek.info'
-        - matchName: 'ninjacentral.co.za'
+        - matchName: 'api.nzb.life'
       toPorts:
         - ports:
             - port: '443'

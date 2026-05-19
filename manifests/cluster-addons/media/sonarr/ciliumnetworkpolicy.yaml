@@ -68,7 +68,7 @@ spec:
         - matchName: 'services.sonarr.tv'
         - matchName: 'thexem.info'
         - matchName: 'api.nzbgeek.info'
-        - matchName: 'ninjacentral.co.za'
+        - matchName: 'api.nzb.life'
       toPorts:
         - ports:
             - port: '443'
