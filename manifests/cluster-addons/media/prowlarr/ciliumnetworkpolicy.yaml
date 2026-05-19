@@ -58,9 +58,9 @@ spec:
 
     - toFQDNs:
         - matchName: 'prowlarr.servarr.com'
-        - matchName: 'api.nzbgeek.info'
         - matchName: 'indexers.prowlarr.com'
-        - matchName: 'ninjacentral.co.za'
+        - matchName: 'api.nzbgeek.info'
+        - matchName: 'api.nzb.life'
       toPorts:
         - ports:
             - port: '443'
