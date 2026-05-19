@@ -4,7 +4,7 @@ metadata:
   name: lidarr
   namespace: media
 spec:
-  replicas: 0
+  replicas: 1
   strategy:
     type: Recreate
   template:
