@@ -13,9 +13,6 @@ spec:
         intel.feature.node.kubernetes.io/gpu: 'true'
       securityContext:
         fsGroup: 1000
-        runAsUser: 1000
-        runAsGroup: 1000
-        runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
         supplementalGroups:
