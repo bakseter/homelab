@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tdarr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tdarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tdarr
+    spec:
+      nodeSelector:
+        intel.feature.node.kubernetes.io/gpu: 'true'
+      securityContext:
+        fsGroup: 1000
+        supplementalGroups:
+          - 44
+          - 105
+      containers:
+        - name: tdarr
+          image: ghcr.io/haveagitgat/tdarr:latest
+          env:
+            - name: TZ
+              value: Europe/Oslo
+            - name: PUID
+              value: '1000'
+            - name: PGID
+              value: '1000'
+            - name: serverIP
+              value: '0.0.0.0'
+            - name: serverPort
+              value: '8266'
+            - name: webUIPort
+              value: '8265'
+            - name: internalNode
+              value: 'true'
+            - name: inContainer
+              value: 'true'
+            - name: ffmpegVersion
+              value: '7'
+            - name: nodeName
+              value: 'InternalNode'
+          ports:
+            - name: webui
+              containerPort: 8265
+            - name: server
+              containerPort: 8266
+          resources:
+            limits:
+              gpu.intel.com/i915: '1'
+            requests:
+              cpu: 2
+              memory: 2Gi
+          volumeMounts:
+            - name: data
+              mountPath: /app/configs
+            - name: media
+              mountPath: /media
+            - name: transcode
+              mountPath: /transcode
+            - name: dri
+              mountPath: /dev/dri
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: tdarr-data
+        - name: media
+          persistentVolumeClaim:
+            claimName: shared-media
+        - name: transcode
+          emptyDir: {}
+        - name: dri
+          hostPath:
+            path: /dev/dri
+            type: Directory
