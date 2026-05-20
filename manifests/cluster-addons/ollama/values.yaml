@@ -28,7 +28,7 @@ ollama:
       value: '1'
 
   persistentVolume:
-    enabled: true
+    enabled: false
     size: 30Gi
 
   resources:
