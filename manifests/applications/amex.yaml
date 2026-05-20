@@ -53,6 +53,9 @@ spec:
     - group: 'networking.k8s.io'
       kind: Ingress
 
+    - group: 'gateway.networking.k8s.io'
+      kind: HTTPRoute
+
     - group: 'postgresql.cnpg.io'
       kind: Cluster
 
