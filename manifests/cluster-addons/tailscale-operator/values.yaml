@@ -45,7 +45,7 @@ pihole:
     loadBalancerClass: tailscale
     annotations:
       tailscale.com/hostname: pihole-dns
-      tailscale.com/tags: 'tag:dns'
+      tailscale.com/tags: 'tag:k8s,tag:dns'
 
   extraEnvVars:
     FTLCONF_dns_listeningMode: all
