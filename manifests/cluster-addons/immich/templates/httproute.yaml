@@ -1,8 +1,8 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: amex
-  namespace: amex
+  name: immich
+  namespace: immich
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
@@ -11,7 +11,7 @@ spec:
       namespace: tailscale
 
   hostnames:
-    - amex.bakseter.net
+    - immich.bakseter.net
 
   rules:
     - matches:
@@ -21,15 +21,5 @@ spec:
       backendRefs:
         - group: ''
           kind: Service
-          name: amex-frontend
-          port: 3000
-
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /api
-      backendRefs:
-        - group: ''
-          kind: Service
-          name: amex-backend
-          port: 8000
+          name: immich-server
+          port: 2283
