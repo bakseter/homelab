@@ -13,7 +13,7 @@ external-dns:
   provider: pihole
 
   extraArgs:
-    - --pihole-server=http://pihole-web.tailscale
+    - --pihole-server=http://tailscale-operator-pihole-web.tailscale
     - --pihole-api-version=6
     - --gateway-label-filter=external-dns==enabled
 
