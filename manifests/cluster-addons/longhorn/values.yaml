@@ -14,6 +14,9 @@ longhorn:
     backupTargetCredentialSecret: longhorn-backup-secret
     pollInterval: 600
 
+  csi:
+    snapshotterReplicaCount: 0
+
   persistence:
     defaultClassReplicaCount: 2
 
