@@ -1,8 +1,0 @@
-apiVersion: v1
-data:
-  password: bmVlMmxheGkyeWlleWFoM21vcXVhZURpZWNoYWhwaG8=
-kind: Secret
-metadata:
-  name: pihole-admin
-  namespace: pihole
-type: Opaque
