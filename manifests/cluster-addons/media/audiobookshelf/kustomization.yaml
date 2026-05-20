@@ -12,3 +12,4 @@ resources:
   - ingress.yaml
   - persistentvolumeclaim.yaml
   - ciliumnetworkpolicy.yaml
+  - httproute.yaml

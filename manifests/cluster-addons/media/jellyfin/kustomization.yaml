@@ -11,6 +11,7 @@ helmCharts:
 resources:
   - ciliumnetworkpolicy.yaml
   - persistentvolumeclaim.yaml
+  - httproute.yaml
 
 patches:
   - target:
