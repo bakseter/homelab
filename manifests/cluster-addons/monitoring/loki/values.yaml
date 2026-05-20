@@ -138,6 +138,10 @@ rustfs:
 
   replicaCount: 2
 
+  config:
+    rustfs:
+      log_level: warn
+
   secret:
     rustfs:
       access_key: rustfsloki
