@@ -5,7 +5,7 @@ provider "tailscale" {
 }
 
 resource "tailscale_dns_split_nameservers" "domains" {
-  for_each = tomap([
+  for_each = toset([
     "bakseter.net",
     "int.bakseter.net",
     "sre.bakseter.net",
