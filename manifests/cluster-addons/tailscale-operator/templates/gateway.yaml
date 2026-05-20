@@ -22,4 +22,4 @@ spec:
         certificateRefs:
         - group: ''
           kind: Secret
-          name: app-example-com-tls
+          name: bakseter-net-tls
