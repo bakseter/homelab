@@ -33,8 +33,6 @@ external-dns:
           key: password
 
 pihole:
-  replicaCount: 3
-
   admin:
     existingSecret: pihole-admin
     passwordKey: password
