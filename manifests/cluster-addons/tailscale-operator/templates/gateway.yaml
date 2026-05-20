@@ -1,14 +1,40 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: bakseter-net-gateway
+  name: bakseter-net-gateway-int
   namespace: tailscale
   labels:
     external-dns: enabled
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
-  gatewayClassName: tailscale
+  gatewayClassName: tailscale-int
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: '*.int.bakseter.net'
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+        - group: ''
+          kind: Secret
+          name: int-bakseter-net-tls
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: bakseter-net-gateway-home
+  namespace: tailscale
+  labels:
+    external-dns: enabled
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  gatewayClassName: tailscale-home
   listeners:
     - name: https
       protocol: HTTPS
@@ -22,4 +48,30 @@ spec:
         certificateRefs:
         - group: ''
           kind: Secret
-          name: bakseter-net-tls
+          name: home-bakseter-net-tls
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: bakseter-net-gateway-sre
+  namespace: tailscale
+  labels:
+    external-dns: enabled
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  gatewayClassName: tailscale-sre
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: '*.sre.bakseter.net'
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+        - group: ''
+          kind: Secret
+          name: sre-bakseter-net-tls

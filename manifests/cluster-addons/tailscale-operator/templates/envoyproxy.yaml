@@ -1,7 +1,7 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
-  name: tailscale-proxy
+  name: tailscale-proxy-int
   namespace: tailscale
 spec:
   provider:
@@ -11,4 +11,37 @@ spec:
         type: LoadBalancer
         loadBalancerClass: tailscale
         annotations:
-          tailscale.com/hostname: gateway-envoy
+          tailscale.com/hostname: gateway-envoy-int
+          tailscale.com/tags: 'tag:k8s'
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: tailscale-proxy-home
+  namespace: tailscale
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: LoadBalancer
+        loadBalancerClass: tailscale
+        annotations:
+          tailscale.com/hostname: gateway-envoy-home
+          tailscale.com/tags: 'tag:k8s,tag:home'
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: tailscale-proxy-sre
+  namespace: tailscale
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: LoadBalancer
+        loadBalancerClass: tailscale
+        annotations:
+          tailscale.com/hostname: gateway-envoy-sre
+          tailscale.com/tags: 'tag:k8s,tag:sre'

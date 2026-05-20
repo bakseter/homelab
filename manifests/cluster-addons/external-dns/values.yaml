@@ -1,0 +1,21 @@
+external-dns:
+  provider: pihole
+  policy: sync
+
+  extraArgs:
+    - --pihole-server=http://pihole-web.pihole.svc.cluster.local
+    - --pihole-api-version=6
+    - --gateway-label-filter=external-dns==enabled
+
+  sources:
+    - gateway-httproute
+
+  domainFilters:
+    - bakseter.net
+
+  env:
+    - name: EXTERNAL_DNS_PIHOLE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: pihole-admin
+          key: password
