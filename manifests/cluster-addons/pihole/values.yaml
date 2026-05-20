@@ -1,15 +1,14 @@
-pihole:
-  admin:
-    existingSecret: pihole-admin
-    passwordKey: password
-  
-  serviceDns:
-    mixedService: true
-    type: LoadBalancer
-    loadBalancerClass: tailscale
-    annotations:
-      tailscale.com/hostname: pihole-dns
-      tailscale.com/tags: 'tag:k8s,tag:dns'
+admin:
+  existingSecret: pihole-admin
+  passwordKey: password
 
-  extraEnvVars:
-    FTLCONF_dns_listeningMode: all
+serviceDns:
+  mixedService: true
+  type: LoadBalancer
+  loadBalancerClass: tailscale
+  annotations:
+    tailscale.com/hostname: pihole-dns
+    tailscale.com/tags: 'tag:k8s,tag:dns'
+
+extraEnvVars:
+  FTLCONF_dns_listeningMode: all
