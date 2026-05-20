@@ -4,7 +4,13 @@ provider "tailscale" {
   tailnet             = "bakseter.github"
 }
 
-resource "tailscale_dns_split_nameservers" "bakseter-net" {
-  domain      = "bakseter.net"
-  nameservers = ["100.77.218.72"]
+resource "tailscale_dns_split_nameservers" "domains" {
+  for_each = tomap([
+    "bakseter.net",
+    "int.bakseter.net",
+    "sre.bakseter.net",
+  ])
+
+  domain      = each.key
+  nameservers = ["100.78.200.32"]
 }
