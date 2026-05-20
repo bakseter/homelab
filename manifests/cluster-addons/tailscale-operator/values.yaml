@@ -33,6 +33,8 @@ external-dns:
           key: password
 
 pihole:
+  replicaCount: 3
+
   admin:
     existingSecret: pihole-admin
     passwordKey: password
@@ -43,6 +45,7 @@ pihole:
     loadBalancerClass: tailscale
     annotations:
       tailscale.com/hostname: pihole-dns
+      tailscale.com/tags: 'tag:dns'
 
   extraEnvVars:
     FTLCONF_dns_listeningMode: all
