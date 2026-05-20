@@ -6,5 +6,5 @@ provider "tailscale" {
 
 resource "tailscale_dns_split_nameservers" "bakseter-net" {
   domain      = "bakseter.net"
-  nameservers = ["100.123.216.19"]
+  nameservers = ["100.77.218.72"]
 }
