@@ -5,3 +5,11 @@ dependencies:
   - name: tailscale-operator
     version: 1.96.5
     repository: https://pkgs.tailscale.com/helmcharts
+  - name: external-dns
+    alias: external-dns
+    version: 1.21.1
+    repository: https://kubernetes-sigs.github.io/external-dns
+  - name: pihole
+    alias: pihole
+    version: v2.35.0
+    repository: https://mojo2600.github.io/pihole-kubernetes
