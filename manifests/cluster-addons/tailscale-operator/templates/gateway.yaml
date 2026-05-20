@@ -10,6 +10,9 @@ metadata:
 spec:
   gatewayClassName: tailscale-int
   listeners:
+    - name: http
+      port: 80
+      protocol: HTTP
     - name: https
       protocol: HTTPS
       port: 443
@@ -36,6 +39,9 @@ metadata:
 spec:
   gatewayClassName: tailscale-home
   listeners:
+    - name: http
+      port: 80
+      protocol: HTTP
     - name: https
       protocol: HTTPS
       port: 443
@@ -62,6 +68,9 @@ metadata:
 spec:
   gatewayClassName: tailscale-sre
   listeners:
+    - name: http
+      port: 80
+      protocol: HTTP
     - name: https
       protocol: HTTPS
       port: 443
