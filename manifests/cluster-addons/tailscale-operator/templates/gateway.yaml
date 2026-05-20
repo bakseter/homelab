@@ -1,7 +1,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: custom-domain-gateway
+  name: bakseter-net-gateway
   namespace: tailscale
   labels:
     external-dns: enabled
@@ -13,7 +13,7 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "app.example.com"
+      hostname: bakseter.net
       allowedRoutes:
         namespaces:
           from: All
