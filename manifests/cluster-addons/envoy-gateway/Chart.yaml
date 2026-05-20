@@ -1,5 +1,5 @@
 apiVersion: v2
-name: envoy-gateway
+name: envoy-gateway-umbrella
 version: 0.1.0
 dependencies:
   - name: gateway-helm

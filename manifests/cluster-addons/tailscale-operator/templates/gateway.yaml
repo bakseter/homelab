@@ -1,0 +1,25 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: custom-domain-gateway
+  namespace: tailscale
+  labels:
+    external-dns: enabled
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  gatewayClassName: tailscale
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "app.example.com"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+        - group: ''
+          kind: Secret
+          name: app-example-com-tls
