@@ -23,7 +23,7 @@ external-dns:
     - gateway-httproute
 
   domainFilters:
-    - bakseter.net
+    - ts.bakseter.net
 
   env:
     - name: EXTERNAL_DNS_PIHOLE_PASSWORD
