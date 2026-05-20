@@ -10,6 +10,11 @@ terraform {
       version = "0.14.0"
     }
 
+    tailscale = {
+      source  = "tailscale/tailscale"
+      version = "0.29.1"
+    }
+
     talos = {
       source  = "siderolabs/talos"
       version = "0.11.0"
