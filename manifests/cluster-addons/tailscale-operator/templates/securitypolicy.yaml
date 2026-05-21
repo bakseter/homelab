@@ -17,6 +17,8 @@ spec:
       - x-forwarded-for
       - x-forwarded-host
       - x-forwarded-proto
+      - x-original-url
+      - host
     http:
       backendRefs:
         - name: ak-outpost-envoy-gateway-sre
