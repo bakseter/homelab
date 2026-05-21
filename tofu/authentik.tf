@@ -148,13 +148,18 @@ data "authentik_user" "emil" {
 
 resource "authentik_group" "argocd-admins" {
   name  = "argocd-admins"
-  users = [authentik_user.andreas.id]
+  users = [data.authentik_user.andreas.id]
+}
+
+import {
+  id = "7250ff1d-6a53-42c5-a18f-8866e1a2b84b"
+  to = authentik_group.mandagsmiddag-admins
 }
 
 resource "authentik_group" "mandagsmiddag-admins" {
   name = "mandagsmiddag-admins"
   users = [
-    authentik_user.andreas.id,
-    authentik_user.email.id,
+    data.authentik_user.andreas.id,
+    data.authentik_user.emil.id,
   ]
 }
