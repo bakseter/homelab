@@ -61,21 +61,7 @@ resource "authentik_outpost" "mandagsmiddag" {
 
   config = jsonencode(
     {
-      authentik_host                   = "https://authentik.bakseter.net/"
-      authentik_host_browser           = ""
-      authentik_host_insecure          = false
-      container_image                  = null
-      docker_labels                    = null
-      docker_map_ports                 = true
-      docker_network                   = null
-      kubernetes_disabled_components   = []
-      kubernetes_httproute_annotations = {}
-      kubernetes_httproute_parent_refs = []
-      kubernetes_image_pull_secrets    = []
-      kubernetes_ingress_annotations   = {}
-      kubernetes_ingress_class_name    = null
-      kubernetes_ingress_path_type     = null
-      kubernetes_ingress_secret_name   = ""
+      authentik_host = "https://authentik.bakseter.net"
       kubernetes_json_patches = {
         deployment = [
           {
@@ -125,16 +111,43 @@ resource "authentik_application" "argocd" {
 }
 
 resource "authentik_outpost" "envoy-gateway-sre" {
-  name               = "envoy-gateway-sre-outpost"
+  name               = "envoy-gateway-sre"
   type               = "proxy"
   service_connection = data.authentik_service_connection_kubernetes.local.id
   protocol_providers = [
     authentik_provider_proxy.argocd.id,
   ]
   config = jsonencode({
-    authentik_host          = "https://authentik.bakseter.net"
-    authentik_host_insecure = false
-    kubernetes_replicas     = 1
+    authentik_host = "https://authentik.bakseter.net"
+    kubernetes_json_patches = {
+      deployment = [
+        {
+          op   = "add"
+          path = "/spec/template/spec/containers/0/resources"
+          value = {
+            limits = {
+              cpu    = "100m"
+              memory = "256Mi"
+            }
+            requests = {
+              cpu    = "10m"
+              memory = "64Mi"
+            }
+          }
+        },
+      ]
+      ingress = [
+        {
+          op   = "remove"
+          path = "/spec/rules/1"
+        },
+      ]
+    }
     kubernetes_namespace    = "authentik"
+    kubernetes_replicas     = 1
+    kubernetes_service_type = "ClusterIP"
+    log_level               = "info"
+    object_naming_template  = "ak-outpost-%(name)s"
+    refresh_interval        = "minutes=5"
   })
 }

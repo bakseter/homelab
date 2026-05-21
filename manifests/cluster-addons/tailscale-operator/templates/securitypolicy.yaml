@@ -1,0 +1,20 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: authentik-forward-auth-sre
+  namespace: tailscale
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: bakseter-net-gateway-sre
+  extAuth:
+    http:
+      backendRefs:
+        - name: ak-outpost-envoy-gateway-sre
+          namespace: authentik
+          port: 9000
+      headersToBackend:
+        - cookie
+        - authorization
+      path: /outpost.goauthentik.io/auth/nginx
