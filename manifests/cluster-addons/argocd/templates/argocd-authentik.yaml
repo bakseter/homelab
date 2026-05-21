@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: argocd-authentik
+  namespace: argocd
+spec:
+  encryptedData:
+    clientSecret: AgCBOnSFTpycO0I86rTPXEVMkCBywtTjjUMOmk49Gr6NRl6ODEhY67hxSHJjmVnrQiDapSgKR3mw9qXP/et4HIEwRSWj6E3qo0FQimRFgOa4pqih748w7SH5jak1p34nqaAk6tC9LNlU9XeVR3nc2hpAPMbHNbjpUXQt9Nc5ZfhV3RwQeUx/Ulwd6pH4yw4hX2bWMYXe4hush3jxLcjZOQc9HVoVr+6W4jHbm/FJR/ycTXp3S11bW8OhLOkdGk/8x2bRiKukcQKyv6Mxd+ctNL2FrUd7VOC08mO6QmxNP1rIFjLCbegh7xg1kq64tfhB+K+Nssq+Ol6GBRgM+6pZ1E/AAwn7NQQjTMbuSiaii07N8qTL6jF9Jo5alvf5PNQGX0YMZfxaD3lfdmjuihxEkO4i/I9HsPJ4i/5OyWIrPATA2oyZ6BQT7j1BbaZ/Zj7vUj0zEvH3PEIvyP5JvDIG/MQ2AjD4ANyDn5CZrlWRR5ZK08bl1rOmoXKIu6PP1qwz1Uck6twT18RfQ6Lz6XPemn2QIj9XMxp1NrADDspQNsA61iAEn+4tfj12ewyUx6pSV1G/V6keMEKotiEU7ewOIVOPEvouMLBZrH2BxvotS0OuW9YrF8GQbrLP5YWCJFnqqkTEp8JEvWSJSae36i/Yuuz9tPdTM7VzRG24guomto3qc8mmz2drvhpUU0SJr9SimCUT0oTB74ih9+S4hrtkAziWnYrwGFuprb3HNGRW62UX3dZcgATT9PEjJYS22SwrfF+cPF8iRf+nyDTat/9JDtEK6QLRq+M4gJxXM5DWLJBedUGZ53Ey7SpfjHx/MZAvclfND9sezG8M9tCtT19DDAWYiWBnlTCdzWTkxHWoIeFPiA==
+  template:
+    metadata:
+      name: argocd-authentik
+      namespace: argocd
