@@ -27,7 +27,8 @@ argo-cd:
             clientID: argocd
             clientSecret: $argocd-authentik:clientSecret
             insecureEnableGroups: true
-            basicAuthUnsupported: true
+            getUserInfo: true
+            userNameKey: preferred_username
             scopes:
               - openid
               - profile
@@ -42,7 +43,7 @@ argo-cd:
         p, role:org-admin, *, get, *, allow
         p, role:org-admin, applications, sync, *, allow
         p, role:org-admin, applicationsets, sync, *, allow
-        g, Bakis, role:org-admin
+        g, argocd-admins, role:org-admin
 
     dex:
       enabled: true

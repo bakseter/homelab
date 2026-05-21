@@ -22,6 +22,9 @@ data "authentik_flow" "default-provider-invalidation-flow" {
   slug = "default-provider-invalidation-flow"
 }
 
+
+# APPLICATION AUTH
+
 resource "authentik_provider_proxy" "mandagsmiddag-frontend" {
   name                  = "mandagsmiddag-frontend"
   external_host         = "https://mandagsmiddag.no"
@@ -46,6 +49,8 @@ resource "authentik_application" "mandagsmiddag-backend" {
   protocol_provider = authentik_provider_proxy.mandagsmiddag-backend.id
 }
 
+
+# OIDC INTEGRATIONS
 
 data "authentik_service_connection_kubernetes" "local" {
   name = "Local Kubernetes Cluster"
@@ -128,4 +133,28 @@ resource "authentik_application" "argocd" {
   name              = "Argo CD"
   slug              = "argocd"
   protocol_provider = authentik_provider_oauth2.argocd.id
+}
+
+
+# RBAC
+
+data "authentik_user" "andreas" {
+  pk = "17"
+}
+
+data "authentik_user" "emil" {
+  pk = "19"
+}
+
+resource "authentik_group" "argocd-admins" {
+  name  = "argocd-admins"
+  users = [authentik_user.andreas.id]
+}
+
+resource "authentik_group" "mandagsmiddag-admins" {
+  name = "mandagsmiddag-admins"
+  users = [
+    authentik_user.andreas.id,
+    authentik_user.email.id,
+  ]
 }
