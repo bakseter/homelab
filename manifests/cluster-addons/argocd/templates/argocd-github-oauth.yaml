@@ -11,3 +11,5 @@ spec:
     metadata:
       name: argocd-github-oauth
       namespace: argocd
+      labels:
+        app.kubernetes.io/part-of: argocd
