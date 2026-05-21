@@ -9,6 +9,7 @@ spec:
       kind: Gateway
       name: bakseter-net-gateway-sre
   extAuth:
+    failOpen: false
     http:
       backendRefs:
         - name: ak-outpost-envoy-gateway-sre
@@ -17,4 +18,10 @@ spec:
       headersToBackend:
         - cookie
         - authorization
+      headersToUpstream:
+        - location
+        - set-cookie
+        - x-authentik-username
+        - x-authentik-email
+        - x-authentik-groups
       path: /outpost.goauthentik.io/auth/nginx
