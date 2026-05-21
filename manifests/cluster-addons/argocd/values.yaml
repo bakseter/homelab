@@ -70,7 +70,7 @@ argo-cd:
     httproute:
       enabled: true
       parentRefs:
-        - group: gateway.netowkring.k8s.io
+        - group: gateway.networking.k8s.io
           kind: Gateway
           name: bakseter-net-gateway-sre
           namespace: tailscale
