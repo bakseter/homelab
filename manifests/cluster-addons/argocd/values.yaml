@@ -28,6 +28,13 @@ argo-cd:
               redirectURI: https://argocd.sre.bakseter.net/api/dex/callback
               useLoginAsID: true
 
+          - type: authproxy
+            id: authentik
+            name: Authentik
+            config:
+              userHeader: X-Authentik-Username
+              emailHeader: X-Authentik-Email
+
       kustomize.buildOptions: --enable-helm
 
     rbac:
