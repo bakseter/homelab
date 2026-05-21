@@ -14,7 +14,7 @@ argo-cd:
       controller.diff.server.side: 'true'
 
     cm:
-      url: https://argocd.tail79d70a.ts.net
+      url: https://argocd.sre.bakseter.net
 
       admin.enabled: false
       dex.config: |
@@ -64,6 +64,17 @@ argo-cd:
       limits:
         cpu: 100m
         memory: 320Mi
+
+    httpRoute:
+      enabled: true
+      parentRefs:
+        - group: gateway.netowkring.k8s.io
+          kind: Gateway
+          name: bakseter-net-gateway-sre
+          namespace: tailscale
+
+      hostnames:
+        - argocd.sre.bakseter.net
 
   repoServer:
     replicas: 2

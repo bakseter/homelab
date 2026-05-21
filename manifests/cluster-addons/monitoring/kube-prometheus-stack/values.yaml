@@ -1,14 +1,5 @@
 kube-prometheus-stack:
   prometheus:
-    ingress:
-      enabled: true
-      ingressClassName: tailscale
-      hosts:
-        - prometheus
-      tls:
-        - hosts:
-            - prometheus
-
     prometheusSpec:
       scrapeInterval: 60s
 
@@ -21,7 +12,7 @@ kube-prometheus-stack:
         tag: v3.11.3-distroless
         sha: cff72a3f49918f41c4b5c8a6174dd8433036bebf7878120da538b3720ba3fa0d
 
-      externalUrl: https://prometheus.tail79d70a.ts.net
+      externalUrl: https://prometheus.int.bakseter.net
 
       serviceMonitorNamespaceSelector:
         matchExpressions:
@@ -78,7 +69,7 @@ kube-prometheus-stack:
         tag: v0.32.1
         sha: 51a825c2a40acc3e338fdd00d622e01ec090f72be2b3ea46be0839cd47a4d286
 
-      externalUrl: https://alertmanager.tail79d70a.ts.net
+      externalUrl: https://alertmanager.int.bakseter.net
       secrets:
         - alertmanager-pushover
 
@@ -103,15 +94,6 @@ kube-prometheus-stack:
               title: '{{ .CommonAnnotations.summary }}'
               message: '{{ .CommonAnnotations.description }}'
               send_resolved: true
-
-    ingress:
-      enabled: true
-      ingressClassName: tailscale
-      hosts:
-        - alertmanager
-      tls:
-        - hosts:
-            - alertmanager
 
   grafana:
     enabled: false

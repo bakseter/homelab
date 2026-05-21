@@ -33,3 +33,15 @@ longhorn:
       enabled: true
       additionalLabels:
         release: kube-prometheus-stack
+
+  httproute:
+    enabled: true
+
+    parentRefs:
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        name: bakseter-net-gateway-int
+        namespace: tailscale
+
+    hostnames:
+      - longhorn.int.bakseter.net
