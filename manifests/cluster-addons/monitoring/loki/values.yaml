@@ -151,14 +151,3 @@ rustfs:
     name: longhorn
     dataStorageSize: 20Gi
     logStorageSize: 2Gi
-
-  ingress:
-    enabled: true
-    className: tailscale
-    hosts:
-      - host: rustfs
-        paths:
-          - path: /
-            pathType: Prefix
-    tls:
-      enabled: true
