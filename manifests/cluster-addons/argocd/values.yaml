@@ -15,7 +15,7 @@ argo-cd:
 
     cm:
       url: https://argocd.sre.bakseter.net
-      additionalUrls:
+      additionalUrls: |
         - https://argocd.tail79d70a.ts.net
 
       admin.enabled: false
