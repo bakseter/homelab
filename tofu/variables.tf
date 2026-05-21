@@ -15,3 +15,12 @@ variable "tailscale_oauth_client_secret" {
   type      = string
   sensitive = true
 }
+
+variable "authentik_url" {
+  type = string
+}
+
+variable "authentik_token" {
+  type      = string
+  sensitive = true
+}

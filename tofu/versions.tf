@@ -5,6 +5,11 @@ terraform {
       version = "3.1.1"
     }
 
+    authentik = {
+      source  = "goauthentik/authentik"
+      version = "2026.2.0"
+    }
+
     time = {
       source  = "hashicorp/time"
       version = "0.14.0"
