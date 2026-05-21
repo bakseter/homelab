@@ -129,3 +129,32 @@ resource "authentik_outpost" "mandagsmiddag" {
     }
   )
 }
+
+resource "authentik_provider_proxy" "argocd" {
+  name               = "argocd"
+  external_host      = "https://argocd.sre.bakseter.net"
+  authorization_flow = data.authentik_flow.default-provider-authorization-explicit-consent.id
+  invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
+  mode               = "forward_single"
+}
+
+resource "authentik_application" "argocd" {
+  name              = "Argo CD"
+  slug              = "argocd"
+  protocol_provider = authentik_provider_proxy.argocd.id
+}
+
+resource "authentik_outpost" "envoy-gateway-sre" {
+  name               = "envoy-gateway-sre-outpost"
+  type               = "proxy"
+  service_connection = authentik_service_connection_kubernetes.local.id
+  protocol_providers = [
+    authentik_provider_proxy.argocd.id,
+  ]
+  config = jsonencode({
+    authentik_host          = "https://authentik.bakseter.net"
+    authentik_host_insecure = false
+    kubernetes_replicas     = 1
+    kubernetes_namespace    = "authentik"
+  })
+}
