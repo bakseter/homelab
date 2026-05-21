@@ -15,17 +15,17 @@ argo-cd:
 
     cm:
       url: https://argocd.sre.bakseter.net
-      additionalUrls: |
-        - https://argocd.tail79d70a.ts.net
 
       admin.enabled: false
       dex.config: |
         connectors:
-          - type: authproxy
-            id: tailscale
-            name: Proxy
+          - type: github
+            id: github
+            name: GitHub
             config:
-              userHeader: Tailscale-User-Login
+              clientID: $argocd-github-oauth:clientID
+              clientSecret: $argocd-github-oauth:clientSecret
+              redirectURI: https://argocd.sre.bakseter.net/api/dex/callback
 
       kustomize.buildOptions: --enable-helm
 
@@ -36,7 +36,7 @@ argo-cd:
         p, role:org-admin, *, get, *, allow
         p, role:org-admin, applications, sync, *, allow
         p, role:org-admin, applicationsets, sync, *, allow
-        g, bakseter@github, role:org-admin
+        g, bakseter, role:org-admin
 
     dex:
       enabled: true
