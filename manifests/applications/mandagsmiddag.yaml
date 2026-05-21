@@ -14,11 +14,11 @@ spec:
     - group: ''
       kind: Namespace
   roles:
-    - name: mandagsmiddag-developer
+    - name: mandagsmiddag-developers
       groups:
-        - emilaukner@github
+        - mandagsmiddag-admins
       policies:
-        - p, proj:mandagsmiddag:mandagsmiddag-developer, applications, *, *, allow
+        - p, proj:mandagsmiddag:mandagsmiddag-developers, applications, *, *, allow
   namespaceResourceWhitelist:
     - group: 'apps'
       kind: Deployment
