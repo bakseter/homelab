@@ -108,9 +108,9 @@ data "authentik_certificate_key_pair" "default" {
   name = "authentik Self-signed Certificate"
 }
 
-resource "authentik_provider_oauth2" "envoy-gateway-sre" {
-  name               = "envoy-gateway-sre"
-  client_id          = "envoy-gateway-sre"
+resource "authentik_provider_oauth2" "argocd" {
+  name               = "argocd"
+  client_id          = "argocd"
   authorization_flow = data.authentik_flow.default-provider-authorization-explicit-consent.id
   invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
   sub_mode           = "user_username"
@@ -119,13 +119,13 @@ resource "authentik_provider_oauth2" "envoy-gateway-sre" {
   allowed_redirect_uris = [
     {
       matching_mode = "strict"
-      url           = "https://argocd.sre.bakseter.net/oauth2/callback"
+      url           = "https://argocd.sre.bakseter.net/api/dex/callback"
     }
   ]
 }
 
-resource "authentik_application" "envoy-gateway-sre" {
-  name              = "Envoy Gateway sre"
-  slug              = "envoy-gateway-sre"
-  protocol_provider = authentik_provider_oauth2.envoy-gateway-sre.id
+resource "authentik_application" "argocd" {
+  name              = "Argo CD"
+  slug              = "argocd"
+  protocol_provider = authentik_provider_oauth2.argocd.id
 }

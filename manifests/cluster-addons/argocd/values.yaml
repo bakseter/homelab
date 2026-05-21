@@ -19,21 +19,18 @@ argo-cd:
       admin.enabled: false
       dex.config: |
         connectors:
-          - type: github
-            id: github
-            name: GitHub
-            config:
-              clientID: $argocd-github-oauth:clientID
-              clientSecret: $argocd-github-oauth:clientSecret
-              redirectURI: https://argocd.sre.bakseter.net/api/dex/callback
-              useLoginAsID: true
-
-          - type: authproxy
-            id: authentik
-            name: Authentik
-            config:
-              userHeader: X-Authentik-Username
-              emailHeader: X-Authentik-Email
+        - type: oidc
+          id: authentik
+          name: Authentik
+          config:
+            issuer: https://authentik.bakseter.net/application/o/argocd/
+            clientID: argocd
+            clientSecret: $argocd-authentik:clientSecret
+            insecureEnableGroups: true
+            scopes:
+              - openid
+              - profile
+              - email
 
       kustomize.buildOptions: --enable-helm
 
@@ -44,7 +41,7 @@ argo-cd:
         p, role:org-admin, *, get, *, allow
         p, role:org-admin, applications, sync, *, allow
         p, role:org-admin, applicationsets, sync, *, allow
-        g, bakseter, role:org-admin
+        g, Bakis, role:org-admin
 
     dex:
       enabled: true
