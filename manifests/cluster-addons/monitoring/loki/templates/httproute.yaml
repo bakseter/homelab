@@ -11,7 +11,7 @@ spec:
       namespace: tailscale
 
   hostnames:
-    - rustfs.bakseter.net
+    - rustfs.int.bakseter.net
 
   rules:
     - matches:
