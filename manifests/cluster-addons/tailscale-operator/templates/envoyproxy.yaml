@@ -7,6 +7,18 @@ spec:
   provider:
     type: Kubernetes
     kubernetes:
+      envoyDeployment:
+        replicas: 2
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - weight: 100
+                  podAffinityTerm:
+                    labelSelector:
+                      matchLabels:
+                        gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-int
+                    topologyKey: bakseter.net/physical-node
       envoyService:
         type: LoadBalancer
         loadBalancerClass: tailscale
@@ -23,6 +35,18 @@ spec:
   provider:
     type: Kubernetes
     kubernetes:
+      envoyDeployment:
+        replicas: 2
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - weight: 100
+                  podAffinityTerm:
+                    labelSelector:
+                      matchLabels:
+                        gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-home
+                    topologyKey: bakseter.net/physical-node
       envoyService:
         type: LoadBalancer
         loadBalancerClass: tailscale
@@ -39,6 +63,18 @@ spec:
   provider:
     type: Kubernetes
     kubernetes:
+      envoyDeployment:
+        replicas: 2
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - weight: 100
+                  podAffinityTerm:
+                    labelSelector:
+                      matchLabels:
+                        gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-sre
+                    topologyKey: bakseter.net/physical-node
       envoyService:
         type: LoadBalancer
         loadBalancerClass: tailscale

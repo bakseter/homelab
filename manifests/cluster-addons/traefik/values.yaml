@@ -11,7 +11,7 @@ traefik:
       type: ClusterIP
 
   deployment:
-    replicas: 3
+    replicas: 2
 
   providers:
     kubernetesCRD:

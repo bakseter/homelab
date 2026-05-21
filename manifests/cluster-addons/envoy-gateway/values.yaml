@@ -1,1 +1,10 @@
-envoy-gateway: {}
+envoy-gateway:
+  deployment:
+    replicas: 2
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: envoy-gateway
+            topologyKey: bakseter.net/physical-node
