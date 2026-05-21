@@ -11,15 +11,21 @@ spec:
   extAuth:
     failOpen: false
     timeout: 30s
+    headersToExtAuth:
+      - cookie
+      - authorization
+      - x-forwarded-for
+      - x-forwarded-host
+      - x-forwarded-proto
     http:
       backendRefs:
         - name: ak-outpost-envoy-gateway-sre
           namespace: authentik
           port: 9000
-      headersToExtAuth:
-        - cookie
-        - authorization
-        - x-forwarded-for
-        - x-forwarded-host
-        - x-forwarded-proto
+      headersToBackend:
+        - set-cookie
+        - location
+        - x-authentik-username
+        - x-authentik-email
+        - x-authentik-groups
       path: /outpost.goauthentik.io/auth/nginx
