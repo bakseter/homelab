@@ -1,39 +1,24 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: SecurityPolicy
 metadata:
-  name: authentik-forward-auth-sre
+  name: authentik-oidc-sre
   namespace: tailscale
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: bakseter-net-gateway-sre
-  extAuth:
-    failOpen: false
-    headersToExtAuth:
-      - cookie
-      - authorization
-      - x-forwarded-for
-      - x-forwarded-host
-      - x-forwarded-proto
-    http:
-      backendRefs:
-        - name: ak-outpost-envoy-gateway-sre
-          namespace: authentik
-          port: 9000
-      headersToBackend:
-        - x-authentik-username
-        - x-authentik-groups
-        - x-authentik-entitlements
-        - x-authentik-email
-        - x-authentik-name
-        - x-authentik-uid
-        - x-authentik-jwt
-        - x-authentik-meta-jwks
-        - x-authentik-meta-outpost
-        - x-authentik-meta-provider
-        - x-authentik-meta-app
-        - x-authentik-meta-version
-        - set-cookie
-        - location
-      path: /outpost.goauthentik.io/auth/traefik
+  oidc:
+    provider:
+      issuer: https://authentik.bakseter.net/application/o/envoy-gateway-sre/
+    clientID: envoy-gateway-sre
+    clientSecret:
+      name: authentik-oidc-secret
+      namespace: tailscale
+    redirectURL: https://argocd.sre.bakseter.net/oauth2/callback
+    scopes:
+      - openid
+      - profile
+      - email
+    forwardAccessToken: true
+    refreshToken: true
