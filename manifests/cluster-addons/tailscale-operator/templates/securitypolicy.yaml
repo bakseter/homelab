@@ -10,24 +10,30 @@ spec:
       name: bakseter-net-gateway-sre
   extAuth:
     failOpen: false
-    timeout: 30s
     headersToExtAuth:
       - cookie
       - authorization
       - x-forwarded-for
       - x-forwarded-host
       - x-forwarded-proto
-      - x-original-url
-      - host
     http:
       backendRefs:
         - name: ak-outpost-envoy-gateway-sre
           namespace: authentik
           port: 9000
       headersToBackend:
+        - x-authentik-username
+        - x-authentik-groups
+        - x-authentik-entitlements
+        - x-authentik-email
+        - x-authentik-name
+        - x-authentik-uid
+        - x-authentik-jwt
+        - x-authentik-meta-jwks
+        - x-authentik-meta-outpost
+        - x-authentik-meta-provider
+        - x-authentik-meta-app
+        - x-authentik-meta-version
         - set-cookie
         - location
-        - x-authentik-username
-        - x-authentik-email
-        - x-authentik-groups
-      path: /outpost.goauthentik.io/auth/nginx
+      path: /outpost.goauthentik.io/auth/traefik
