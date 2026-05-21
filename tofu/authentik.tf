@@ -96,58 +96,31 @@ resource "authentik_outpost" "mandagsmiddag" {
   )
 }
 
-resource "authentik_provider_proxy" "argocd" {
-  name               = "argocd"
-  external_host      = "https://argocd.sre.bakseter.net"
-  authorization_flow = data.authentik_flow.default-provider-authorization-explicit-consent.id
-  invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
-  mode               = "forward_single"
-}
-
-resource "authentik_application" "argocd" {
-  name              = "Argo CD"
-  slug              = "argocd"
-  protocol_provider = authentik_provider_proxy.argocd.id
-}
-
-resource "authentik_outpost" "envoy-gateway-sre" {
-  name               = "envoy-gateway-sre"
-  type               = "proxy"
-  service_connection = data.authentik_service_connection_kubernetes.local.id
-  protocol_providers = [
-    authentik_provider_proxy.argocd.id,
+data "authentik_property_mapping_provider_scope" "scopes" {
+  managed_list = [
+    "goauthentik.io/providers/oauth2/scope-openid",
+    "goauthentik.io/providers/oauth2/scope-profile",
+    "goauthentik.io/providers/oauth2/scope-email",
   ]
-  config = jsonencode({
-    authentik_host = "https://authentik.bakseter.net"
-    kubernetes_json_patches = {
-      deployment = [
-        {
-          op   = "add"
-          path = "/spec/template/spec/containers/0/resources"
-          value = {
-            limits = {
-              cpu    = "100m"
-              memory = "256Mi"
-            }
-            requests = {
-              cpu    = "10m"
-              memory = "64Mi"
-            }
-          }
-        },
-      ]
-      ingress = [
-        {
-          op   = "remove"
-          path = "/spec/rules/1"
-        },
-      ]
+}
+
+resource "authentik_provider_oauth2" "envoy-gateway-sre" {
+  name               = "envoy-gateway-sre"
+  client_id          = "envoy-gateway-sre"
+  authorization_flow    = data.authentik_flow.default-provider-authorization-explicit-consent.id
+  invalidation_flow     = data.authentik_flow.default-provider-invalidation-flow.id
+  sub_mode           = "user_username"
+  property_mappings  = data.authentik_property_mapping_provider_scope.scopes.ids
+  allowed_redirect_uris = [
+    {
+      matching_mode = "strict"
+      url           = "https://argocd.sre.bakseter.net/oauth2/callback"
     }
-    kubernetes_namespace    = "authentik"
-    kubernetes_replicas     = 1
-    kubernetes_service_type = "ClusterIP"
-    log_level               = "info"
-    object_naming_template  = "ak-outpost-%(name)s"
-    refresh_interval        = "minutes=5"
-  })
+  ]
+}
+
+resource "authentik_application" "envoy-gateway-sre" {
+  name              = "Envoy Gateway sre"
+  slug              = "envoy-gateway-sre"
+  protocol_provider = authentik_provider_oauth2.envoy-gateway-sre.id
 }
