@@ -26,6 +26,7 @@ argo-cd:
               clientID: $argocd-github-oauth:clientID
               clientSecret: $argocd-github-oauth:clientSecret
               redirectURI: https://argocd.sre.bakseter.net/api/dex/callback
+              preferredUsernameField: login
 
       kustomize.buildOptions: --enable-helm
 
