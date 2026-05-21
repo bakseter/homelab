@@ -22,11 +22,6 @@ data "authentik_flow" "default-provider-invalidation-flow" {
   slug = "default-provider-invalidation-flow"
 }
 
-import {
-  id = "2"
-  to = authentik_provider_proxy.mandagsmiddag-frontend
-}
-
 resource "authentik_provider_proxy" "mandagsmiddag-frontend" {
   name                  = "mandagsmiddag-frontend"
   external_host         = "https://mandagsmiddag.no"
@@ -34,11 +29,6 @@ resource "authentik_provider_proxy" "mandagsmiddag-frontend" {
   invalidation_flow     = data.authentik_flow.default-provider-invalidation-flow.id
   access_token_validity = "hours=24"
   mode                  = "forward_single"
-}
-
-import {
-  id = "4"
-  to = authentik_provider_proxy.mandagsmiddag-backend
 }
 
 resource "authentik_provider_proxy" "mandagsmiddag-backend" {
@@ -50,11 +40,6 @@ resource "authentik_provider_proxy" "mandagsmiddag-backend" {
   mode                  = "forward_single"
 }
 
-import {
-  id = "mandagsmiddag-backend"
-  to = authentik_application.mandagsmiddag-backend
-}
-
 resource "authentik_application" "mandagsmiddag-backend" {
   name              = "mandagsmiddag-backend"
   slug              = "mandagsmiddag-backend"
@@ -64,11 +49,6 @@ resource "authentik_application" "mandagsmiddag-backend" {
 
 data "authentik_service_connection_kubernetes" "local" {
   name = "Local Kubernetes Cluster"
-}
-
-import {
-  id = "5013cba8-372b-4587-b926-a49a737b22a2"
-  to = authentik_outpost.mandagsmiddag
 }
 
 resource "authentik_outpost" "mandagsmiddag" {
@@ -147,7 +127,7 @@ resource "authentik_application" "argocd" {
 resource "authentik_outpost" "envoy-gateway-sre" {
   name               = "envoy-gateway-sre-outpost"
   type               = "proxy"
-  service_connection = authentik_service_connection_kubernetes.local.id
+  service_connection = data.authentik_service_connection_kubernetes.local.id
   protocol_providers = [
     authentik_provider_proxy.argocd.id,
   ]
