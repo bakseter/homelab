@@ -65,7 +65,7 @@ argo-cd:
         cpu: 100m
         memory: 320Mi
 
-    httpRoute:
+    httproute:
       enabled: true
       parentRefs:
         - group: gateway.netowkring.k8s.io
