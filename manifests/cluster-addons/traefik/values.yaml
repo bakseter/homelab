@@ -75,6 +75,14 @@ traefik:
   logs:
     access:
       enabled: true
+      format: json
+      fields:
+        headers:
+          defaultMode: keep
+          names:
+            CF-Connecting-IP: keep
+            X-Forwarded-For: keep
+            X-Real-Ip: keep
 
   affinity:
     podAntiAffinity:
