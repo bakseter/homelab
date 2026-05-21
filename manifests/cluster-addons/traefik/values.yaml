@@ -2,9 +2,9 @@ traefik:
   image:
     registry: docker.io
     repository: traefik
-    tag: v3.7.0
+    tag: v3.7.1
     # takes precedence over tag
-    digest: sha256:eb328e2c806c53aafbbace6c451fa54d268961261a85452fcf0fb752a30c17be
+    digest: sha256:6b9cbca6fac42ab0075f5437d8dc1685cfd188626d8d515839ea94f8b6271c42
 
   service:
     spec:
@@ -57,14 +57,16 @@ traefik:
       expose:
         default: false
 
-    public: # Cloudflare Tunnel
+    # Cloudflare tunnel
+    public:
       expose:
         default: true
       port: 9000
       exposedPort: 9000
       forwardedHeaders:
         trustedIPs:
-          - '10.244.0.0/16' # trusts internal pod network
+          # Trusts internal pod CIDR. In practice only cloudflared b/c networkpolicy.
+          - '10.244.0.0/16'
 
   api:
     dashboard: false
@@ -79,10 +81,6 @@ traefik:
       fields:
         headers:
           defaultMode: keep
-          names:
-            CF-Connecting-IP: keep
-            X-Forwarded-For: keep
-            X-Real-Ip: keep
 
   affinity:
     podAntiAffinity:
