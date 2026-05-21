@@ -27,6 +27,7 @@ argo-cd:
             clientID: argocd
             clientSecret: $argocd-authentik:clientSecret
             insecureEnableGroups: true
+            basicAuthUnsupported: true
             scopes:
               - openid
               - profile
