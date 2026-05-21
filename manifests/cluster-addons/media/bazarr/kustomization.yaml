@@ -9,7 +9,6 @@ labels:
 resources:
   - deployment.yaml
   - service.yaml
-  - ingress.yaml
   - persistentvolumeclaim.yaml
 # - ciliumnetworkpolicy.yaml
   - httproute.yaml

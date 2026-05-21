@@ -20,14 +20,6 @@ longhorn:
   networkPolicies:
     enabled: true
 
-  ingress:
-    enabled: true
-    ingressClassName: tailscale
-    host: longhorn
-    tls:
-      - hosts:
-          - longhorn
-
   metrics:
     serviceMonitor:
       enabled: true
