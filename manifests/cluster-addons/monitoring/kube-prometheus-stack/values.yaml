@@ -3,8 +3,8 @@ kube-prometheus-stack:
     prometheusSpec:
       scrapeInterval: 60s
 
-      retention: 14d
-      retentionSize: 40GB # https://prometheus.io/docs/prometheus/latest/storage/#right-sizing-retention-size
+      retention: 30d
+      retentionSize: 45GB # https://prometheus.io/docs/prometheus/latest/storage/#right-sizing-retention-size
 
       image:
         registry: quay.io
@@ -26,12 +26,12 @@ kube-prometheus-stack:
               - mandagsmiddag
               - spenn
 
-      podMonitorNamespaceSelector:
-        matchExpressions:
-          - key: kubernetes.io/metadata.name
-            operator: In
-            values:
-              - falco
+      #     podMonitorNamespaceSelector:
+      #       matchExpressions:
+      #         - key: kubernetes.io/metadata.name
+      #           operator: In
+      #           values:
+      #             - falco
 
       storageSpec:
         volumeClaimTemplate:
