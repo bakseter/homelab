@@ -7,7 +7,6 @@ metadata:
   name: jellyfin-lan
   namespace: media
 spec:
-  externalTrafficPolicy: Local
   type: LoadBalancer
   selector:
     app.kubernetes.io/instance: jellyfin
