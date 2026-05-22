@@ -27,6 +27,14 @@ spec:
             - port: '8096'
               protocol: TCP
 
+    - fromCIDR:
+        - 192.168.50.0/24 # wifi
+        - 192.168.80.0/24 # media
+      toPorts:
+        - ports:
+            - port: '8096'
+              protocol: TCP
+
   egress:
     - toFQDNs:
         - matchPattern: '*.jellyfin.org'
