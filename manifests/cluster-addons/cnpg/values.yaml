@@ -1,4 +1,6 @@
 cloudnative-pg:
+  fullnameOverride: cloudnative-pg
+
   replicaCount: 3
 
   affinity:
