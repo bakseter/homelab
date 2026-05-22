@@ -36,6 +36,12 @@ cilium:
 
   ### END talos
 
+  l2announcements:
+    enabled: true
+
+  lbIPAM:
+    enabled: true
+
   prometheus:
     enabled: true
     serviceMonitor:
