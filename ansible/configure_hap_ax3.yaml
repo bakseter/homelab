@@ -27,7 +27,7 @@
       community.routeros.api:
         path: ip firewall filter
         remove: "{{ item['.id'] }}"
-      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|proxmox-to-talos|proxmox-to-infra|infra-to-proxmox|infra-to-talos|infra-to-storage|talos-to-infra|talos-to-storage|media-to-talos|all-to-media|drop-wifi-to-interal|drop-media-to-internal|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-all-inter-vlan|drop-wifi-router-mgmt') | list }}"
+      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|proxmox-to-talos|proxmox-to-infra|infra-to-proxmox|infra-to-talos|infra-to-storage|talos-to-infra|talos-to-storage|all-to-talos-cilium-subnet|all-to-media|drop-wifi-to-interal|drop-media-to-internal|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-all-inter-vlan|drop-wifi-router-mgmt') | list }}"
       ignore_errors: true
 
     # -------------------------
@@ -345,11 +345,11 @@
         path: ip firewall filter
         cmd: 'add chain=forward src-address=192.168.30.0/24 dst-address=192.168.70.0/24 action=accept comment=talos-to-storage'
 
-    # LAN loadbalancer for media streaming
-    - name: Allow media to Talos
+    # LAN loadbalancers for e.g. media streaming
+    - name: Allow all to Talos Cilium subnet
       community.routeros.api:
         path: ip firewall filter
-        cmd: 'add chain=forward src-address=192.168.80.0/24 dst-address=192.168.30.0/24 action=accept comment=media-to-talos'
+        cmd: 'add chain=forward src-address=192.168.0.0/16 dst-address=192.168.30.200-192.168.30.250 action=accept comment=all-to-talos-cilium-subnet'
 
     # For streaming access
     - name: Allow all to media
