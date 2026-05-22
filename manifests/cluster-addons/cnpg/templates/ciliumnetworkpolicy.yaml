@@ -4,7 +4,10 @@ metadata:
   name: cnpg
   namespace: cnpg-system
 spec:
-  endpointSelector: {}
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: cnpg
+      app.kubernetes.io/name: cloudnative-pg
 
   ingress: []
 
