@@ -16,3 +16,6 @@ cloudnative-pg:
     limits:
       cpu: 200m
       memory: 512Mi
+
+barman-cloud:
+  fullnameOverride: barman-cloud
