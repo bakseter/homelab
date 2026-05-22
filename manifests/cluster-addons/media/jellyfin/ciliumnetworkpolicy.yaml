@@ -29,7 +29,7 @@ spec:
 
     # TODO: lock down
     - fromEntities:
-        - cluster
+        - world
       toPorts:
         - ports:
             - port: '8096'
