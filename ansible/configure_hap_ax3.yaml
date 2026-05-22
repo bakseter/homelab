@@ -417,35 +417,6 @@
           security.passphrase: '{{ wifi_password }}'
           disabled: 'no'
 
-    - name: Add wifi1 virtual AP for media SSID
-      community.routeros.api:
-        path: interface wifi
-        cmd: 'add name=wifi1-media master-interface=wifi1 configuration.ssid="{{ media_ssid }}" security.authentication-types="wpa2-psk,wpa3-psk" security.passphrase="{{ media_password }}" disabled=no'
-      ignore_errors: true
-
-    - name: Add media virtual AP to bridge
-      community.routeros.api:
-        path: interface bridge port
-        cmd: 'add interface=wifi1-media bridge=bridge pvid=80 frame-types=admit-only-untagged-and-priority-tagged'
-      ignore_errors: true
-
-    - name: Set media wifi bridge port to VLAN 80
-      community.routeros.api_find_and_modify:
-        path: interface bridge port
-        find:
-          interface: wifi1-media
-        values:
-          pvid: '80'
-          frame-types: admit-only-untagged-and-priority-tagged
-
-    - name: Add VLAN 80 untagged on media AP to bridge VLAN
-      community.routeros.api_find_and_modify:
-        path: interface bridge vlan
-        find:
-          vlan-ids: '80'
-        values:
-          untagged: wifi1-media
-
   post_tasks:
     - name: Verify firewall rules
       community.routeros.api:

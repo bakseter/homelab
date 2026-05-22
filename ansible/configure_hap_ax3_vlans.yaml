@@ -18,9 +18,11 @@
     # Identity
     # -------------------------
     - name: Set identity
-      community.routeros.api:
+      community.routeros.api_find_and_modify:
         path: system identity
-        cmd: 'set name=hap-ax3'
+        find: {}
+        values:
+          name: hap-ax3
 
     # -------------------------
     # Bridge ports
@@ -34,13 +36,22 @@
           pvid: '1'
           frame-types: admit-all
 
-    - name: Set ether4 as access port VLAN 40 desktop
+    - name: Set ether3 as access port VLAN 80 media
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: ether3
+        values:
+          pvid: '80'
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    - name: Set ether4 as access port VLAN 80 media
       community.routeros.api_find_and_modify:
         path: interface bridge port
         find:
           interface: ether4
         values:
-          pvid: '40'
+          pvid: '80'
           frame-types: admit-only-untagged-and-priority-tagged
 
     - name: Set ether5 as access port VLAN 50
@@ -71,292 +82,409 @@
           frame-types: admit-only-untagged-and-priority-tagged
 
     # -------------------------
-    # Cleanup - DHCP
+    # Cleanup - defconf DHCP server only
     # -------------------------
     - name: Gather DHCP servers
       community.routeros.api:
         path: ip dhcp-server
         cmd: 'print'
-      register: dhcp_cleanup
+      register: dhcp_existing
 
-    - name: Remove defconf DHCP server
+    - name: Remove defconf DHCP server if present
       community.routeros.api:
         path: ip dhcp-server
         remove: "{{ item['.id'] }}"
-      loop: "{{ dhcp_cleanup.msg | selectattr('name', 'equalto', 'defconf') | list }}"
+      loop: "{{ dhcp_existing.msg | selectattr('name', 'equalto', 'defconf') | list }}"
       ignore_errors: true
 
     # -------------------------
-    # Cleanup - media virtual AP
+    # Cleanup - stale media virtual APs only
     # -------------------------
     - name: Gather WiFi interfaces
       community.routeros.api:
         path: interface wifi
         cmd: 'print'
-      register: wifi_cleanup
+      register: wifi_existing
 
-    - name: Remove existing media virtual APs
+    - name: Remove stale media virtual APs
       community.routeros.api:
         path: interface wifi
         remove: "{{ item['.id'] }}"
-      loop: "{{ wifi_cleanup.msg | selectattr('name', 'defined') | selectattr('name', 'search', 'media') | list }}"
+      loop: "{{ wifi_existing.msg | selectattr('name', 'defined') | selectattr('name', 'search', 'media') | list }}"
       ignore_errors: true
 
     # -------------------------
-    # Cleanup - media bridge ports
+    # Cleanup - stale media bridge ports only
     # -------------------------
     - name: Gather bridge ports
       community.routeros.api:
         path: interface bridge port
         cmd: 'print'
-      register: bridge_port_cleanup
+      register: bridge_ports_existing
 
-    - name: Remove existing media bridge ports
+    - name: Remove stale media bridge ports
       community.routeros.api:
         path: interface bridge port
         remove: "{{ item['.id'] }}"
-      loop: "{{ bridge_port_cleanup.msg | selectattr('interface', 'defined') | selectattr('interface', 'search', 'media') | list }}"
+      loop: "{{ bridge_ports_existing.msg | selectattr('interface', 'defined') | selectattr('interface', 'search', 'media') | list }}"
       ignore_errors: true
 
     # -------------------------
-    # Cleanup - Bridge VLANs
+    # Bridge VLAN membership - upsert via api_find_and_modify
+    # RouterOS will error if the VLAN entry already exists with 'add',
+    # so we attempt modify first and fall back to add only when missing.
     # -------------------------
-    - name: Gather all bridge VLAN entries
+    - name: Gather existing bridge VLANs
       community.routeros.api:
         path: interface bridge vlan
         cmd: 'print'
-      register: bridge_vlan_cleanup
+      register: bridge_vlans_existing
 
-    - name: Remove all static bridge VLAN entries
-      community.routeros.api:
+    # For each desired bridge VLAN we check whether a static entry already
+    # exists for that vlan-ids value.  If it does we modify it; if not we add.
+    - name: Update bridge VLAN 88 if present
+      community.routeros.api_find_and_modify:
         path: interface bridge vlan
-        remove: "{{ item['.id'] }}"
-      loop: "{{ bridge_vlan_cleanup.msg | selectattr('dynamic', 'equalto', false) | list }}"
+        find:
+          vlan-ids: '88'
+        values:
+          bridge: bridge
+          tagged: 'bridge'
+          untagged: 'ether2,ether3,ether4,ether5'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 88) | list | length > 0
       ignore_errors: true
 
-    # -------------------------
-    # Cleanup - VLAN interfaces
-    # -------------------------
-    - name: Gather VLAN interfaces
-      community.routeros.api:
-        path: interface vlan
-        cmd: 'print'
-      register: vlan_iface_cleanup
-
-    - name: Remove existing VLAN interfaces
-      community.routeros.api:
-        path: interface vlan
-        remove: "{{ item['.id'] }}"
-      loop: "{{ vlan_iface_cleanup.msg | selectattr('name', 'match', '^vlan\\d+$') | list }}"
-      ignore_errors: true
-
-    # -------------------------
-    # Cleanup - IP addresses
-    # -------------------------
-    - name: Gather IP addresses
-      community.routeros.api:
-        path: ip address
-        cmd: 'print'
-      register: ip_addr_cleanup
-
-    - name: Remove existing VLAN IP addresses
-      community.routeros.api:
-        path: ip address
-        remove: "{{ item['.id'] }}"
-      loop: "{{ ip_addr_cleanup.msg | selectattr('interface', 'match', '^vlan\\d+$') | list }}"
-      ignore_errors: true
-
-    # -------------------------
-    # Cleanup - DHCP pools
-    # -------------------------
-    - name: Gather DHCP pools
-      community.routeros.api:
-        path: ip pool
-        cmd: 'print'
-      register: dhcp_pool_cleanup
-
-    - name: Remove existing VLAN DHCP pools
-      community.routeros.api:
-        path: ip pool
-        remove: "{{ item['.id'] }}"
-      loop: "{{ dhcp_pool_cleanup.msg | selectattr('name', 'match', '^dhcp-vlan\\d+$') | list }}"
-      ignore_errors: true
-
-    # -------------------------
-    # Cleanup - DHCP servers
-    # -------------------------
-    - name: Gather DHCP servers for cleanup
-      community.routeros.api:
-        path: ip dhcp-server
-        cmd: 'print'
-      register: dhcp_server_cleanup
-
-    - name: Remove existing VLAN DHCP servers
-      community.routeros.api:
-        path: ip dhcp-server
-        remove: "{{ item['.id'] }}"
-      loop: "{{ dhcp_server_cleanup.msg | selectattr('name', 'match', '^dhcp-vlan\\d+$') | list }}"
-      ignore_errors: true
-
-    # -------------------------
-    # Cleanup - DHCP networks
-    # -------------------------
-    - name: Gather DHCP networks
-      community.routeros.api:
-        path: ip dhcp-server network
-        cmd: 'print'
-      register: dhcp_network_cleanup
-
-    - name: Remove existing VLAN DHCP networks
-      community.routeros.api:
-        path: ip dhcp-server network
-        remove: "{{ item['.id'] }}"
-      loop: "{{ dhcp_network_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'management|cluster|talos|desktop|wifi|infra|storage|media') | list }}"
-      ignore_errors: true
-
-    # -------------------------
-    # Cleanup - Interface list members
-    # -------------------------
-    - name: Gather interface list members
-      community.routeros.api:
-        path: interface list member
-        cmd: 'print'
-      register: iface_list_cleanup
-
-    - name: Remove existing VLAN interface list members
-      community.routeros.api:
-        path: interface list member
-        remove: "{{ item['.id'] }}"
-      loop: "{{ iface_list_cleanup.msg | selectattr('interface', 'match', '^vlan\\d+$') | list }}"
-      ignore_errors: true
-
-    # -------------------------
-    # Bridge VLAN membership
-    # -------------------------
-    - name: Add VLAN 88 to bridge
+    - name: Add bridge VLAN 88 if absent
       community.routeros.api:
         path: interface bridge vlan
         cmd: 'add bridge=bridge vlan-ids=88 tagged=bridge untagged=ether2,ether3,ether4,ether5'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 88) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
-    - name: Add VLAN 10 to bridge
+    - name: Update bridge VLAN 10 if present
+      community.routeros.api_find_and_modify:
+        path: interface bridge vlan
+        find:
+          vlan-ids: '10'
+        values:
+          bridge: bridge
+          tagged: 'bridge,ether2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 10) | selectattr('dynamic', 'equalto', false) | list | length > 0
+      ignore_errors: true
+
+    - name: Add bridge VLAN 10 if absent
       community.routeros.api:
         path: interface bridge vlan
         cmd: 'add bridge=bridge vlan-ids=10 tagged=bridge,ether2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 10) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
-    - name: Add VLAN 20 to bridge
+    - name: Update bridge VLAN 20 if present
+      community.routeros.api_find_and_modify:
+        path: interface bridge vlan
+        find:
+          vlan-ids: '20'
+        values:
+          bridge: bridge
+          tagged: 'bridge,ether2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 20) | selectattr('dynamic', 'equalto', false) | list | length > 0
+      ignore_errors: true
+
+    - name: Add bridge VLAN 20 if absent
       community.routeros.api:
         path: interface bridge vlan
         cmd: 'add bridge=bridge vlan-ids=20 tagged=bridge,ether2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 20) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
-    - name: Add VLAN 30 to bridge
+    - name: Update bridge VLAN 30 if present
+      community.routeros.api_find_and_modify:
+        path: interface bridge vlan
+        find:
+          vlan-ids: '30'
+        values:
+          bridge: bridge
+          tagged: 'bridge,ether2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 30) | selectattr('dynamic', 'equalto', false) | list | length > 0
+      ignore_errors: true
+
+    - name: Add bridge VLAN 30 if absent
       community.routeros.api:
         path: interface bridge vlan
         cmd: 'add bridge=bridge vlan-ids=30 tagged=bridge,ether2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 30) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
-    - name: Add VLAN 40 to bridge
-      community.routeros.api:
+    - name: Update bridge VLAN 50 if present
+      community.routeros.api_find_and_modify:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=40 tagged=bridge,ether2 untagged=ether4'
+        find:
+          vlan-ids: '50'
+        values:
+          bridge: bridge
+          tagged: 'bridge,ether2'
+          untagged: 'ether5,wifi1,wifi2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 50) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
-    - name: Add VLAN 50 to bridge
+    - name: Add bridge VLAN 50 if absent
       community.routeros.api:
         path: interface bridge vlan
         cmd: 'add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether5,wifi1,wifi2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 50) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
-    - name: Add VLAN 60 to bridge
+    - name: Update bridge VLAN 60 if present
+      community.routeros.api_find_and_modify:
+        path: interface bridge vlan
+        find:
+          vlan-ids: '60'
+        values:
+          bridge: bridge
+          tagged: 'bridge,ether2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 60) | selectattr('dynamic', 'equalto', false) | list | length > 0
+      ignore_errors: true
+
+    - name: Add bridge VLAN 60 if absent
       community.routeros.api:
         path: interface bridge vlan
         cmd: 'add bridge=bridge vlan-ids=60 tagged=bridge,ether2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 60) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
-    - name: Add VLAN 70 to bridge
+    - name: Update bridge VLAN 70 if present
+      community.routeros.api_find_and_modify:
+        path: interface bridge vlan
+        find:
+          vlan-ids: '70'
+        values:
+          bridge: bridge
+          tagged: 'bridge,ether2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 70) | selectattr('dynamic', 'equalto', false) | list | length > 0
+      ignore_errors: true
+
+    - name: Add bridge VLAN 70 if absent
       community.routeros.api:
         path: interface bridge vlan
         cmd: 'add bridge=bridge vlan-ids=70 tagged=bridge,ether2'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 70) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
-    - name: Add VLAN 80 to bridge
+    - name: Update bridge VLAN 80 if present
+      community.routeros.api_find_and_modify:
+        path: interface bridge vlan
+        find:
+          vlan-ids: '80'
+        values:
+          bridge: bridge
+          tagged: 'bridge,ether2'
+          untagged: 'ether3,ether4'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 80) | selectattr('dynamic', 'equalto', false) | list | length > 0
+      ignore_errors: true
+
+    - name: Add bridge VLAN 80 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=80 tagged=bridge,ether2 untagged=wifi1-media'
+        cmd: 'add bridge=bridge vlan-ids=80 tagged=bridge,ether2 untagged=ether3,ether4'
+      when: bridge_vlans_existing.msg | selectattr('vlan-ids', 'equalto', 80) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
     # -------------------------
-    # VLAN interfaces
+    # VLAN interfaces - add only if absent
     # -------------------------
-    - name: Add VLAN {{ vlan.id }} interface
+    - name: Gather existing VLAN interfaces
+      community.routeros.api:
+        path: interface vlan
+        cmd: 'print'
+      register: vlan_ifaces_existing
+
+    - name: Add VLAN interface if absent
       community.routeros.api:
         path: interface vlan
         cmd: 'add name=vlan{{ vlan.id }} vlan-id={{ vlan.id }} interface=bridge comment={{ vlan.name }}'
       loop: '{{ vlans }}'
       loop_control:
         loop_var: vlan
+      when: vlan_ifaces_existing.msg | selectattr('name', 'equalto', 'vlan' ~ vlan.id) | list | length == 0
+      ignore_errors: true
+
+    # Update comment on existing VLAN interfaces (name/vlan-id are immutable)
+    - name: Update comment on existing VLAN interface
+      community.routeros.api_find_and_modify:
+        path: interface vlan
+        find:
+          name: 'vlan{{ vlan.id }}'
+        values:
+          comment: '{{ vlan.name }}'
+      loop: '{{ vlans }}'
+      loop_control:
+        loop_var: vlan
+      when: vlan_ifaces_existing.msg | selectattr('name', 'equalto', 'vlan' ~ vlan.id) | list | length > 0
       ignore_errors: true
 
     # -------------------------
-    # IP addresses
+    # IP addresses - add only if interface has no address yet
     # -------------------------
-    - name: Set IP on VLAN {{ vlan.id }} {{ vlan.name }}
+    - name: Gather existing IP addresses
+      community.routeros.api:
+        path: ip address
+        cmd: 'print'
+      register: ip_addrs_existing
+
+    - name: Add IP address if absent
       community.routeros.api:
         path: ip address
         cmd: 'add address={{ vlan.gateway }}/24 interface=vlan{{ vlan.id }} comment={{ vlan.name }}'
       loop: '{{ vlans }}'
       loop_control:
         loop_var: vlan
+      when: ip_addrs_existing.msg | selectattr('interface', 'equalto', 'vlan' ~ vlan.id) | list | length == 0
+      ignore_errors: true
+
+    # Update address/comment if the interface already has an entry
+    - name: Update IP address if present
+      community.routeros.api_find_and_modify:
+        path: ip address
+        find:
+          interface: 'vlan{{ vlan.id }}'
+        values:
+          address: '{{ vlan.gateway }}/24'
+          comment: '{{ vlan.name }}'
+      loop: '{{ vlans }}'
+      loop_control:
+        loop_var: vlan
+      when: ip_addrs_existing.msg | selectattr('interface', 'equalto', 'vlan' ~ vlan.id) | list | length > 0
       ignore_errors: true
 
     # -------------------------
-    # DHCP pools
+    # DHCP pools - add only if absent
     # -------------------------
-    - name: Add DHCP pool for VLAN {{ vlan.id }}
+    - name: Gather existing DHCP pools
+      community.routeros.api:
+        path: ip pool
+        cmd: 'print'
+      register: dhcp_pools_existing
+
+    - name: Add DHCP pool if absent
       community.routeros.api:
         path: ip pool
         cmd: 'add name=dhcp-vlan{{ vlan.id }} ranges={{ vlan.dhcp_pool_start }}-{{ vlan.dhcp_pool_end }}'
       loop: '{{ vlans }}'
       loop_control:
         loop_var: vlan
-      when: vlan.dhcp
+      when:
+        - vlan.dhcp
+        - dhcp_pools_existing.msg | selectattr('name', 'equalto', 'dhcp-vlan' ~ vlan.id) | list | length == 0
+      ignore_errors: true
+
+    - name: Update DHCP pool ranges if present
+      community.routeros.api_find_and_modify:
+        path: ip pool
+        find:
+          name: 'dhcp-vlan{{ vlan.id }}'
+        values:
+          ranges: '{{ vlan.dhcp_pool_start }}-{{ vlan.dhcp_pool_end }}'
+      loop: '{{ vlans }}'
+      loop_control:
+        loop_var: vlan
+      when:
+        - vlan.dhcp
+        - dhcp_pools_existing.msg | selectattr('name', 'equalto', 'dhcp-vlan' ~ vlan.id) | list | length > 0
       ignore_errors: true
 
     # -------------------------
-    # DHCP servers
+    # DHCP servers - add only if absent
     # -------------------------
-    - name: Add DHCP server for VLAN {{ vlan.id }}
+    - name: Gather DHCP servers
+      community.routeros.api:
+        path: ip dhcp-server
+        cmd: 'print'
+      register: dhcp_servers_existing
+
+    - name: Add DHCP server if absent
       community.routeros.api:
         path: ip dhcp-server
         cmd: 'add name=dhcp-vlan{{ vlan.id }} interface=vlan{{ vlan.id }} address-pool=dhcp-vlan{{ vlan.id }} disabled=no'
       loop: '{{ vlans }}'
       loop_control:
         loop_var: vlan
-      when: vlan.dhcp
+      when:
+        - vlan.dhcp
+        - dhcp_servers_existing.msg | selectattr('name', 'equalto', 'dhcp-vlan' ~ vlan.id) | list | length == 0
       ignore_errors: true
 
-    - name: Add DHCP network for VLAN {{ vlan.id }}
+    - name: Ensure DHCP server is enabled if present
+      community.routeros.api_find_and_modify:
+        path: ip dhcp-server
+        find:
+          name: 'dhcp-vlan{{ vlan.id }}'
+        values:
+          disabled: 'no'
+          interface: 'vlan{{ vlan.id }}'
+          address-pool: 'dhcp-vlan{{ vlan.id }}'
+      loop: '{{ vlans }}'
+      loop_control:
+        loop_var: vlan
+      when:
+        - vlan.dhcp
+        - dhcp_servers_existing.msg | selectattr('name', 'equalto', 'dhcp-vlan' ~ vlan.id) | list | length > 0
+      ignore_errors: true
+
+    # -------------------------
+    # DHCP networks - add only if absent
+    # -------------------------
+    - name: Gather existing DHCP networks
+      community.routeros.api:
+        path: ip dhcp-server network
+        cmd: 'print'
+      register: dhcp_networks_existing
+
+    - name: Add DHCP network if absent
       community.routeros.api:
         path: ip dhcp-server network
         cmd: 'add address={{ vlan.subnet }} gateway={{ vlan.gateway }} dns-server={{ vlan.gateway }} comment={{ vlan.name }}'
       loop: '{{ vlans }}'
       loop_control:
         loop_var: vlan
-      when: vlan.dhcp
+      when:
+        - vlan.dhcp
+        - dhcp_networks_existing.msg | selectattr('address', 'equalto', vlan.subnet) | list | length == 0
+      ignore_errors: true
+
+    - name: Update DHCP network if present
+      community.routeros.api_find_and_modify:
+        path: ip dhcp-server network
+        find:
+          address: '{{ vlan.subnet }}'
+        values:
+          gateway: '{{ vlan.gateway }}'
+          dns-server: '{{ vlan.gateway }}'
+          comment: '{{ vlan.name }}'
+      loop: '{{ vlans }}'
+      loop_control:
+        loop_var: vlan
+      when:
+        - vlan.dhcp
+        - dhcp_networks_existing.msg | selectattr('address', 'equalto', vlan.subnet) | list | length > 0
       ignore_errors: true
 
     # -------------------------
-    # Interface list members
+    # Interface list members - add only if absent
     # -------------------------
-    - name: Add vlan{{ vlan.id }} to LAN interface list
+    - name: Gather existing interface list members
+      community.routeros.api:
+        path: interface list member
+        cmd: 'print'
+      register: iface_list_existing
+
+    - name: Add VLAN to LAN interface list if absent
       community.routeros.api:
         path: interface list member
         cmd: 'add interface=vlan{{ vlan.id }} list=LAN comment={{ vlan.name }}'
       loop: '{{ vlans }}'
       loop_control:
         loop_var: vlan
+      when: iface_list_existing.msg | selectattr('interface', 'equalto', 'vlan' ~ vlan.id) | selectattr('list', 'equalto', 'LAN') | list | length == 0
       ignore_errors: true
 
     # -------------------------
