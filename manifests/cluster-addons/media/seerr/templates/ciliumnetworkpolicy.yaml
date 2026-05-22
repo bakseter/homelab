@@ -68,6 +68,7 @@ spec:
         - matchName: 'api.themoviedb.org'
         - matchName: 'api.github.com'
         - matchName: 'gravatar.com'
+        - matchPattern: '*.algolia.net'
       toPorts:
         - ports:
             - port: '443'
