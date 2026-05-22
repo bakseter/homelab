@@ -12,6 +12,7 @@ resources:
   - ciliumnetworkpolicy.yaml
   - persistentvolumeclaim.yaml
   - httproute.yaml
+  - loadbalancer.yaml
 
 patches:
   - target:
