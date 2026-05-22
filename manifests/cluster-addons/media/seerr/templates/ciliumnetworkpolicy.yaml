@@ -19,6 +19,14 @@ spec:
             - port: '5055'
               protocol: TCP
 
+    # TODO: harden
+    - fromEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: '5055'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
