@@ -92,13 +92,34 @@
 
     - name: Normalize DHCP server list
       set_fact:
-        _dhcp_list: "{{ _dhcp_raw.msg if (_dhcp_raw.msg is iterable and _dhcp_raw.msg is not string) else [] }}"
+        _dhcp_list: '{{ _dhcp_raw.msg if (_dhcp_raw.msg is iterable and _dhcp_raw.msg is not string) else [] }}'
 
     - name: Remove defconf DHCP server if present
       community.routeros.api:
         path: ip dhcp-server
         remove: "{{ item['.id'] }}"
       loop: "{{ _dhcp_list | selectattr('name', 'equalto', 'defconf') | list }}"
+      ignore_errors: true
+
+    # -------------------------
+    # Cleanup - stale interface list members for deleted interfaces
+    # (catches orphaned entries where interface is an internal ID like '*13')
+    # -------------------------
+    - name: Gather interface list members for cleanup
+      community.routeros.api:
+        path: interface list member
+        cmd: 'print'
+      register: _iface_list_cleanup_raw
+
+    - name: Normalize interface list for cleanup
+      set_fact:
+        _iface_list_cleanup: '{{ _iface_list_cleanup_raw.msg if (_iface_list_cleanup_raw.msg is iterable and _iface_list_cleanup_raw.msg is not string) else [] }}'
+
+    - name: Remove stale interface list members pointing to deleted interfaces
+      community.routeros.api:
+        path: interface list member
+        remove: "{{ item['.id'] }}"
+      loop: "{{ _iface_list_cleanup | selectattr('interface', 'match', '^\\*[0-9A-Fa-f]+$') | list }}"
       ignore_errors: true
 
     # -------------------------
@@ -112,7 +133,7 @@
 
     - name: Normalize WiFi interface list
       set_fact:
-        _wifi_list: "{{ _wifi_raw.msg if (_wifi_raw.msg is iterable and _wifi_raw.msg is not string) else [] }}"
+        _wifi_list: '{{ _wifi_raw.msg if (_wifi_raw.msg is iterable and _wifi_raw.msg is not string) else [] }}'
 
     - name: Remove stale media virtual APs
       community.routeros.api:
@@ -132,7 +153,7 @@
 
     - name: Normalize bridge port list
       set_fact:
-        _bridge_ports_list: "{{ _bridge_ports_raw.msg if (_bridge_ports_raw.msg is iterable and _bridge_ports_raw.msg is not string) else [] }}"
+        _bridge_ports_list: '{{ _bridge_ports_raw.msg if (_bridge_ports_raw.msg is iterable and _bridge_ports_raw.msg is not string) else [] }}'
 
     - name: Remove stale media bridge ports
       community.routeros.api:
@@ -152,7 +173,7 @@
 
     - name: Normalize bridge VLAN list
       set_fact:
-        _bridge_vlans_list: "{{ _bridge_vlans_raw.msg if (_bridge_vlans_raw.msg is iterable and _bridge_vlans_raw.msg is not string) else [] }}"
+        _bridge_vlans_list: '{{ _bridge_vlans_raw.msg if (_bridge_vlans_raw.msg is iterable and _bridge_vlans_raw.msg is not string) else [] }}'
 
     # Macro: for each VLAN, update if a static entry exists, add if not.
     # The vlan-ids field comes back as an integer from RouterOS.
@@ -315,7 +336,7 @@
 
     - name: Normalize VLAN interface list
       set_fact:
-        _vlan_ifaces_list: "{{ _vlan_ifaces_raw.msg if (_vlan_ifaces_raw.msg is iterable and _vlan_ifaces_raw.msg is not string) else [] }}"
+        _vlan_ifaces_list: '{{ _vlan_ifaces_raw.msg if (_vlan_ifaces_raw.msg is iterable and _vlan_ifaces_raw.msg is not string) else [] }}'
 
     - name: Add VLAN interface if absent
       community.routeros.api:
@@ -351,7 +372,7 @@
 
     - name: Normalize IP address list
       set_fact:
-        _ip_addrs_list: "{{ _ip_addrs_raw.msg if (_ip_addrs_raw.msg is iterable and _ip_addrs_raw.msg is not string) else [] }}"
+        _ip_addrs_list: '{{ _ip_addrs_raw.msg if (_ip_addrs_raw.msg is iterable and _ip_addrs_raw.msg is not string) else [] }}'
 
     - name: Add IP address if absent
       community.routeros.api:
@@ -388,7 +409,7 @@
 
     - name: Normalize DHCP pool list
       set_fact:
-        _dhcp_pools_list: "{{ _dhcp_pools_raw.msg if (_dhcp_pools_raw.msg is iterable and _dhcp_pools_raw.msg is not string) else [] }}"
+        _dhcp_pools_list: '{{ _dhcp_pools_raw.msg if (_dhcp_pools_raw.msg is iterable and _dhcp_pools_raw.msg is not string) else [] }}'
 
     - name: Add DHCP pool if absent
       community.routeros.api:
@@ -428,7 +449,7 @@
 
     - name: Normalize DHCP server list
       set_fact:
-        _dhcp_servers_list: "{{ _dhcp_servers_raw.msg if (_dhcp_servers_raw.msg is iterable and _dhcp_servers_raw.msg is not string) else [] }}"
+        _dhcp_servers_list: '{{ _dhcp_servers_raw.msg if (_dhcp_servers_raw.msg is iterable and _dhcp_servers_raw.msg is not string) else [] }}'
 
     - name: Add DHCP server if absent
       community.routeros.api:
@@ -470,7 +491,7 @@
 
     - name: Normalize DHCP network list
       set_fact:
-        _dhcp_networks_list: "{{ _dhcp_networks_raw.msg if (_dhcp_networks_raw.msg is iterable and _dhcp_networks_raw.msg is not string) else [] }}"
+        _dhcp_networks_list: '{{ _dhcp_networks_raw.msg if (_dhcp_networks_raw.msg is iterable and _dhcp_networks_raw.msg is not string) else [] }}'
 
     - name: Add DHCP network if absent
       community.routeros.api:
@@ -512,7 +533,7 @@
 
     - name: Normalize interface list members
       set_fact:
-        _iface_list: "{{ _iface_list_raw.msg if (_iface_list_raw.msg is iterable and _iface_list_raw.msg is not string) else [] }}"
+        _iface_list: '{{ _iface_list_raw.msg if (_iface_list_raw.msg is iterable and _iface_list_raw.msg is not string) else [] }}'
 
     - name: Add VLAN to LAN interface list if absent
       community.routeros.api:
@@ -539,6 +560,16 @@
     # -------------------------
     # Disable default 192.168.88.1 LAST
     # -------------------------
+    - name: Gather 192.168.88.1 address state
+      community.routeros.api:
+        path: ip address
+        cmd: 'print'
+      register: _default_addr_raw
+
+    - name: Normalize default address list
+      set_fact:
+        _default_addr_list: '{{ _default_addr_raw.msg if (_default_addr_raw.msg is iterable and _default_addr_raw.msg is not string) else [] }}'
+
     - name: Disable default 192.168.88.1 address
       community.routeros.api_find_and_modify:
         path: ip address
@@ -546,6 +577,7 @@
           address: 192.168.88.1/24
         values:
           disabled: 'yes'
+      when: _default_addr_list | selectattr('address', 'equalto', '192.168.88.1/24') | selectattr('disabled', 'equalto', false) | list | length > 0
 
   post_tasks:
     - name: Verify VLAN interfaces
