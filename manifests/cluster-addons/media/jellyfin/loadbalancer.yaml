@@ -7,12 +7,13 @@ metadata:
   name: jellyfin-lan
   namespace: media
 spec:
+  externalTrafficPolicy: Local
   type: LoadBalancer
   selector:
     app.kubernetes.io/instance: jellyfin
     app.kubernetes.io/name: jellyfin
   ports:
-  - name: http
-    port: 8096
-    protocol: TCP
-    targetPort: http
+    - name: http
+      port: 8096
+      protocol: TCP
+      targetPort: http
