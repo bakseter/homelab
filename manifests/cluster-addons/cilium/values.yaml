@@ -49,9 +49,6 @@ cilium:
   bpf:
     masquerade: true
 
-  loadBalancer:
-    acceleration: native
-
   prometheus:
     enabled: true
     serviceMonitor:
