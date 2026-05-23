@@ -67,7 +67,7 @@ loki:
   lokiCanary:
     enabled: true
     push: false
-    labels:
+    podLabels:
       logs.bakseter.net/scrape: 'false'
 
   resultsCache:
