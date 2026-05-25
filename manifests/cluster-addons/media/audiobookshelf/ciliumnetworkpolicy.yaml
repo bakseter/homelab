@@ -19,6 +19,14 @@ spec:
             - port: '80'
               protocol: TCP
 
+    # TODO: lock down
+    - fromEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: '80'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
