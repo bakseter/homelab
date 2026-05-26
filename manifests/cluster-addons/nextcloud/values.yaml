@@ -1,4 +1,6 @@
 nextcloud:
+  replicaCount: 0
+
   httpRoute:
     enabled: true
 
