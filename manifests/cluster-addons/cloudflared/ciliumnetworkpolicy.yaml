@@ -6,7 +6,19 @@ metadata:
 spec:
   endpointSelector: {}
 
-  ingress: []
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - rules:
+            http:
+              - path: '/metrics'
+                method: 'GET'
+          ports:
+            - port: '2000'
+              protocol: TCP
 
   egress:
     - toEntities:
