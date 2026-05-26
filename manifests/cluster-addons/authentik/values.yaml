@@ -27,16 +27,16 @@ authentik:
         release: kube-prometheus-stack
 
   server:
-    replicas: 1
+    replicas: 2
 
-    #   affinity:
-    #     podAntiAffinity:
-    #       requiredDuringSchedulingIgnoredDuringExecution:
-    #         - labelSelector:
-    #             matchLabels:
-    #               app.kubernetes.io/instance: authentik
-    #               app.kubernetes.io/component: server
-    #           topologyKey: bakseter.net/physical-node
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/instance: authentik
+                app.kubernetes.io/component: server
+            topologyKey: bakseter.net/physical-node
 
     containerSecurityContext:
       allowPrivilegeEscalation: false
@@ -119,10 +119,8 @@ authentik:
     metrics:
       enabled: true
 
-      # TODO: enable after upgrade to 2026.5.0
-      # https://github.com/goauthentik/authentik/issues/18292
       serviceMonitor:
-        enabled: false
+        enabled: true
         interval: 60s
         labels:
           release: kube-prometheus-stack

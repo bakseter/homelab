@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: authentik-server
+  namespace: authentik
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+      sectionName: public
+      group: gateway.networking.k8s.io # for argocd diff
+      kind: Gateway
+
+  hostnames:
+    - authentik.bakseter.net
+
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: authentik-server
+          port: 80
+          group: '' # for argocd diff
+          kind: Service # for argocd diff
+          weight: 1 # for argocd diff
