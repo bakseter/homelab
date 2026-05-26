@@ -4,10 +4,11 @@ metadata:
   name: cloudflared
   namespace: cloudflared
 spec:
+  allowCrossNamespaceImport: true
+  title: cloudflared
   instanceSelector:
     matchLabels:
       dashboards: grafana
-  title: cloudflared
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
@@ -15,10 +16,11 @@ metadata:
   name: cloudflared
   namespace: cloudflared
 spec:
+  allowCrossNamespaceImport: true
+  folder: cloudflared
   instanceSelector:
     matchLabels:
       dashboards: grafana
-  folder: cloudflared
   json: |
     {
       "title": "Cloudflared tunnel",
