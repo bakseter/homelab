@@ -58,6 +58,7 @@ spec:
   config:
     log:
       mode: 'console'
+      level: 'debug'
     server:
       domain: grafana.sre.bakseter.net
       root_url: https://grafana.sre.bakseter.net
