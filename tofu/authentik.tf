@@ -190,22 +190,22 @@ resource "authentik_group" "grafana-viewers" {
 
 resource "authentik_application_entitlement" "grafana-admins" {
   name        = "Grafana Admins"
-  application = authentik_application.grafana.id
+  application = authentik_application.grafana.uuid
 }
 
 resource "authentik_application_entitlement" "grafana-viewers" {
   name        = "Grafana Viewers"
-  application = authentik_application.grafana.id
+  application = authentik_application.grafana.uuid
 }
 
 resource "authentik_policy_binding" "grafana-admins-entitlement" {
-  target = authentik_application_entitlement.grafana-admins.uuid
+  target = authentik_application_entitlement.grafana-admins.id
   group  = authentik_group.grafana-admins.id
   order  = 0
 }
 
 resource "authentik_policy_binding" "grafana-viewers-entitlement" {
-  target = authentik_application_entitlement.grafana-viewers.uuid
+  target = authentik_application_entitlement.grafana-viewers.id
   group  = authentik_group.grafana-viewers.id
   order  = 0
 }
