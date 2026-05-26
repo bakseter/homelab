@@ -27,58 +27,65 @@ spec:
       "panels": [
         {
           "type": "stat", "title": "Total requests",
-          "targets": [{"expr": "cloudflared_tunnel_total_requests", "legendFormat": "requests"}],
+          "datasource": "prometheus",
+          "targets": [{"expr": "cloudflared_tunnel_total_requests", "legendFormat": "requests", "datasource": "prometheus"}],
           "gridPos": {"x":0,"y":0,"w":6,"h":4}
         },
         {
           "type": "stat", "title": "Proxy errors",
-          "targets": [{"expr": "cloudflared_tunnel_request_errors", "legendFormat": "errors"}],
+          "datasource": "prometheus",
+          "targets": [{"expr": "cloudflared_tunnel_request_errors", "legendFormat": "errors", "datasource": "prometheus"}],
           "fieldConfig": {"defaults": {"thresholds": {"steps": [{"color":"green","value":0},{"color":"red","value":1}]}}},
           "gridPos": {"x":6,"y":0,"w":6,"h":4}
         },
         {
           "type": "stat", "title": "HA connections",
-          "targets": [{"expr": "cloudflared_tunnel_ha_connections"}],
+          "datasource": "prometheus",
+          "targets": [{"expr": "cloudflared_tunnel_ha_connections", "datasource": "prometheus"}],
           "fieldConfig": {"defaults": {"thresholds": {"steps": [{"color":"red","value":0},{"color":"yellow","value":2},{"color":"green","value":4}]}}},
           "gridPos": {"x":12,"y":0,"w":6,"h":4}
         },
         {
           "type": "stat", "title": "Active requests",
-          "targets": [{"expr": "cloudflared_tunnel_concurrent_requests_per_tunnel"}],
+          "datasource": "prometheus",
+          "targets": [{"expr": "cloudflared_tunnel_concurrent_requests_per_tunnel", "datasource": "prometheus"}],
           "gridPos": {"x":18,"y":0,"w":6,"h":4}
         },
         {
           "type": "timeseries", "title": "Request rate",
-          "targets": [{"expr": "rate(cloudflared_tunnel_total_requests[1m])", "legendFormat": "req/s"}],
+          "datasource": "prometheus",
+          "targets": [{"expr": "rate(cloudflared_tunnel_total_requests[1m])", "legendFormat": "req/s", "datasource": "prometheus"}],
           "gridPos": {"x":0,"y":4,"w":12,"h":8}
         },
         {
           "type": "timeseries", "title": "Responses by status code",
-          "targets": [
-            {"expr": "increase(cloudflared_tunnel_response_by_code[1m])", "legendFormat": "{{status_code}}"}
-          ],
+          "datasource": "prometheus",
+          "targets": [{"expr": "increase(cloudflared_tunnel_response_by_code[1m])", "legendFormat": "{{status_code}}", "datasource": "prometheus"}],
           "gridPos": {"x":12,"y":4,"w":12,"h":8}
         },
         {
           "type": "timeseries", "title": "4xx + 5xx error rate",
+          "datasource": "prometheus",
           "targets": [
-            {"expr": "rate(cloudflared_tunnel_response_by_code{status_code=~\"4..\"}[5m])", "legendFormat": "4xx"},
-            {"expr": "rate(cloudflared_tunnel_response_by_code{status_code=~\"5..\"}[5m])", "legendFormat": "5xx"},
-            {"expr": "rate(cloudflared_tunnel_request_errors[5m])", "legendFormat": "proxy errors"}
+            {"expr": "rate(cloudflared_tunnel_response_by_code{status_code=~\"4..\"}[5m])", "legendFormat": "4xx", "datasource": "prometheus"},
+            {"expr": "rate(cloudflared_tunnel_response_by_code{status_code=~\"5..\"}[5m])", "legendFormat": "5xx", "datasource": "prometheus"},
+            {"expr": "rate(cloudflared_tunnel_request_errors[5m])", "legendFormat": "proxy errors", "datasource": "prometheus"}
           ],
           "gridPos": {"x":0,"y":12,"w":24,"h":8}
         },
         {
           "type": "timeseries", "title": "QUIC RTT per connection (ms)",
+          "datasource": "prometheus",
           "targets": [
-            {"expr": "quic_client_latest_rtt", "legendFormat": "conn {{conn_index}}"},
-            {"expr": "quic_client_smoothed_rtt", "legendFormat": "smoothed {{conn_index}}"}
+            {"expr": "quic_client_latest_rtt", "legendFormat": "conn {{conn_index}}", "datasource": "prometheus"},
+            {"expr": "quic_client_smoothed_rtt", "legendFormat": "smoothed {{conn_index}}", "datasource": "prometheus"}
           ],
           "gridPos": {"x":0,"y":20,"w":12,"h":8}
         },
         {
           "type": "stat", "title": "Tunnel server locations",
-          "targets": [{"expr": "cloudflared_tunnel_server_locations == 1", "legendFormat": "{{connection_id}} → {{edge_location}}"}],
+          "datasource": "prometheus",
+          "targets": [{"expr": "cloudflared_tunnel_server_locations == 1", "legendFormat": "{{connection_id}} → {{edge_location}}", "datasource": "prometheus"}],
           "gridPos": {"x":12,"y":20,"w":12,"h":8}
         }
       ]
