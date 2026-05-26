@@ -50,13 +50,11 @@ spec:
                 - name: GF_INSTALL_PLUGINS
                   value: 'grafana-lokiexplore-app,grafana-metricsdrilldown-app'
 
-                - name: grafana
-                  env:
-                    - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
-                      valueFrom:
-                        secretKeyRef:
-                          name: grafana-oauth-secret
-                          key: client_secret
+                - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-oauth-secret
+                      key: client_secret
   config:
     log:
       mode: 'console'
