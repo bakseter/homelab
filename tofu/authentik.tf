@@ -190,12 +190,12 @@ resource "authentik_group" "grafana-viewers" {
 
 resource "authentik_application_entitlement" "grafana-admins" {
   name        = "Grafana Admins"
-  application = authentik_application.grafana.uuid
+  application = authentik_application.grafana.id
 }
 
 resource "authentik_application_entitlement" "grafana-viewers" {
   name        = "Grafana Viewers"
-  application = authentik_application.grafana.uuid
+  application = authentik_application.grafana.id
 }
 
 resource "authentik_policy_binding" "grafana-admins-entitlement" {
