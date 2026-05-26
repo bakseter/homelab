@@ -9,7 +9,7 @@ spec:
     kind: Deployment
     name: authentik-server
   updatePolicy:
-    updateMode: Initial
+    updateMode: Off
 ---
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
@@ -22,4 +22,4 @@ spec:
     kind: Deployment
     name: authentik-worker
   updatePolicy:
-    updateMode: Initial
+    updateMode: Off
