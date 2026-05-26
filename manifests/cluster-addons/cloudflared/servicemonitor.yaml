@@ -4,11 +4,10 @@ metadata:
   name: cloudflared
   namespace: cloudflared
   labels:
-    app: cloudflared
     release: kube-prometheus-stack
 spec:
   endpoints:
   - port: metrics
   selector:
     matchLabels:
-      app: cloudflared
+      app.kubernetes.io/name: cloudflared
