@@ -10,4 +10,5 @@ resources:
   - deployment.yaml
   - ciliumnetworkpolicy.yaml
   - sealedsecret.yaml
+  - service.yaml
   - servicemonitor.yaml
