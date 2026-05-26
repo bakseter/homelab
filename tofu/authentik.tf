@@ -23,7 +23,7 @@ data "authentik_flow" "default-provider-invalidation-flow" {
 }
 
 
-# APPLICATION AUTH
+#### Application auth
 
 resource "authentik_provider_proxy" "mandagsmiddag-frontend" {
   name                  = "mandagsmiddag-frontend"
@@ -50,7 +50,7 @@ resource "authentik_application" "mandagsmiddag-backend" {
 }
 
 
-# OIDC INTEGRATIONS
+#### OIDC integrations
 
 data "authentik_service_connection_kubernetes" "local" {
   name = "Local Kubernetes Cluster"
@@ -106,6 +106,7 @@ data "authentik_property_mapping_provider_scope" "scopes" {
     "goauthentik.io/providers/oauth2/scope-openid",
     "goauthentik.io/providers/oauth2/scope-profile",
     "goauthentik.io/providers/oauth2/scope-email",
+    "goauthentik.io/providers/oauth2/scope-entitlements",
   ]
 }
 
@@ -113,14 +114,21 @@ data "authentik_certificate_key_pair" "default" {
   name = "authentik Self-signed Certificate"
 }
 
+
+### Argo CD
+
 resource "authentik_provider_oauth2" "argocd" {
-  name               = "argocd"
-  client_id          = "argocd"
+  name      = "argocd"
+  client_id = "argocd"
+
   authorization_flow = data.authentik_flow.default-provider-authorization-explicit-consent.id
   invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
-  sub_mode           = "user_username"
-  signing_key        = data.authentik_certificate_key_pair.default.id
-  property_mappings  = data.authentik_property_mapping_provider_scope.scopes.ids
+
+  sub_mode = "user_username"
+
+  signing_key       = data.authentik_certificate_key_pair.default.id
+  property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
+
   allowed_redirect_uris = [
     {
       matching_mode = "strict"
@@ -136,7 +144,36 @@ resource "authentik_application" "argocd" {
 }
 
 
-# RBAC
+#### Grafana
+
+resource "authentik_provider_oauth2" "grafana" {
+  name      = "grafana"
+  client_id = "grafana"
+
+  authorization_flow = data.authentik_flow.default-provider-authorization-explicit-consent.id
+  invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
+
+  sub_mode = "user_username"
+
+  signing_key       = data.authentik_certificate_key_pair.default.id
+  property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
+
+  allowed_redirect_uris = [
+    {
+      matching_mode = "strict"
+      url           = "https://grafana.sre.bakseter.net/login/generic_oauth"
+    }
+  ]
+}
+
+resource "authentik_application" "grafana" {
+  name              = "Grafana"
+  slug              = "argocd"
+  protocol_provider = authentik_provider_oauth2.grafana.id
+}
+
+
+#### RBAC
 
 data "authentik_user" "andreas" {
   pk = "17"
@@ -151,9 +188,14 @@ resource "authentik_group" "argocd-admins" {
   users = [data.authentik_user.andreas.id]
 }
 
-import {
-  id = "7250ff1d-6a53-42c5-a18f-8866e1a2b84b"
-  to = authentik_group.mandagsmiddag-admins
+resource "authentik_group" "grafana-admins" {
+  name  = "grafana-admins"
+  users = [data.authentik_user.andreas.id]
+}
+
+resource "authentik_group" "grafana-viewers" {
+  name  = "grafana-viewers"
+  users = [data.authentik_user.emil.id]
 }
 
 resource "authentik_group" "mandagsmiddag-admins" {
