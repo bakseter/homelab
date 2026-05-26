@@ -69,7 +69,7 @@ spec:
           "targets": [
             {"expr": "sum(rate(cloudflared_tunnel_response_by_code{status_code=~\"4..\"}[10m])) by (job)", "legendFormat": "4xx", "datasource": "prometheus"},
             {"expr": "sum(rate(cloudflared_tunnel_response_by_code{status_code=~\"5..\"}[10m])) by (job)", "legendFormat": "5xx", "datasource": "prometheus"},
-            {"expr": "sum(rate(cloudflared_tunnel_request_errors[10m])", "legendFormat": "proxy errors", "datasource": "prometheus"}
+            {"expr": "sum(rate(cloudflared_tunnel_request_errors[10m]))", "legendFormat": "proxy errors", "datasource": "prometheus"}
           ],
           "gridPos": {"x":0,"y":12,"w":24,"h":8}
         },
