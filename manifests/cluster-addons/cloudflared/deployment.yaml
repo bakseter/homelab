@@ -49,7 +49,8 @@ spec:
                   name: tunnel-token
                   key: token
           ports:
-            - containerPort: 2000
+            - port: 2000
+              containerPort: 2000
               name: metrics
               protocol: TCP
           command:

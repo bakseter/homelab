@@ -8,10 +8,7 @@ metadata:
     release: kube-prometheus-stack
 spec:
   endpoints:
-  - interval: 60s
-    path: /metrics
-    port: metrics
-    scrapeTimeout: 3s
+  - port: metrics
   selector:
     matchLabels:
       app: cloudflared
