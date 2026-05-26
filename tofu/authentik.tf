@@ -155,7 +155,8 @@ resource "authentik_provider_oauth2" "grafana" {
   authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
   invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
 
-  sub_mode = "user_username"
+  sub_mode    = "user_username"
+  client_type = "confidential"
 
   signing_key       = data.authentik_certificate_key_pair.default.id
   property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
