@@ -5,7 +5,7 @@ metadata:
   namespace: cloudflared
 spec:
   ports:
-  - name: metrics
-    port: 2000
-    protocol: TCP
-    targetPort: metrics
+    - name: metrics
+      port: 2000
+      protocol: TCP
+      targetPort: metrics

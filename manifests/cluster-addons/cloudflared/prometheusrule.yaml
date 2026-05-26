@@ -7,60 +7,60 @@ metadata:
     release: kube-prometheus-stack
 spec:
   groups:
-  - name: cloudflared
-    rules:
-      - alert: TunnelRequestErrors
-        expr: increase(cloudflared_tunnel_request_errors[5m]) > 5
-        for: 1m
-        labels:
-          severity: critical
-        annotations:
-          summary: "Cloudflared proxy errors spiking"
-          description: "{{ $value }} proxy errors in the last 5 minutes"
+    - name: cloudflared
+      rules:
+        - alert: TunnelRequestErrors
+          expr: increase(cloudflared_tunnel_request_errors[5m]) > 5
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: 'Cloudflared proxy errors spiking'
+            description: '{{ $value }} proxy errors in the last 5 minutes'
 
-      - alert: TunnelHAConnectionsLow
-        expr: cloudflared_tunnel_ha_connections < 2
-        for: 2m
-        labels:
-          severity: critical
-        annotations:
-          summary: "HA tunnel connections critically low ({{ $value }})"
-          description: "Expected 4, currently {{ $value }}. Tunnel resilience degraded."
+        - alert: TunnelHAConnectionsLow
+          expr: cloudflared_tunnel_ha_connections < 2
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: 'HA tunnel connections critically low ({{ $value }})'
+            description: 'Expected 4, currently {{ $value }}. Tunnel resilience degraded.'
 
-      - alert: TunnelHighErrorRate
-        expr: |
-          rate(cloudflared_tunnel_response_by_code{status_code=~"4.."}[5m])
-          / rate(cloudflared_tunnel_total_requests[5m]) > 0.05
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          summary: "4xx error rate above 5%"
-          description: "Current rate: {{ $value | humanizePercentage }}"
+        - alert: TunnelHighErrorRate
+          expr: |
+            rate(cloudflared_tunnel_response_by_code{status_code=~"4.."}[5m])
+            / rate(cloudflared_tunnel_total_requests[5m]) > 0.05
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: '4xx error rate above 5%'
+            description: 'Current rate: {{ $value | humanizePercentage }}'
 
-      - alert: Tunnel5xxErrors
-        expr: increase(cloudflared_tunnel_response_by_code{status_code=~"5.."}[5m]) > 0
-        for: 1m
-        labels:
-          severity: warning
-        annotations:
-          summary: "5xx responses detected"
-          description: "{{ $value }} server errors in last 5 minutes"
+        - alert: Tunnel5xxErrors
+          expr: increase(cloudflared_tunnel_response_by_code{status_code=~"5.."}[5m]) > 0
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: '5xx responses detected'
+            description: '{{ $value }} server errors in last 5 minutes'
 
-      - alert: TunnelRegistrationFailure
-        expr: |
-          increase(cloudflared_rpc_client_operations{method="register_connection"}[5m])
-          - increase(cloudflared_tunnel_tunnel_register_success{rpcName="registerConnection"}[5m]) > 0
-        for: 0m
-        labels:
-          severity: critical
-        annotations:
-          summary: "Tunnel registration attempt failed"
+        - alert: TunnelRegistrationFailure
+          expr: |
+            increase(cloudflared_rpc_client_operations{method="register_connection"}[5m])
+            - increase(cloudflared_tunnel_tunnel_register_success{rpcName="registerConnection"}[5m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: 'Tunnel registration attempt failed'
 
-      - alert: QUICHighRTT
-        expr: quic_client_latest_rtt > 150
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          summary: "QUIC RTT elevated on conn {{ $labels.conn_index }} ({{ $value }}ms)"
+        - alert: QUICHighRTT
+          expr: quic_client_latest_rtt > 150
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: 'QUIC RTT elevated on conn {{ $labels.conn_index }} ({{ $value }}ms)'

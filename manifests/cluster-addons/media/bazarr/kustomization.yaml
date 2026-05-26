@@ -10,5 +10,5 @@ resources:
   - deployment.yaml
   - service.yaml
   - persistentvolumeclaim.yaml
-# - ciliumnetworkpolicy.yaml
+  # - ciliumnetworkpolicy.yaml
   - httproute.yaml

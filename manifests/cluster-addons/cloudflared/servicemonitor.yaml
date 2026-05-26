@@ -7,7 +7,7 @@ metadata:
     release: kube-prometheus-stack
 spec:
   endpoints:
-  - port: metrics
+    - port: metrics
   selector:
     matchLabels:
       app.kubernetes.io/name: cloudflared

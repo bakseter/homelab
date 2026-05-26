@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: ollama
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     namespace: ollama

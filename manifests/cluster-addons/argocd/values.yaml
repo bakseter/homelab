@@ -87,17 +87,17 @@ argo-cd:
         - argocd.sre.bakseter.net
 
       rules:
-      - matches:
-          - path:
-              type: PathPrefix
-              value: /
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
 
-        filters:
-        - type: RequestHeaderModifier
-          requestHeaderModifier:
-            set:
-              - name: Tailscale-User-Login
-                value: "%REQ(Tailscale-User-Login)%"
+          filters:
+            - type: RequestHeaderModifier
+              requestHeaderModifier:
+                set:
+                  - name: Tailscale-User-Login
+                    value: '%REQ(Tailscale-User-Login)%'
 
   repoServer:
     replicas: 2
