@@ -168,7 +168,7 @@ resource "authentik_provider_oauth2" "grafana" {
 
 resource "authentik_application" "grafana" {
   name              = "Grafana"
-  slug              = "argocd"
+  slug              = "grafana"
   protocol_provider = authentik_provider_oauth2.grafana.id
 }
 
