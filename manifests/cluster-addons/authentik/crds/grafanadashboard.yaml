@@ -27,126 +27,173 @@ spec:
       "datasource": "prometheus",
       "panels": [
 
+        { "type": "row", "title": "Server — overview", "gridPos": {"x":0,"y":0,"w":24,"h":1} },
+
         { "type": "stat", "title": "HTTP request rate",
           "datasource": "prometheus",
-          "targets": [{"expr": "rate(django_http_requests_before_middlewares_total[5m])", "legendFormat": "req/s", "datasource": "prometheus"}],
-          "gridPos": {"x":0,"y":0,"w":4,"h":4} },
+          "targets": [{"expr": "sum(rate(django_http_requests_before_middlewares_total{job=\"authentik-server-metrics\"}[5m]))", "legendFormat": "req/s", "datasource": "prometheus"}],
+          "gridPos": {"x":0,"y":1,"w":4,"h":4} },
 
-        { "type": "stat", "title": "HTTP error rate (5xx)",
+        { "type": "stat", "title": "5xx error rate",
           "datasource": "prometheus",
-          "targets": [{"expr": "rate(django_http_responses_total_by_status_total{status=~\"5..\"}[5m])", "datasource": "prometheus"}],
+          "targets": [{"expr": "sum(rate(django_http_responses_total_by_status_total{job=\"authentik-server-metrics\",status=~\"5..\"}[5m]))", "datasource": "prometheus"}],
           "fieldConfig": {"defaults": {"thresholds": {"steps": [{"color":"green","value":0},{"color":"red","value":0.01}]}}},
-          "gridPos": {"x":4,"y":0,"w":4,"h":4} },
+          "gridPos": {"x":4,"y":1,"w":4,"h":4} },
 
         { "type": "stat", "title": "DB connection errors",
           "datasource": "prometheus",
-          "targets": [{"expr": "sum(django_db_new_connection_errors_total)", "datasource": "prometheus"}],
+          "targets": [{"expr": "sum(django_db_new_connection_errors_total{job=\"authentik-server-metrics\"})", "datasource": "prometheus"}],
           "fieldConfig": {"defaults": {"thresholds": {"steps": [{"color":"green","value":0},{"color":"yellow","value":1},{"color":"red","value":10}]}}},
-          "gridPos": {"x":8,"y":0,"w":4,"h":4} },
-
-        { "type": "stat", "title": "Task errors",
-          "datasource": "prometheus",
-          "targets": [{"expr": "sum(authentik_tasks_errors_total)", "datasource": "prometheus"}],
-          "fieldConfig": {"defaults": {"thresholds": {"steps": [{"color":"green","value":0},{"color":"red","value":1}]}}},
-          "gridPos": {"x":12,"y":0,"w":4,"h":4} },
-
-        { "type": "stat", "title": "Workers connected",
-          "datasource": "prometheus",
-          "targets": [{"expr": "count(authentik_tasks_workers)", "datasource": "prometheus"}],
-          "fieldConfig": {"defaults": {"thresholds": {"steps": [{"color":"red","value":0},{"color":"yellow","value":1},{"color":"green","value":2}]}}},
-          "gridPos": {"x":16,"y":0,"w":4,"h":4} },
+          "gridPos": {"x":8,"y":1,"w":4,"h":4} },
 
         { "type": "stat", "title": "Outposts connected",
           "datasource": "prometheus",
-          "targets": [{"expr": "sum(authentik_outposts_connected)", "datasource": "prometheus"}],
+          "targets": [{"expr": "sum(authentik_outposts_connected{job=\"authentik-server-metrics\"})", "datasource": "prometheus"}],
           "fieldConfig": {"defaults": {"thresholds": {"steps": [{"color":"red","value":0},{"color":"green","value":1}]}}},
-          "gridPos": {"x":20,"y":0,"w":4,"h":4} },
+          "gridPos": {"x":12,"y":1,"w":4,"h":4} },
+
+        { "type": "stat", "title": "Flows cached",
+          "datasource": "prometheus",
+          "targets": [{"expr": "max(authentik_flows_cached{job=\"authentik-server-metrics\"})", "datasource": "prometheus"}],
+          "gridPos": {"x":16,"y":1,"w":4,"h":4} },
+
+        { "type": "stat", "title": "Policies cached",
+          "datasource": "prometheus",
+          "targets": [{"expr": "max(authentik_policies_cached{job=\"authentik-server-metrics\"})", "datasource": "prometheus"}],
+          "gridPos": {"x":20,"y":1,"w":4,"h":4} },
 
         { "type": "timeseries", "title": "HTTP responses by status class",
           "datasource": "prometheus",
           "targets": [
-            {"expr": "rate(django_http_responses_total_by_status_total{status=~\"2..\"}[5m])", "legendFormat": "2xx", "datasource": "prometheus"},
-            {"expr": "rate(django_http_responses_total_by_status_total{status=~\"3..\"}[5m])", "legendFormat": "3xx", "datasource": "prometheus"},
-            {"expr": "rate(django_http_responses_total_by_status_total{status=~\"4..\"}[5m])", "legendFormat": "4xx", "datasource": "prometheus"},
-            {"expr": "rate(django_http_responses_total_by_status_total{status=~\"5..\"}[5m])", "legendFormat": "5xx", "datasource": "prometheus"}
+            {"expr": "sum(rate(django_http_responses_total_by_status_total{job=\"authentik-server-metrics\",status=~\"2..\"}[5m]))", "legendFormat": "2xx", "datasource": "prometheus"},
+            {"expr": "sum(rate(django_http_responses_total_by_status_total{job=\"authentik-server-metrics\",status=~\"3..\"}[5m]))", "legendFormat": "3xx", "datasource": "prometheus"},
+            {"expr": "sum(rate(django_http_responses_total_by_status_total{job=\"authentik-server-metrics\",status=~\"4..\"}[5m]))", "legendFormat": "4xx", "datasource": "prometheus"},
+            {"expr": "sum(rate(django_http_responses_total_by_status_total{job=\"authentik-server-metrics\",status=~\"5..\"}[5m]))", "legendFormat": "5xx", "datasource": "prometheus"}
           ],
-          "gridPos": {"x":0,"y":4,"w":12,"h":8} },
+          "gridPos": {"x":0,"y":5,"w":12,"h":8} },
 
         { "type": "timeseries", "title": "API request latency p50 / p95 / p99",
           "datasource": "prometheus",
           "targets": [
-            {"expr": "histogram_quantile(0.5,  rate(authentik_main_request_duration_seconds_bucket[5m]))", "legendFormat": "p50", "datasource": "prometheus"},
-            {"expr": "histogram_quantile(0.95, rate(authentik_main_request_duration_seconds_bucket[5m]))", "legendFormat": "p95", "datasource": "prometheus"},
-            {"expr": "histogram_quantile(0.99, rate(authentik_main_request_duration_seconds_bucket[5m]))", "legendFormat": "p99", "datasource": "prometheus"}
+            {"expr": "histogram_quantile(0.5,  sum by (le) (rate(authentik_main_request_duration_seconds_bucket{job=\"authentik-server-metrics\"}[5m])))", "legendFormat": "p50", "datasource": "prometheus"},
+            {"expr": "histogram_quantile(0.95, sum by (le) (rate(authentik_main_request_duration_seconds_bucket{job=\"authentik-server-metrics\"}[5m])))", "legendFormat": "p95", "datasource": "prometheus"},
+            {"expr": "histogram_quantile(0.99, sum by (le) (rate(authentik_main_request_duration_seconds_bucket{job=\"authentik-server-metrics\"}[5m])))", "legendFormat": "p99", "datasource": "prometheus"}
           ],
           "fieldConfig": {"defaults": {"unit": "s"}},
-          "gridPos": {"x":12,"y":4,"w":12,"h":8} },
+          "gridPos": {"x":12,"y":5,"w":12,"h":8} },
 
-        { "type": "timeseries", "title": "DB query latency p50 / p95 / p99",
+        { "type": "timeseries", "title": "DB query latency p50 / p95 / p99 (server)",
           "datasource": "prometheus",
           "targets": [
-            {"expr": "histogram_quantile(0.5,  rate(django_db_query_duration_seconds_bucket[5m]))", "legendFormat": "p50", "datasource": "prometheus"},
-            {"expr": "histogram_quantile(0.95, rate(django_db_query_duration_seconds_bucket[5m]))", "legendFormat": "p95", "datasource": "prometheus"},
-            {"expr": "histogram_quantile(0.99, rate(django_db_query_duration_seconds_bucket[5m]))", "legendFormat": "p99", "datasource": "prometheus"}
+            {"expr": "histogram_quantile(0.5,  sum by (le) (rate(django_db_query_duration_seconds_bucket{job=\"authentik-server-metrics\"}[5m])))", "legendFormat": "p50", "datasource": "prometheus"},
+            {"expr": "histogram_quantile(0.95, sum by (le) (rate(django_db_query_duration_seconds_bucket{job=\"authentik-server-metrics\"}[5m])))", "legendFormat": "p95", "datasource": "prometheus"},
+            {"expr": "histogram_quantile(0.99, sum by (le) (rate(django_db_query_duration_seconds_bucket{job=\"authentik-server-metrics\"}[5m])))", "legendFormat": "p99", "datasource": "prometheus"}
           ],
           "fieldConfig": {"defaults": {"unit": "s"}},
-          "gridPos": {"x":0,"y":12,"w":12,"h":8} },
+          "gridPos": {"x":0,"y":13,"w":12,"h":8} },
 
-        { "type": "timeseries", "title": "DB connection errors rate",
+        { "type": "timeseries", "title": "DB connection errors rate (server)",
           "datasource": "prometheus",
           "targets": [
-            {"expr": "rate(django_db_new_connection_errors_total[5m])", "legendFormat": "conn errors/s", "datasource": "prometheus"},
-            {"expr": "rate(django_db_errors_total[5m])", "legendFormat": "{{type}}", "datasource": "prometheus"}
+            {"expr": "sum(rate(django_db_new_connection_errors_total{job=\"authentik-server-metrics\"}[5m]))", "legendFormat": "conn errors/s", "datasource": "prometheus"},
+            {"expr": "sum by (type) (rate(django_db_errors_total{job=\"authentik-server-metrics\"}[5m]))", "legendFormat": "{{type}}", "datasource": "prometheus"}
           ],
-          "gridPos": {"x":12,"y":12,"w":12,"h":8} },
+          "gridPos": {"x":12,"y":13,"w":12,"h":8} },
 
-        { "type": "timeseries", "title": "Task errors rate",
+        { "type": "timeseries", "title": "Flow stage execution p95 (by stage type)",
           "datasource": "prometheus",
           "targets": [
-            {"expr": "rate(authentik_tasks_errors_total[5m])", "legendFormat": "{{actor_name}}", "datasource": "prometheus"}
-          ],
-          "gridPos": {"x":0,"y":20,"w":12,"h":8} },
-
-        { "type": "timeseries", "title": "Task throughput",
-          "datasource": "prometheus",
-          "targets": [
-            {"expr": "topk(5, rate(authentik_tasks_total[5m]))", "legendFormat": "{{actor_name}}", "datasource": "prometheus"}
-          ],
-          "gridPos": {"x":12,"y":20,"w":12,"h":8} },
-
-        { "type": "timeseries", "title": "Flow stage execution time p95 (by stage type)",
-          "datasource": "prometheus",
-          "targets": [
-            {"expr": "histogram_quantile(0.95, sum by (stage_type, le) (rate(authentik_flows_execution_stage_time_bucket[5m])))", "legendFormat": "{{stage_type}}", "datasource": "prometheus"}
+            {"expr": "histogram_quantile(0.95, sum by (stage_type, le) (rate(authentik_flows_execution_stage_time_bucket{job=\"authentik-server-metrics\"}[5m])))", "legendFormat": "{{stage_type}}", "datasource": "prometheus"}
           ],
           "fieldConfig": {"defaults": {"unit": "s"}},
-          "gridPos": {"x":0,"y":28,"w":12,"h":8} },
+          "gridPos": {"x":0,"y":21,"w":12,"h":8} },
 
-        { "type": "timeseries", "title": "Policy engine time p95",
+        { "type": "timeseries", "title": "Policy engine time p95 (by object type)",
           "datasource": "prometheus",
           "targets": [
-            {"expr": "histogram_quantile(0.95, sum by (obj_type, le) (rate(authentik_policies_engine_time_total_seconds_bucket[5m])))", "legendFormat": "{{obj_type}}", "datasource": "prometheus"}
+            {"expr": "histogram_quantile(0.95, sum by (obj_type, le) (rate(authentik_policies_engine_time_total_seconds_bucket{job=\"authentik-server-metrics\"}[5m])))", "legendFormat": "{{obj_type}}", "datasource": "prometheus"}
           ],
           "fieldConfig": {"defaults": {"unit": "s"}},
-          "gridPos": {"x":12,"y":28,"w":12,"h":8} },
+          "gridPos": {"x":12,"y":21,"w":12,"h":8} },
 
-        { "type": "timeseries", "title": "Outpost last seen (age in seconds)",
+        { "type": "timeseries", "title": "Outpost last seen (staleness)",
           "datasource": "prometheus",
           "targets": [
-            {"expr": "time() - authentik_outposts_last_update", "legendFormat": "{{outpost}}", "datasource": "prometheus"}
+            {"expr": "max by (outpost) (time() - authentik_outposts_last_update{job=\"authentik-server-metrics\"})", "legendFormat": "{{outpost}}", "datasource": "prometheus"}
           ],
           "fieldConfig": {"defaults": {"unit": "s", "thresholds": {"steps": [{"color":"green","value":0},{"color":"yellow","value":120},{"color":"red","value":300}]}}},
-          "gridPos": {"x":0,"y":36,"w":12,"h":8} },
+          "gridPos": {"x":0,"y":29,"w":12,"h":8} },
 
-        { "type": "stat", "title": "License expiry (seconds)",
+        { "type": "timeseries", "title": "Outpost connection status",
           "datasource": "prometheus",
-          "targets": [{"expr": "max(authentik_enterprise_license_expiry_seconds)", "datasource": "prometheus"}],
-          "fieldConfig": {"defaults": {"unit": "s", "thresholds": {"steps": [{"color":"red","value":0},{"color":"yellow","value":604800},{"color":"green","value":2592000}]}}},
-          "gridPos": {"x":12,"y":36,"w":6,"h":4} },
+          "targets": [
+            {"expr": "max by (outpost) (authentik_outposts_connected{job=\"authentik-server-metrics\"})", "legendFormat": "{{outpost}}", "datasource": "prometheus"}
+          ],
+          "gridPos": {"x":12,"y":29,"w":12,"h":8} },
 
-        { "type": "stat", "title": "Flows cached",
+        { "type": "row", "title": "Worker — overview", "gridPos": {"x":0,"y":37,"w":24,"h":1} },
+
+        { "type": "stat", "title": "Workers connected",
           "datasource": "prometheus",
-          "targets": [{"expr": "max(authentik_flows_cached)", "datasource": "prometheus"}],
-          "gridPos": {"x":18,"y":36,"w":6,"h":4} }
+          "targets": [{"expr": "count(sum by (pid) (authentik_tasks_workers{job=\"authentik-worker-metrics\"}))", "datasource": "prometheus"}],
+          "fieldConfig": {"defaults": {"thresholds": {"steps": [{"color":"red","value":0},{"color":"yellow","value":1},{"color":"green","value":2}]}}},
+          "gridPos": {"x":0,"y":38,"w":4,"h":4} },
+
+        { "type": "stat", "title": "Task errors (total)",
+          "datasource": "prometheus",
+          "targets": [{"expr": "sum(authentik_tasks_errors_total{job=\"authentik-worker-metrics\"})", "datasource": "prometheus"}],
+          "fieldConfig": {"defaults": {"thresholds": {"steps": [{"color":"green","value":0},{"color":"red","value":1}]}}},
+          "gridPos": {"x":4,"y":38,"w":4,"h":4} },
+
+        { "type": "stat", "title": "Tasks in progress",
+          "datasource": "prometheus",
+          "targets": [{"expr": "sum(authentik_tasks_in_progress{job=\"authentik-worker-metrics\"})", "datasource": "prometheus"}],
+          "gridPos": {"x":8,"y":38,"w":4,"h":4} },
+
+        { "type": "stat", "title": "DB connection errors (worker)",
+          "datasource": "prometheus",
+          "targets": [{"expr": "sum(django_db_new_connection_errors_total{job=\"authentik-worker-metrics\"})", "datasource": "prometheus"}],
+          "fieldConfig": {"defaults": {"thresholds": {"steps": [{"color":"green","value":0},{"color":"yellow","value":1},{"color":"red","value":10}]}}},
+          "gridPos": {"x":12,"y":38,"w":4,"h":4} },
+
+        { "type": "timeseries", "title": "Task error rate (by task)",
+          "datasource": "prometheus",
+          "targets": [
+            {"expr": "sum by (actor_name) (rate(authentik_tasks_errors_total{job=\"authentik-worker-metrics\"}[5m]))", "legendFormat": "{{actor_name}}", "datasource": "prometheus"}
+          ],
+          "gridPos": {"x":0,"y":42,"w":12,"h":8} },
+
+        { "type": "timeseries", "title": "Task throughput top 5 (by task)",
+          "datasource": "prometheus",
+          "targets": [
+            {"expr": "topk(5, sum by (actor_name) (rate(authentik_tasks_total{job=\"authentik-worker-metrics\"}[5m])))", "legendFormat": "{{actor_name}}", "datasource": "prometheus"}
+          ],
+          "gridPos": {"x":12,"y":42,"w":12,"h":8} },
+
+        { "type": "timeseries", "title": "Task duration p95 (top 5 slowest)",
+          "datasource": "prometheus",
+          "targets": [
+            {"expr": "topk(5, histogram_quantile(0.95, sum by (actor_name, le) (rate(authentik_tasks_duration_milliseconds_bucket{job=\"authentik-worker-metrics\"}[5m]))))", "legendFormat": "{{actor_name}}", "datasource": "prometheus"}
+          ],
+          "fieldConfig": {"defaults": {"unit": "ms"}},
+          "gridPos": {"x":0,"y":50,"w":12,"h":8} },
+
+        { "type": "timeseries", "title": "DB query latency p50 / p95 / p99 (worker)",
+          "datasource": "prometheus",
+          "targets": [
+            {"expr": "histogram_quantile(0.5,  sum by (le) (rate(django_db_query_duration_seconds_bucket{job=\"authentik-worker-metrics\"}[5m])))", "legendFormat": "p50", "datasource": "prometheus"},
+            {"expr": "histogram_quantile(0.95, sum by (le) (rate(django_db_query_duration_seconds_bucket{job=\"authentik-worker-metrics\"}[5m])))", "legendFormat": "p95", "datasource": "prometheus"},
+            {"expr": "histogram_quantile(0.99, sum by (le) (rate(django_db_query_duration_seconds_bucket{job=\"authentik-worker-metrics\"}[5m])))", "legendFormat": "p99", "datasource": "prometheus"}
+          ],
+          "fieldConfig": {"defaults": {"unit": "s"}},
+          "gridPos": {"x":12,"y":50,"w":12,"h":8} },
+
+        { "type": "timeseries", "title": "DB connection errors rate (worker)",
+          "datasource": "prometheus",
+          "targets": [
+            {"expr": "sum(rate(django_db_new_connection_errors_total{job=\"authentik-worker-metrics\"}[5m]))", "legendFormat": "conn errors/s", "datasource": "prometheus"},
+            {"expr": "sum by (type) (rate(django_db_errors_total{job=\"authentik-worker-metrics\"}[5m]))", "legendFormat": "{{type}}", "datasource": "prometheus"}
+          ],
+          "gridPos": {"x":0,"y":58,"w":12,"h":8} }
       ]
     }
