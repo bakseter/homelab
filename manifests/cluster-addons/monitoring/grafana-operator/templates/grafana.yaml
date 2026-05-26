@@ -75,7 +75,7 @@ spec:
       token_url: 'https://authentik.bakseter.net/application/o/token/'
       api_url: 'https://authentik.bakseter.net/application/o/userinfo/'
       auth_style: 'InParams'
-      use_pkce: 'true'
+      use_pkce: 'false'
       role_attribute_path: >-
         contains(entitlements, 'Grafana Admins') && 'Admin' ||
         contains(entitlements, 'Grafana Editors') && 'Editor' ||
