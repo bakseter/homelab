@@ -21,6 +21,14 @@ spec:
 
     - fromEndpoints:
         - matchLabels:
+            app.kubernetes.io/name: authentik-outpost-proxy
+      toPorts:
+        - ports:
+            - port: '9000'
+              protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: monitoring
             app.kubernetes.io/name: prometheus
       toPorts:
@@ -48,6 +56,14 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: authentik-database
+      toPorts:
+        - ports:
+            - port: '5432'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            cnpg.io/poolerName: authentik-pooler
       toPorts:
         - ports:
             - port: '5432'
@@ -146,6 +162,15 @@ spec:
             dns:
               - matchPattern: '*'
 
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: authentik
+            app.kubernetes.io/component: server
+      toPorts:
+        - ports:
+            - port: '9000'
+              protocol: TCP
+
     - toFQDNs:
         - matchPattern: '*'
       toPorts:
@@ -203,6 +228,14 @@ spec:
             - port: '8000'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            cnpg.io/poolerName: authentik-pooler
+      toPorts:
+        - ports:
+            - port: '5432'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
@@ -236,4 +269,54 @@ spec:
       toPorts:
         - ports:
             - port: '8000'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: authentik-pooler
+  namespace: authentik
+spec:
+  endpointSelector:
+    matchLabels:
+      cnpg.io/poolerName: authentik-pooler
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: authentik
+            app.kubernetes.io/component: server
+      toPorts:
+        - ports:
+            - port: '5432'
+              protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: authentik
+            app.kubernetes.io/component: worker
+      toPorts:
+        - ports:
+            - port: '5432'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints: # pooler → DB primary
+        - matchLabels:
+            app.kubernetes.io/instance: authentik-database
+      toPorts:
+        - ports:
+            - port: '5432'
               protocol: TCP
