@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloudflared-deployment
+  name: cloudflared
   namespace: cloudflared
 spec:
   replicas: 2
@@ -41,8 +41,7 @@ spec:
                   name: tunnel-token
                   key: token
           ports:
-            - port: 2000
-              containerPort: 2000
+            - containerPort: 2000
               name: metrics
               protocol: TCP
           command:
