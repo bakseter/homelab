@@ -69,24 +69,44 @@ kube-prometheus-stack:
     config:
       global:
         resolve_timeout: 5m
-
       route:
         receiver: pushover
         group_by: ['alertname', 'namespace']
+        group_wait: 30s
+        group_interval: 5m
+        repeat_interval: 4h
         routes:
           - matchers:
               - alertname=~"Watchdog|InfoInhibitor|NodeSystemSaturation"
             receiver: 'null'
-
       receivers:
         - name: 'null'
         - name: pushover
           pushover_configs:
             - user_key_file: /etc/alertmanager/secrets/alertmanager-pushover/user_key
               token_file: /etc/alertmanager/secrets/alertmanager-pushover/token
-              title: '{{ .CommonAnnotations.summary }}'
-              message: '{{ .CommonAnnotations.description }}'
+
+              # --- Visual distinction ---
+              title: '{{ if eq .Status "firing" }}🔥 FIRING{{ else }}✅ RESOLVED{{ end }} {{ .CommonAnnotations.summary }}'
+              message: |
+                {{ if eq .Status "firing" }}
+                🚨 {{ .Alerts.Firing | len }} alert(s) firing
+                {{ range .Alerts.Firing }}• {{ .Labels.alertname }}{{ if .Labels.namespace }} ({{ .Labels.namespace }}){{ end }}
+                {{ .Annotations.description }}
+                {{ end }}
+                {{ else }}
+                ✅ {{ .Alerts.Resolved | len }} alert(s) resolved
+                {{ range .Alerts.Resolved }}• {{ .Labels.alertname }}{{ if .Labels.namespace }} ({{ .Labels.namespace }}){{ end }}
+                {{ end }}
+                {{ end }}
+
+              # --- Priority: high for firing, low for resolved ---
+              # -2=silent, -1=quiet, 0=normal, 1=high, 2=emergency
+              priority: '{{ if eq .Status "firing" }}1{{ else }}-1{{ end }}'
+
               send_resolved: true
+              retry: 30m # for priority=2 (emergency) only; harmless otherwise
+              expire: 1h # for priority=2 (emergency) only
 
   grafana:
     enabled: false
