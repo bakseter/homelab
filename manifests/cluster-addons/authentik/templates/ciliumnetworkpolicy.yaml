@@ -63,7 +63,15 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            cnpg.io/poolerName: authentik-pooler
+            cnpg.io/poolerName: authentik-pooler-rw
+      toPorts:
+        - ports:
+            - port: '5432'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            cnpg.io/poolerName: authentik-pooler-ro
       toPorts:
         - ports:
             - port: '5432'
@@ -274,12 +282,12 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: authentik-pooler
+  name: authentik-pooler-rw
   namespace: authentik
 spec:
   endpointSelector:
     matchLabels:
-      cnpg.io/poolerName: authentik-pooler
+      cnpg.io/poolerName: authentik-pooler-rw
 
   ingress:
     - fromEndpoints:
@@ -313,7 +321,57 @@ spec:
             dns:
               - matchPattern: '*'
 
-    - toEndpoints: # pooler → DB primary
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: authentik-database
+      toPorts:
+        - ports:
+            - port: '5432'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: authentik-pooler-ro
+  namespace: authentik
+spec:
+  endpointSelector:
+    matchLabels:
+      cnpg.io/poolerName: authentik-pooler-ro
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: authentik
+            app.kubernetes.io/component: server
+      toPorts:
+        - ports:
+            - port: '5432'
+              protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: authentik
+            app.kubernetes.io/component: worker
+      toPorts:
+        - ports:
+            - port: '5432'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: authentik-database
       toPorts:

@@ -61,6 +61,12 @@ authentik:
       - name: AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS
         value: 10.244.0.0/16
 
+      - name: AUTHENTIK_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: authentik-secret-key
+            key: secret-key
+
       # primary — rw pooler
       - name: AUTHENTIK_POSTGRESQL__HOST
         value: authentik-pooler-rw.authentik.svc.cluster.local
@@ -184,6 +190,12 @@ authentik:
     env:
       - name: AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS
         value: 10.244.0.0/16
+
+      - name: AUTHENTIK_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: authentik-secret-key
+            key: secret-key
 
       # primary — rw pooler
       - name: AUTHENTIK_POSTGRESQL__HOST
