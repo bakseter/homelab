@@ -79,7 +79,9 @@ spec:
       role_attribute_path: >-
         contains(entitlements, 'Grafana Admins') && 'Admin' ||
         contains(entitlements, 'Grafana Editors') && 'Editor' ||
-        'Viewer'
+        contains(entitlements, 'Grafana Viewers') && 'Viewer' ||
+        'None'
     users:
       auto_assign_org: 'true'
+      auto_assign_org_role: 'None'
       auto_assign_org_id: '1'
