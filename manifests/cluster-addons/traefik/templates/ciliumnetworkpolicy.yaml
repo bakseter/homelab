@@ -10,7 +10,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: cloudflared
-            app: cloudflared
+            app.kubernetes.io/name: cloudflared
 
   egress:
     - toEntities:
