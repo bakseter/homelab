@@ -53,17 +53,8 @@ spec:
     - group: 'rbac.authorization.k8s.io'
       kind: RoleBinding
 
-    - group: 'networking.k8s.io'
-      kind: NetworkPolicy
-
     - group: 'cilium.io'
       kind: CiliumNetworkPolicy
-
-    - group: 'traefik.io'
-      kind: IngressRoute
-
-    - group: 'traefik.io'
-      kind: Middleware
 
     - group: 'gateway.networking.k8s.io'
       kind: HTTPRoute
@@ -74,11 +65,17 @@ spec:
     - group: 'postgresql.cnpg.io'
       kind: Database
 
-    - group: 'bitnami.com'
-      kind: SealedSecret
-
     - group: 'monitoring.coreos.com'
       kind: ServiceMonitor
+
+    - group: 'monitoring.coreos.com'
+      kind: PrometheusRule
+
+    - group: 'grafana.integreatly.org'
+      kind: GrafanaFolder
+
+    - group: 'grafana.integreatly.org'
+      kind: GrafanaDashboard
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
