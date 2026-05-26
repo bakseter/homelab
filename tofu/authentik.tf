@@ -167,7 +167,9 @@ resource "authentik_provider_oauth2" "grafana" {
       url           = "https://grafana.sre.bakseter.net/login/generic_oauth"
     }
   ]
-  redirect_uris_logout = ["https://grafana.sre.bakseter.net/logout"]
+
+  logout_uri    = "https://grafana.sre.bakseter.net/logout"
+  logout_method = "frontchannel"
 }
 
 resource "authentik_application" "grafana" {
