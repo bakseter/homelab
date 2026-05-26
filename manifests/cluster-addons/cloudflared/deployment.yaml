@@ -14,7 +14,6 @@ spec:
     metadata:
       labels:
         app: cloudflared
-        logs.bakseter.net/scrape: 'true'
     spec:
       affinity:
         podAntiAffinity:
@@ -49,6 +48,10 @@ spec:
                 secretKeyRef:
                   name: tunnel-token
                   key: token
+          ports:
+            - containerPort: 2000
+              name: metrics
+              protocol: TCP
           command:
             # Configures tunnel run parameters
             - cloudflared
