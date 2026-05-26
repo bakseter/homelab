@@ -14,12 +14,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: traefik
             app.kubernetes.io/name: traefik
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
-
-    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app: grafana
         - matchLabels:
             app.kubernetes.io/name: authentik-outpost-proxy
       toPorts:
@@ -56,20 +53,8 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: authentik-database
-      toPorts:
-        - ports:
-            - port: '5432'
-              protocol: TCP
-
-    - toEndpoints:
         - matchLabels:
             cnpg.io/poolerName: authentik-pooler-rw
-      toPorts:
-        - ports:
-            - port: '5432'
-              protocol: TCP
-
-    - toEndpoints:
         - matchLabels:
             cnpg.io/poolerName: authentik-pooler-ro
       toPorts:
@@ -201,15 +186,13 @@ spec:
         - matchLabels:
             app.kubernetes.io/instance: authentik
             app.kubernetes.io/component: server
-      toPorts:
-        - ports:
-            - port: '5432'
-              protocol: TCP
-
-    - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: authentik
             app.kubernetes.io/component: worker
+        - matchLabels:
+            cnpg.io/poolerName: authentik-pooler-rw
+        - matchLabels:
+            cnpg.io/poolerName: authentik-pooler-ro
       toPorts:
         - ports:
             - port: '5432'
@@ -219,14 +202,6 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: cloudnative-pg
             k8s:io.kubernetes.pod.namespace: cnpg-system
-      toPorts:
-        - ports:
-            - port: '5432'
-              protocol: TCP
-            - port: '8000'
-              protocol: TCP
-
-    - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: authentik-database
       toPorts:
@@ -234,14 +209,6 @@ spec:
             - port: '5432'
               protocol: TCP
             - port: '8000'
-              protocol: TCP
-
-    - fromEndpoints:
-        - matchLabels:
-            cnpg.io/poolerName: authentik-pooler
-      toPorts:
-        - ports:
-            - port: '5432'
               protocol: TCP
 
   egress:
@@ -294,12 +261,6 @@ spec:
         - matchLabels:
             app.kubernetes.io/instance: authentik
             app.kubernetes.io/component: server
-      toPorts:
-        - ports:
-            - port: '5432'
-              protocol: TCP
-
-    - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: authentik
             app.kubernetes.io/component: worker
@@ -344,12 +305,6 @@ spec:
         - matchLabels:
             app.kubernetes.io/instance: authentik
             app.kubernetes.io/component: server
-      toPorts:
-        - ports:
-            - port: '5432'
-              protocol: TCP
-
-    - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: authentik
             app.kubernetes.io/component: worker
