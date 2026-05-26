@@ -20,15 +20,8 @@ spec:
     size: 6Gi
   resources:
     requests:
-      cpu: 50m
-      memory: 320Mi
+      cpu: 200m
+      memory: 512Mi
     limits:
-      cpu: 500m
-      memory: 1Gi
-  bootstrap:
-    recovery:
-      volumeSnapshots:
-        storage:
-          name: authentik-database-1
-          kind: PersistentVolumeClaim
-          apiGroup: ''
+      cpu: 1
+      memory: 2Gi
