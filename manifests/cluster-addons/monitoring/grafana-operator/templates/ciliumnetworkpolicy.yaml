@@ -51,6 +51,16 @@ spec:
             - port: '9090'
               protocol: TCP
 
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: authentik
+            app.kubernetes.io/instance: authentik
+            app.kubernetes.io/component: server
+      toPorts:
+        - ports:
+            - port: '9000'
+              protocol: TCP
+
     - toFQDNs:
         - matchName: 'grafana.com' # plugins
         - matchName: 'storage.googleapis.com' # plugins

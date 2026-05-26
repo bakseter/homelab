@@ -72,8 +72,8 @@ spec:
       client_id: 'grafana'
       scopes: 'openid profile email entitlements'
       auth_url: 'https://authentik.bakseter.net/application/o/authorize/'
-      token_url: 'https://authentik.bakseter.net/application/o/token/'
-      api_url: 'https://authentik.bakseter.net/application/o/userinfo/'
+      token_url: 'http://authentik-server.authentik.svc.cluster.local/application/o/token/'
+      api_url: 'http://authentik-server.authentik.svc.cluster.local/application/o/userinfo/'
       auth_style: 'InParams'
       use_pkce: 'false'
       role_attribute_path: >-
