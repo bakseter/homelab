@@ -10,11 +10,11 @@ spec:
       parentRefs:
         - group: gateway.networking.k8s.io
           kind: Gateway
-          name: bakseter-net-gateway-int
+          name: bakseter-net-gateway-sre
           namespace: tailscale
 
       hostnames:
-        - grafana.int.bakseter.net
+        - grafana.sre.bakseter.net
 
       rules:
         - matches:
@@ -49,25 +49,36 @@ spec:
               env:
                 - name: GF_INSTALL_PLUGINS
                   value: 'grafana-lokiexplore-app,grafana-metricsdrilldown-app'
+
+                - name: grafana
+                  env:
+                    - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+                      valueFrom:
+                        secretKeyRef:
+                          name: grafana-oauth-secret
+                          key: client_secret
   config:
     log:
       mode: 'console'
     server:
-      domain: grafana.tail79d70a.ts.net
-      root_url: https://grafana.tail79d70a.ts.net
-#   auth:
-#     disable_login_form: 'true'
-#   users:
-#     auto_assign_org: 'true'
-#     auto_assign_org_id: 'true'
-#     auto_assign_role: 'Viewer'
-#   auth.proxy:
-#     enabled: 'true'
-#     header_name: Tailscale-User-Login
-#     header_property: username
-#     auto_sign_up: 'true'
-#     sync_ttl: '60'
-#     whitelist: '0.0.0.0/0'
-#     #whitelist: '100.0.0.0/8, 100.73.169.118' # all Tailscale IPs
-#     headers: Name:Tailscale-User-Name
-#     # enable_login_token: true
+      domain: grafana.sre.bakseter.net
+      root_url: https://grafana.sre.bakseter.net
+    auth:
+      signout_redirect_url: 'https://authentik.bakseter.net/application/o/grafana/end-session/'
+      oauth_auto_login: 'true'
+      disable_login_form: 'true'
+    auth.generic_oauth:
+      name: authentik
+      enabled: 'true'
+      client_id: 'grafana'
+      scopes: 'openid profile email entitlements'
+      auth_url: 'https://authentik.bakseter.net/application/o/authorize/'
+      token_url: 'https://authentik.bakseter.net/application/o/token/'
+      api_url: 'https://authentik.bakseter.net/application/o/userinfo/'
+      role_attribute_path: >-
+        contains(entitlements, 'Grafana Admins') && 'Admin' ||
+        contains(entitlements, 'Grafana Editors') && 'Editor' ||
+        'Viewer'
+    users:
+      auto_assign_org: 'true'
+      auto_assign_org_id: '1'

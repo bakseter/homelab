@@ -143,6 +143,12 @@ resource "authentik_application" "argocd" {
   protocol_provider = authentik_provider_oauth2.argocd.id
 }
 
+resource "authentik_group" "argocd-admins" {
+  name  = "argocd-admins"
+  users = [data.authentik_user.andreas.id]
+}
+
+
 
 #### Grafana
 
@@ -172,6 +178,39 @@ resource "authentik_application" "grafana" {
   protocol_provider = authentik_provider_oauth2.grafana.id
 }
 
+resource "authentik_group" "grafana-admins" {
+  name  = "grafana-admins"
+  users = [data.authentik_user.andreas.id]
+}
+
+resource "authentik_group" "grafana-viewers" {
+  name  = "grafana-viewers"
+  users = [data.authentik_user.emil.id]
+}
+
+resource "authentik_application_entitlement" "grafana-admins" {
+  name        = "Grafana Admins"
+  application = authentik_application.grafana.uuid
+}
+
+resource "authentik_application_entitlement" "grafana-viewers" {
+  name        = "Grafana Viewers"
+  application = authentik_application.grafana.uuid
+}
+
+resource "authentik_policy_binding" "grafana-admins-entitlement" {
+  target = authentik_application_entitlement.grafana-admins.uuid
+  group  = authentik_group.grafana-admins.id
+  order  = 0
+}
+
+resource "authentik_policy_binding" "grafana-viewers-entitlement" {
+  target = authentik_application_entitlement.grafana-viewers.uuid
+  group  = authentik_group.grafana-viewers.id
+  order  = 0
+}
+
+
 
 #### RBAC
 
@@ -181,21 +220,6 @@ data "authentik_user" "andreas" {
 
 data "authentik_user" "emil" {
   pk = "19"
-}
-
-resource "authentik_group" "argocd-admins" {
-  name  = "argocd-admins"
-  users = [data.authentik_user.andreas.id]
-}
-
-resource "authentik_group" "grafana-admins" {
-  name  = "grafana-admins"
-  users = [data.authentik_user.andreas.id]
-}
-
-resource "authentik_group" "grafana-viewers" {
-  name  = "grafana-viewers"
-  users = [data.authentik_user.emil.id]
 }
 
 resource "authentik_group" "mandagsmiddag-admins" {
