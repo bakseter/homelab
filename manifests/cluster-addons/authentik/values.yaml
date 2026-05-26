@@ -8,7 +8,6 @@ authentik:
       repository: ghcr.io/goauthentik/server
       tag: 2026.5.0
       digest: sha256:feb81e02f7af70469c87c8a4fbfdb148647ae7a3ee5f79f8b08b7ee02b98c4c9
-
     securityContext:
       runAsNonRoot: true
       runAsUser: 65534
@@ -58,22 +57,13 @@ authentik:
         interval: 60s
         labels:
           release: kube-prometheus-stack
-
     env:
       - name: AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS
         value: 10.244.0.0/16
 
-      - name: AUTHENTIK_SECRET_KEY
-        valueFrom:
-          secretKeyRef:
-            name: authentik-secret-key
-            key: secret-key
-
+      # primary — rw pooler
       - name: AUTHENTIK_POSTGRESQL__HOST
-        valueFrom:
-          secretKeyRef:
-            name: authentik-database-app
-            key: host
+        value: authentik-pooler-rw.authentik.svc.cluster.local
 
       - name: AUTHENTIK_POSTGRESQL__USER
         valueFrom:
@@ -92,6 +82,74 @@ authentik:
           secretKeyRef:
             name: authentik-database-app
             key: dbname
+
+      - name: AUTHENTIK_POSTGRESQL__CONN_MAX_AGE
+        value: '0'
+
+      - name: AUTHENTIK_POSTGRESQL__DISABLE_SERVER_SIDE_CURSORS
+        value: 'true'
+
+      # read replica 0 — ro pooler (replicas)
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__HOST
+        value: authentik-pooler-ro.authentik.svc.cluster.local
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__USER
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: user
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: password
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__NAME
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: dbname
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__CONN_MAX_AGE
+        value: '0'
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__DISABLE_SERVER_SIDE_CURSORS
+        value: 'true'
+
+      # read replica 1 — rw pooler (primary also handles reads)
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__HOST
+        value: authentik-pooler-rw.authentik.svc.cluster.local
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__USER
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: user
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: password
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__NAME
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: dbname
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__CONN_MAX_AGE
+        value: '0'
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__DISABLE_SERVER_SIDE_CURSORS
+        value: 'true'
+
+      # gunicorn tuning
+      - name: AUTHENTIK_WEB__WORKERS
+        value: '4'
+      - name: AUTHENTIK_WEB__THREADS
+        value: '4'
 
   worker:
     containerSecurityContext:
@@ -117,7 +175,6 @@ authentik:
 
     metrics:
       enabled: true
-
       serviceMonitor:
         enabled: true
         interval: 60s
@@ -128,17 +185,9 @@ authentik:
       - name: AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS
         value: 10.244.0.0/16
 
-      - name: AUTHENTIK_SECRET_KEY
-        valueFrom:
-          secretKeyRef:
-            name: authentik-secret-key
-            key: secret-key
-
+      # primary — rw pooler
       - name: AUTHENTIK_POSTGRESQL__HOST
-        valueFrom:
-          secretKeyRef:
-            name: authentik-database-app
-            key: host
+        value: authentik-pooler-rw.authentik.svc.cluster.local
 
       - name: AUTHENTIK_POSTGRESQL__USER
         valueFrom:
@@ -157,3 +206,72 @@ authentik:
           secretKeyRef:
             name: authentik-database-app
             key: dbname
+
+      - name: AUTHENTIK_POSTGRESQL__CONN_MAX_AGE
+        value: '0'
+
+      - name: AUTHENTIK_POSTGRESQL__DISABLE_SERVER_SIDE_CURSORS
+        value: 'true'
+
+      # read replica 0 — ro pooler
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__HOST
+        value: authentik-pooler-ro.authentik.svc.cluster.local
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__USER
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: user
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: password
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__NAME
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: dbname
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__CONN_MAX_AGE
+        value: '0'
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__0__DISABLE_SERVER_SIDE_CURSORS
+        value: 'true'
+
+      # read replica 1 — rw pooler (primary also handles reads)
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__HOST
+        value: authentik-pooler-rw.authentik.svc.cluster.local
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__USER
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: user
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: password
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__NAME
+        valueFrom:
+          secretKeyRef:
+            name: authentik-database-app
+            key: dbname
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__CONN_MAX_AGE
+        value: '0'
+
+      - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__DISABLE_SERVER_SIDE_CURSORS
+        value: 'true'
+
+      # worker tuning
+      - name: AUTHENTIK_WORKER__PROCESSES
+        value: '1'
+
+      - name: AUTHENTIK_WORKER__THREADS
+        value: '4'

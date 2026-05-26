@@ -1,7 +1,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Pooler
 metadata:
-  name: authentik-pooler
+  name: authentik-pooler-rw
   namespace: authentik
 spec:
   cluster:
@@ -13,6 +13,19 @@ spec:
     parameters:
       max_client_conn: '100'
       default_pool_size: '20'
-      reserve_pool_size: '5'
-      reserve_pool_timeout: '3'
-      server_idle_timeout: '60'
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: authentik-pooler-ro
+  namespace: authentik
+spec:
+  cluster:
+    name: authentik-database
+  instances: 2
+  type: ro
+  pgbouncer:
+    poolMode: transaction
+    parameters:
+      max_client_conn: '100'
+      default_pool_size: '20'
