@@ -199,13 +199,13 @@ resource "authentik_application_entitlement" "grafana-viewers" {
 }
 
 resource "authentik_policy_binding" "grafana-admins-entitlement" {
-  target = authentik_application_entitlement.grafana-admins.id
+  target = authentik_application_entitlement.grafana-admins.uuid
   group  = authentik_group.grafana-admins.id
   order  = 0
 }
 
 resource "authentik_policy_binding" "grafana-viewers-entitlement" {
-  target = authentik_application_entitlement.grafana-viewers.id
+  target = authentik_application_entitlement.grafana-viewers.uuid
   group  = authentik_group.grafana-viewers.id
   order  = 0
 }
