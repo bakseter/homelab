@@ -1,0 +1,7 @@
+apiVersion: v2
+name: vertical-pod-autoscaler-umbrella
+version: 0.1.0
+dependencies:
+  - name: vertical-pod-autoscaler
+    version: 0.9.0
+    repository: https://kubernetes.github.io/autoscaler
