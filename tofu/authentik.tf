@@ -14,10 +14,6 @@ data "authentik_flow" "default-provider-authorization-implicit-consent" {
   slug = "default-provider-authorization-implicit-consent"
 }
 
-data "authentik_flow" "default-provider-authorization-explicit-consent" {
-  slug = "default-provider-authorization-explicit-consent"
-}
-
 data "authentik_flow" "default-provider-invalidation-flow" {
   slug = "default-provider-invalidation-flow"
 }
@@ -28,7 +24,7 @@ data "authentik_flow" "default-provider-invalidation-flow" {
 resource "authentik_provider_proxy" "mandagsmiddag-frontend" {
   name                  = "mandagsmiddag-frontend"
   external_host         = "https://mandagsmiddag.no"
-  authorization_flow    = data.authentik_flow.default-provider-authorization-explicit-consent.id
+  authorization_flow    = data.authentik_flow.default-provider-authorization-implicit-consent.id
   invalidation_flow     = data.authentik_flow.default-provider-invalidation-flow.id
   access_token_validity = "hours=24"
   mode                  = "forward_single"
@@ -37,7 +33,7 @@ resource "authentik_provider_proxy" "mandagsmiddag-frontend" {
 resource "authentik_provider_proxy" "mandagsmiddag-backend" {
   name                  = "mandagsmiddag-backend"
   external_host         = "https://mandagsmiddag.no/api"
-  authorization_flow    = data.authentik_flow.default-provider-authorization-explicit-consent.id
+  authorization_flow    = data.authentik_flow.default-provider-authorization-implicit-consent.id
   invalidation_flow     = data.authentik_flow.default-provider-invalidation-flow.id
   access_token_validity = "hours=24"
   mode                  = "forward_single"
@@ -121,7 +117,7 @@ resource "authentik_provider_oauth2" "argocd" {
   name      = "argocd"
   client_id = "argocd"
 
-  authorization_flow = data.authentik_flow.default-provider-authorization-explicit-consent.id
+  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
   invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
 
   sub_mode = "user_username"
@@ -156,7 +152,7 @@ resource "authentik_provider_oauth2" "grafana" {
   name      = "grafana"
   client_id = "grafana"
 
-  authorization_flow = data.authentik_flow.default-provider-authorization-explicit-consent.id
+  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
   invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
 
   sub_mode = "user_username"
