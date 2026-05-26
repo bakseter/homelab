@@ -22,7 +22,6 @@ authentik:
   prometheus:
     rules:
       enabled: true
-      namespace: monitoring
       labels:
         release: kube-prometheus-stack
 

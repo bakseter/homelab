@@ -12,3 +12,5 @@ resources:
   - sealedsecret.yaml
   - service.yaml
   - servicemonitor.yaml
+  - prometheusrule.yaml
+  - grafanadashboard.yaml
