@@ -202,14 +202,24 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: cloudnative-pg
             k8s:io.kubernetes.pod.namespace: cnpg-system
-        - matchLabels:
-            app.kubernetes.io/instance: authentik-database
       toPorts:
         - ports:
             - port: '5432'
               protocol: TCP
             - port: '8000'
               protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: authentik-database
+
+    - fromEntities:
+        - remote-node
+        - host
+      icmps:
+        - fields:
+            - type: 8
+              family: IPv4
 
   egress:
     - toEndpoints:
@@ -230,12 +240,6 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: authentik-database
-      toPorts:
-        - ports:
-            - port: '5432'
-              protocol: TCP
-            - port: '8000'
-              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
