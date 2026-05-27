@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: falco
-  labels:
-    # Needs access
-    pod-security.kubernetes.io/enforce: privileged
-spec: {}
