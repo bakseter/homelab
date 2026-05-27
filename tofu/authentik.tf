@@ -14,6 +14,10 @@ data "authentik_flow" "default-provider-authorization-implicit-consent" {
   slug = "default-provider-authorization-implicit-consent"
 }
 
+data "authentik_flow" "default-provider-authorization-explicit-consent" {
+  slug = "default-provider-authorization-explicit-consent"
+}
+
 data "authentik_flow" "default-provider-invalidation-flow" {
   slug = "default-provider-invalidation-flow"
 }
@@ -217,7 +221,7 @@ resource "authentik_provider_oauth2" "vaultwarden" {
   name      = "vaultwarden"
   client_id = "vaultwarden"
 
-  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
+  authorization_flow = data.authentik_flow.default-provider-authorization-explicit-consent.id
   invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
 
   sub_mode    = "user_username"
