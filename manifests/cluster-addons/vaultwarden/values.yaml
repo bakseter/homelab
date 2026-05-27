@@ -39,6 +39,7 @@ vaultwarden:
     enabled: true
     onlySSO: true
     enforceSSO: true
+    pkce: false
     authority: https://authentik.bakseter.net/application/o/vaultwarden/
     scopes: 'profile email offline_access'
     existingSecret: vaultwarden-sso-secret

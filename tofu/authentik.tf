@@ -224,8 +224,7 @@ resource "authentik_provider_oauth2" "vaultwarden" {
   authorization_flow = data.authentik_flow.default-provider-authorization-explicit-consent.id
   invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
 
-  sub_mode    = "user_username"
-  client_type = "public"
+  sub_mode = "user_username"
 
   signing_key       = data.authentik_certificate_key_pair.default.id
   property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
