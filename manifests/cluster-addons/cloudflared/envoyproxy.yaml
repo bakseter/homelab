@@ -1,0 +1,25 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: cloudflared-proxy
+  namespace: cloudflared
+spec:
+  http:
+    xForwardedClientCert: {}
+  backendTLS:
+    disableTLSClientCertValidation: true
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: ClusterIP
+      envoyDeployment:
+        replicas: 2
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      gateway.envoyproxy.io/owning-gateway-name: cloudflared-gateway
+                  topologyKey: bakseter.net/physical-node
