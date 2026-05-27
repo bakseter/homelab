@@ -37,9 +37,11 @@ vaultwarden:
 
   sso:
     enabled: true
-    existingSecret: vaultwarden-sso-secret
     onlySSO: true
     enforceSSO: true
     authority: https://authentik.bakseter.net/application/o/vaultwarden/
+    existingSecret: vaultwarden-sso-secret
     clientId:
       value: vaultwarden
+    clientSecret:
+      existingSecretKey: SSO_CLIENT_SECRET
