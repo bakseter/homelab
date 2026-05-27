@@ -42,7 +42,7 @@ vaultwarden:
     pkce: false
     ignoreEmailVerification: true
     authority: https://authentik.bakseter.net/application/o/vaultwarden/
-    scopes: 'profile email offline_access'
+    scopes: 'openid profile email offline_access'
     existingSecret: vaultwarden-sso-secret
     clientId:
       existingSecretKey: clientId
