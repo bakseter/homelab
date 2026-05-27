@@ -79,6 +79,9 @@ spec:
 
     - group: 'grafana.integreatly.org'
       kind: GrafanaDashboard
+
+    - group: 'gateway.envoyproxy.io'
+      kind: SecurityPolicy
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
