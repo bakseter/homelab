@@ -40,6 +40,7 @@ vaultwarden:
     onlySSO: true
     enforceSSO: true
     authority: https://authentik.bakseter.net/application/o/vaultwarden/
+    scopes: 'openid profile email offline_access"'
     existingSecret: vaultwarden-sso-secret
     clientId:
       existingSecretKey: clientId
