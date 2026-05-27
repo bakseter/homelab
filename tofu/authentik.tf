@@ -225,6 +225,17 @@ data "authentik_property_mapping_provider_scope" "vaultwarden-scopes" {
   ]
 }
 
+resource "authentik_property_mapping_provider_scope" "email-verified" {
+  name       = "vaultwarden-email-verified"
+  scope_name = "email"
+  expression = <<-EOT
+    return {
+      "email": request.user.email,
+      "email_verified": true,
+    }
+  EOT
+}
+
 resource "authentik_provider_oauth2" "vaultwarden" {
   name      = "vaultwarden"
   client_id = "vaultwarden"
@@ -234,8 +245,11 @@ resource "authentik_provider_oauth2" "vaultwarden" {
 
   sub_mode = "user_username"
 
-  signing_key       = data.authentik_certificate_key_pair.default.id
-  property_mappings = data.authentik_property_mapping_provider_scope.vaultwarden-scopes.ids
+  signing_key = data.authentik_certificate_key_pair.default.id
+  property_mappings = concat(
+    data.authentik_property_mapping_provider_scope.vaultwarden-scopes.ids,
+    [authentik_property_mapping_provider_scope.email-verified.id]
+  )
 
   allowed_redirect_uris = [
     {
