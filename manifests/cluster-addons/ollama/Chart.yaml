@@ -1,7 +1,0 @@
-apiVersion: v2
-name: ollama-umbrella
-version: 0.1.0
-dependencies:
-  - name: ollama
-    version: 1.57.0
-    repository: https://helm.otwld.com
