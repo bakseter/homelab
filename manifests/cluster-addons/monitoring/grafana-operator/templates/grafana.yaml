@@ -26,6 +26,7 @@ spec:
               kind: Service
               name: grafana-service
               port: 3000
+
   deployment:
     spec:
       template:
@@ -58,16 +59,16 @@ spec:
   config:
     log:
       mode: 'console'
-      level: 'debug'
+      level: 'info'
     server:
-      domain: grafana.sre.bakseter.net
-      root_url: https://grafana.sre.bakseter.net
+      domain: 'grafana.sre.bakseter.net'
+      root_url: 'https://grafana.sre.bakseter.net'
     auth:
       signout_redirect_url: 'https://authentik.bakseter.net/application/o/grafana/end-session/'
       oauth_auto_login: 'true'
       disable_login_form: 'true'
     auth.generic_oauth:
-      name: authentik
+      name: 'authentik'
       enabled: 'true'
       client_id: 'grafana'
       scopes: 'openid profile email entitlements'
