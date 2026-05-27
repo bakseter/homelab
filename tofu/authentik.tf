@@ -107,7 +107,6 @@ data "authentik_property_mapping_provider_scope" "scopes" {
     "goauthentik.io/providers/oauth2/scope-profile",
     "goauthentik.io/providers/oauth2/scope-email",
     "goauthentik.io/providers/oauth2/scope-entitlements",
-    "goauthentik.io/providers/oauth2/scope-offline_access",
   ]
 }
 
@@ -217,6 +216,14 @@ resource "authentik_policy_binding" "grafana-viewers-entitlement" {
 
 #### Vaultwarden
 
+data "authentik_property_mapping_provider_scope" "vaultwarden-scopes" {
+  managed_list = [
+    "goauthentik.io/providers/oauth2/scope-openid",
+    "goauthentik.io/providers/oauth2/scope-profile",
+    "goauthentik.io/providers/oauth2/scope-offline_access",
+  ]
+}
+
 resource "authentik_provider_oauth2" "vaultwarden" {
   name      = "vaultwarden"
   client_id = "vaultwarden"
@@ -227,7 +234,7 @@ resource "authentik_provider_oauth2" "vaultwarden" {
   sub_mode = "user_username"
 
   signing_key       = data.authentik_certificate_key_pair.default.id
-  property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
+  property_mappings = data.authentik_property_mapping_provider_scope.vaultwarden-scopes.ids
 
   allowed_redirect_uris = [
     {
