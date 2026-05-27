@@ -155,8 +155,7 @@ resource "authentik_provider_oauth2" "grafana" {
   authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
   invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
 
-  sub_mode    = "user_username"
-  client_type = "confidential"
+  sub_mode = "user_username"
 
   signing_key       = data.authentik_certificate_key_pair.default.id
   property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
@@ -210,6 +209,44 @@ resource "authentik_policy_binding" "grafana-viewers-entitlement" {
   order  = 0
 }
 
+
+#### Vaultwarden
+
+resource "authentik_provider_oauth2" "vaultwarden" {
+  name      = "vaultwarden"
+  client_id = "vaultwarden"
+
+  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
+  invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
+
+  sub_mode = "user_username"
+
+  signing_key       = data.authentik_certificate_key_pair.default.id
+  property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
+
+  allowed_redirect_uris = [
+    {
+      matching_mode = "strict"
+      url           = "https://vaultwarden.bakseter.net/identity/connect/oidc-signin"
+    }
+  ]
+
+  logout_uri    = "https://vaultwarden.bakseter.net"
+  logout_method = "frontchannel"
+
+  access_token_validity  = "minutes=10"
+  refresh_token_validity = "days=30"
+}
+
+resource "authentik_application" "vaultwarden" {
+  name = "vaultwarden"
+  slug = "vaultwarden"
+
+  protocol_provider = authentik_provider_oauth2.vaultwarden.id
+
+  meta_launch_url = "https://vaultwarden.bakseter.net"
+  meta_icon       = "https://vaultwarden.bakseter.net/images/icon-white.png"
+}
 
 
 #### RBAC

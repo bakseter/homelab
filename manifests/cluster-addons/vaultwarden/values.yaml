@@ -34,3 +34,13 @@ vaultwarden:
     type: postgresql
     existingSecret: vaultwarden-database-app
     existingSecretKey: uri
+
+  env:
+    SSO_ENABLED: 'true'
+    SSO_AUTHORITY: 'https://authentik.bakseter.net/application/o/vaultwarden/'
+    SSO_SCOPES: 'openid profile email offline_access'
+    SSO_CLIENT_ID: 'vaultwarden'
+
+  envFrom:
+    - secretRef:
+        name: vaultwarden-sso-secret
