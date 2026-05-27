@@ -4,10 +4,6 @@ metadata:
   name: cloudflared-proxy
   namespace: cloudflared
 spec:
-  http:
-    xForwardedClientCert: {}
-  backendTLS:
-    disableTLSClientCertValidation: true
   provider:
     type: Kubernetes
     kubernetes:
