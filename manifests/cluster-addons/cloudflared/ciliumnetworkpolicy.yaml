@@ -49,7 +49,7 @@ spec:
             gateway.envoyproxy.io/owning-gateway-name: cloudflared-gateway
       toPorts:
         - ports:
-            - port: '9000'
+            - port: '10080'
               protocol: TCP
 
     - toEntities:
