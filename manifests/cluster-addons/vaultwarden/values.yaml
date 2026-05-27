@@ -14,7 +14,6 @@ vaultwarden:
     capabilities:
       drop:
         - ALL
-    readOnlyRootFilesystem: true
 
   domain: https://vaultwarden.bakseter.net
 
