@@ -241,6 +241,8 @@ resource "authentik_provider_oauth2" "vaultwarden" {
 
   access_token_validity  = "minutes=10"
   refresh_token_validity = "days=30"
+
+  # TODO: need to set grant types 'Authorization' and 'Refresh' manually. Fix in future if Tofu supports
 }
 
 resource "authentik_application" "vaultwarden" {
