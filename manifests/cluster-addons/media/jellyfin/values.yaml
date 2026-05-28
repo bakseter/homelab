@@ -1,6 +1,6 @@
 image:
   repository: docker.io/jellyfin/jellyfin
-  tag: 10.10.7@sha256:7ae36aab93ef9b6aaff02b37f8bb23df84bb2d7a3f6054ec8fc466072a648ce2
+  tag: 10.11.10@sha256:f66273e014b307e4ac46778845ebc1e9ee24b2e57c1fc17d5ec5ac3015649bfa
 
 resources:
   limits:
