@@ -3,7 +3,7 @@ external-dns:
   policy: sync
 
   extraArgs:
-    - --pihole-server=http://pihole-web.pihole.svc.cluster.local
+    - --pihole-server=http://192.168.60.200:8080
     - --pihole-api-version=6
     - --gateway-label-filter=external-dns==enabled
 
