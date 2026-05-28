@@ -12,5 +12,5 @@ resource "tailscale_dns_split_nameservers" "domains" {
   ])
 
   domain      = each.key
-  nameservers = ["100.78.200.32"]
+  nameservers = ["100.113.132.29"] # infra
 }
