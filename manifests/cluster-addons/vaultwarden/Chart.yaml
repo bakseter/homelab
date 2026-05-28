@@ -1,7 +1,0 @@
-apiVersion: v2
-name: vaultwarden-umbrella
-version: 0.1.0
-dependencies:
-  - name: vaultwarden
-    version: 0.36.4
-    repository: https://guerzon.github.io/vaultwarden

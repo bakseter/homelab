@@ -1,0 +1,39 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - name: vaultwarden
+    version: 0.37.0
+    repo: https://guerzon.github.io/vaultwarden
+    releaseName: vaultwarden
+    valuesFile: values.yaml
+
+resources:
+  - cluster.yaml
+  - httproute.yaml
+  - vaultwarden-sso-secret.yaml
+
+patches:
+  - target:
+      kind: PersistentVolumeClaim
+      name: vaultwarden-data-vaultwarden-0
+    patch: |-
+      - op: add
+        path: /metadata/labels/recurring-job.longhorn.io~1source
+        value: 'enabled'
+
+      - op: add
+        path: /metadata/labels/recurring-job-group.longhorn.io~1hetzner-backup
+        value: 'enabled'
+
+  - target:
+      kind: PersistentVolumeClaim
+      name: vaultwarden-files-vaultwarden-0
+    patch: |-
+      - op: add
+        path: /metadata/labels/recurring-job.longhorn.io~1source
+        value: 'enabled'
+
+      - op: add
+        path: /metadata/labels/recurring-job-group.longhorn.io~1hetzner-backup
+        value: 'enabled'
