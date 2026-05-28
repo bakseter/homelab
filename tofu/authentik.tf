@@ -135,6 +135,8 @@ resource "authentik_provider_oauth2" "argocd" {
       url           = "https://argocd.sre.bakseter.net/api/dex/callback"
     }
   ]
+
+  meta_icon = "https://landscape.cncf.io/logos/ba71fd50cbc06c7bad3554de23cbca4298593141df3842003a94065c209610f4.svg"
 }
 
 resource "authentik_application" "argocd" {
@@ -173,6 +175,8 @@ resource "authentik_provider_oauth2" "grafana" {
 
   logout_uri    = "https://grafana.sre.bakseter.net/logout"
   logout_method = "frontchannel"
+
+  meta_icon = "https://upload.wikimedia.org/wikipedia/commons/a/a1/Grafana_logo.svg"
 }
 
 resource "authentik_application" "grafana" {
