@@ -4,6 +4,13 @@ provider "tailscale" {
   tailnet             = "bakseter.github"
 }
 
+resource "tailscale_dns_nameservers" "global" {
+  nameservers = [
+    "100.113.132.29", # infra pihole
+    "1.1.1.1",
+  ]
+}
+
 resource "tailscale_dns_split_nameservers" "domains" {
   for_each = toset([
     "bakseter.net",
@@ -12,5 +19,5 @@ resource "tailscale_dns_split_nameservers" "domains" {
   ])
 
   domain      = each.key
-  nameservers = ["100.113.132.29"] # infra
+  nameservers = ["100.113.132.29"] # infra pihole
 }
