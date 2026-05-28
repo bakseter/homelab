@@ -27,7 +27,15 @@ vaultwarden:
     data:
       name: vaultwarden-data
       size: 20Gi
+      class: longhorn-encrypted
       path: /data
+      accessMode: ReadWriteOnce
+
+    attachments:
+      name: vaultwarden-files
+      size: 5Gi
+      class: longhorn-encrypted
+      path: /files
       accessMode: ReadWriteOnce
 
   database:
