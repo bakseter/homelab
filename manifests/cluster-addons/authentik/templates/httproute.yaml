@@ -5,9 +5,8 @@ metadata:
   namespace: authentik
 spec:
   parentRefs:
-    - name: traefik-gateway
-      namespace: traefik
-      sectionName: public
+    - name: cloudflared-gateway
+      namespace: cloudflared
       group: gateway.networking.k8s.io # for argocd diff
       kind: Gateway
 
@@ -19,6 +18,7 @@ spec:
         - path:
             type: PathPrefix
             value: /
+
       backendRefs:
         - name: authentik-server
           port: 80
