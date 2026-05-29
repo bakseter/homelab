@@ -147,7 +147,7 @@ kube-prometheus-stack:
       registry: registry.k8s.io
       repository: kube-state-metrics/kube-state-metrics
       tag: 2.19.0
-      sha: 6b2f0b6f2f86ac5b1aa883a033a8dd55bb96c16d191ec973393bdaadaddac914
+      sha: sha256:6b2f0b6f2f86ac5b1aa883a033a8dd55bb96c16d191ec973393bdaadaddac914
 
   kubeControllerManager:
     enabled: false
