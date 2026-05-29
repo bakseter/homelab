@@ -119,12 +119,12 @@ argo-cd:
         cpu: 500m
         memory: 512Mi
 
-      metrics:
+    metrics:
+      enabled: true
+      serviceMonitor:
         enabled: true
-        serviceMonitor:
-          enabled: true
-          additionalLabels:
-            release: kube-prometheus-stack
+        additionalLabels:
+          release: kube-prometheus-stack
 
   applicationSet:
     replicas: 2
@@ -137,12 +137,12 @@ argo-cd:
         cpu: 100m
         memory: 256Mi
 
-      metrics:
+    metrics:
+      enabled: true
+      serviceMonitor:
         enabled: true
-        serviceMonitor:
-          enabled: true
-          additionalLabels:
-            release: kube-prometheus-stack
+        additionalLabels:
+          release: kube-prometheus-stack
 
   dex:
     resources:
@@ -153,9 +153,9 @@ argo-cd:
         cpu: 200m
         memory: 512Mi
 
-      metrics:
+    metrics:
+      enabled: true
+      serviceMonitor:
         enabled: true
-        serviceMonitor:
-          enabled: true
-          additionalLabels:
-            release: kube-prometheus-stack
+        additionalLabels:
+          release: kube-prometheus-stack
