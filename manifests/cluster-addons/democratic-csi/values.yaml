@@ -62,3 +62,12 @@ democratic-csi:
     hostNetwork: true
     driver:
       extraEnv: []
+
+snapshot-controller:
+  fullnameOverride: snapshot-controller
+
+  controller:
+    enabled: false
+
+  validatingWebhook:
+    enabled: false
