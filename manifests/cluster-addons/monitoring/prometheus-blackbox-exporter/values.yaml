@@ -5,7 +5,11 @@ prometheus-blackbox-exporter:
     enabled: true
     defaults:
       interval: 60s
+    labels:
+      release: kube-prometheus-stack
 
     selfMonitor:
       enabled: true
       interval: 60s
+      labels:
+        release: kube-prometheus-stack
