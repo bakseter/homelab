@@ -2,9 +2,24 @@ tailscale-operator:
   operatorConfig:
     image:
       repository: docker.io/tailscale/k8s-operator
-      tag: v1.98.3
-      # takes precedence over tag
-      digest: sha256:a3f3bcb653ce85e36ae4df49708bcb194d3f7b41d098655becc480d9d003b3cd
+      digest: sha256:59060effe5baeeac7909f23871549fbbd9da78dd5b03af8c89bccb35ba46e93c # v1.98.4
+
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+      runAsGroup: 65534
+      fsGroup: 65534
+      seccompProfile:
+        type: RuntimeDefault
+      supplementalGroups:
+        - 65534
+
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
 
   apiServerProxyConfig:
     allowImpersonation: true
