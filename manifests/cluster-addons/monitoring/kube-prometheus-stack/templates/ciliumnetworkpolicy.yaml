@@ -60,9 +60,8 @@ spec:
         - remote-node
 
     - toEndpoints:
-        - matchExpressions:
-            matchLabels:
-              app.kubernetes.io/name: prometheus-blackbox-exporter
+        - matchLabels:
+            app.kubernetes.io/name: prometheus-blackbox-exporter
       toPorts:
         - ports:
             - port: '9115'
