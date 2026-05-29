@@ -7,7 +7,7 @@ cert-manager:
 
   prometheus:
     enabled: true
-    serviceMonitor:
+    servicemonitor:
       enabled: true
       labels:
         release: kube-prometheus-stack
