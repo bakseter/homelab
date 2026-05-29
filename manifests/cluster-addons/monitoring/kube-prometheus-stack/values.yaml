@@ -9,8 +9,8 @@ kube-prometheus-stack:
       image:
         registry: quay.io
         repository: prometheus/prometheus
-        tag: v3.11.3-distroless
-        sha: cff72a3f49918f41c4b5c8a6174dd8433036bebf7878120da538b3720ba3fa0d
+        tag: v3.12.0-distroless
+        sha: f39df5334dee301b885f77e0ff1159f5d8a43bf9db518f885544594799a1e3c2
 
       externalUrl: https://prometheus.int.bakseter.net
 
@@ -141,6 +141,13 @@ kube-prometheus-stack:
       metricRelabelings: # Remove pod label
         - action: labeldrop
           regex: pod
+
+  kube-state-metrics:
+    image:
+      registry: registry.k8s.io
+      repository: kube-state-metrics/kube-state-metrics
+      tag: 2.19.0
+      sha: 6b2f0b6f2f86ac5b1aa883a033a8dd55bb96c16d191ec973393bdaadaddac914
 
   kubeControllerManager:
     enabled: false
