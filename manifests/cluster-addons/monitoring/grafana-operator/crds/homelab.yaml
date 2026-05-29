@@ -37,7 +37,7 @@ spec:
           }
         ]
       },
-      "description": "Homelab single-pane-of-glass: cluster gauges, consolidated alert strip, per-node CPU/mem bars with sparklines, PVC usage, ArgoCD app chips, service uptime, TLS expiry bars, and log error rate.",
+      "description": "Homelab single-pane-of-glass: cluster gauges, consolidated alert strip, per-node CPU/mem bars with sparklines, PVC usage, Argo CD app chips, service uptime, TLS expiry bars, and log error rate.",
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 1,
@@ -50,7 +50,7 @@ spec:
           "keepTime": true,
           "tags": [],
           "targetBlank": true,
-          "title": "ArgoCD UI",
+          "title": "Argo CD",
           "tooltip": "",
           "type": "link",
           "url": "https://argocd.sre.bakseter.net"
