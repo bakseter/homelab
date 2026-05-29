@@ -32,7 +32,6 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
       "${path.module}/manifests/default-patches.yaml.tmpl",
       {
         physical_node_name      = split("-", each.key)[0]
-        hostname                = each.value.hostname
         node_ip                 = each.value.ip
         node_type               = each.value.type
         virtual_ip_controlplane = local.virtual_ip_controlplane
@@ -75,7 +74,6 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
       "${path.module}/manifests/default-patches.yaml.tmpl",
       {
         physical_node_name      = split("-", each.key)[0]
-        hostname                = each.value.hostname
         node_ip                 = each.value.ip
         node_type               = each.value.type
         virtual_ip_controlplane = local.virtual_ip_controlplane
