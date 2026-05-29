@@ -9,16 +9,3 @@ prometheus-blackbox-exporter:
     selfMonitor:
       enabled: true
       interval: 60s
-
-    targets:
-      - name: authentik
-        url: https://authentik.bakseter.net
-        hostname: authentik.bakseter.net
-
-      - name: bakseter-net
-        url: https://bakseter.net
-        hostname: bakseter.net
-
-      - name: mandagsmiddag.no
-        url: https://mandagsmiddag.no
-        hostname: mandagsmiddag.no

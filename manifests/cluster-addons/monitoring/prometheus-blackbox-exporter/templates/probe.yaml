@@ -1,0 +1,43 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: http-probes
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  jobName: http
+  interval: 60s
+  module: http_2xx
+  prober:
+    url: prometheus-blackbox-exporter.monitoring.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - https://authentik.bakseter.net
+        - https://bakseter.net
+        - https://mandagsmiddag.no
+      labels:
+        probe_type: http
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: tls-probes
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  jobName: tls
+  interval: 300s
+  module: http_2xx
+  prober:
+    url: prometheus-blackbox-exporter.monitoring.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - https://authentik.bakseter.net
+        - https://bakseter.net
+        - https://mandagsmiddag.no
+      labels:
+        probe_type: tls
