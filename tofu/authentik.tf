@@ -89,6 +89,10 @@ resource "authentik_outpost" "mandagsmiddag" {
             op   = "remove"
             path = "/spec/rules/1"
           },
+          {
+            op   = "remove"
+            path = "/spec/tls"
+          }
         ]
       }
       kubernetes_namespace    = "authentik"
