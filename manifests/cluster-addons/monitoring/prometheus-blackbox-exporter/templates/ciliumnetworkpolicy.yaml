@@ -35,7 +35,7 @@ spec:
             app.kubernetes.io/name: prometheus
       toPorts:
         - ports:
-            - port: '9000'
+            - port: '9090'
               protocol: TCP
 
     - toEndpoints:
@@ -56,10 +56,11 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            app.kubernetes.io/instance: loki
             app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
-            - port: '9000'
+            - port: '9001'
               protocol: TCP
 
     # Any pod in any other namespace, for internal probes

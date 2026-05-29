@@ -36,7 +36,7 @@ metadata:
     release: kube-prometheus-stack
 spec:
   jobName: tls
-  interval: 300s
+  interval: 1h
   module: http_2xx
   prober:
     url: prometheus-blackbox-exporter.monitoring.svc.cluster.local:9115
@@ -65,13 +65,14 @@ metadata:
 spec:
   jobName: internal
   interval: 60s
+  scrapeTimeout: 30s
   module: http_2xx
   prober:
     url: prometheus-blackbox-exporter.monitoring.svc.cluster.local:9115
   targets:
     staticConfig:
       static:
-        - http://amex-frontend.amex.svc.cluster.local
+        - http://amex-frontend.amex.svc.cluster.local:3000
         - http://argocd-server.argocd.svc.cluster.local
         - http://frontend.five31.svc.cluster.local:3000
         - http://immich-server.immich.svc.cluster.local:2283
@@ -86,8 +87,8 @@ spec:
         - http://sonarr.media.svc.cluster.local:8989
         - http://grafana-service.monitoring.svc.cluster.local:3000
         - http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
-        - http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9000
-        - http://loki-rustfs-svc.monitoring.svc.cluster.local:9000
+        - http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
+        - http://loki-rustfs-svc.monitoring.svc.cluster.local:9001
         - http://vaultwarden.vaultwarden.svc.cluster.local:8080
       labels:
         probe_type: internal

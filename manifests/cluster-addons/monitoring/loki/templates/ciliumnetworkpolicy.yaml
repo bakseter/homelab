@@ -35,8 +35,6 @@ spec:
         - matchLabels:
             app.kubernetes.io/instance: loki
             app.kubernetes.io/name: create-s3-buckets
-        - matchLabels:
-            app.kubernetes.io/name: prometheus-blackbox-exporter
       toPorts:
         - ports:
             - port: '9000'
@@ -47,6 +45,8 @@ spec:
             k8s:io.kubernetes.pod.namespace: envoy-gateway-system
             app.kubernetes.io/name: envoy
             gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-int
+        - matchLabels:
+            app.kubernetes.io/name: prometheus-blackbox-exporter
       toPorts:
         - ports:
             - port: '9001'
