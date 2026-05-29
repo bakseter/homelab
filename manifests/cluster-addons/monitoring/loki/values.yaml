@@ -1,5 +1,6 @@
 loki:
   loki:
+    revisionHistoryLimit: 5
     image:
       registry: docker.io
       repository: grafana/loki
@@ -71,6 +72,7 @@ loki:
 
   lokiCanary:
     enabled: true
+    revisionHistoryLimit: 5
     image:
       registry: docker.io
       repository: grafana/loki-canary
@@ -177,3 +179,7 @@ rustfs:
 
   ingress:
     enabled: false
+
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault

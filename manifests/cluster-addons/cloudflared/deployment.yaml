@@ -5,6 +5,7 @@ metadata:
   namespace: cloudflared
 spec:
   replicas: 2
+  revisionHistoryLimit: 5
   template:
     spec:
       affinity:
