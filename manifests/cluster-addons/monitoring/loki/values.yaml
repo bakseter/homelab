@@ -1,5 +1,10 @@
 loki:
   loki:
+    image:
+      registry: docker.io
+      repository: grafana/loki
+      digest: sha256:191d4fdfb7264f16989f0a57f320872620a5a7c2ceeec6229212c4190ec49b86 # 3.7.2
+
     schemaConfig:
       configs:
         - from: 2024-04-01
@@ -66,6 +71,10 @@ loki:
 
   lokiCanary:
     enabled: true
+    image:
+      registry: docker.io
+      repository: grafana/loki-canary
+      digest: sha256:93751140d6c5cdfb3b07587b10ff262861c9b86c0f2935a418b12e0407cf0d0f # 3.7.2
     push: false
     podLabels:
       logs.bakseter.net/scrape: 'false'
@@ -114,6 +123,10 @@ loki:
 
   gateway:
     enabled: true
+    image:
+      registry: docker.io
+      repository: nginxinc/nginx-unprivileged
+      digest: sha256:8122337ed6c475bb486bc9340da453d4599f225e6b920ff0d92ca2267486b9b5 # 1.31-alpine
 
   bloomPlanner:
     replicas: 0
@@ -131,6 +144,14 @@ loki:
     replicas: 0
 
 rustfs:
+  image:
+    rustfs:
+      repository: rustfs/rustfs
+      tag: 1.0.0-beta.6@sha256:e620d37756fff072b10bf648c7bb9d370d7e91a928b7e6a5e1ac85bdfb4e4dab
+    initImage:
+      repository: busybox
+      tag: stable@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+
   mode:
     standalone:
       enabled: true

@@ -3,9 +3,9 @@ name: monitoring-umbrella
 version: 0.1.0
 dependencies:
   - name: loki
-    version: 16.0.0
+    version: 17.1.4
     repository: oci://ghcr.io/grafana-community/helm-charts
   - name: rustfs
     alias: rustfs
-    version: 0.4.0
+    version: 0.6.0
     repository: https://charts.rustfs.com

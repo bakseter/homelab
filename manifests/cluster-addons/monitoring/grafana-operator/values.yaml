@@ -1,4 +1,9 @@
 grafana-operator:
+  image:
+    registry: ghcr.io
+    repository: grafana/grafana-operator
+    tag: v5.23.0@sha256:3abeaccdf54e9e02c2f4b6215be594c8f78b94a866961ada7f92b677bf33c9b4
+
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
