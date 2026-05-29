@@ -19,6 +19,7 @@ kube-prometheus-stack:
           - key: kubernetes.io/metadata.name
             operator: In
             values:
+              - argocd
               - authentik
               - cloudflared
               - kube-system # cilium hubble
