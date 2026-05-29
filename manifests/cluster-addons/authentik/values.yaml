@@ -45,10 +45,10 @@ authentik:
     resources:
       requests:
         cpu: 100m
-        memory: 512Mi
+        memory: 1Gi
       limits:
-        cpu: 1
-        memory: 1536Mi
+        cpu: 1500m
+        memory: 2Gi
 
     metrics:
       enabled: true
@@ -57,6 +57,7 @@ authentik:
         interval: 60s
         labels:
           release: kube-prometheus-stack
+
     env:
       - name: AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS
         value: 10.244.0.0/16
@@ -166,11 +167,11 @@ authentik:
 
     resources:
       requests:
-        cpu: 100m
+        cpu: 0.5
         memory: 512Mi
       limits:
-        cpu: 500m
-        memory: 2Gi
+        cpu: 1
+        memory: 1Gi
 
     livenessProbe:
       timeoutSeconds: 10
