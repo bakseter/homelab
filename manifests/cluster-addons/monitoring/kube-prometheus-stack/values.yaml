@@ -75,6 +75,8 @@ kube-prometheus-stack:
       secrets:
         - alertmanager-pushover
 
+    revisionHistoryLimit: 5
+
     config:
       global:
         resolve_timeout: 5m
@@ -148,6 +150,11 @@ kube-prometheus-stack:
       repository: kube-state-metrics/kube-state-metrics
       tag: 2.19.0
       sha: sha256:6b2f0b6f2f86ac5b1aa883a033a8dd55bb96c16d191ec973393bdaadaddac914
+
+    revisionHistoryLimit: 5
+
+  prometheusOperator:
+    revisionHistoryLimit: 5
 
   kubeControllerManager:
     enabled: false
