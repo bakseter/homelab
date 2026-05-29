@@ -15,6 +15,9 @@ spec:
             app.kubernetes.io/name: envoy
             gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-home
         - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus-blackbox-exporter
+        - matchLabels:
             app.kubernetes.io/name: radarr
         - matchLabels:
             app.kubernetes.io/name: sonarr

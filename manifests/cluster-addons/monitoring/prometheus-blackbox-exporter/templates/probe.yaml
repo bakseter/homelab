@@ -41,3 +41,41 @@ spec:
         - https://mandagsmiddag.no
       labels:
         probe_type: tls
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: internal-probes
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  jobName: internal
+  interval: 60s
+  scrapeTimeout: 30s
+  module: http_2xx
+  prober:
+    url: prometheus-blackbox-exporter.monitoring.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - http://amex-frontend.amex.svc.cluster.local
+        - http://argocd-server.argocd.svc.cluster.local
+        - http://frontend.five31.svc.cluster.local
+        - http://immich-server.immich.svc.cluster.local:2283
+        - http://longhorn-frontend.longhorn-system.svc.cluster.local
+        - http://audiobookshelf.media.svc.cluster.local
+        - http://jellyfin.media.svc.cluster.local:8096
+        - http://lidarr.media.svc.cluster.local:8686
+        - http://prowlarr.media.svc.cluster.local:9696
+        - http://radarr.media.svc.cluster.local:7878
+        - http://sabnzbd.media.svc.cluster.local:8080
+        - http://seerr.media.svc.cluster.local:5055
+        - http://sonarr.media.svc.cluster.local:8989
+        - http://grafana-service.monitoring.svc.cluster.local:3000
+        - http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
+        - http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9000
+        - http://loki-rustfs-svc.monitoring.svc.cluster.local:9000
+        - http://vaultwarden.vaultwarden.svc.cluster.local
+      labels:
+        probe_type: internal

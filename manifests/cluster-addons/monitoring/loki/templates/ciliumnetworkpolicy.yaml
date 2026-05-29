@@ -35,6 +35,8 @@ spec:
         - matchLabels:
             app.kubernetes.io/instance: loki
             app.kubernetes.io/name: create-s3-buckets
+        - matchLabels:
+            app.kubernetes.io/name: prometheus-blackbox-exporter
       toPorts:
         - ports:
             - port: '9000'

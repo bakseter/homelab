@@ -15,6 +15,8 @@ spec:
             app.kubernetes.io/name: envoy
             gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-int
         - matchLabels:
+            app.kubernetes.io/name: prometheus-blackbox-exporter
+        - matchLabels:
             app: grafana
       toPorts:
         - ports:
@@ -93,6 +95,8 @@ spec:
             gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-int
         - matchLabels:
             app.kubernetes.io/name: prometheus
+        - matchLabels:
+            app.kubernetes.io/name: prometheus-blackbox-exporter
         - matchLabels:
             app: grafana
       toPorts:
