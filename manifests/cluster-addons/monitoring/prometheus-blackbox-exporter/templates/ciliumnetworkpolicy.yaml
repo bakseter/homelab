@@ -54,15 +54,6 @@ spec:
             - port: '3000'
               protocol: TCP
 
-    - toEndpoints:
-        - matchLabels:
-            app.kubernetes.io/instance: loki
-            app.kubernetes.io/name: rustfs
-      toPorts:
-        - ports:
-            - port: '9001'
-              protocol: TCP
-
     # Any pod in any other namespace, for internal probes
     - toEndpoints:
         - matchExpressions:
