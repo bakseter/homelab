@@ -83,7 +83,7 @@ spec:
         - http://prowlarr.media.svc.cluster.local:9696
         - http://radarr.media.svc.cluster.local:7878
         - http://sabnzbd.media.svc.cluster.local:8080
-        - http://seerr.media.svc.cluster.local:5055
+        - http://seerr.media.svc.cluster.local
         - http://sonarr.media.svc.cluster.local:8989
         - http://grafana-service.monitoring.svc.cluster.local:3000
         - http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
