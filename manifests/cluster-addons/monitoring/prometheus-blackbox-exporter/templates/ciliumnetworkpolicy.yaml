@@ -30,12 +30,19 @@ spec:
             dns:
               - matchPattern: '*'
 
+    # Any pod in any other namespace, for internal probes
+    - toEndpoints:
+        - matchExpressions:
+            - key: 'k8s:io.kubernetes.pod.namespace'
+              operator: NotIn
+              values:
+                - monitoring
+
     - toFQDNs:
         - matchName: 'authentik.bakseter.net'
         - matchName: 'bakseter.net'
         - matchName: 'mandagsmiddag.no'
-# TODO: ports
-#     toPorts:
-#       - ports:
-#           - port: '443'
-#             protocol: TCP
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
