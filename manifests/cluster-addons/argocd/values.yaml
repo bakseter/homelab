@@ -56,6 +56,7 @@ argo-cd:
 
   controller:
     replicas: 1
+
     resouces:
       requests:
         cpu: 100m
@@ -64,15 +65,30 @@ argo-cd:
         cpu: 2
         memory: 2Gi
 
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          release: kube-prometheus-stack
+
   server:
     replicas: 2
+
     resources:
       requests:
         cpu: 10m
         memory: 128Mi
       limits:
         cpu: 100m
-        memory: 320Mi
+        memory: 512Mi
+
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        additionalLabels:
+          release: kube-prometheus-stack
 
     httproute:
       enabled: true
@@ -92,15 +108,9 @@ argo-cd:
                 type: PathPrefix
                 value: /
 
-          filters:
-            - type: RequestHeaderModifier
-              requestHeaderModifier:
-                set:
-                  - name: Tailscale-User-Login
-                    value: '%REQ(Tailscale-User-Login)%'
-
   repoServer:
     replicas: 2
+
     resources:
       requests:
         cpu: 10m
@@ -109,8 +119,16 @@ argo-cd:
         cpu: 500m
         memory: 512Mi
 
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          additionalLabels:
+            release: kube-prometheus-stack
+
   applicationSet:
     replicas: 2
+
     resources:
       requests:
         cpu: 10m
@@ -118,6 +136,13 @@ argo-cd:
       limits:
         cpu: 100m
         memory: 256Mi
+
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          additionalLabels:
+            release: kube-prometheus-stack
 
   dex:
     resources:
@@ -127,3 +152,10 @@ argo-cd:
       limits:
         cpu: 200m
         memory: 512Mi
+
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          additionalLabels:
+            release: kube-prometheus-stack
