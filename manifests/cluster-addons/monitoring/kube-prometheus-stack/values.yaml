@@ -21,6 +21,7 @@ kube-prometheus-stack:
             values:
               - argocd
               - authentik
+              - cert-manager
               - cloudflared
               - kube-system # cilium hubble
               - longhorn-system
