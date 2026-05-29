@@ -1,7 +1,7 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-ingress-tailscale-to-longhorn-ui
+  name: allow-ingress-longhorn-ui
   namespace: longhorn-system
 spec:
   endpointSelector:
@@ -14,6 +14,9 @@ spec:
             k8s:io.kubernetes.pod.namespace: envoy-gateway-system
             app.kubernetes.io/name: envoy
             gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-int
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus-blackbox-exporter
       toPorts:
         - ports:
             - port: '8000'
@@ -24,7 +27,7 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-prometheus-to-longhorn-manager
+  name: allow-ingress-longhorn-manager
   namespace: longhorn-system
 spec:
   endpointSelector:
