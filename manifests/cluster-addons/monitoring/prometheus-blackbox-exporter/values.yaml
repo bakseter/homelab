@@ -22,6 +22,3 @@ prometheus-blackbox-exporter:
       - name: mandagsmiddag.no
         url: https://mandagsmiddag.no
         hostname: mandagsmiddag.no
-
-  prometheusRule:
-    enabled: true
