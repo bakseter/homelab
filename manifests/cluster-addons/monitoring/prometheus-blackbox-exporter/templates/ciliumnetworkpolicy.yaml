@@ -1,0 +1,41 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: prometheus-blackbox-exporter
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-blackbox-exporter
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '9115'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toFQDNs:
+        - matchName: 'authentik.bakseter.net'
+        - matchName: 'bakseter.net'
+        - matchName: 'mandagsmiddag.no'
+# TODO: ports
+#     toPorts:
+#       - ports:
+#           - port: '443'
+#             protocol: TCP
