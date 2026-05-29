@@ -28,6 +28,13 @@ kube-prometheus-stack:
               - monitoring
               - mandagsmiddag
 
+      probeNamespaceSelector:
+        matchExpressions:
+          - key: kubernetes.io/metadata.name
+            operator: In
+            values:
+              - monitoring
+
       storageSpec:
         volumeClaimTemplate:
           metadata:
