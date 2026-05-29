@@ -1,0 +1,14 @@
+prometheus-blackbox-exporter:
+  releaseLabel: true
+
+  serviceMonitor:
+    enabled: true
+    defaults:
+      interval: 60s
+
+    selfMonitor:
+      enabled: true
+      interval: 60s
+
+  prometheusRule:
+    enabled: true
