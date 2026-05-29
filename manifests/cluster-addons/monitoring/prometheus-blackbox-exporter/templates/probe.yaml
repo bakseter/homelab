@@ -61,9 +61,9 @@ spec:
       static:
         - http://amex-frontend.amex.svc.cluster.local
         - http://argocd-server.argocd.svc.cluster.local
-        - http://frontend.five31.svc.cluster.local
+        - http://frontend.five31.svc.cluster.local:3000
         - http://immich-server.immich.svc.cluster.local:2283
-        - http://longhorn-frontend.longhorn-system.svc.cluster.local
+        - http://longhorn-frontend.longhorn-system.svc.cluster.local:8000
         - http://audiobookshelf.media.svc.cluster.local
         - http://jellyfin.media.svc.cluster.local:8096
         - http://lidarr.media.svc.cluster.local:8686
@@ -76,6 +76,6 @@ spec:
         - http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
         - http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9000
         - http://loki-rustfs-svc.monitoring.svc.cluster.local:9000
-        - http://vaultwarden.vaultwarden.svc.cluster.local
+        - http://vaultwarden.vaultwarden.svc.cluster.local:8080
       labels:
         probe_type: internal
