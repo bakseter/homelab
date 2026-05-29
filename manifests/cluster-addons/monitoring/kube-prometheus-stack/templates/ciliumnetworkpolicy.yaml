@@ -59,6 +59,15 @@ spec:
         - host
         - remote-node
 
+    - toEndpoints:
+        - matchExpressions:
+            matchLabels:
+              app.kubernetes.io/name: prometheus-blackbox-exporter
+      toPorts:
+        - ports:
+            - port: '9115'
+              protocol: TCP
+
     # Any pod in any other namespace, for scrape
     - toEndpoints:
         - matchExpressions:
