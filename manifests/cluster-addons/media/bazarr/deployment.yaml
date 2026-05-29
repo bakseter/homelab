@@ -5,6 +5,7 @@ metadata:
   namespace: media
 spec:
   replicas: 0
+  revisionHistoryLimit: 5
   strategy:
     type: Recreate
   template:
