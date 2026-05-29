@@ -19,6 +19,12 @@ spec:
         - https://mandagsmiddag.no
       labels:
         probe_type: http
+  metricRelabelings:
+    - sourceLabels: [instance]
+      regex: 'https?://([^.]+)\..*'
+      targetLabel: instance
+      replacement: '$1'
+      action: replace
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: Probe
@@ -41,6 +47,12 @@ spec:
         - https://mandagsmiddag.no
       labels:
         probe_type: tls
+  metricRelabelings:
+    - sourceLabels: [instance]
+      regex: 'https?://([^.]+)\..*'
+      targetLabel: instance
+      replacement: '$1'
+      action: replace
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: Probe
@@ -78,3 +90,9 @@ spec:
         - http://vaultwarden.vaultwarden.svc.cluster.local:8080
       labels:
         probe_type: internal
+  metricRelabelings:
+    - sourceLabels: [instance]
+      regex: 'https?://([^.]+)\..*'
+      targetLabel: instance
+      replacement: '$1'
+      action: replace
