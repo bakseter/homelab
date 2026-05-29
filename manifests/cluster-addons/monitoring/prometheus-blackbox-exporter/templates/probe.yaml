@@ -8,6 +8,7 @@ metadata:
 spec:
   jobName: http
   interval: 60s
+  scrapeTimeout: 30s
   module: http_2xx
   prober:
     url: prometheus-blackbox-exporter.monitoring.svc.cluster.local:9115
