@@ -19,7 +19,6 @@ tailscale-operator:
       capabilities:
         drop:
           - ALL
-      readOnlyRootFilesystem: true
 
   apiServerProxyConfig:
     allowImpersonation: true
