@@ -48,11 +48,6 @@ data:
           dateStyle: short
           hourCycle: h23
 
-    - search:
-        provider: duckduckgo
-        target: _blank
-        focus: false
-
   docker.yaml: ''
   proxmox.yaml: ''
   custom.css: ''

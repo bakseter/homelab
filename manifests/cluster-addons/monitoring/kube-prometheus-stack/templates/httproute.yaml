@@ -42,7 +42,7 @@ metadata:
     gethomepage.dev/icon: prometheus.png
     gethomepage.dev/name: Prometheus
     gethomepage.dev/widget.type: prometheus
-    gethomepage.dev/widget.url: http://kube-prometheus-stack.prometheus.svc.cluster.local:9090
+    gethomepage.dev/widget.url: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
