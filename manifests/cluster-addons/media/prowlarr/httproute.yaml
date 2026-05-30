@@ -3,6 +3,12 @@ kind: HTTPRoute
 metadata:
   name: prowlarr
   namespace: media
+  annotations:
+    gethomepage.dev/enabled: 'true'
+    gethomepage.dev/description: Indexer
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: prowlarr.png
+    gethomepage.dev/name: Prowlarr
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

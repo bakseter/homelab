@@ -3,6 +3,12 @@ kind: HTTPRoute
 metadata:
   name: lidarr
   namespace: media
+  annotations:
+    gethomepage.dev/enabled: 'true'
+    gethomepage.dev/description: Music
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: lidarr.png
+    gethomepage.dev/name: Lidarr
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
