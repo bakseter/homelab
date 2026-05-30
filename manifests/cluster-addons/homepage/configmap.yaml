@@ -70,10 +70,6 @@ data:
             icon: argocd.svg
             namespace: argocd
             app: argocd-server
-            widget:
-              type: argocd
-              url: http://argocd-server.argocd.svc.cluster.local
-              key: {{ARGOCD_TOKEN}}
 
         - Authentik:
             href: https://auth.bakseter.net
@@ -81,10 +77,6 @@ data:
             icon: authentik.svg
             namespace: authentik
             app: authentik
-            widget:
-              type: authentik
-              url: http://authentik-server.authentik.svc.cluster.local
-              key: {{AUTHENTIK_TOKEN}}
 
         - Longhorn:
             href: https://longhorn.bakseter.net
@@ -92,9 +84,6 @@ data:
             icon: longhorn.svg
             namespace: longhorn-system
             app: longhorn-ui
-            widget:
-              type: longhorn
-              url: http://longhorn-frontend.longhorn-system.svc.cluster.local
 
     - Media:
         - Jellyfin:
@@ -117,7 +106,7 @@ data:
             namespace: media
             app: seerr
             widget:
-              type: yseerr
+              type: seerr
               url: http://seerr.media.svc.cluster.local
               key: {{SEERR_TOKEN}}
 
@@ -206,11 +195,6 @@ data:
             icon: grafana.svg
             namespace: monitoring
             app: grafana
-            widget:
-              type: grafana
-              url: http://grafana-service.monitoring.svc.cluster.local:3000
-              username: admin
-              password: {{GRAFANA_PASSWORD}}
 
         - Prometheus:
             href: https://prometheus.int.bakseter.net
@@ -219,7 +203,7 @@ data:
             namespace: monitoring
             app: prometheus
             widget:
-              type: grafana
+              type: prometheus
               url: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:3000
 
         - Alertmanager:
