@@ -9,6 +9,10 @@ metadata:
     gethomepage.dev/group: Meida
     gethomepage.dev/icon: immich.png
     gethomepage.dev/name: Immich
+    gethomepage.dev/widget.type: immich
+    gethomepage.dev/widget.url: http://immich-server.immich.svc.cluster.local:2283
+    gethomepage.dev/widget.key: '{{IMMICH_TOKEN}}'
+    gethomepage.dev/widget.version: '2'
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
