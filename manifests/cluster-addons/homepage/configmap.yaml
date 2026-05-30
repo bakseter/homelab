@@ -6,6 +6,7 @@ metadata:
 data:
   kubernetes.yaml: |
     mode: cluster
+    gateway: true
 
   settings.yaml: |
     title: Homelab
@@ -38,7 +39,7 @@ data:
 
   bookmarks.yaml: |
     - Quick Access:
-        - Arg oCD:
+        - Argo CD:
             - abbr: CD
               href: https://argocd.sre.bakseter.net
         - Grafana:
@@ -50,13 +51,10 @@ data:
     - Developer:
         - GitHub:
             - abbr: GH
-              href: https://github.com
+              href: https://github.com/bakseter/homelab
         - Artifact Hub:
             - abbr: AH
               href: https://artifacthub.io
-        - Kubernetes Docs:
-            - abbr: K8
-              href: https://kubernetes.io/docs
 
   services.yaml: |
     - Observability:
@@ -66,11 +64,11 @@ data:
             icon: grafana.svg
             namespace: monitoring
             app: grafana
-            widget:
-              type: grafana
-              url: http://grafana-deployment.monitoring.svc.cluster.local:3000
-              username: admin
-              password: {{GRAFANA_PASSWORD}}
+            #widget:
+            #  type: grafana
+            #  url: http://grafana-deployment.monitoring.svc.cluster.local:3000
+            #  username: admin
+            #  password: {{GRAFANA_PASSWORD}}
 
         - Prometheus:
             href: https://prometheus.int.bakseter.net
@@ -86,12 +84,6 @@ data:
             namespace: monitoring
             app: alertmanager
 
-        - Loki:
-            description: Log aggregation
-            icon: loki.svg
-            namespace: monitoring
-            app: loki
-
     - Infrastructure:
         - Argo CD:
             href: https://argocd.sre.bakseter.net
@@ -99,10 +91,10 @@ data:
             icon: argocd.svg
             namespace: argocd
             app: argocd-server
-            widget:
-              type: argocd
-              url: http://argocd-server.argocd.svc.cluster.local
-              key: {{ARGOCD_TOKEN}}
+            #widget:
+            #  type: argocd
+            #  url: http://argocd-server.argocd.svc.cluster.local
+            #  key: {{ARGOCD_TOKEN}}
 
         - Longhorn:
             href: https://longhorn.int.bakseter.net
@@ -128,12 +120,12 @@ data:
             icon: jellyfin.svg
             namespace: media
             app: jellyfin
-            widget:
-              type: jellyfin
-              url: http://jellyfin.media.svc.cluster.local:8096
-              key: {{JELLYFIN_TOKEN}}
-              enableBlocks: true
-              enableNowPlaying: true
+            #widget:
+            #  type: jellyfin
+            #  url: http://jellyfin.media.svc.cluster.local:8096
+            #  key: {{JELLYFIN_TOKEN}}
+            #  enableBlocks: true
+            #  enableNowPlaying: true
 
     - Home:
         - Vaultwarden:
