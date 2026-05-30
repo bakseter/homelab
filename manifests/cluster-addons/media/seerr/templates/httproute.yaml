@@ -3,6 +3,12 @@ kind: HTTPRoute
 metadata:
   name: seerr
   namespace: media
+  annotations:
+    gethomepage.dev/enabled: 'true'
+    gethomepage.dev/description: Media requests
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: seerr.png
+    gethomepage.dev/name: Seerr
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
