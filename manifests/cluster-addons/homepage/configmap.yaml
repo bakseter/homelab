@@ -1,0 +1,178 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage
+  namespace: homepage
+data:
+  kubernetes.yaml: |
+    mode: cluster
+
+  settings.yaml: |
+    title: Homelab
+    headerStyle: clean
+    statusStyle: dot
+    hideVersion: true
+    color: slate
+    background:
+      opacity: 20
+    theme: dark
+    layout:
+      Observability:
+        style: row
+        columns: 4
+      Media:
+        style: row
+        columns: 4
+      Infrastructure:
+        style: row
+        columns: 4
+      Home:
+        style: row
+        columns: 4
+      Dev:
+        style: row
+        columns: 4
+
+  custom.css: ''
+  custom.js: ''
+
+  bookmarks.yaml: |
+    - Quick Access:
+        - Arg oCD:
+            - abbr: CD
+              href: https://argocd.sre.bakseter.net
+        - Grafana:
+            - abbr: GF
+              href: https://grafana.sre.bakseter.net
+        - Longhorn:
+            - abbr: LH
+              href: https://longhorn.int.bakseter.net
+    - Developer:
+        - GitHub:
+            - abbr: GH
+              href: https://github.com
+        - Artifact Hub:
+            - abbr: AH
+              href: https://artifacthub.io
+        - Kubernetes Docs:
+            - abbr: K8
+              href: https://kubernetes.io/docs
+
+  services.yaml: |
+    - Observability:
+        - Grafana:
+            href: https://grafana.sre.bakseter.net
+            description: Metrics & dashboards
+            icon: grafana.svg
+            namespace: monitoring
+            app: grafana
+            widget:
+              type: grafana
+              url: http://grafana-deployment.monitoring.svc.cluster.local:3000
+              username: admin
+              password: {{GRAFANA_PASSWORD}}
+
+        - Prometheus:
+            href: https://prometheus.int.bakseter.net
+            description: Metrics backend
+            icon: prometheus.svg
+            namespace: monitoring
+            app: prometheus
+
+        - Alertmanager:
+            href: https://alertmanager.int.bakseter.net
+            description: Alert routing
+            icon: alertmanager.svg
+            namespace: monitoring
+            app: alertmanager
+
+        - Loki:
+            description: Log aggregation
+            icon: loki.svg
+            namespace: monitoring
+            app: loki
+
+    - Infrastructure:
+        - Argo CD:
+            href: https://argocd.sre.bakseter.net
+            description: GitOps deployments
+            icon: argocd.svg
+            namespace: argocd
+            app: argocd-server
+            widget:
+              type: argocd
+              url: http://argocd-server.argocd.svc.cluster.local
+              key: {{ARGOCD_TOKEN}}
+
+        - Longhorn:
+            href: https://longhorn.int.bakseter.net
+            description: Distributed block storage
+            icon: longhorn.svg
+            namespace: longhorn-system
+            app: longhorn-ui
+            widget:
+              type: longhorn
+              url: http://longhorn-frontend.longhorn-system.svc.cluster.local
+
+        - cert-manager:
+            href: https://grafana.yourdomain.com/d/certmanager
+            description: TLS certificate management
+            icon: cert-manager.svg
+            namespace: cert-manager
+            app: cert-manager
+
+    - Media:
+        - Jellyfin:
+            href: https://jellyfin.bakseter.net
+            description: Open source media
+            icon: jellyfin.svg
+            namespace: media
+            app: jellyfin
+            widget:
+              type: jellyfin
+              url: http://jellyfin.media.svc.cluster.local:8096
+              key: {{JELLYFIN_TOKEN}}
+              enableBlocks: true
+              enableNowPlaying: true
+
+    - Home:
+        - Vaultwarden:
+            href: https://vaultwarden.bakseter.net
+            description: Password manager
+            icon: vaultwarden.svg
+            namespace: apps
+            app: vaultwarden
+
+  widgets.yaml: |
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: homelab
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+
+    - longhorn:
+        expanded: true
+        total: true
+        labels: true
+        nodes: false
+
+    - datetime:
+        text_size: xl
+        format:
+          timeStyle: short
+          dateStyle: short
+          hourCycle: h23
+
+    - search:
+        provider: duckduckgo
+        target: _blank
+        focus: false
+
+  docker.yaml: ''
