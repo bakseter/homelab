@@ -42,12 +42,12 @@ spec:
             - name: http
               containerPort: 3000
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /api/healthcheck
-              port: http
-            initialDelaySeconds: 30
-            periodSeconds: 15
+          #ivenessProbe:
+          # httpGet:
+          #   path: /api/healthcheck
+          #   port: http
+          # initialDelaySeconds: 30
+          # periodSeconds: 15
           volumeMounts:
             - mountPath: /app/config/custom.js
               name: homepage-config
