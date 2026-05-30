@@ -3,15 +3,6 @@ kind: HTTPRoute
 metadata:
   name: lidarr
   namespace: media
-  annotations:
-    gethomepage.dev/enabled: 'true'
-    gethomepage.dev/description: Music
-    gethomepage.dev/group: Media
-    gethomepage.dev/icon: lidarr.png
-    gethomepage.dev/name: Lidarr
-    gethomepage.dev/widget.type: lidarr
-    gethomepage.dev/widget.url: http://lidarr.media.svc.cluster.local:8686
-    gethomepage.dev/widget.key: '{{LIDARR_TOKEN}}'
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

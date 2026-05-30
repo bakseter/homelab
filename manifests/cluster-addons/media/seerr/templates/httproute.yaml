@@ -3,15 +3,6 @@ kind: HTTPRoute
 metadata:
   name: seerr
   namespace: media
-  annotations:
-    gethomepage.dev/enabled: 'true'
-    gethomepage.dev/description: Media requests
-    gethomepage.dev/group: Media
-    gethomepage.dev/icon: seerr.png
-    gethomepage.dev/name: Seerr
-    gethomepage.dev/widget.type: seerr
-    gethomepage.dev/widget.url: http://seerr.media.svc.cluster.local
-    gethomepage.dev/widget.key: '{{SEERR_TOKEN}}'
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

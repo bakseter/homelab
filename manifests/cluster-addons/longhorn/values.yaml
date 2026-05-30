@@ -29,13 +29,6 @@ longhorn:
   httproute:
     enabled: true
 
-    annotations:
-      gethomepage.dev/enabled: 'true'
-      gethomepage.dev/description: Storage
-      gethomepage.dev/group: Core
-      gethomepage.dev/icon: longhorn.png
-      gethomepage.dev/name: Longhorn
-
     parentRefs:
       - group: gateway.networking.k8s.io
         kind: Gateway

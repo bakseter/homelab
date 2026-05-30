@@ -3,14 +3,6 @@ kind: HTTPRoute
 metadata:
   name: immich
   namespace: immich
-  annotations:
-    gethomepage.dev/enabled: 'true'
-    gethomepage.dev/description: Photos
-    gethomepage.dev/group: Media
-    gethomepage.dev/icon: immich.png
-    gethomepage.dev/name: Immich
-    gethomepage.dev/pod-selector: >-
-      app.kubernetes.io/instance=immich,app.kubernetes.io/name=server
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

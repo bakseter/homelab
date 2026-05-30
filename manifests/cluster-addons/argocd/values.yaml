@@ -93,13 +93,6 @@ argo-cd:
     httproute:
       enabled: true
 
-      annotations:
-        gethomepage.dev/enabled: 'true'
-        gethomepage.dev/description: GitOps
-        gethomepage.dev/group: Core
-        gethomepage.dev/icon: argocd.png
-        gethomepage.dev/name: Argo CD
-
       parentRefs:
         - group: gateway.networking.k8s.io
           kind: Gateway

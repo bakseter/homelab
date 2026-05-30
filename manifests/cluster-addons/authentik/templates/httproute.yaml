@@ -3,14 +3,6 @@ kind: HTTPRoute
 metadata:
   name: authentik-server
   namespace: authentik
-  annotations:
-    gethomepage.dev/enabled: 'true'
-    gethomepage.dev/description: Auth
-    gethomepage.dev/group: Core
-    gethomepage.dev/icon: authentik.png
-    gethomepage.dev/name: Authentik
-    gethomepage.dev/pod-selector: >-
-      app.kubernetes.io/instance=authentik,app.kubernetes.io/component=server
 spec:
   parentRefs:
     - name: cloudflared-gateway

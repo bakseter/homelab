@@ -3,15 +3,6 @@ kind: HTTPRoute
 metadata:
   name: audiobookshelf
   namespace: media
-  annotations:
-    gethomepage.dev/enabled: 'true'
-    gethomepage.dev/description: Podcasts
-    gethomepage.dev/group: Media
-    gethomepage.dev/icon: audiobookshelf.png
-    gethomepage.dev/name: Audiobookshelf
-    gethomepage.dev/widget.type: audiobookshelf
-    gethomepage.dev/widget.url: http://audiobookshelf.media.svc.cluster.local
-    gethomepage.dev/widget.key: '{{AUDIOBOOKSHELF_TOKEN}}'
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

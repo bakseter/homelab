@@ -3,15 +3,6 @@ kind: HTTPRoute
 metadata:
   name: sabnzbd
   namespace: media
-  annotations:
-    gethomepage.dev/enabled: 'true'
-    gethomepage.dev/description: NZB client
-    gethomepage.dev/group: Media
-    gethomepage.dev/icon: sabnzbd.png
-    gethomepage.dev/name: Sabnzbd
-    gethomepage.dev/widget.type: sabnzbd
-    gethomepage.dev/widget.url: http://sabnzbd.media.svc.cluster.local:8080
-    gethomepage.dev/widget.key: '{{SABNZBD_TOKEN}}'
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

@@ -6,10 +6,9 @@ metadata:
 data:
   kubernetes.yaml: |
     mode: cluster
-    gateway: true
 
   settings.yaml: |
-    title: Homelab
+    title: bakseter.net
     headerStyle: clean
     statusStyle: dot
     hideVersion: true
@@ -20,6 +19,23 @@ data:
     providers:
       longhorn:
         url: http://longhorn-frontend.longhorn-system.svc.cluster.local
+    layout:
+      Core:
+        style: row
+        columns: 3
+        icon: mdi-cube-outline
+      Media:
+        style: row
+        columns: 5
+        icon: mdi-play-circle-outline
+      Monitoring:
+        style: row
+        columns: 3
+        icon: mdi-chart-line
+      Home:
+        style: row
+        columns: 4
+        icon: mdi-home-outline
 
   widgets.yaml: |
     - kubernetes:
@@ -34,13 +50,11 @@ data:
           cpu: true
           memory: true
           showLabel: true
-
     - longhorn:
         expanded: true
         total: true
         labels: true
         nodes: true
-
     - datetime:
         text_size: xl
         format:
@@ -49,16 +63,190 @@ data:
           hourCycle: h23
 
   services.yaml: |
+    - Core:
+        - ArgoCD:
+            href: https://argocd.sre.bakseter.net
+            description: GitOps
+            icon: argocd.svg
+            namespace: argocd
+            app: argocd-server
+            widget:
+              type: argocd
+              url: http://argocd-server.argocd.svc.cluster.local
+              key: {{ARGOCD_TOKEN}}
+
+        - Authentik:
+            href: https://auth.bakseter.net
+            description: Identity provider
+            icon: authentik.svg
+            namespace: authentik
+            app: authentik
+            widget:
+              type: authentik
+              url: http://authentik-server.authentik.svc.cluster.local
+              key: {{AUTHENTIK_TOKEN}}
+
+        - Longhorn:
+            href: https://longhorn.bakseter.net
+            description: Distributed block storage
+            icon: longhorn.svg
+            namespace: longhorn-system
+            app: longhorn-ui
+            widget:
+              type: longhorn
+              url: http://longhorn-frontend.longhorn-system.svc.cluster.local
+
     - Media:
+        - Jellyfin:
+            href: https://jellyfin.bakseter.net
+            description: Media server
+            icon: jellyfin.svg
+            namespace: media
+            app: jellyfin
+            widget:
+              type: jellyfin
+              url: http://jellyfin.media.svc.cluster.local:8096
+              key: {{JELLYFIN_TOKEN}}
+              enableBlocks: true
+              enableNowPlaying: true
+
+        - Seerr:
+            href: https://seerr.bakseter.net
+            description: Request management
+            icon: seerr.svg
+            namespace: media
+            app: seerr
+            widget:
+              type: yseerr
+              url: http://seerr.media.svc.cluster.local
+              key: {{SEERR_TOKEN}}
+
         - Immich:
+            href: https://immich.bakseter.net
+            description: Photo management
+            icon: immich.svg
+            namespace: immich
+            app: immich-server
             widget:
               type: immich
               url: http://immich-server.immich.svc.cluster.local:2283
               key: {{IMMICH_TOKEN}}
               version: 2
 
+        - Audiobookshelf:
+            href: https://podcasts.bakseter.net
+            description: Audiobook server
+            icon: audiobookshelf.svg
+            namespace: media
+            app: audiobookshelf
+            widget:
+              type: audiobookshelf
+              url: http://audiobookshelf.media.svc.cluster.local:13378
+              key: {{AUDIOBOOKSHELF_TOKEN}}
+
+        - Sonarr:
+            href: https://sonarr.bakseter.net
+            description: TV series
+            icon: sonarr.svg
+            namespace: media
+            app: sonarr
+            widget:
+              type: sonarr
+              url: http://sonarr.media.svc.cluster.local:8989
+              key: {{SONARR_TOKEN}}
+
+        - Radarr:
+            href: https://radarr.bakseter.net
+            description: Movies
+            icon: radarr.svg
+            namespace: media
+            app: radarr
+            widget:
+              type: radarr
+              url: http://radarr.media.svc.cluster.local:7878
+              key: {{RADARR_TOKEN}}
+
+        - Lidarr:
+            href: https://lidarr.bakseter.net
+            description: Music
+            icon: lidarr.svg
+            namespace: media
+            app: lidarr
+            widget:
+              type: lidarr
+              url: http://lidarr.media.svc.cluster.local:8686
+              key: {{LIDARR_TOKEN}}
+
+        - Prowlarr:
+            href: https://prowlarr.bakseter.net
+            description: Indexer manager
+            icon: prowlarr.svg
+            namespace: media
+            app: prowlarr
+            widget:
+              type: prowlarr
+              url: http://prowlarr.media.svc.cluster.local:9696
+              key: {{PROWLARR_TOKEN}}
+
+        - SABnzbd:
+            href: https://sabnzbd.bakseter.net
+            description: Usenet downloader
+            icon: sabnzbd.svg
+            namespace: media
+            app: sabnzbd
+            widget:
+              type: sabnzbd
+              url: http://sabnzbd.media.svc.cluster.local:8080
+              key: {{SABNZBD_TOKEN}}
+
+    - Monitoring:
+        - Grafana:
+            href: https://grafana.sre.bakseter.net
+            description: Dashboards
+            icon: grafana.svg
+            namespace: monitoring
+            app: grafana
+            widget:
+              type: grafana
+              url: http://grafana-service.monitoring.svc.cluster.local:3000
+              username: admin
+              password: {{GRAFANA_PASSWORD}}
+
+        - Prometheus:
+            href: https://prometheus.int.bakseter.net
+            description: Metrics
+            icon: prometheus.svg
+            namespace: monitoring
+            app: prometheus
+            widget:
+              type: grafana
+              url: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:3000
+
+        - Alertmanager:
+            href: https://alertmanager.bakseter.net
+            description: Alerts
+            icon: alertmanager.svg
+            namespace: monitoring
+            app: alertmanager
+
+    - Home:
+        - Vaultwarden:
+            href: https://vault.bakseter.net
+            description: Password manager
+            icon: vaultwarden.svg
+            namespace: vaultwarden
+            app: vaultwarden
+
+  bookmarks.yaml: |
+    - Quick links:
+        - GitHub:
+            - abbr: GH
+              href: https://github.com
+        - Artifact Hub:
+            - abbr: AH
+              href: https://artifacthub.io
+
   docker.yaml: ''
   proxmox.yaml: ''
   custom.css: ''
   custom.js: ''
-  bookmarks.yaml: ''
