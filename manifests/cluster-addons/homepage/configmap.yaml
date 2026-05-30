@@ -8,31 +8,63 @@ data:
     mode: cluster
 
   settings.yaml: |
-    title: bakseter.net
+    title: Homelab
+    description: Homelab dashboard
+    favicon: https://cdn-icons-png.flaticon.com/512/900/900618.png
+    theme: dark
+    color: slate
     headerStyle: clean
     statusStyle: dot
     hideVersion: true
-    color: slate
+    disableUpdateCheck: true
+    disableIndexing: true
+    fullWidth: false
+    useEqualHeights: true
+    iconStyle: theme
+    target: _blank
+
     background:
-      opacity: 20
-    theme: dark
+      image: https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2560&q=80
+      blur: sm
+      saturate: 50
+      brightness: 25
+      opacity: 30
+
+    cardBlur: md
+
+    quicklaunch:
+      searchDescriptions: true
+      hideInternetSearch: false
+      showSearchSuggestions: true
+      provider: duckduckgo
+
     providers:
       longhorn:
         url: http://longhorn-frontend.longhorn-system.svc.cluster.local
+
     layout:
       Core:
+        tab: Infrastructure
         style: row
         columns: 3
-        icon: mdi-cube-outline
+        icon: mdi-cube-scan
+      Monitoring:
+        tab: Infrastructure
+        style: row
+        columns: 3
+        icon: mdi-chart-areaspline
       Media:
+        tab: Media
         style: row
         columns: 5
-        icon: mdi-play-circle-outline
-      Monitoring:
+        icon: mdi-play-box-multiple-outline
+      Downloads:
+        tab: Media
         style: row
-        columns: 3
-        icon: mdi-chart-line
+        columns: 4
+        icon: mdi-download-circle-outline
       Home:
+        tab: Home
         style: row
         columns: 4
         icon: mdi-home-outline
@@ -59,8 +91,12 @@ data:
         text_size: xl
         format:
           timeStyle: short
-          dateStyle: short
+          dateStyle: long
           hourCycle: h23
+    - search:
+        provider: duckduckgo
+        target: _blank
+        focus: false
 
   services.yaml: |
     - Core:
@@ -72,20 +108,47 @@ data:
             app: argocd-server
 
         - Authentik:
-            href: https://auth.bakseter.net
+            href: https://authentik.bakseter.net
             description: Identity provider
             icon: authentik.svg
             namespace: authentik
             app: authentik
+            podSelector: >-
+              app.kubernetes.io/component=server
 
         - Longhorn:
-            href: https://longhorn.bakseter.net
+            href: https://longhorn.int.bakseter.net
             description: Distributed block storage
             icon: longhorn.svg
             namespace: longhorn-system
             app: longhorn-ui
             podSelector: >-
-              app=longhorn-ui
+              app: longhorn-ui
+
+    - Monitoring:
+        - Grafana:
+            href: https://grafana.sre.bakseter.net
+            description: Dashboards
+            icon: grafana.svg
+            namespace: monitoring
+            app: grafana
+
+        - Prometheus:
+            href: https://prometheus.int.bakseter.net
+            description: Metrics
+            icon: prometheus.svg
+            namespace: monitoring
+            app: prometheus
+            widget:
+              type: prometheus
+              url: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
+
+        - Alertmanager:
+            href: https://alertmanager.int.bakseter.net
+            description: Alerts
+            icon: alertmanager.svg
+            namespace: monitoring
+            app: alertmanager
 
     - Media:
         - Jellyfin:
@@ -114,12 +177,12 @@ data:
 
         - Immich:
             href: https://immich.bakseter.net
-            description: Photo management
+            description: Photos
             icon: immich.svg
             namespace: immich
             app: immich-server
             podSelector: >-
-              app.kubernetes.io/instance=immich,app.kubernetes.io/name=server
+              app.kubernetes.io/component=server
             widget:
               type: immich
               url: http://immich-server.immich.svc.cluster.local:2283
@@ -128,15 +191,16 @@ data:
 
         - Audiobookshelf:
             href: https://podcasts.bakseter.net
-            description: Audiobook server
+            description: Podcasts
             icon: audiobookshelf.svg
             namespace: media
             app: audiobookshelf
             widget:
               type: audiobookshelf
-              url: http://audiobookshelf.media.svc.cluster.local:13378
+              url: http://audiobookshelf.media.svc.cluster.local
               key: {{HOMEPAGE_VAR_AUDIOBOOKSHELF_TOKEN}}
 
+    - Downloads:
         - Sonarr:
             href: https://sonarr.bakseter.net
             description: TV series
@@ -146,7 +210,7 @@ data:
             widget:
               type: sonarr
               url: http://sonarr.media.svc.cluster.local:8989
-              key: {{HOMEPAGE_VAR_SONARR_TOKEN}}
+              key: {{SONARR_TOKEN}}
 
         - Radarr:
             href: https://radarr.bakseter.net
@@ -157,7 +221,7 @@ data:
             widget:
               type: radarr
               url: http://radarr.media.svc.cluster.local:7878
-              key: {{HOMEPAGE_VAR_RADARR_TOKEN}}
+              key: {{RADARR_TOKEN}}
 
         - Lidarr:
             href: https://lidarr.bakseter.net
@@ -192,39 +256,12 @@ data:
               url: http://sabnzbd.media.svc.cluster.local:8080
               key: {{HOMEPAGE_VAR_SABNZBD_TOKEN}}
 
-    - Monitoring:
-        - Grafana:
-            href: https://grafana.sre.bakseter.net
-            description: Dashboards
-            icon: grafana.svg
-            namespace: monitoring
-            app: grafana
-            podSelector: >-
-              app=grafana
-
-        - Prometheus:
-            href: https://prometheus.int.bakseter.net
-            description: Metrics
-            icon: prometheus.svg
-            namespace: monitoring
-            app: prometheus
-            widget:
-              type: prometheus
-              url: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:3000
-
-        - Alertmanager:
-            href: https://alertmanager.bakseter.net
-            description: Alerts
-            icon: alertmanager.svg
-            namespace: monitoring
-            app: alertmanager
-
     - Home:
         - Vaultwarden:
-            href: https://vault.bakseter.net
+            href: https://vaultwarden.bakseter.net
             description: Password manager
             icon: vaultwarden.svg
-            namespace: vaultwarden
+            namespace: apps
             app: vaultwarden
 
   bookmarks.yaml: |
@@ -235,8 +272,24 @@ data:
         - Artifact Hub:
             - abbr: AH
               href: https://artifacthub.io
+        - Kubernetes Docs:
+            - abbr: K8s
+              href: https://kubernetes.io/docs
+        - Bitwarden:
+            - abbr: BW
+              href: https://vault.bakseter.net
 
+  custom.css: |
+    /* Tighten up card padding slightly */
+    .service-card {
+      padding: 0.6rem 0.75rem;
+    }
+
+    /* Slightly more breathing room between tab buttons */
+    .tab-button {
+      letter-spacing: 0.04em;
+    }
+
+  custom.js: ''
   docker.yaml: ''
   proxmox.yaml: ''
-  custom.css: ''
-  custom.js: ''
