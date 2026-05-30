@@ -84,6 +84,8 @@ data:
             icon: longhorn.svg
             namespace: longhorn-system
             app: longhorn-ui
+            podSelector: >-
+              app=longhorn-ui
 
     - Media:
         - Jellyfin:
@@ -116,6 +118,9 @@ data:
             icon: immich.svg
             namespace: immich
             app: immich-server
+            podSelector: >-
+              app.kubernetes.io/instance=immich
+              app.kubernetes.io/name=server
             widget:
               type: immich
               url: http://immich-server.immich.svc.cluster.local:2283
@@ -195,6 +200,8 @@ data:
             icon: grafana.svg
             namespace: monitoring
             app: grafana
+            podSelector: >-
+              app=grafana
 
         - Prometheus:
             href: https://prometheus.int.bakseter.net
