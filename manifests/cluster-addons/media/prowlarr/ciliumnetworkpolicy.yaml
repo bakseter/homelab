@@ -18,6 +18,9 @@ spec:
             k8s:io.kubernetes.pod.namespace: monitoring
             app.kubernetes.io/name: prometheus-blackbox-exporter
         - matchLabels:
+            k8s:io.kubernetes.pod.namespace: homepage
+            app.kubernetes.io/name: homepage
+        - matchLabels:
             app.kubernetes.io/name: radarr
         - matchLabels:
             app.kubernetes.io/name: sonarr

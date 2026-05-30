@@ -9,6 +9,9 @@ metadata:
     gethomepage.dev/group: Media
     gethomepage.dev/icon: prowlarr.png
     gethomepage.dev/name: Prowlarr
+    gethomepage.dev/widget.type: prowlarr
+    gethomepage.dev/widget.url: http://prowlarr.media.svc.cluster.local:8686
+    gethomepage.dev/widget.key: '{{PROWLARR_TOKEN}}'
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

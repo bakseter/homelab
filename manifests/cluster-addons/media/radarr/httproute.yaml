@@ -9,6 +9,9 @@ metadata:
     gethomepage.dev/group: Media
     gethomepage.dev/icon: radarr.png
     gethomepage.dev/name: Radarr
+    gethomepage.dev/widget.type: radarr
+    gethomepage.dev/widget.url: http://radarr.media.svc.cluster.local:7878
+    gethomepage.dev/widget.key: '{{RADARR_TOKEN}}'
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
