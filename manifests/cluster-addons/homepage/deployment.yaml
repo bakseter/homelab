@@ -58,6 +58,9 @@ spec:
             - mountPath: /app/config/docker.yaml
               name: homepage-config
               subPath: docker.yaml
+            - mountPath: /app/config/proxmox.yaml
+              name: homepage-config
+              subPath: proxmox.yaml
             - mountPath: /app/config/kubernetes.yaml
               name: homepage-config
               subPath: kubernetes.yaml
