@@ -10,7 +10,6 @@ data:
   settings.yaml: |
     title: Homelab
     description: Homelab dashboard
-    favicon: https://cdn-icons-png.flaticon.com/512/900/900618.png
     theme: dark
     color: slate
     headerStyle: clean
@@ -24,7 +23,6 @@ data:
     target: _blank
 
     background:
-      image: https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2560&q=80
       blur: sm
       saturate: 50
       brightness: 25
@@ -78,21 +76,12 @@ data:
           showLabel: true
           label: homelab
         nodes:
-          show: true
-          cpu: true
-          memory: true
-          showLabel: true
+          show: false
     - longhorn:
-        expanded: true
+        expanded: false
         total: true
-        labels: true
-        nodes: true
-    - datetime:
-        text_size: xl
-        format:
-          timeStyle: short
-          dateStyle: long
-          hourCycle: h23
+        labels: false
+        nodes: false
     - search:
         provider: duckduckgo
         target: _blank
@@ -182,7 +171,7 @@ data:
             namespace: immich
             app: immich-server
             podSelector: >-
-              app.kubernetes.io/component=server
+              app.kubernetes.io/name=server
             widget:
               type: immich
               url: http://immich-server.immich.svc.cluster.local:2283
@@ -261,7 +250,7 @@ data:
             href: https://vaultwarden.bakseter.net
             description: Password manager
             icon: vaultwarden.svg
-            namespace: apps
+            namespace: vaultwarden
             app: vaultwarden
 
   bookmarks.yaml: |
