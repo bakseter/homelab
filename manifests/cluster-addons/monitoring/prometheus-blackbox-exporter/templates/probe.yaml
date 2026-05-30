@@ -72,11 +72,12 @@ spec:
   targets:
     staticConfig:
       static:
+        # TODO: fix ones commented out
         - http://amex-frontend.amex.svc.cluster.local:3000
         - http://argocd-server.argocd.svc.cluster.local
-        - http://five31-frontend.five31.svc.cluster.local:3000
+#       - http://five31-frontend.five31.svc.cluster.local:3000
         - http://immich-server.immich.svc.cluster.local:2283
-        - http://longhorn-frontend.longhorn-system.svc.cluster.local:8000
+#       - http://longhorn-frontend.longhorn-system.svc.cluster.local:8000
         - http://audiobookshelf.media.svc.cluster.local
         - http://jellyfin.media.svc.cluster.local:8096
         - http://lidarr.media.svc.cluster.local:8686
@@ -88,7 +89,7 @@ spec:
         - http://grafana-service.monitoring.svc.cluster.local:3000
         - http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
         - http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
-        - http://vaultwarden.vaultwarden.svc.cluster.local:8080
+#       - http://vaultwarden.vaultwarden.svc.cluster.local:8080
       labels:
         probe_type: internal
   metricRelabelings:
