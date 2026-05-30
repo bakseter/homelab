@@ -3,6 +3,12 @@ kind: HTTPRoute
 metadata:
   name: alertmanager
   namespace: monitoring
+  annotations:
+    gethomepage.dev/enabled: 'true'
+    gethomepage.dev/description: Alerts
+    gethomepage.dev/group: Monitoring
+    gethomepage.dev/icon: alertmanager.png
+    gethomepage.dev/name: Alertmanager
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
@@ -29,6 +35,14 @@ kind: HTTPRoute
 metadata:
   name: prometheus
   namespace: monitoring
+  annotations:
+    gethomepage.dev/enabled: 'true'
+    gethomepage.dev/description: Metrics
+    gethomepage.dev/group: Monitoring
+    gethomepage.dev/icon: prometheus.png
+    gethomepage.dev/name: Prometheus
+    gethomepage.dev/widget.type: prometheus
+    gethomepage.dev/widget.url: http://kube-prometheus-stack.prometheus.svc.cluster.local:9090
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io

@@ -6,6 +6,13 @@ metadata:
     dashboards: grafana
 spec:
   httpRoute:
+    metadata:
+      annotations:
+        gethomepage.dev/enabled: 'true'
+        gethomepage.dev/description: Dashboards
+        gethomepage.dev/group: Monitoring
+        gethomepage.dev/icon: grafana.png
+        gethomepage.dev/name: Grafana
     spec:
       parentRefs:
         - group: gateway.networking.k8s.io

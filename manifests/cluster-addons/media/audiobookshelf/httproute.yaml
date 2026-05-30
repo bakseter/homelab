@@ -3,6 +3,12 @@ kind: HTTPRoute
 metadata:
   name: audiobookshelf
   namespace: media
+  annotations:
+    gethomepage.dev/enabled: 'true'
+    gethomepage.dev/description: Podcasts
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: audiobookshelf.png
+    gethomepage.dev/name: Audiobookshelf
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
