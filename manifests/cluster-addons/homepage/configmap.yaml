@@ -17,149 +17,9 @@ data:
     background:
       opacity: 20
     theme: dark
-    layout:
-      Observability:
-        style: row
-        columns: 4
-      Media:
-        style: row
-        columns: 4
-      Infrastructure:
-        style: row
-        columns: 4
-      Home:
-        style: row
-        columns: 4
-      Dev:
-        style: row
-        columns: 4
-
-  custom.css: ''
-  custom.js: ''
-
-  bookmarks.yaml: |
-    - Quick Access:
-        - Argo CD:
-            - abbr: CD
-              href: https://argocd.sre.bakseter.net
-        - Grafana:
-            - abbr: GF
-              href: https://grafana.sre.bakseter.net
-        - Longhorn:
-            - abbr: LH
-              href: https://longhorn.int.bakseter.net
-    - Developer:
-        - GitHub:
-            - abbr: GH
-              href: https://github.com/bakseter/homelab
-        - Artifact Hub:
-            - abbr: AH
-              href: https://artifacthub.io
-
-  services.yaml: |
-    - Observability:
-        - Grafana:
-            href: https://grafana.sre.bakseter.net
-            description: Observability
-            icon: grafana.svg
-            namespace: monitoring
-            app: grafana-service
-            #widget:
-            #  type: grafana
-            #  url: http://grafana-deployment.monitoring.svc.cluster.local:3000
-            #  username: admin
-            #  password: {{GRAFANA_PASSWORD}}
-
-        - Prometheus:
-            href: https://prometheus.int.bakseter.net
-            description: Metrics
-            icon: prometheus.svg
-            namespace: monitoring
-            app: kube-prometheus-stack-prometheus
-
-        - Alertmanager:
-            href: https://alertmanager.int.bakseter.net
-            description: Alerts
-            icon: alertmanager.svg
-            namespace: monitoring
-            app: kube-prometheus-stack-alertmanager
-
-    - Infrastructure:
-        - Argo CD:
-            href: https://argocd.sre.bakseter.net
-            description: GitOps deployments
-            icon: argocd.svg
-            namespace: argocd
-            app: argocd-server
-            #widget:
-            #  type: argocd
-            #  url: http://argocd-server.argocd.svc.cluster.local
-            #  key: {{ARGOCD_TOKEN}}
-
-        - Longhorn:
-            href: https://longhorn.int.bakseter.net
-            description: Distributed block storage
-            icon: longhorn.svg
-            namespace: longhorn-system
-            app: longhorn-frontend
-
-        - Authentik:
-            href: https://authentik.bakseter.net
-            description: Authentication
-            icon: authentik.svg
-            namespace: authentik
-            app: authentik-server
-
-    - Media:
-        - Jellyfin:
-            href: https://jellyfin.bakseter.net
-            description: Media player
-            icon: jellyfin.svg
-            namespace: media
-            app: jellyfin
-
-        - Radarr:
-            href: https://radarr.bakseter.net
-            description: Movies
-            icon: radarr.svg
-            namespace: media
-            app: radarr
-
-        - Sonarr:
-            href: https://sonarr.bakseter.net
-            description: Shows
-            icon: sonarr.svg
-            namespace: media
-            app: sonarr
-
-        - Lidarr:
-            href: https://lidarr.bakseter.net
-            description: Music
-            icon: lidarr.svg
-            namespace: media
-            app: lidarr
-
-        - Prowlarr
-            href: https://lidarr.bakseter.net
-            description: Indexers
-            icon: prowlarr.svg
-            namespace: media
-            app: prowlarr
-
-        - Sabnzbd
-            href: https://sabnzbd.bakseter.net
-            description: NZB client
-            icon: sabnzbd.svg
-            namespace: media
-            app: sabnzbd
-
-    - Home:
-        - Vaultwarden:
-            href: https://vaultwarden.bakseter.net
-            description: Password manager
-            icon: vaultwarden.svg
-            namespace: vaultwarden
-            app: vaultwarden
+    providers:
+      longhorn:
+        url: http://longhorn-frontend.longhorn-system.svc.cluster.local
 
   widgets.yaml: |
     - kubernetes:
@@ -179,7 +39,7 @@ data:
         expanded: true
         total: true
         labels: true
-        nodes: false
+        nodes: true
 
     - datetime:
         text_size: xl
@@ -195,3 +55,7 @@ data:
 
   docker.yaml: ''
   proxmox.yaml: ''
+  custom.css: ''
+  custom.js: ''
+  bookmarks.yaml: ''
+  services.yaml: ''
