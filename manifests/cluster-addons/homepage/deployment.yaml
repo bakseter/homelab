@@ -46,7 +46,7 @@ spec:
             httpGet:
               path: /api/healthcheck
               port: http
-            initialDelaySeconds: 5
+            initialDelaySeconds: 30
             periodSeconds: 15
           volumeMounts:
             - mountPath: /app/config/custom.js
