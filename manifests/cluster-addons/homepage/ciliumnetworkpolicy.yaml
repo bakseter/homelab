@@ -59,6 +59,15 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app: grafana
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
             app.kubernetes.io/name: lidarr
       toPorts:
@@ -82,6 +91,15 @@ spec:
       toPorts:
         - ports:
             - port: '7878'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+            app.kubernetes.io/name: prowlarr
+      toPorts:
+        - ports:
+            - port: '9696'
               protocol: TCP
 
     - toEndpoints:
