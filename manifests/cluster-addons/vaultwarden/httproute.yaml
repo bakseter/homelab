@@ -3,6 +3,12 @@ kind: HTTPRoute
 metadata:
   name: vaultwarden
   namespace: vaultwarden
+  annotations:
+    gethomepage.dev/enabled: 'true'
+    gethomepage.dev/description: Password manager
+    gethomepage.dev/group: Home
+    gethomepage.dev/icon: vaultwarden.png
+    gethomepage.dev/name: Vaultwarden
 spec:
   hostnames:
     - vaultwarden.bakseter.net

@@ -3,6 +3,12 @@ kind: HTTPRoute
 metadata:
   name: immich
   namespace: immich
+  annotations:
+    gethomepage.dev/enabled: 'true'
+    gethomepage.dev/description: Photos
+    gethomepage.dev/group: Meida
+    gethomepage.dev/icon: immich.png
+    gethomepage.dev/name: Immich
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
