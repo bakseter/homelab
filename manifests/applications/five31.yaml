@@ -53,8 +53,8 @@ spec:
     - group: 'cilium.io'
       kind: CiliumNetworkPolicy
 
-    - group: 'networking.k8s.io'
-      kind: Ingress
+    - group: 'gateway.networking.k8s.io'
+      kind: HTTPRoute
 
     - group: 'postgresql.cnpg.io'
       kind: Cluster
