@@ -35,6 +35,9 @@ spec:
                   fieldPath: status.podIP
             - name: HOMEPAGE_ALLOWED_HOSTS
               value: '$(MY_POD_IP):3000,home.bakseter.net' # See https://gethomepage.dev/installation/#homepage_allowed_hosts . Value before the comma is required for the k8s probe
+          envFrom:
+            - secretRef:
+                name: homepage-secrets
           ports:
             - name: http
               containerPort: 3000
