@@ -60,10 +60,10 @@ data:
     - Observability:
         - Grafana:
             href: https://grafana.sre.bakseter.net
-            description: Metrics & dashboards
+            description: Observability
             icon: grafana.svg
             namespace: monitoring
-            app: grafana
+            app: grafana-service
             #widget:
             #  type: grafana
             #  url: http://grafana-deployment.monitoring.svc.cluster.local:3000
@@ -72,17 +72,17 @@ data:
 
         - Prometheus:
             href: https://prometheus.int.bakseter.net
-            description: Metrics backend
+            description: Metrics
             icon: prometheus.svg
             namespace: monitoring
-            app: prometheus
+            app: kube-prometheus-stack-prometheus
 
         - Alertmanager:
             href: https://alertmanager.int.bakseter.net
-            description: Alert routing
+            description: Alerts
             icon: alertmanager.svg
             namespace: monitoring
-            app: alertmanager
+            app: kube-prometheus-stack-alertmanager
 
     - Infrastructure:
         - Argo CD:
@@ -101,38 +101,64 @@ data:
             description: Distributed block storage
             icon: longhorn.svg
             namespace: longhorn-system
-            app: longhorn-ui
-            widget:
-              type: longhorn
-              url: http://longhorn-frontend.longhorn-system.svc.cluster.local
+            app: longhorn-frontend
 
-        - cert-manager:
-            href: https://grafana.yourdomain.com/d/certmanager
-            description: TLS certificate management
-            icon: cert-manager.svg
-            namespace: cert-manager
-            app: cert-manager
+        - Authentik:
+            href: https://authentik.bakseter.net
+            description: Authentication
+            icon: authentik.svg
+            namespace: authentik
+            app: authentik-server
 
     - Media:
         - Jellyfin:
             href: https://jellyfin.bakseter.net
-            description: Open source media
+            description: Media player
             icon: jellyfin.svg
             namespace: media
             app: jellyfin
-            #widget:
-            #  type: jellyfin
-            #  url: http://jellyfin.media.svc.cluster.local:8096
-            #  key: {{JELLYFIN_TOKEN}}
-            #  enableBlocks: true
-            #  enableNowPlaying: true
+
+        - Radarr:
+            href: https://radarr.bakseter.net
+            description: Movies
+            icon: radarr.svg
+            namespace: media
+            app: radarr
+
+        - Sonarr:
+            href: https://sonarr.bakseter.net
+            description: Shows
+            icon: sonarr.svg
+            namespace: media
+            app: sonarr
+
+        - Lidarr:
+            href: https://lidarr.bakseter.net
+            description: Music
+            icon: lidarr.svg
+            namespace: media
+            app: lidarr
+
+        - Prowlarr
+            href: https://lidarr.bakseter.net
+            description: Indexers
+            icon: prowlarr.svg
+            namespace: media
+            app: prowlarr
+
+        - Sabnzbd
+            href: https://sabnzbd.bakseter.net
+            description: NZB client
+            icon: sabnzbd.svg
+            namespace: media
+            app: sabnzbd
 
     - Home:
         - Vaultwarden:
             href: https://vaultwarden.bakseter.net
             description: Password manager
             icon: vaultwarden.svg
-            namespace: apps
+            namespace: vaultwarden
             app: vaultwarden
 
   widgets.yaml: |
