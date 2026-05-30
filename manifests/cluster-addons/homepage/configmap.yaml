@@ -112,7 +112,7 @@ data:
             namespace: longhorn-system
             app: longhorn-ui
             podSelector: >-
-              app: longhorn-ui
+              app=longhorn-ui
 
     - Monitoring:
         - Grafana:
@@ -121,6 +121,8 @@ data:
             icon: grafana.svg
             namespace: monitoring
             app: grafana
+            podSelector: >-
+              app=grafana
 
         - Prometheus:
             href: https://prometheus.int.bakseter.net
@@ -199,7 +201,7 @@ data:
             widget:
               type: sonarr
               url: http://sonarr.media.svc.cluster.local:8989
-              key: {{SONARR_TOKEN}}
+              key: {{HOMEPAGE_VAR_SONARR_TOKEN}}
 
         - Radarr:
             href: https://radarr.bakseter.net
@@ -210,7 +212,7 @@ data:
             widget:
               type: radarr
               url: http://radarr.media.svc.cluster.local:7878
-              key: {{RADARR_TOKEN}}
+              key: {{HOMEPAGE_VAR_RADARR_TOKEN}}
 
         - Lidarr:
             href: https://lidarr.bakseter.net
