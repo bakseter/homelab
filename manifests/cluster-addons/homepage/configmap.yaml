@@ -97,7 +97,7 @@ data:
             widget:
               type: jellyfin
               url: http://jellyfin.media.svc.cluster.local:8096
-              key: {{JELLYFIN_TOKEN}}
+              key: {{HOMEPAGE_VAR_JELLYFIN_TOKEN}}
               enableBlocks: true
               enableNowPlaying: true
 
@@ -110,7 +110,7 @@ data:
             widget:
               type: seerr
               url: http://seerr.media.svc.cluster.local
-              key: {{SEERR_TOKEN}}
+              key: {{HOMEPAGE_VAR_SEERR_TOKEN}}
 
         - Immich:
             href: https://immich.bakseter.net
@@ -119,12 +119,11 @@ data:
             namespace: immich
             app: immich-server
             podSelector: >-
-              app.kubernetes.io/instance=immich
-              app.kubernetes.io/name=server
+              app.kubernetes.io/instance=immich,app.kubernetes.io/name=server
             widget:
               type: immich
               url: http://immich-server.immich.svc.cluster.local:2283
-              key: {{IMMICH_TOKEN}}
+              key: {{HOMEPAGE_VAR_IMMICH_TOKEN}}
               version: 2
 
         - Audiobookshelf:
@@ -136,7 +135,7 @@ data:
             widget:
               type: audiobookshelf
               url: http://audiobookshelf.media.svc.cluster.local:13378
-              key: {{AUDIOBOOKSHELF_TOKEN}}
+              key: {{HOMEPAGE_VAR_AUDIOBOOKSHELF_TOKEN}}
 
         - Sonarr:
             href: https://sonarr.bakseter.net
@@ -147,7 +146,7 @@ data:
             widget:
               type: sonarr
               url: http://sonarr.media.svc.cluster.local:8989
-              key: {{SONARR_TOKEN}}
+              key: {{HOMEPAGE_VAR_SONARR_TOKEN}}
 
         - Radarr:
             href: https://radarr.bakseter.net
@@ -158,7 +157,7 @@ data:
             widget:
               type: radarr
               url: http://radarr.media.svc.cluster.local:7878
-              key: {{RADARR_TOKEN}}
+              key: {{HOMEPAGE_VAR_RADARR_TOKEN}}
 
         - Lidarr:
             href: https://lidarr.bakseter.net
@@ -169,7 +168,7 @@ data:
             widget:
               type: lidarr
               url: http://lidarr.media.svc.cluster.local:8686
-              key: {{LIDARR_TOKEN}}
+              key: {{HOMEPAGE_VAR_LIDARR_TOKEN}}
 
         - Prowlarr:
             href: https://prowlarr.bakseter.net
@@ -180,7 +179,7 @@ data:
             widget:
               type: prowlarr
               url: http://prowlarr.media.svc.cluster.local:9696
-              key: {{PROWLARR_TOKEN}}
+              key: {{HOMEPAGE_VAR_PROWLARR_TOKEN}}
 
         - SABnzbd:
             href: https://sabnzbd.bakseter.net
@@ -191,7 +190,7 @@ data:
             widget:
               type: sabnzbd
               url: http://sabnzbd.media.svc.cluster.local:8080
-              key: {{SABNZBD_TOKEN}}
+              key: {{HOMEPAGE_VAR_SABNZBD_TOKEN}}
 
     - Monitoring:
         - Grafana:
