@@ -64,7 +64,7 @@ data:
 
   services.yaml: |
     - Core:
-        - ArgoCD:
+        - Argo CD:
             href: https://argocd.sre.bakseter.net
             description: GitOps
             icon: argocd.svg
