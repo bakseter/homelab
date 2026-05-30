@@ -168,3 +168,4 @@ data:
         focus: false
 
   docker.yaml: ''
+  proxmox.yaml: ''
