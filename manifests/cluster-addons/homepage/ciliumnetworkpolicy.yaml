@@ -32,6 +32,14 @@ spec:
             dns:
               - matchPattern: '*'
 
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
+
     # TODO: harden
     - toFQDNs:
+        - matchName: 'api.github.com'
         - matchPattern: '*'
