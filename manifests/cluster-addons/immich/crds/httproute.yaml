@@ -11,10 +11,6 @@ metadata:
     gethomepage.dev/name: Immich
     gethomepage.dev/pod-selector: >-
       app.kubernetes.io/instance=immich,app.kubernetes.io/name=server
-    gethomepage.dev/widget.type: immich
-    gethomepage.dev/widget.url: http://immich-server.immich.svc.cluster.local:2283
-    gethomepage.dev/widget.key: '{{IMMICH_TOKEN}}'
-    gethomepage.dev/widget.version: '2'
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
