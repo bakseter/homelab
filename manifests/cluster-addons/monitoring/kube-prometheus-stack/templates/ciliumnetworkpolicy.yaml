@@ -88,7 +88,7 @@ spec:
         - cidr: 192.168.10.23
       toPorts:
         - ports:
-            - port: 9100
+            - port: '9100'
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
