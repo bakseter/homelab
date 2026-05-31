@@ -79,6 +79,17 @@ spec:
               operator: NotIn
               values:
                 - monitoring
+
+    # Scrape Proxmox node exporters
+    - toCIDRSet:
+        - cidr: 192.168.10.20
+        - cidr: 192.168.10.21
+        - cidr: 192.168.10.22
+        - cidr: 192.168.10.23
+      toPorts:
+        - ports:
+            - port: 9100
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
