@@ -1,0 +1,213 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: proxmox
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  title: proxmox
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: proxmox
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  folder: proxmox
+  json: |
+    {
+      "__inputs": [],
+      "__requires": [],
+      "title": "Proxmox node temperatures",
+      "uid": "proxmox-temps",
+      "tags": ["proxmox", "hardware", "temperature"],
+      "refresh": "30s",
+      "time": { "from": "now-3h", "to": "now" },
+      "panels": [
+        {
+          "id": 1,
+          "type": "stat",
+          "title": "Current CPU temperature",
+          "gridPos": { "x": 0, "y": 0, "w": 24, "h": 4 },
+          "options": {
+            "reduceOptions": { "calcs": ["lastNotNull"] },
+            "colorMode": "background",
+            "graphMode": "none",
+            "textMode": "value_and_name",
+            "orientation": "horizontal"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "celsius",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 60 },
+                  { "color": "orange", "value": 75 },
+                  { "color": "red", "value": 85 }
+                ]
+              }
+            }
+          },
+          "targets": [
+            {
+              "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)",
+              "legendFormat": "{{instance}}"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "type": "timeseries",
+          "title": "Temperature history",
+          "gridPos": { "x": 0, "y": 4, "w": 16, "h": 10 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "celsius",
+              "custom": { "lineWidth": 2, "fillOpacity": 10 },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 60 },
+                  { "color": "red", "value": 85 }
+                ]
+              }
+            }
+          },
+          "targets": [
+            {
+              "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)",
+              "legendFormat": "{{instance}}"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "type": "gauge",
+          "title": "% of critical threshold",
+          "gridPos": { "x": 16, "y": 4, "w": 8, "h": 10 },
+          "options": {
+            "reduceOptions": { "calcs": ["lastNotNull"] },
+            "minVizValue": 0,
+            "maxVizValue": 100
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "min": 0,
+              "max": 100,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 60 },
+                  { "color": "orange", "value": 75 },
+                  { "color": "red", "value": 90 }
+                ]
+              }
+            }
+          },
+          "targets": [
+            {
+              "expr": "100 * avg by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)\n/ avg by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"proxmox-nodes\"}\n)",
+              "legendFormat": "{{instance}}"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "type": "timeseries",
+          "title": "Max sensor temp per node",
+          "gridPos": { "x": 0, "y": 14, "w": 24, "h": 8 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "celsius",
+              "custom": { "lineWidth": 2, "fillOpacity": 5 }
+            }
+          },
+          "targets": [
+            {
+              "expr": "max by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)",
+              "legendFormat": "{{instance}} (max)"
+            },
+            {
+              "expr": "max by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"proxmox-nodes\"}\n)",
+              "legendFormat": "{{instance}} (critical)"
+            }
+          ]
+        }
+      ],
+      "schemaVersion": 36
+    }
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: proxmox-temperature-alerts
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: proxmox.temperature
+      rules:
+        - alert: ProxmoxHighCPUTemp
+          expr: |
+            avg by (instance) (
+              node_hwmon_temp_celsius{job="proxmox-nodes"}
+            ) > 75
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: 'High CPU temperature on {{ $labels.instance }}'
+            description: 'CPU temperature is {{ $value | humanize }}°C on {{ $labels.instance }}'
+
+        - alert: ProxmoxCriticalCPUTemp
+          expr: |
+            avg by (instance) (
+              node_hwmon_temp_celsius{job="proxmox-nodes"}
+            ) > 85
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: 'Critical CPU temperature on {{ $labels.instance }}'
+            description: 'CPU temperature is {{ $value | humanize }}°C on {{ $labels.instance }}'
+
+        - alert: ProxmoxTempNearCritical
+          expr: |
+            (
+              avg by (instance) (
+                node_hwmon_temp_celsius{job="proxmox-nodes"}
+              )
+              /
+              avg by (instance) (
+                node_hwmon_temp_crit_celsius{job="proxmox-nodes"}
+              )
+            ) > 0.90
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: 'Temperature near critical threshold on {{ $labels.instance }}'
+            description: '{{ $labels.instance }} is at {{ $value | humanizePercentage }} of its critical threshold'
+
+        - alert: ProxmoxNodeExporterDown
+          expr: |
+            absent(
+              node_hwmon_temp_celsius{job="proxmox-nodes"}
+            )
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: 'Proxmox node-exporter metrics missing'
+            description: 'No hwmon temperature metrics from proxmox-nodes — node-exporter may be down'
