@@ -26,7 +26,7 @@ authentik:
         release: kube-prometheus-stack
 
   server:
-    replicas: 2
+    replicas: 1
 
     affinity:
       podAntiAffinity:
