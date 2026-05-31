@@ -156,6 +156,18 @@ kube-prometheus-stack:
   prometheusOperator:
     revisionHistoryLimit: 5
 
+  nodeExporter:
+    operatingSystem:
+      aix:
+        enabled: false
+      darwin:
+        enabled: false
+
+  prometheus-node-exporter:
+    extraArgs:
+      - --collector.hwmon.chip-include
+      - --collector.hwmon.sensor-include
+
   kubeControllerManager:
     enabled: false
   kubeProxy:
