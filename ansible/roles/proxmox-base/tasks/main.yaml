@@ -55,8 +55,25 @@
       - vim
       - lm-sensors
       - expect
+      - prometheus-node-exporter
     state: present
     update_cache: true
+
+- name: Configure prometheus-node-exporter
+  copy:
+    dest: /etc/default/prometheus-node-exporter
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      ARGS="--collector.disable-defaults --collector.hwmon"
+  notify: restart prometheus-node-exporter
+
+- name: Enable and start prometheus-node-exporter
+  systemd:
+    name: prometheus-node-exporter
+    enabled: true
+    state: started
 
 - name: Disable SSH password authentication
   lineinfile:
@@ -81,41 +98,6 @@
   shell: sensors-detect --auto
   args:
     creates: /etc/modules-load.d/lm_sensors.conf
-
-- name: Download PVE sensors GUI script
-  get_url:
-    url: https://raw.githubusercontent.com/Meliox/PVE-mods/6a27678594be8afca3bc13256f5f26588f8bf7be/pve-mod-gui-sensors.sh
-    dest: /tmp/pve-mod-gui-sensors.sh
-    mode: '0755'
-
-- name: Check if PVE sensors mod is active
-  shell: grep -q "pve-mod-gui-sensors" /usr/share/pve-manager/js/pvemanagerlib.js && echo "present" || echo "absent"
-  register: sensors_mod_status
-  changed_when: false
-
-- name: Install PVE sensors GUI mod non-interactively
-  shell: |
-    expect -c '
-    set timeout 60
-    log_user 1
-    spawn bash /tmp/pve-mod-gui-sensors.sh install
-    expect {
-      timeout { puts "TIMEOUT waiting for prompt"; exit 1 }
-      eof { puts "EOF reached"; exit 0 }
-      -re "already installed" { puts "Already installed"; exit 0 }
-      -re "C/a" { send "C\r"; exp_continue }
-      -re "C/f" { send "C\r"; exp_continue }
-      -re "y/N" { send "N\r"; exp_continue }
-      -re "1/2/n" { send "1\r"; exp_continue }
-      -re "any key to continue" { send "\r"; exp_continue }
-    }
-    '
-  when: sensors_mod_status.stdout == "absent"
-  register: sensors_install_result
-
-- name: Show sensors install output
-  debug:
-    var: sensors_install_result
 
 - name: Setup Intel iGPU
   include_tasks: intel_igpu.yaml
