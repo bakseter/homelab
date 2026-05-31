@@ -951,7 +951,7 @@ spec:
           expr: |
             1 - avg by (instance) (
               rate(node_cpu_seconds_total{job="node-exporter-proxmox", mode="idle"}[5m])
-            ) > 0.85
+            ) > 0.90
           for: 5m
           labels:
             severity: warning
