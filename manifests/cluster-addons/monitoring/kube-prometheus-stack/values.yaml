@@ -157,7 +157,7 @@ kube-prometheus-stack:
     revisionHistoryLimit: 5
 
   nodeExporter:
-    operatingSystem:
+    operatingSystems:
       aix:
         enabled: false
       darwin:
