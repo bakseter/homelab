@@ -21,18 +21,49 @@ spec:
   folder: proxmox
   json: |
     {
-      "__inputs": [],
-      "__requires": [],
       "title": "Proxmox node temperatures",
       "uid": "proxmox-temps",
       "tags": ["proxmox", "hardware", "temperature"],
       "refresh": "30s",
       "time": { "from": "now-3h", "to": "now" },
+      "schemaVersion": 36,
+      "__inputs": [
+        {
+          "name": "DS_PROMETHEUS",
+          "label": "Prometheus",
+          "type": "datasource",
+          "pluginId": "prometheus",
+          "pluginName": "Prometheus"
+        }
+      ],
+      "__requires": [
+        {
+          "type": "datasource",
+          "id": "prometheus",
+          "name": "Prometheus",
+          "version": "1.0.0"
+        }
+      ],
+      "templating": {
+        "list": [
+          {
+            "name": "DS_PROMETHEUS",
+            "type": "datasource",
+            "pluginId": "prometheus",
+            "hide": 2,
+            "options": [],
+            "query": "prometheus",
+            "refresh": 1,
+            "regex": ""
+          }
+        ]
+      },
       "panels": [
         {
           "id": 1,
           "type": "stat",
           "title": "Current CPU temperature",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
           "gridPos": { "x": 0, "y": 0, "w": 24, "h": 4 },
           "options": {
             "reduceOptions": { "calcs": ["lastNotNull"] },
@@ -57,8 +88,10 @@ spec:
           },
           "targets": [
             {
-              "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)",
-              "legendFormat": "{{instance}}"
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)",
+              "legendFormat": "{{instance}}",
+              "refId": "A"
             }
           ]
         },
@@ -66,6 +99,7 @@ spec:
           "id": 2,
           "type": "timeseries",
           "title": "Temperature history",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
           "gridPos": { "x": 0, "y": 4, "w": 16, "h": 10 },
           "fieldConfig": {
             "defaults": {
@@ -83,8 +117,10 @@ spec:
           },
           "targets": [
             {
-              "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)",
-              "legendFormat": "{{instance}}"
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)",
+              "legendFormat": "{{instance}}",
+              "refId": "A"
             }
           ]
         },
@@ -92,6 +128,7 @@ spec:
           "id": 3,
           "type": "gauge",
           "title": "% of critical threshold",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
           "gridPos": { "x": 16, "y": 4, "w": 8, "h": 10 },
           "options": {
             "reduceOptions": { "calcs": ["lastNotNull"] },
@@ -116,15 +153,18 @@ spec:
           },
           "targets": [
             {
-              "expr": "100 * avg by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)\n/ avg by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"proxmox-nodes\"}\n)",
-              "legendFormat": "{{instance}}"
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "expr": "100 * avg by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)\n/ avg by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"node-exporter-proxmox\"}\n)",
+              "legendFormat": "{{instance}}",
+              "refId": "A"
             }
           ]
         },
         {
           "id": 4,
           "type": "timeseries",
-          "title": "Max sensor temp per node",
+          "title": "Max sensor temp vs critical threshold",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
           "gridPos": { "x": 0, "y": 14, "w": 24, "h": 8 },
           "fieldConfig": {
             "defaults": {
@@ -134,17 +174,20 @@ spec:
           },
           "targets": [
             {
-              "expr": "max by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)",
-              "legendFormat": "{{instance}} (max)"
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "expr": "max by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)",
+              "legendFormat": "{{instance}} (max)",
+              "refId": "A"
             },
             {
-              "expr": "max by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"proxmox-nodes\"}\n)",
-              "legendFormat": "{{instance}} (critical)"
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "expr": "max by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"node-exporter-proxmox\"}\n)",
+              "legendFormat": "{{instance}} (critical)",
+              "refId": "B"
             }
           ]
         }
-      ],
-      "schemaVersion": 36
+      ]
     }
 ---
 apiVersion: monitoring.coreos.com/v1
