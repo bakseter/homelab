@@ -22,7 +22,7 @@ spec:
   json: |
     {
       "title": "Proxmox nodes",
-      "uid": "proxmox-nodes",
+      "uid": "node-exporter-proxmox",
       "tags": ["proxmox", "hardware", "temperature", "cpu", "memory"],
       "refresh": "30s",
       "time": { "from": "now-3h", "to": "now" },
@@ -95,7 +95,7 @@ spec:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)",
+              "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
@@ -116,13 +116,13 @@ spec:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "max by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)",
+              "expr": "max by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             },
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "max by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"proxmox-nodes\"}\n)",
+              "expr": "max by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"node-exporter-proxmox\"}\n)",
               "legendFormat": "{{instance}} crit",
               "refId": "B"
             }
@@ -158,7 +158,7 @@ spec:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "100 * avg by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)\n/ avg by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"proxmox-nodes\"}\n)",
+              "expr": "100 * avg by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)\n/ avg by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"node-exporter-proxmox\"}\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
@@ -197,7 +197,7 @@ spec:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "1 - avg by (instance) (\n  rate(node_cpu_seconds_total{job=\"proxmox-nodes\", mode=\"idle\"}[5m])\n)",
+              "expr": "1 - avg by (instance) (\n  rate(node_cpu_seconds_total{job=\"node-exporter-proxmox\", mode=\"idle\"}[5m])\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
@@ -227,7 +227,7 @@ spec:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "avg by (instance) (\n  rate(node_cpu_seconds_total{job=\"proxmox-nodes\", mode=\"steal\"}[5m])\n)",
+              "expr": "avg by (instance) (\n  rate(node_cpu_seconds_total{job=\"node-exporter-proxmox\", mode=\"steal\"}[5m])\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
@@ -250,7 +250,7 @@ spec:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "avg by (instance, mode) (\n  rate(node_cpu_seconds_total{job=\"proxmox-nodes\", mode!=\"idle\"}[5m])\n)",
+              "expr": "avg by (instance, mode) (\n  rate(node_cpu_seconds_total{job=\"node-exporter-proxmox\", mode!=\"idle\"}[5m])\n)",
               "legendFormat": "{{instance}} — {{mode}}",
               "refId": "A"
             }
@@ -279,13 +279,13 @@ spec:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "node_memory_MemTotal_bytes{job=\"proxmox-nodes\"} - node_memory_MemAvailable_bytes{job=\"proxmox-nodes\"}",
+              "expr": "node_memory_MemTotal_bytes{job=\"node-exporter-proxmox\"} - node_memory_MemAvailable_bytes{job=\"node-exporter-proxmox\"}",
               "legendFormat": "{{instance}} used",
               "refId": "A"
             },
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "node_memory_MemTotal_bytes{job=\"proxmox-nodes\"}",
+              "expr": "node_memory_MemTotal_bytes{job=\"node-exporter-proxmox\"}",
               "legendFormat": "{{instance}} total",
               "refId": "B"
             }
@@ -321,7 +321,7 @@ spec:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "100 * (1 - node_memory_MemAvailable_bytes{job=\"proxmox-nodes\"} / node_memory_MemTotal_bytes{job=\"proxmox-nodes\"})",
+              "expr": "100 * (1 - node_memory_MemAvailable_bytes{job=\"node-exporter-proxmox\"} / node_memory_MemTotal_bytes{job=\"node-exporter-proxmox\"})",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
@@ -344,7 +344,7 @@ spec:
         - alert: ProxmoxHighCPUTemp
           expr: |
             avg by (instance) (
-              node_hwmon_temp_celsius{job="proxmox-nodes"}
+              node_hwmon_temp_celsius{job="node-exporter-proxmox"}
             ) > 75
           for: 5m
           labels:
@@ -356,7 +356,7 @@ spec:
         - alert: ProxmoxCriticalCPUTemp
           expr: |
             avg by (instance) (
-              node_hwmon_temp_celsius{job="proxmox-nodes"}
+              node_hwmon_temp_celsius{job="node-exporter-proxmox"}
             ) > 85
           for: 2m
           labels:
@@ -369,11 +369,11 @@ spec:
           expr: |
             (
               avg by (instance) (
-                node_hwmon_temp_celsius{job="proxmox-nodes"}
+                node_hwmon_temp_celsius{job="node-exporter-proxmox"}
               )
               /
               avg by (instance) (
-                node_hwmon_temp_crit_celsius{job="proxmox-nodes"}
+                node_hwmon_temp_crit_celsius{job="node-exporter-proxmox"}
               )
             ) > 0.90
           for: 2m
@@ -388,7 +388,7 @@ spec:
         - alert: ProxmoxHighCPUUsage
           expr: |
             1 - avg by (instance) (
-              rate(node_cpu_seconds_total{job="proxmox-nodes", mode="idle"}[5m])
+              rate(node_cpu_seconds_total{job="node-exporter-proxmox", mode="idle"}[5m])
             ) > 0.85
           for: 5m
           labels:
@@ -400,7 +400,7 @@ spec:
         - alert: ProxmoxHighCPUSteal
           expr: |
             avg by (instance) (
-              rate(node_cpu_seconds_total{job="proxmox-nodes", mode="steal"}[5m])
+              rate(node_cpu_seconds_total{job="node-exporter-proxmox", mode="steal"}[5m])
             ) > 0.10
           for: 5m
           labels:
@@ -413,8 +413,8 @@ spec:
       rules:
         - alert: ProxmoxHighMemoryUsage
           expr: |
-            100 * (1 - node_memory_MemAvailable_bytes{job="proxmox-nodes"}
-            / node_memory_MemTotal_bytes{job="proxmox-nodes"}) > 90
+            100 * (1 - node_memory_MemAvailable_bytes{job="node-exporter-proxmox"}
+            / node_memory_MemTotal_bytes{job="node-exporter-proxmox"}) > 90
           for: 5m
           labels:
             severity: warning
@@ -424,8 +424,8 @@ spec:
 
         - alert: ProxmoxCriticalMemoryUsage
           expr: |
-            100 * (1 - node_memory_MemAvailable_bytes{job="proxmox-nodes"}
-            / node_memory_MemTotal_bytes{job="proxmox-nodes"}) > 95
+            100 * (1 - node_memory_MemAvailable_bytes{job="node-exporter-proxmox"}
+            / node_memory_MemTotal_bytes{job="node-exporter-proxmox"}) > 95
           for: 2m
           labels:
             severity: critical
@@ -438,11 +438,11 @@ spec:
         - alert: ProxmoxNodeExporterDown
           expr: |
             absent(
-              node_hwmon_temp_celsius{job="proxmox-nodes"}
+              node_hwmon_temp_celsius{job="node-exporter-proxmox"}
             )
           for: 2m
           labels:
             severity: warning
           annotations:
             summary: 'Proxmox node-exporter metrics missing'
-            description: 'No metrics from proxmox-nodes — node-exporter may be down'
+            description: 'No metrics from node-exporter-proxmox — node-exporter may be down'
