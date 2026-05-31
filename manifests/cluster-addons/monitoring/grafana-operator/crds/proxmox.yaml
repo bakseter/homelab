@@ -21,9 +21,9 @@ spec:
   folder: proxmox
   json: |
     {
-      "title": "Proxmox node temperatures",
-      "uid": "proxmox-temps",
-      "tags": ["proxmox", "hardware", "temperature"],
+      "title": "Proxmox nodes",
+      "uid": "proxmox-nodes",
+      "tags": ["proxmox", "hardware", "temperature", "cpu", "memory"],
       "refresh": "30s",
       "time": { "from": "now-3h", "to": "now" },
       "schemaVersion": 36,
@@ -51,20 +51,26 @@ spec:
             "type": "datasource",
             "pluginId": "prometheus",
             "hide": 2,
-            "options": [],
             "query": "prometheus",
-            "refresh": 1,
-            "regex": ""
+            "refresh": 1
           }
         ]
       },
       "panels": [
         {
           "id": 1,
+          "type": "text",
+          "title": "",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 0, "y": 0, "w": 24, "h": 1 },
+          "options": { "content": "## Temperature", "mode": "markdown" }
+        },
+        {
+          "id": 2,
           "type": "stat",
           "title": "Current CPU temperature",
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 0, "w": 24, "h": 4 },
+          "gridPos": { "x": 0, "y": 1, "w": 24, "h": 4 },
           "options": {
             "reduceOptions": { "calcs": ["lastNotNull"] },
             "colorMode": "background",
@@ -89,36 +95,7 @@ spec:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)",
-              "legendFormat": "{{instance}}",
-              "refId": "A"
-            }
-          ]
-        },
-        {
-          "id": 2,
-          "type": "timeseries",
-          "title": "Temperature history",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 4, "w": 16, "h": 10 },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "celsius",
-              "custom": { "lineWidth": 2, "fillOpacity": 10 },
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  { "color": "green", "value": null },
-                  { "color": "yellow", "value": 60 },
-                  { "color": "red", "value": 85 }
-                ]
-              }
-            }
-          },
-          "targets": [
-            {
-              "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)",
+              "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
@@ -126,10 +103,37 @@ spec:
         },
         {
           "id": 3,
+          "type": "timeseries",
+          "title": "Temperature history vs critical threshold",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 0, "y": 5, "w": 16, "h": 9 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "celsius",
+              "custom": { "lineWidth": 2, "fillOpacity": 8 }
+            }
+          },
+          "targets": [
+            {
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "expr": "max by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)",
+              "legendFormat": "{{instance}}",
+              "refId": "A"
+            },
+            {
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "expr": "max by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"proxmox-nodes\"}\n)",
+              "legendFormat": "{{instance}} crit",
+              "refId": "B"
+            }
+          ]
+        },
+        {
+          "id": 4,
           "type": "gauge",
           "title": "% of critical threshold",
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 16, "y": 4, "w": 8, "h": 10 },
+          "gridPos": { "x": 16, "y": 5, "w": 8, "h": 9 },
           "options": {
             "reduceOptions": { "calcs": ["lastNotNull"] },
             "minVizValue": 0,
@@ -154,36 +158,172 @@ spec:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "100 * avg by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)\n/ avg by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"node-exporter-proxmox\"}\n)",
+              "expr": "100 * avg by (instance) (\n  node_hwmon_temp_celsius{job=\"proxmox-nodes\"}\n)\n/ avg by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"proxmox-nodes\"}\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
           ]
         },
         {
-          "id": 4,
-          "type": "timeseries",
-          "title": "Max sensor temp vs critical threshold",
+          "id": 5,
+          "type": "text",
+          "title": "",
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 14, "w": 24, "h": 8 },
+          "gridPos": { "x": 0, "y": 14, "w": 24, "h": 1 },
+          "options": { "content": "## CPU", "mode": "markdown" }
+        },
+        {
+          "id": 6,
+          "type": "timeseries",
+          "title": "Host CPU utilisation",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 0, "y": 15, "w": 12, "h": 9 },
           "fieldConfig": {
             "defaults": {
-              "unit": "celsius",
-              "custom": { "lineWidth": 2, "fillOpacity": 5 }
+              "unit": "percentunit",
+              "min": 0,
+              "max": 1,
+              "custom": { "lineWidth": 2, "fillOpacity": 8 },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 0.7 },
+                  { "color": "red", "value": 0.9 }
+                ]
+              }
             }
           },
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "max by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)",
-              "legendFormat": "{{instance}} (max)",
+              "expr": "1 - avg by (instance) (\n  rate(node_cpu_seconds_total{job=\"proxmox-nodes\", mode=\"idle\"}[5m])\n)",
+              "legendFormat": "{{instance}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "type": "timeseries",
+          "title": "CPU steal time (overprovisioning pressure)",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 12, "y": 15, "w": 12, "h": 9 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "min": 0,
+              "custom": { "lineWidth": 2, "fillOpacity": 8 },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 0.05 },
+                  { "color": "red", "value": 0.15 }
+                ]
+              }
+            }
+          },
+          "targets": [
+            {
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "expr": "avg by (instance) (\n  rate(node_cpu_seconds_total{job=\"proxmox-nodes\", mode=\"steal\"}[5m])\n)",
+              "legendFormat": "{{instance}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "type": "timeseries",
+          "title": "CPU mode breakdown",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 0, "y": 24, "w": 24, "h": 8 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "min": 0,
+              "max": 1,
+              "custom": { "lineWidth": 1, "fillOpacity": 20, "stacking": { "mode": "normal" } }
+            }
+          },
+          "targets": [
+            {
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "expr": "avg by (instance, mode) (\n  rate(node_cpu_seconds_total{job=\"proxmox-nodes\", mode!=\"idle\"}[5m])\n)",
+              "legendFormat": "{{instance}} — {{mode}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "type": "text",
+          "title": "",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 0, "y": 32, "w": 24, "h": 1 },
+          "options": { "content": "## Memory", "mode": "markdown" }
+        },
+        {
+          "id": 10,
+          "type": "timeseries",
+          "title": "Memory utilisation",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 0, "y": 33, "w": 16, "h": 9 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bytes",
+              "custom": { "lineWidth": 2, "fillOpacity": 8 }
+            }
+          },
+          "targets": [
+            {
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "expr": "node_memory_MemTotal_bytes{job=\"proxmox-nodes\"} - node_memory_MemAvailable_bytes{job=\"proxmox-nodes\"}",
+              "legendFormat": "{{instance}} used",
               "refId": "A"
             },
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "max by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"node-exporter-proxmox\"}\n)",
-              "legendFormat": "{{instance}} (critical)",
+              "expr": "node_memory_MemTotal_bytes{job=\"proxmox-nodes\"}",
+              "legendFormat": "{{instance}} total",
               "refId": "B"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "type": "gauge",
+          "title": "Memory usage %",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 16, "y": 33, "w": 8, "h": 9 },
+          "options": {
+            "reduceOptions": { "calcs": ["lastNotNull"] },
+            "minVizValue": 0,
+            "maxVizValue": 100
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "min": 0,
+              "max": 100,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 70 },
+                  { "color": "orange", "value": 85 },
+                  { "color": "red", "value": 95 }
+                ]
+              }
+            }
+          },
+          "targets": [
+            {
+              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "expr": "100 * (1 - node_memory_MemAvailable_bytes{job=\"proxmox-nodes\"} / node_memory_MemTotal_bytes{job=\"proxmox-nodes\"})",
+              "legendFormat": "{{instance}}",
+              "refId": "A"
             }
           ]
         }
@@ -193,7 +333,7 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: proxmox-temperature-alerts
+  name: proxmox-alerts
   namespace: monitoring
   labels:
     release: kube-prometheus-stack
@@ -243,6 +383,58 @@ spec:
             summary: 'Temperature near critical threshold on {{ $labels.instance }}'
             description: '{{ $labels.instance }} is at {{ $value | humanizePercentage }} of its critical threshold'
 
+    - name: proxmox.cpu
+      rules:
+        - alert: ProxmoxHighCPUUsage
+          expr: |
+            1 - avg by (instance) (
+              rate(node_cpu_seconds_total{job="proxmox-nodes", mode="idle"}[5m])
+            ) > 0.85
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: 'High CPU usage on {{ $labels.instance }}'
+            description: 'CPU usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}'
+
+        - alert: ProxmoxHighCPUSteal
+          expr: |
+            avg by (instance) (
+              rate(node_cpu_seconds_total{job="proxmox-nodes", mode="steal"}[5m])
+            ) > 0.10
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: 'High CPU steal on {{ $labels.instance }}'
+            description: 'CPU steal is {{ $value | humanizePercentage }} on {{ $labels.instance }} — VMs are being starved of CPU'
+
+    - name: proxmox.memory
+      rules:
+        - alert: ProxmoxHighMemoryUsage
+          expr: |
+            100 * (1 - node_memory_MemAvailable_bytes{job="proxmox-nodes"}
+            / node_memory_MemTotal_bytes{job="proxmox-nodes"}) > 90
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: 'High memory usage on {{ $labels.instance }}'
+            description: 'Memory usage is {{ $value | humanize }}% on {{ $labels.instance }}'
+
+        - alert: ProxmoxCriticalMemoryUsage
+          expr: |
+            100 * (1 - node_memory_MemAvailable_bytes{job="proxmox-nodes"}
+            / node_memory_MemTotal_bytes{job="proxmox-nodes"}) > 95
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: 'Critical memory usage on {{ $labels.instance }}'
+            description: 'Memory usage is {{ $value | humanize }}% on {{ $labels.instance }}'
+
+    - name: proxmox.availability
+      rules:
         - alert: ProxmoxNodeExporterDown
           expr: |
             absent(
@@ -253,4 +445,4 @@ spec:
             severity: warning
           annotations:
             summary: 'Proxmox node-exporter metrics missing'
-            description: 'No hwmon temperature metrics from proxmox-nodes — node-exporter may be down'
+            description: 'No metrics from proxmox-nodes — node-exporter may be down'
