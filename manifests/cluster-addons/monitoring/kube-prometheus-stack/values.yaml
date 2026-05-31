@@ -57,12 +57,27 @@ kube-prometheus-stack:
           static_configs:
             - targets:
                 - 192.168.10.20:9100
+              labels:
+                hostname: m715q
+            - targets:
                 - 192.168.10.21:9100
+              labels:
+                hostname: m715q2
+            - targets:
                 - 192.168.10.22:9100
+              labels:
+                hostname: m720q
+            - targets:
                 - 192.168.10.23:9100
+              labels:
+                hostname: m920q
           relabel_configs:
             - target_label: job
               replacement: node-exporter-proxmox
+            - source_labels: [hostname]
+              target_label: instance
+            - regex: hostname
+              action: labeldrop
 
   defaultRules:
     create: true
