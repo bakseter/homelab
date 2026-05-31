@@ -66,7 +66,7 @@
     group: root
     mode: '0644'
     content: |
-      ARGS="--collector.disable-defaults --collector.hwmon"
+      ARGS="--collector.disable-defaults --collector.hwmon --collector.cpu --collector.meminfo"
   notify: restart prometheus-node-exporter
 
 - name: Enable and start prometheus-node-exporter
@@ -98,7 +98,7 @@
   shell: sensors-detect --auto
   args:
     creates: /etc/modules-load.d/lm_sensors.conf
-
-- name: Setup Intel iGPU
-  include_tasks: intel_igpu.yaml
-  when: intel_igpu_enabled is defined
+#
+#- name: Setup Intel iGPU
+#  include_tasks: intel_igpu.yaml
+#  when: intel_igpu_enabled is defined
