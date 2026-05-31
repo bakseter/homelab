@@ -52,6 +52,21 @@ kube-prometheus-stack:
           regex: '.*_bucket'
           action: drop
 
+      additionalScrapeConfigs:
+        - job_name: proxmox-nodes
+          static_configs:
+            - targets:
+                - 192.168.1.100:9100
+                - 192.168.1.101:9100
+                - 192.168.1.110:9100
+                - 192.168.1.111:9100
+                - 192.168.1.120:9100
+                - 192.168.1.121:9100
+                - 192.168.1.131:9100
+          relabel_configs:
+            - target_label: job
+              replacement: node-exporter-proxmox
+
   defaultRules:
     create: true
     rules:
