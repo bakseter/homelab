@@ -327,6 +327,15 @@ resource "proxmox_virtual_environment_firewall_rules" "node" {
     proto   = "tcp"
     comment = "Cilium healthcheck"
   }
+
+  rule {
+    type    = "in"
+    action  = "ACCEPT"
+    source  = "+cluster-nodes"
+    dport   = "9100"
+    proto   = "tcp"
+    comment = "Prometheus node-exporter"
+  }
 }
 
 resource "proxmox_virtual_environment_firewall_rules" "talos-controlplane" {
