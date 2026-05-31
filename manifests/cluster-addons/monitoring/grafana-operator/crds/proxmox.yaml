@@ -21,313 +21,875 @@ spec:
   folder: proxmox
   json: |
     {
-      "title": "Proxmox nodes",
-      "uid": "node-exporter-proxmox",
-      "tags": ["proxmox", "hardware", "temperature", "cpu", "memory"],
-      "refresh": "30s",
-      "time": { "from": "now-3h", "to": "now" },
-      "schemaVersion": 36,
-      "__inputs": [
-        {
-          "name": "DS_PROMETHEUS",
-          "label": "Prometheus",
-          "type": "datasource",
-          "pluginId": "prometheus",
-          "pluginName": "Prometheus"
-        }
-      ],
-      "__requires": [
-        {
-          "type": "datasource",
-          "id": "prometheus",
-          "name": "Prometheus",
-          "version": "1.0.0"
-        }
-      ],
-      "templating": {
+      "annotations": {
         "list": [
           {
-            "name": "DS_PROMETHEUS",
-            "type": "datasource",
-            "pluginId": "prometheus",
-            "hide": 2,
-            "query": "prometheus",
-            "refresh": 1
+            "builtIn": 1,
+            "datasource": {
+              "type": "grafana",
+              "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
           }
         ]
       },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": 0,
+      "links": [],
       "panels": [
         {
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 2,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
           "id": 1,
-          "type": "text",
+          "options": {
+            "code": {
+              "language": "plaintext",
+              "showLineNumbers": false,
+              "showMiniMap": false
+            },
+            "content": "## Temperature",
+            "mode": "markdown"
+          },
+          "pluginVersion": "12.3.3",
           "title": "",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 0, "w": 24, "h": 1 },
-          "options": { "content": "## Temperature", "mode": "markdown" }
+          "type": "text"
         },
         {
-          "id": 2,
-          "type": "stat",
-          "title": "Current CPU temperature",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 1, "w": 24, "h": 4 },
-          "options": {
-            "reduceOptions": { "calcs": ["lastNotNull"] },
-            "colorMode": "background",
-            "graphMode": "none",
-            "textMode": "value_and_name",
-            "orientation": "horizontal"
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
           },
           "fieldConfig": {
             "defaults": {
-              "unit": "celsius",
+              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
-                  { "color": "green", "value": null },
-                  { "color": "yellow", "value": 60 },
-                  { "color": "orange", "value": 75 },
-                  { "color": "red", "value": 85 }
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 60
+                  },
+                  {
+                    "color": "orange",
+                    "value": 75
+                  },
+                  {
+                    "color": "red",
+                    "value": 85
+                  }
                 ]
-              }
-            }
+              },
+              "unit": "celsius"
+            },
+            "overrides": []
           },
+          "gridPos": {
+            "h": 4,
+            "w": 24,
+            "x": 0,
+            "y": 2
+          },
+          "id": 2,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "vertical",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showPercentChange": true,
+            "textMode": "value_and_name",
+            "wideLayout": true
+          },
+          "pluginVersion": "12.3.3",
           "targets": [
             {
-              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "expr": "avg by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
-          ]
+          ],
+          "title": "Current CPU temperature",
+          "type": "stat"
         },
         {
-          "id": 3,
-          "type": "timeseries",
-          "title": "Temperature history vs critical threshold",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 5, "w": 16, "h": 9 },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
-              "unit": "celsius",
-              "custom": { "lineWidth": 2, "fillOpacity": 8 }
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 8,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "celsius"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 16,
+            "x": 0,
+            "y": 6
+          },
+          "id": 3,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.3.3",
           "targets": [
             {
-              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "expr": "max by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             },
             {
-              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "expr": "max by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"node-exporter-proxmox\"}\n)",
               "legendFormat": "{{instance}} crit",
               "refId": "B"
             }
-          ]
+          ],
+          "title": "Temperature history vs critical threshold",
+          "type": "timeseries"
         },
         {
-          "id": 4,
-          "type": "gauge",
-          "title": "% of critical threshold",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 16, "y": 5, "w": 8, "h": 9 },
-          "options": {
-            "reduceOptions": { "calcs": ["lastNotNull"] },
-            "minVizValue": 0,
-            "maxVizValue": 100
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
           },
           "fieldConfig": {
             "defaults": {
-              "unit": "percent",
-              "min": 0,
+              "mappings": [],
               "max": 100,
+              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
-                  { "color": "green", "value": null },
-                  { "color": "yellow", "value": 60 },
-                  { "color": "orange", "value": 75 },
-                  { "color": "red", "value": 90 }
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 60
+                  },
+                  {
+                    "color": "orange",
+                    "value": 75
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
                 ]
-              }
-            }
+              },
+              "unit": "percent"
+            },
+            "overrides": []
           },
+          "gridPos": {
+            "h": 9,
+            "w": 8,
+            "x": 16,
+            "y": 6
+          },
+          "id": 4,
+          "options": {
+            "maxVizValue": 100,
+            "minVizHeight": 75,
+            "minVizValue": 0,
+            "minVizWidth": 75,
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true,
+            "sizing": "auto"
+          },
+          "pluginVersion": "12.3.3",
           "targets": [
             {
-              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "expr": "100 * avg by (instance) (\n  node_hwmon_temp_celsius{job=\"node-exporter-proxmox\"}\n)\n/ avg by (instance) (\n  node_hwmon_temp_crit_celsius{job=\"node-exporter-proxmox\"}\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
-          ]
+          ],
+          "title": "% of critical threshold",
+          "type": "gauge"
         },
         {
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 2,
+            "w": 24,
+            "x": 0,
+            "y": 15
+          },
           "id": 5,
-          "type": "text",
+          "options": {
+            "code": {
+              "language": "plaintext",
+              "showLineNumbers": false,
+              "showMiniMap": false
+            },
+            "content": "## CPU",
+            "mode": "markdown"
+          },
+          "pluginVersion": "12.3.3",
           "title": "",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 14, "w": 24, "h": 1 },
-          "options": { "content": "## CPU", "mode": "markdown" }
+          "type": "text"
         },
         {
-          "id": 6,
-          "type": "timeseries",
-          "title": "Host CPU utilisation",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 15, "w": 12, "h": 9 },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
-              "unit": "percentunit",
-              "min": 0,
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 8,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
               "max": 1,
-              "custom": { "lineWidth": 2, "fillOpacity": 8 },
+              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
-                  { "color": "green", "value": null },
-                  { "color": "yellow", "value": 0.7 },
-                  { "color": "red", "value": 0.9 }
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 0.7
+                  },
+                  {
+                    "color": "red",
+                    "value": 0.9
+                  }
                 ]
-              }
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 17
+          },
+          "id": 6,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.3.3",
           "targets": [
             {
-              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "expr": "1 - avg by (instance) (\n  rate(node_cpu_seconds_total{job=\"node-exporter-proxmox\", mode=\"idle\"}[5m])\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
-          ]
+          ],
+          "title": "Host CPU utilisation",
+          "type": "timeseries"
         },
         {
-          "id": 7,
-          "type": "timeseries",
-          "title": "CPU steal time (overprovisioning pressure)",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 12, "y": 15, "w": 12, "h": 9 },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
-              "unit": "percentunit",
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 8,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
               "min": 0,
-              "custom": { "lineWidth": 2, "fillOpacity": 8 },
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
-                  { "color": "green", "value": null },
-                  { "color": "yellow", "value": 0.05 },
-                  { "color": "red", "value": 0.15 }
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 0.05
+                  },
+                  {
+                    "color": "red",
+                    "value": 0.15
+                  }
                 ]
-              }
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 12,
+            "y": 17
+          },
+          "id": 7,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.3.3",
           "targets": [
             {
-              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "expr": "avg by (instance) (\n  rate(node_cpu_seconds_total{job=\"node-exporter-proxmox\", mode=\"steal\"}[5m])\n)",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
-          ]
+          ],
+          "title": "CPU steal time (overprovisioning pressure)",
+          "type": "timeseries"
         },
         {
-          "id": 8,
-          "type": "timeseries",
-          "title": "CPU mode breakdown",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 24, "w": 24, "h": 8 },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
-              "unit": "percentunit",
-              "min": 0,
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "normal"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
               "max": 1,
-              "custom": { "lineWidth": 1, "fillOpacity": 20, "stacking": { "mode": "normal" } }
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 26
+          },
+          "id": 8,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.3.3",
           "targets": [
             {
-              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "expr": "avg by (instance, mode) (\n  rate(node_cpu_seconds_total{job=\"node-exporter-proxmox\", mode!=\"idle\"}[5m])\n)",
               "legendFormat": "{{instance}} — {{mode}}",
               "refId": "A"
             }
-          ]
+          ],
+          "title": "CPU mode breakdown",
+          "type": "timeseries"
         },
         {
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 2,
+            "w": 24,
+            "x": 0,
+            "y": 34
+          },
           "id": 9,
-          "type": "text",
+          "options": {
+            "code": {
+              "language": "plaintext",
+              "showLineNumbers": false,
+              "showMiniMap": false
+            },
+            "content": "## Memory",
+            "mode": "markdown"
+          },
+          "pluginVersion": "12.3.3",
           "title": "",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 32, "w": 24, "h": 1 },
-          "options": { "content": "## Memory", "mode": "markdown" }
+          "type": "text"
         },
         {
-          "id": 10,
-          "type": "timeseries",
-          "title": "Memory utilisation",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 33, "w": 16, "h": 9 },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fieldConfig": {
             "defaults": {
-              "unit": "bytes",
-              "custom": { "lineWidth": 2, "fillOpacity": 8 }
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 8,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 16,
+            "x": 0,
+            "y": 36
+          },
+          "id": 10,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
             }
           },
+          "pluginVersion": "12.3.3",
           "targets": [
             {
-              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "expr": "node_memory_MemTotal_bytes{job=\"node-exporter-proxmox\"} - node_memory_MemAvailable_bytes{job=\"node-exporter-proxmox\"}",
               "legendFormat": "{{instance}} used",
               "refId": "A"
             },
             {
-              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "expr": "node_memory_MemTotal_bytes{job=\"node-exporter-proxmox\"}",
               "legendFormat": "{{instance}} total",
               "refId": "B"
             }
-          ]
+          ],
+          "title": "Memory utilisation",
+          "type": "timeseries"
         },
         {
-          "id": 11,
-          "type": "gauge",
-          "title": "Memory usage %",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 16, "y": 33, "w": 8, "h": 9 },
-          "options": {
-            "reduceOptions": { "calcs": ["lastNotNull"] },
-            "minVizValue": 0,
-            "maxVizValue": 100
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
           },
           "fieldConfig": {
             "defaults": {
-              "unit": "percent",
-              "min": 0,
+              "mappings": [],
               "max": 100,
+              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
-                  { "color": "green", "value": null },
-                  { "color": "yellow", "value": 70 },
-                  { "color": "orange", "value": 85 },
-                  { "color": "red", "value": 95 }
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 70
+                  },
+                  {
+                    "color": "orange",
+                    "value": 85
+                  },
+                  {
+                    "color": "red",
+                    "value": 95
+                  }
                 ]
-              }
-            }
+              },
+              "unit": "percent"
+            },
+            "overrides": []
           },
+          "gridPos": {
+            "h": 9,
+            "w": 8,
+            "x": 16,
+            "y": 36
+          },
+          "id": 11,
+          "options": {
+            "maxVizValue": 100,
+            "minVizHeight": 75,
+            "minVizValue": 0,
+            "minVizWidth": 75,
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true,
+            "sizing": "auto"
+          },
+          "pluginVersion": "12.3.3",
           "targets": [
             {
-              "datasource": { "type": "prometheus", "uid": "prometheus" },
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
               "expr": "100 * (1 - node_memory_MemAvailable_bytes{job=\"node-exporter-proxmox\"} / node_memory_MemTotal_bytes{job=\"node-exporter-proxmox\"})",
               "legendFormat": "{{instance}}",
               "refId": "A"
             }
-          ]
+          ],
+          "title": "Memory usage %",
+          "type": "gauge"
         }
-      ]
+      ],
+      "preload": false,
+      "refresh": "30s",
+      "schemaVersion": 42,
+      "tags": [
+        "proxmox",
+        "hardware",
+        "temperature",
+        "cpu",
+        "memory"
+      ],
+      "templating": {
+        "list": [
+          {
+            "current": {
+              "text": "prometheus",
+              "value": "prometheus"
+            },
+            "hide": 2,
+            "name": "DS_PROMETHEUS",
+            "options": [],
+            "query": "prometheus",
+            "refresh": 1,
+            "type": "datasource"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-5m",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "",
+      "title": "Proxmox nodes",
+      "uid": "node-exporter-proxmox",
+      "version": 2
     }
 ---
 apiVersion: monitoring.coreos.com/v1
