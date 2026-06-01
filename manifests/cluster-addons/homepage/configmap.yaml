@@ -137,19 +137,27 @@ data:
         - Amex:
             href: https://amex.bakseter.net
             description: Amex invoice processing
-            icon: amex.svg
+            icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/250px-American_Express_logo_%282018%29.svg.png'
             namespace: amex
             app: amex-frontend
+            podSelector: >-
+              app=amex-frontend
 
         - Mandagsmiddag:
             href: https://mandagsmiddag.no
             description: Dinner on a monday
-            icon: mandagsmiddag.svg
+            icon: https://mandagsmiddag.no/icon.png
+            namespace: mandagsmiddag
+            app: mandagsmiddag-frontend
 
         - bakseter.net:
             href: https://bakseter.net
             description: Personal homepage
-            icon: bakseter.svg
+            icon: https://bakseter.net/favicon.ico
+            namespace: bakseter-net
+            app: web
+            podSelector: >-
+              app=web
 
         - Vaultwarden:
             href: https://vaultwarden.bakseter.net
