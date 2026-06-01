@@ -51,7 +51,7 @@ import {
 resource "authentik_application" "mandagsmiddag-frontend" {
   name              = "Mandagsmiddag"
   slug              = "mandagsmiddag-frontend"
-  protocol_provider = authentik_provider_proxy.mandagsmiddag-backend.id
+  protocol_provider = authentik_provider_proxy.mandagsmiddag-frontend.id
 
   meta_icon = "https://mandagsmiddag.no/icon.png"
 }
