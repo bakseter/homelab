@@ -43,10 +43,27 @@ resource "authentik_provider_proxy" "mandagsmiddag-backend" {
   mode                  = "forward_single"
 }
 
+import {
+  id = "mandagsmiddag-frontend"
+  to = authentik_application.mandagsmiddag-frontend
+}
+
+resource "authentik_application" "mandagsmiddag-frontend" {
+  name              = "Mandagsmiddag"
+  slug              = "mandagsmiddag-frontend"
+  protocol_provider = authentik_provider_proxy.mandagsmiddag-backend.id
+
+  meta_icon = "https://mandagsmiddag.no/icon.png"
+}
+
 resource "authentik_application" "mandagsmiddag-backend" {
   name              = "mandagsmiddag-backend"
   slug              = "mandagsmiddag-backend"
   protocol_provider = authentik_provider_proxy.mandagsmiddag-backend.id
+
+  # Setting "Hide from application dashboard" not supported in Terraform.
+  # https://docs.goauthentik.io/add-secure-apps/applications/manage_apps/#hide-applications
+  meta_launch_url = "blank://blank"
 }
 
 
@@ -275,7 +292,7 @@ resource "authentik_provider_oauth2" "vaultwarden" {
 }
 
 resource "authentik_application" "vaultwarden" {
-  name = "vaultwarden"
+  name = "Vaultwarden"
   slug = "vaultwarden"
 
   protocol_provider = authentik_provider_oauth2.vaultwarden.id
