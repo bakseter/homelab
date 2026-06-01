@@ -157,5 +157,20 @@ spec:
             - port: '2283'
               protocol: TCP
 
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: amex
+            app: amex-frontend
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
     - toFQDNs:
         - matchName: 'api.github.com'
+        - matchName: 'bakseter.net'
+        - matchName: 'mandagsmiddag.no'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
