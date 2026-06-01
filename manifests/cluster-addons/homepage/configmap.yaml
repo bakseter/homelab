@@ -41,14 +41,10 @@ data:
         url: http://longhorn-frontend.longhorn-system.svc.cluster.local
 
     layout:
-      Core:
+      Home:
         style: row
-        columns: 3
-        icon: mdi-cube-scan
-      Monitoring:
-        style: row
-        columns: 3
-        icon: mdi-chart-areaspline
+        columns: 4
+        icon: mdi-home-outline
       Media:
         style: row
         columns: 5
@@ -57,10 +53,14 @@ data:
         style: row
         columns: 4
         icon: mdi-download-circle-outline
-      Home:
+      Core:
         style: row
-        columns: 4
-        icon: mdi-home-outline
+        columns: 3
+        icon: mdi-cube-scan
+      Monitoring:
+        style: row
+        columns: 3
+        icon: mdi-chart-areaspline
 
   widgets.yaml: |
     - kubernetes:
@@ -145,15 +145,11 @@ data:
             href: https://mandagsmiddag.no
             description: Dinner on a monday
             icon: mandagsmiddag.svg
-            namespace: mandagsmiddag
-            app: mandagsmiddag-frontend
 
         - bakseter.net:
             href: https://bakseter.net
             description: Personal homepage
             icon: bakseter.svg
-            namespace: homepage
-            app: homepage
 
         - Vaultwarden:
             href: https://vaultwarden.bakseter.net
