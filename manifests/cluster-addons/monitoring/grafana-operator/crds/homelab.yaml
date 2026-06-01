@@ -1795,24 +1795,25 @@ spec:
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "description": "24 h uptime % per public endpoint. Green ≥ 99.9 %, yellow ≥ 99 %, orange ≥ 90 %, red below.",
+          "description": "24h uptime % per public endpoint.",
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "thresholds"
               },
+              "decimals": 4,
               "mappings": [],
               "max": 100,
               "min": 0,
               "thresholds": {
-                "mode": "absolute",
+                "mode": "percentage",
                 "steps": [
                   {
-                    "color": "red",
+                    "color": "dark-red",
                     "value": 0
                   },
                   {
-                    "color": "orange",
+                    "color": "dark-orange",
                     "value": 90
                   },
                   {
@@ -1820,8 +1821,12 @@ spec:
                     "value": 99
                   },
                   {
-                    "color": "green",
+                    "color": "semi-dark-green",
                     "value": 99.9
+                  },
+                  {
+                    "color": "dark-green",
+                    "value": 99.99
                   }
                 ]
               },
@@ -1871,7 +1876,7 @@ spec:
               "refId": "A"
             }
           ],
-          "title": "Uptime % — Public (24 h)",
+          "title": "Public sites uptime (24h)",
           "type": "bargauge"
         },
         {
@@ -1879,7 +1884,7 @@ spec:
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "description": "24 h uptime % per internal endpoint.",
+          "description": "24h uptime % per internal endpoint.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1889,7 +1894,7 @@ spec:
               "max": 100,
               "min": 0,
               "thresholds": {
-                "mode": "absolute",
+                "mode": "percentage",
                 "steps": [
                   {
                     "color": "red",
@@ -1904,8 +1909,12 @@ spec:
                     "value": 99
                   },
                   {
-                    "color": "green",
+                    "color": "semi-dark-green",
                     "value": 99.9
+                  },
+                  {
+                    "color": "dark-green",
+                    "value": 99.99
                   }
                 ]
               },
@@ -1955,7 +1964,7 @@ spec:
               "refId": "A"
             }
           ],
-          "title": "Uptime % — Internal (24 h)",
+          "title": "Internal sites uptime (24h)",
           "type": "bargauge"
         },
         {
@@ -2105,7 +2114,32 @@ spec:
               },
               "unit": "s"
             },
-            "overrides": []
+            "overrides": [
+              {
+                "__systemRef": "hideSeriesFrom",
+                "matcher": {
+                  "id": "byNames",
+                  "options": {
+                    "mode": "exclude",
+                    "names": [
+                      "mandagsmiddag"
+                    ],
+                    "prefix": "All except:",
+                    "readOnly": true
+                  }
+                },
+                "properties": [
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": true,
+                      "viz": true
+                    }
+                  }
+                ]
+              }
+            ]
           },
           "gridPos": {
             "h": 7,
@@ -2426,12 +2460,12 @@ spec:
         ]
       },
       "time": {
-        "from": "now-3h",
+        "from": "now-6h",
         "to": "now"
       },
       "timepicker": {},
       "timezone": "browser",
       "title": "Homelab Overview",
       "uid": "homelab-overview-v3",
-      "version": 3
+      "version": 4
     }
