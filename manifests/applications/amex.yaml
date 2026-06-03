@@ -64,6 +64,9 @@ spec:
 
     - group: 'monitoring.coreos.com'
       kind: ServiceMonitor
+
+    - group: 'monitoring.coreos.com'
+      kind: PodMonitor
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application

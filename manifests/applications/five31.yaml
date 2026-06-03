@@ -68,6 +68,9 @@ spec:
     - group: 'monitoring.coreos.com'
       kind: ServiceMonitor
 
+    - group: 'monitoring.coreos.com'
+      kind: PodMonitor
+
     - group: 'batch'
       kind: Job
 

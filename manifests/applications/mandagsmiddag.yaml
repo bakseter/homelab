@@ -72,6 +72,9 @@ spec:
       kind: ServiceMonitor
 
     - group: 'monitoring.coreos.com'
+      kind: PodMonitor
+
+    - group: 'monitoring.coreos.com'
       kind: PrometheusRule
 
     - group: 'grafana.integreatly.org'
