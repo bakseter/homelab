@@ -1,12 +1,12 @@
 auto lo
 iface lo inet loopback
 
-iface nic0 inet manual
+iface enp2s0 inet manual
 
 # VLAN-aware bridge
 auto vmbr0
 iface vmbr0 inet manual
-    bridge-ports nic0
+    bridge-ports enp2s0
     bridge-stp off
     bridge-fd 0
     bridge-vlan-aware yes
@@ -18,7 +18,7 @@ iface vmbr0.{{ vlan_management }} inet static
     address {{ host_ip }}/24
     gateway {{ gateway_vlan10 }}
 
-# VLAN {{ vlan_cluster }} - Cluster (Corosync, live migration)
+# VLAN {{ vlan_cluster }} - Proxmox cluster
 auto vmbr0.{{ vlan_cluster }}
 iface vmbr0.{{ vlan_cluster }} inet static
     address {{ host_ip_cluster }}/24

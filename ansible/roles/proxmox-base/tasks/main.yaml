@@ -6,6 +6,14 @@
     group: root
     mode: '0644'
 
+- name: Configure /etc/network/interfaces
+  template:
+    src: interfaces.j2
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: Configure /etc/resolv.conf
   copy:
     dest: /etc/resolv.conf
