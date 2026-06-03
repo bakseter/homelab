@@ -205,13 +205,22 @@ spec:
 
     - fromEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: cloudnative-pg
             k8s:io.kubernetes.pod.namespace: cnpg-system
+            app.kubernetes.io/name: cloudnative-pg
       toPorts:
         - ports:
             - port: '5432'
               protocol: TCP
             - port: '8000'
+              protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '9187'
               protocol: TCP
 
     - fromEndpoints:
