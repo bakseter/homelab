@@ -20,6 +20,7 @@ machine:
       rotate-server-certificates: true
   nodeLabels:
     bakseter.net/physical-node: ${physical_node_name}
+    bakseter.net/node: ${hostname}
   features:
     hostDNS:
       forwardKubeDNSToHost: false
