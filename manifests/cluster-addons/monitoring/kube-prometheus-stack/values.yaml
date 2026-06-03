@@ -3,8 +3,8 @@ kube-prometheus-stack:
     prometheusSpec:
       scrapeInterval: 60s
 
-      retention: 30d
-      retentionSize: 45GB # https://prometheus.io/docs/prometheus/latest/storage/#right-sizing-retention-size
+      retention: 60d
+      retentionSize: 65GB # https://prometheus.io/docs/prometheus/latest/storage/#right-sizing-retention-size
 
       image:
         registry: quay.io
@@ -23,10 +23,25 @@ kube-prometheus-stack:
               - authentik
               - cert-manager
               - cloudflared
+              - cnpg-system
+              - external-dns
               - kube-system # cilium hubble
               - longhorn-system
               - monitoring
               - mandagsmiddag
+              - tailscale
+
+      podMonitorNamespaceSelector:
+        matchExpressions:
+          - key: kubernetes.io/metadata.name
+            operator: In
+            values:
+              - amex
+              - authentik
+              - immich
+              - mandagsmiddag
+              - media
+              - vaultwarden
 
       probeNamespaceSelector:
         matchExpressions:
@@ -45,7 +60,7 @@ kube-prometheus-stack:
             accessModes: ['ReadWriteOnce']
             resources:
               requests:
-                storage: 50Gi
+                storage: 75Gi
 
       metricRelabelings:
         - sourceLabels: [__name__]
@@ -189,13 +204,6 @@ kube-prometheus-stack:
         enabled: false
       darwin:
         enabled: false
-
-  # prometheus-node-exporter:
-  #   extraArgs:
-  #     - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|run/containerd/.+|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
-  #     - --collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs|erofs)$
-  #     - --collector.hwmon.chip-include
-  #     - --collector.hwmon.sensor-include
 
   kubeControllerManager:
     enabled: false
