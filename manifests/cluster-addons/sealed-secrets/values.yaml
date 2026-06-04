@@ -8,3 +8,6 @@ sealed-secrets:
     allowPrivilegeEscalation: false
     seccompProfile:
       type: RuntimeDefault
+
+  privateKeyLabels:
+    bakseter.net/backup: 'true'
