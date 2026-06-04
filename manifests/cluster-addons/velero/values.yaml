@@ -1,10 +1,14 @@
 velero:
+  snapshotsEnabled: true
+  deployNodeAgent: true
+
   image:
     repository: docker.io/velero/velero
     tag: v1.18.1@sha256:11459094b1b21ec7c817b08f8067d9e89380835547915cac9c4132ff05b55b90
 
   configuration:
     features: EnableCSI
+    uploaderType: kopia
 
     volumeSnapshotLocation:
       - name: default
