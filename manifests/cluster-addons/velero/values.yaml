@@ -1,5 +1,9 @@
 velero:
   configuration:
+    volumeSnapshotLocation:
+      - name: default
+        provider: csi
+
     backupStorageLocation:
       - name: hetzner-s3
         provider: aws
