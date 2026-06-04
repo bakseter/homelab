@@ -27,7 +27,7 @@ spec:
       selfHeal: true
     managedNamespaceMetadata:
       labels:
-        pod-security.kubernetes.io/enforce: restricted
+        pod-security.kubernetes.io/enforce: privileged # TODO: revert
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
