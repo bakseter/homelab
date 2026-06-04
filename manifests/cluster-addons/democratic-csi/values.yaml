@@ -28,13 +28,6 @@ democratic-csi:
         node-publish-secret:
         controller-expand-secret:
 
-  volumeSnapshotClasses:
-    - name: truenas-nfs
-      deletionPolicy: Delete
-      labels:
-        velero.io/csi-volumesnapshot-class: 'true'
-      parameters: {}
-
   driver:
     existingConfigSecret: freenas-api-nfs-secret
     config:
