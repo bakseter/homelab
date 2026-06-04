@@ -13,3 +13,13 @@ velero:
 
   credentials:
     existingSecret: velero-s3-credentials
+
+  kubectl:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
