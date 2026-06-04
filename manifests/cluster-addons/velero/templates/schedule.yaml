@@ -4,7 +4,7 @@ metadata:
   name: nightly
   namespace: velero
 spec:
-  schedule: '42 */1 * * *' # TODO: change
+  schedule: '48 */1 * * *' # TODO: change
   template:
     ttl: 168h
     storageLocation: hetzner-s3
