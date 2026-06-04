@@ -55,7 +55,6 @@ velero:
       capabilities:
         drop:
           - ALL
-      readOnlyRootFilesystem: true
 
   podSecurityContext:
     runAsNonRoot: true
