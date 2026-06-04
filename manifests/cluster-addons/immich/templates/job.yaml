@@ -6,6 +6,10 @@ metadata:
 spec:
   template:
     spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       restartPolicy: Never
       containers:
         - name: migrate
@@ -19,6 +23,11 @@ spec:
               rsync -avh --progress /source/ /dest/ && \
               echo "Migration complete." && \
               ls -lah /dest/
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           volumeMounts:
             - name: source
               mountPath: /source
