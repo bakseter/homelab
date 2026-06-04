@@ -1,22 +1,33 @@
 velero:
+  image:
+    repository: docker.io/velero/velero
+    tag: v1.18.1@sha256:11459094b1b21ec7c817b08f8067d9e89380835547915cac9c4132ff05b55b90
+
   configuration:
+    features: EnableCSI
+
     volumeSnapshotLocation:
       - name: default
         provider: csi
 
     backupStorageLocation:
-      - name: hetzner-s3
+      - name: default
         provider: aws
         bucket: bakseter-homelab-velero
         config:
           region: eu-central
           s3ForcePathStyle: true
-          s3Url: hel1.your-objectstorage.com
-
-    features: EnableCSI
+          s3Url: https://hel1.your-objectstorage.com
 
   credentials:
     existingSecret: velero-s3-credentials
+
+  initContainers:
+    - name: velero-plugin-for-aws
+      image: velero/velero-plugin-for-aws:v1.13.1@sha256:472d0e486d5d5c23c782b1b123530c7df8645784523ec36ca661a326d47885ff
+      volumeMounts:
+        - mountPath: /target
+          name: plugins
 
   podSecurityContext:
     runAsNonRoot: true
