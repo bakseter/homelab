@@ -4,10 +4,10 @@ metadata:
   name: nightly
   namespace: velero
 spec:
-  schedule: '48 */1 * * *' # TODO: change
+  schedule: '54 */1 * * *' # TODO: change
   template:
     ttl: 168h
-    storageLocation: hetzner-s3
+    storageLocation: default
     snapshotMoveData: true
     includedResources:
       - persistentvolumeclaims
