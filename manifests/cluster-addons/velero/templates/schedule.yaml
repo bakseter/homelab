@@ -1,0 +1,18 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: nightly
+  namespace: velero
+spec:
+  schedule: '0 2 * * *'
+  template:
+    ttl: 168h
+    storageLocation: hetzner-s3
+    snapshotMoveData: true
+    includedResources:
+      - persistentvolumeclaims
+      - persistentvolumes
+      - sealedsecrets
+    labelSelector:
+      matchLabels:
+        bakseter.net/backup: 'true'

@@ -1,0 +1,15 @@
+velero:
+  configuration:
+    backupStorageLocation:
+      - name: hetzner-s3
+        provider: aws
+        bucket: bakseter-homelab-velero
+        config:
+          region: eu-central
+          s3ForcePathStyle: true
+          s3Url: hel1.your-objectstorage.com
+
+    features: EnableCSI
+
+  credentials:
+    existingSecret: velero-s3-credentials
