@@ -33,6 +33,7 @@ democratic-csi:
       deletionPolicy: Delete
       labels:
         velero.io/csi-volumesnapshot-class: 'true'
+      parameters: {}
 
   driver:
     existingConfigSecret: freenas-api-nfs-secret
