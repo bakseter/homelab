@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pvc-migration
+  namespace: immich
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: alpine:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              apk add --no-cache rsync && \
+              echo "Starting migration..." && \
+              rsync -avh --progress /source/ /dest/ && \
+              echo "Migration complete." && \
+              ls -lah /dest/
+          volumeMounts:
+            - name: source
+              mountPath: /source
+              readOnly: true
+            - name: dest
+              mountPath: /dest
+      volumes:
+        - name: source
+          persistentVolumeClaim:
+            claimName: immich-library-encrypted
+        - name: dest
+          persistentVolumeClaim:
+            claimName: immich-library
