@@ -65,9 +65,3 @@ democratic-csi:
 
 snapshot-controller:
   fullnameOverride: snapshot-controller
-
-  controller:
-    enabled: false
-
-  validatingWebhook:
-    enabled: false
