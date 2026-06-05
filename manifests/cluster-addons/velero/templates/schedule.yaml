@@ -4,7 +4,7 @@ metadata:
   name: nightly
   namespace: velero
 spec:
-  schedule: '0 3 * * *'
+  schedule: '17 * * * *'
   template:
     ttl: 168h
     storageLocation: default
