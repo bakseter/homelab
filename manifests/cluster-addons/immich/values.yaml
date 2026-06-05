@@ -2,7 +2,7 @@ immich:
   immich:
     persistence:
       library:
-        existingClaim: immich-library-encrypted # TODO: change
+        existingClaim: immich-library
 
   machine-learning:
     enabled: true
@@ -80,9 +80,6 @@ immich:
             capabilities:
               drop:
                 - ALL
-
-        strategy: Recreate
-        rollingUpdate: {}
 
         containers:
           main:
