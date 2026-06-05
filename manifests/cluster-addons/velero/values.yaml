@@ -48,6 +48,10 @@ velero:
         drop:
           - ALL
 
+    extraEnvVars:
+      - name: HOME
+        value: /tmp
+
   podSecurityContext:
     runAsNonRoot: true
     runAsUser: 65534
