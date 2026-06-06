@@ -45,13 +45,13 @@
           pvid: '80'
           frame-types: admit-only-untagged-and-priority-tagged
 
-    - name: Set ether4 as access port VLAN 80 media
+    - name: Set ether4 as access port VLAN 50
       community.routeros.api_find_and_modify:
         path: interface bridge port
         find:
           interface: ether4
         values:
-          pvid: '80'
+          pvid: '50'
           frame-types: admit-only-untagged-and-priority-tagged
 
     - name: Set ether5 as access port VLAN 50
@@ -259,14 +259,14 @@
         values:
           bridge: bridge
           tagged: 'bridge,ether2'
-          untagged: 'ether5,wifi1,wifi2'
+          untagged: 'ether4,ether5,wifi1,wifi2'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 50) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
     - name: Add bridge VLAN 50 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether5,wifi1,wifi2'
+        cmd: 'add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether4,ether5,wifi1,wifi2'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 50) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
@@ -314,14 +314,14 @@
         values:
           bridge: bridge
           tagged: 'bridge,ether2'
-          untagged: 'ether3,ether4'
+          untagged: 'ether3'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 80) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
     - name: Add bridge VLAN 80 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=80 tagged=bridge,ether2 untagged=ether3,ether4'
+        cmd: 'add bridge=bridge vlan-ids=80 tagged=bridge,ether2 untagged=ether3'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 80) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
