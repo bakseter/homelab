@@ -2,8 +2,7 @@ alloy:
   image:
     registry: docker.io
     repository: grafana/alloy
-    tag: v1.16.2 # overriden by digest, but left for clarity
-    digest: 51aeb9d829239345070619dad3edd6873186f913c84f45b365b74574fcb38ec0
+    tag: v1.16.3@sha256:84b76d56c5943025515438fd45cbb5995386a0260d072c9b671dfd7f539f9c01
 
   global:
     podSecurityContext:
@@ -14,8 +13,7 @@ alloy:
     image:
       registry: quay.io
       repository: prometheus-operator/prometheus-config-reloader
-      tag: v0.91.0 # overriden by digest, but left for clarity
-      digest: 7d9e4eea5f1139e602508871f422b0116c60e87c662f3dcd234d5ab60cd0d8c1
+      tag: v0.91.0@sha256:7d9e4eea5f1139e602508871f422b0116c60e87c662f3dcd234d5ab60cd0d8c1
 
     securityContext:
       allowPrivilegeEscalation: false
@@ -80,16 +78,22 @@ alloy:
               "envoy-gateway-system",
               "external-dns",
               "five31",
+              "homepage",
               "immich",
+              "inteldeviceplugins-system",
               "keel",
+              "kube-system",
               "kubelet-serving-cert-approver",
               "longhorn-system",
               "mandagsmiddag",
               "media",
               "monitoring",
-              "pihole",
+              "node-feature-discovery",
+              "sealed-secrets",
               "tailscale",
               "traefik",
+              "vaultwarden",
+              "velero",
             ]
           }
         }
