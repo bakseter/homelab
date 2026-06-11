@@ -6,6 +6,13 @@ velero:
     repository: docker.io/velero/velero
     tag: v1.18.1@sha256:11459094b1b21ec7c817b08f8067d9e89380835547915cac9c4132ff05b55b90
 
+  extraVolumes:
+    - emptyDir: {}
+      name: udmrepo
+  extraVolumeMounts:
+    - mountPath: /nonexistent
+      name: udmrepo
+
   configuration:
     features: EnableCSI
     uploaderType: kopia
@@ -48,15 +55,12 @@ velero:
         drop:
           - ALL
 
-    extraEnvVars:
-      - name: HOME
-        value: /root
     extraVolumes:
-      - name: velero-home
-        emptyDir: {}
+      - emptyDir: {}
+        name: udmrepo
     extraVolumeMounts:
-      - name: velero-home
-        mountPath: /root
+      - mountPath: /nonexistent
+        name: udmrepo
 
   podSecurityContext:
     runAsNonRoot: true
