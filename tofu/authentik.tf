@@ -104,10 +104,21 @@ resource "authentik_outpost" "mandagsmiddag" {
               }
             }
           },
+        ],
+
+        httproute = [
+          {
+            op   = "remove"
+            path = "/spec/rules/1"
+          },
+          {
+            op   = "remove"
+            path = "/spec/hostnames/1"
+          }
         ]
       }
       kubernetes_namespace    = "authentik"
-      kubernetes_replicas     = 2
+      kubernetes_replicas     = 1
       kubernetes_service_type = "ClusterIP"
       kubernetes_disabled_components = [
         "ingress",
