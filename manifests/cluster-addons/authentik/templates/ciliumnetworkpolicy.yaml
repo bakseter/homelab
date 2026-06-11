@@ -130,18 +130,9 @@ spec:
 
   ingress:
     - fromEndpoints:
-        # TODO: harden more
-        # TODO: what is this?
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
-            app.kubernetes.io/name: envoy
-        #
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: envoy-gateway-system
             gateway.envoyproxy.io/owning-gateway-name: cloudflared-gateway
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: traefik
-            app.kubernetes.io/name: traefik
       toPorts:
         - ports:
             - port: '9000'

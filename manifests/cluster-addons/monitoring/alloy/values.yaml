@@ -91,7 +91,6 @@ alloy:
               "node-feature-discovery",
               "sealed-secrets",
               "tailscale",
-              "traefik",
               "vaultwarden",
               "velero",
             ]

@@ -8,7 +8,7 @@ cloudnative-pg:
       requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
             matchLabels:
-              app.kubernetes.io/name: traefik
+              app.kubernetes.io/name: cloudnative-pg
           topologyKey: bakseter.net/physical-node
 
   resources:
