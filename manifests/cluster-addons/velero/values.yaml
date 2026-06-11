@@ -52,6 +52,14 @@ velero:
       - name: HOME
         value: /home/velero
 
+    extraVolumes:
+      - name: velero-home
+        emptyDir: {}
+
+    extraVolumeMounts:
+      - name: velero-home
+        mountPath: /home/velero
+
   podSecurityContext:
     runAsNonRoot: true
     runAsUser: 65534
