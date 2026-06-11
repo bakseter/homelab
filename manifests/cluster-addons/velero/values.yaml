@@ -50,15 +50,13 @@ velero:
 
     extraEnvVars:
       - name: HOME
-        value: /home/velero
-
+        value: /nonexistent
     extraVolumes:
       - name: velero-home
         emptyDir: {}
-
     extraVolumeMounts:
       - name: velero-home
-        mountPath: /home/velero
+        mountPath: /nonexistent
 
   podSecurityContext:
     runAsNonRoot: true
