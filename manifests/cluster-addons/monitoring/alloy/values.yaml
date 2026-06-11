@@ -2,7 +2,7 @@ alloy:
   image:
     registry: docker.io
     repository: grafana/alloy
-    tag: v1.16.3@sha256:84b76d56c5943025515438fd45cbb5995386a0260d072c9b671dfd7f539f9c01
+    digest: sha256:84b76d56c5943025515438fd45cbb5995386a0260d072c9b671dfd7f539f9c01 # v1.16.3
 
   global:
     podSecurityContext:
