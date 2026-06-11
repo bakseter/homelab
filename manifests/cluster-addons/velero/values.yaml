@@ -50,19 +50,13 @@ velero:
 
     extraEnvVars:
       - name: HOME
-        value: /nonexistent
-      - name: KOPIA_CONFIG_PATH
-        value: /scratch/kopia/config.json
-      - name: KOPIA_CACHE_DIRECTORY
-        value: /scratch/kopia/cache
-      - name: KOPIA_LOG_DIR
-        value: /scratch/kopia/logs
+        value: /root
     extraVolumes:
       - name: velero-home
         emptyDir: {}
     extraVolumeMounts:
       - name: velero-home
-        mountPath: /nonexistent
+        mountPath: /root
 
   podSecurityContext:
     runAsNonRoot: true
