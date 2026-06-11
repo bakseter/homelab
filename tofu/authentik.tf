@@ -83,7 +83,11 @@ resource "authentik_outpost" "mandagsmiddag" {
 
   config = jsonencode(
     {
-      authentik_host = "https://authentik.bakseter.net"
+      authentik_host         = "https://authentik.bakseter.net"
+      log_level              = "info"
+      object_naming_template = "ak-outpost-%(name)s"
+      refresh_interval       = "minutes=5"
+
       kubernetes_json_patches = {
         deployment = [
           {
@@ -101,23 +105,22 @@ resource "authentik_outpost" "mandagsmiddag" {
             }
           },
         ]
-        ingress = [
-          {
-            op   = "remove"
-            path = "/spec/rules/1"
-          },
-          {
-            op   = "remove"
-            path = "/spec/tls"
-          }
-        ]
       }
       kubernetes_namespace    = "authentik"
-      kubernetes_replicas     = 1
+      kubernetes_replicas     = 2
       kubernetes_service_type = "ClusterIP"
-      log_level               = "info"
-      object_naming_template  = "ak-outpost-%(name)s"
-      refresh_interval        = "minutes=5"
+      kubernetes_disabled_components = [
+        "ingress",
+        "traefik middleware",
+      ]
+      kubernetes_httproute_parent_refs = [
+        {
+          group     = "gateway.networking.k8s.io"
+          kind      = "Gateway"
+          name      = "cloudflared-gateway"
+          namespace = "cloudflared"
+        }
+      ]
     }
   )
 }
