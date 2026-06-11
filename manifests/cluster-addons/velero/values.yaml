@@ -50,7 +50,7 @@ velero:
 
     extraEnvVars:
       - name: HOME
-        value: /tmp
+        value: /home/velero
 
   podSecurityContext:
     runAsNonRoot: true
