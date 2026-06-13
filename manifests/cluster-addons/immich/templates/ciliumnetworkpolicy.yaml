@@ -127,11 +127,14 @@ spec:
               - matchPattern: '*'
 
     - toFQDNs:
-        - matchName: www.modelscope.cn # model website
-        - matchName: cdn-lfs-cn-1.modelscope.cn # modelscope cdn (?)
+        # modelscope
+        - matchName: www.modelscope.cn
+        - matchName: cdn-lfs-cn-1.modelscope.cn
+        # huggingface
         - matchName: huggingface.co
-        - matchName: cas-server.xethub.hf.co # huggingface storage
-        - matchName: transfer.xethub.hf.co # huggingface storage
+        - matchName: cas-server.xethub.hf.co
+        - matchName: transfer.xethub.hf.co
+        - matchName: us.aws.cdn.hf.co
       toPorts:
         - ports:
             - port: '443'
