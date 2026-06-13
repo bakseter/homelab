@@ -15,7 +15,7 @@ longhorn:
     pollInterval: 600
 
   persistence:
-    defaultClassReplicaCount: 2
+    defaultClassReplicaCount: 3
 
   networkPolicies:
     enabled: true
