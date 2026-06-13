@@ -12,3 +12,7 @@ cryptpad:
     capabilities:
       drop:
         - ALL
+
+  config:
+    httpUnsafeOrigin: https://cryptpad.bakseter.net
+    httpSafeOrigin: https://cryptpad.bakseter.net
