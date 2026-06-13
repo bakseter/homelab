@@ -1,0 +1,7 @@
+apiVersion: v2
+name: cryptpad-umbrella
+version: 0.1.0
+dependencies:
+  - name: cryptpad
+    version: 0.0.23
+    repository: oci://ghcr.io/cryptpad/helm/cryptpad
