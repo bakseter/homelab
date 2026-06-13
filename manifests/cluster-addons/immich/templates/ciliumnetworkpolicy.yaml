@@ -30,6 +30,14 @@ spec:
             - port: '2283'
               protocol: TCP
 
+    # TODO: remove
+    - fromEntities:
+      - world
+      toPorts:
+        - ports:
+            - port: '2283'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
