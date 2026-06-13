@@ -32,7 +32,7 @@ spec:
 
     # TODO: remove
     - fromEntities:
-      - world
+        - world
       toPorts:
         - ports:
             - port: '2283'
@@ -75,6 +75,13 @@ spec:
       toPorts:
         - ports:
             - port: '5432'
+              protocol: TCP
+
+    - toFQDNs:
+        - matchName: version.immich.cloud
+      toPorts:
+        - ports:
+            - port: 443
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
