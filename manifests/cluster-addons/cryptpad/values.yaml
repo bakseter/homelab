@@ -1,0 +1,15 @@
+cryptpad:
+  podSecurityContext:
+    fsGroup: 4001 # default
+    runAsGroup: 4001
+    runAsUser: 4001
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
