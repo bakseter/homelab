@@ -203,8 +203,9 @@ resource "authentik_provider_oauth2" "grafana" {
 
   allowed_redirect_uris = [
     {
-      matching_mode = "strict"
-      url           = "https://grafana.sre.bakseter.net/login/generic_oauth"
+      matching_mode     = "strict"
+      url               = "https://grafana.sre.bakseter.net/login/generic_oauth"
+      redirect_uri_type = "authorization"
     }
   ]
 
@@ -278,7 +279,7 @@ resource "authentik_provider_oauth2" "vaultwarden" {
   name      = "vaultwarden"
   client_id = "vaultwarden"
 
-  authorization_flow = data.authentik_flow.default-provider-authorization-explicit-consent.id
+  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
   invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
 
   sub_mode = "user_username"
@@ -291,8 +292,9 @@ resource "authentik_provider_oauth2" "vaultwarden" {
 
   allowed_redirect_uris = [
     {
-      matching_mode = "strict"
-      url           = "https://vaultwarden.bakseter.net/identity/connect/oidc-signin"
+      matching_mode     = "strict"
+      url               = "https://vaultwarden.bakseter.net/identity/connect/oidc-signin"
+      redirect_uri_type = "authorization"
     }
   ]
 
