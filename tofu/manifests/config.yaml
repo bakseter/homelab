@@ -4,18 +4,10 @@ nodes:
     memory: 32
     ip: 192.168.10.20
     virtualNodes:
-      - hostname: m715q-controlplane-1
-        type: controlplane
-        mainControlplane: true
-        cores: 2
-        memory: 4
-        disk: 100
-        ip: 192.168.30.110
-
       - hostname: m715q-worker-1
         type: worker
         cores: 4
-        memory: 20
+        memory: 24
         disk: 100
         ip: 192.168.30.111
         longhorn:
@@ -54,6 +46,7 @@ nodes:
     virtualNodes:
       - hostname: m720q-controlplane-1
         type: controlplane
+        mainControlplane: true # TODO: actually use this
         cores: 2
         memory: 4
         disk: 100
@@ -80,10 +73,17 @@ nodes:
     memory: 32
     ip: 192.168.10.23
     virtualNodes:
+      - hostname: m920q-controlplane-1
+        type: controlplane
+        cores: 2
+        memory: 4
+        disk: 100
+        ip: 192.168.30.130
+
       - hostname: m920q-worker-1
         type: worker
         cores: 6
-        memory: 24
+        memory: 20
         disk: 200
         ip: 192.168.30.131
         longhorn:
