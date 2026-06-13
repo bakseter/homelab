@@ -254,9 +254,9 @@ resource "proxmox_virtual_environment_firewall_ipset" "cluster_nodes" {
 
   # TODO: use config.yaml for this
   # Controlplane VMs
-  cidr { name = "192.168.30.100" }
   cidr { name = "192.168.30.110" }
   cidr { name = "192.168.30.120" }
+  cidr { name = "192.168.30.130" }
   cidr { name = "192.168.30.190" }
 
 
