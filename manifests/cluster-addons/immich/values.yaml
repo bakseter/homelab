@@ -85,7 +85,13 @@ immich:
           main:
             image:
               tag: v2.7.5@sha256:c15bff75068effb03f4355997d03dc7e0fc58720c2b54ad6f7f10d1bc57efaa5
-            livenessProbe: {}
+            resources:
+              limits:
+                cpu: 2
+                memory: 2Gi
+              requests:
+                cpu: 500m
+                memory: 256Mi
             env:
               DB_HOSTNAME:
                 valueFrom:

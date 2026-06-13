@@ -5,7 +5,7 @@ metadata:
   namespace: immich
 spec:
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 2
   behavior:
     scaleUp:
       stabilizationWindowSeconds: 300
