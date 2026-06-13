@@ -7,9 +7,15 @@ resources:
     gpu.intel.com/i915: '1'
 
 persistence:
+  config:
+    enabled: true
+    size: 5Gi
   media:
     enabled: true
     existingClaim: shared-media
+  cache:
+    enabled: true
+    size: 10Gi
 
 deploymentStrategy:
   type: Recreate
@@ -34,8 +40,16 @@ securityContext:
 volumes:
   - name: tmp
     emptyDir: {}
+  - name: log
+    emptyDir: {}
 
 volumeMounts:
   - name: tmp
     mountPath: /tmp
-    readOnly: false
+  - name: log
+    mountPath: /log
+
+jellyfin:
+  env:
+    - name: JELLYFIN_LOG_DIR
+      value: /log
