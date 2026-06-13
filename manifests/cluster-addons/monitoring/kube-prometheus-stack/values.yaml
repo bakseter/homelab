@@ -6,6 +6,9 @@ kube-prometheus-stack:
       retention: 60d
       retentionSize: 65GB # https://prometheus.io/docs/prometheus/latest/storage/#right-sizing-retention-size
 
+      tsdb:
+        outOfOrderTimeWindow: 10m
+
       image:
         registry: quay.io
         repository: prometheus/prometheus
