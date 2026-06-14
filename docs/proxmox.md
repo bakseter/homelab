@@ -10,7 +10,7 @@ Four nodes, each connected to a single Proxmox cluster:
 ## VMs
 
 Each node runs a single controlplane VM and a single worker VM.
-The only exception is m920q, which only runs a single worker VM.
+The only exception is `m715q`, which only runs a single worker VM.
 
 All VMs run Talos Linux. No other VMs exist; everything else should run inside the Kubernetes cluster.
 
