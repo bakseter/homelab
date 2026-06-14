@@ -1,12 +1,12 @@
 external-dns:
   provider: pihole
   policy: sync
+  registry: noop
 
   extraArgs:
     - --pihole-server=http://192.168.60.200:8080
     - --pihole-api-version=6
     - --gateway-label-filter=external-dns==enabled
-    - --registry=noop
 
   sources:
     - gateway-httproute
