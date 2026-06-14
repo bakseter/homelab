@@ -22,6 +22,7 @@ spec:
         loadBalancerClass: tailscale
         annotations:
           tailscale.com/hostname: gateway-envoy-int
+          tailscale.com/proxy-group: ingress
           tailscale.com/tags: 'tag:k8s'
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
@@ -48,6 +49,7 @@ spec:
         loadBalancerClass: tailscale
         annotations:
           tailscale.com/hostname: gateway-envoy-home
+          tailscale.com/proxy-group: ingress
           tailscale.com/tags: 'tag:k8s,tag:home'
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
@@ -74,4 +76,5 @@ spec:
         loadBalancerClass: tailscale
         annotations:
           tailscale.com/hostname: gateway-envoy-sre
+          tailscale.com/proxy-group: ingress
           tailscale.com/tags: 'tag:k8s,tag:sre'
