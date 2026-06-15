@@ -1,4 +1,7 @@
 alloy:
+  controller:
+    type: deployment
+
   image:
     registry: docker.io
     repository: grafana/alloy
@@ -46,20 +49,6 @@ alloy:
           endpoint {
             url = "http://loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push"
           }
-        }
-
-        local.file_match "node_logs" {
-          path_targets = [{
-            __path__  = "/var/log/syslog",
-            job       = "node/syslog",
-            node_name = sys.env("HOSTNAME"),
-            cluster   = "homelab",
-          }]
-        }
-
-        loki.source.file "node_logs" {
-          targets    = local.file_match.node_logs.targets
-          forward_to = [loki.write.default.receiver]
         }
 
         discovery.kubernetes "pod" {
