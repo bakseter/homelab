@@ -33,6 +33,7 @@ immich:
               limits:
                 cpu: 4
                 memory: 2Gi
+                gpu.intel.com/i915: '1'
               requests:
                 cpu: 500m
                 memory: 256Mi
