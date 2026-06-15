@@ -17,7 +17,7 @@ spec:
     topologyKey: bakseter.net/physical-node
     podAntiAffinityType: required
   storage:
-    size: 6Gi
+    size: 10Gi
   resources:
     requests:
       cpu: 200m
