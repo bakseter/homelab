@@ -52,7 +52,7 @@ argo-cd:
     enabled: false
 
   redis-ha:
-    enabled: true
+    enabled: false
 
   controller:
     replicas: 1
@@ -73,7 +73,7 @@ argo-cd:
           release: kube-prometheus-stack
 
   server:
-    replicas: 2
+    replicas: 1
 
     resources:
       requests:
@@ -109,7 +109,7 @@ argo-cd:
                 value: /
 
   repoServer:
-    replicas: 2
+    replicas: 1
 
     resources:
       requests:
@@ -127,7 +127,7 @@ argo-cd:
           release: kube-prometheus-stack
 
   applicationSet:
-    replicas: 2
+    replicas: 1
 
     resources:
       requests:
