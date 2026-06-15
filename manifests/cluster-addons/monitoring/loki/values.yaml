@@ -71,15 +71,9 @@ loki:
     enabled: false
 
   lokiCanary:
-    enabled: true
-    revisionHistoryLimit: 5
-    image:
-      registry: docker.io
-      repository: grafana/loki-canary
-      digest: sha256:93751140d6c5cdfb3b07587b10ff262861c9b86c0f2935a418b12e0407cf0d0f # 3.7.2
-    push: false
-    podLabels:
-      logs.bakseter.net/scrape: 'false'
+    enabled: false
+  test:
+    enabled: false
 
   resultsCache:
     enabled: false
@@ -87,13 +81,13 @@ loki:
   deploymentMode: Distributed
 
   ingester:
-    replicas: 3
+    replicas: 2
     zoneAwareReplication:
       enabled: false
 
   querier:
-    replicas: 3 # Improve query performance via parallelism
-    maxUnavailable: 2
+    replicas: 2
+    maxUnavailable: 1
 
   queryFrontend:
     replicas: 2
@@ -103,8 +97,8 @@ loki:
     replicas: 2
 
   distributor:
-    replicas: 3
-    maxUnavailable: 2
+    replicas: 2
+    maxUnavailable: 1
 
   compactor:
     replicas: 1
@@ -121,7 +115,7 @@ loki:
   chunksCache:
     enabled: false
     # default is 500MB, with limited memory keep this smaller
-    writebackSizeLimit: 250MB
+    writebackSizeLimit: 150MB
 
   gateway:
     enabled: true

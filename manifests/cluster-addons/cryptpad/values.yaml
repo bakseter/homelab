@@ -1,4 +1,6 @@
 cryptpad:
+  replicaCount: 0
+
   podSecurityContext:
     fsGroup: 4001 # default
     runAsGroup: 4001
