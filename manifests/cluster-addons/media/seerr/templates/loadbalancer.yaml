@@ -6,6 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: seerr
     app.kubernetes.io/name: seerr
+    l2-announce: 'true'
 spec:
   type: LoadBalancer
   selector:

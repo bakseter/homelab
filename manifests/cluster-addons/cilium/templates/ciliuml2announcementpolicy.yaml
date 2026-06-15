@@ -8,3 +8,6 @@ spec:
     - ^eth.*
     - ^ens.*
     - ^enp.*
+  serviceSelector:
+    matchLabels:
+      l2-announce: 'true'
