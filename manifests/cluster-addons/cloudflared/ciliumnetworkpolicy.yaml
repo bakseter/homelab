@@ -52,3 +52,6 @@ spec:
         - ports:
             - port: '7844'
               protocol: UDP
+        - ports:
+            - port: '7844'
+              protocol: TCP
