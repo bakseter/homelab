@@ -1,6 +1,17 @@
 alloy:
   controller:
     type: deployment
+    replicas: 2
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - alloy
+            topologyKey: bakseter.net/physical-node
 
   image:
     registry: docker.io
