@@ -59,6 +59,11 @@ immich:
               drop:
                 - ALL
 
+        containers:
+          main:
+            image:
+              tag: 9.1-alpine@sha256:34f4f659e02a67cfdf3995d11ae432219c936005055b2cd39a042e86280e053e
+
   server:
     enabled: true
 
