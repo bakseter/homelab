@@ -89,6 +89,10 @@ kube-prometheus-stack:
                 - 192.168.10.23:9100
               labels:
                 hostname: m920q
+            - targets:
+                - 192.168.10.24:9100
+              labels:
+                hostname: m70qg3
           relabel_configs:
             - target_label: job
               replacement: node-exporter-proxmox
