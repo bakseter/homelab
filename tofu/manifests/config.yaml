@@ -96,13 +96,13 @@ nodes:
           pcie: false
           rombar: true
 
-  m90gq3:
+  m70gq3:
     cores: 12
     memory: 16
     ip: 192.168.10.24
     disk: 200
     virtualNodes:
-      - hostname: m90qg3-worker-1
+      - hostname: m70qg3-worker-1
         type: worker
         cores: 12
         memory: 12
