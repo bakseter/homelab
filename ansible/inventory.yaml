@@ -10,7 +10,7 @@ all:
           ansible_host: 192.168.10.22
         m920q:
           ansible_host: 192.168.10.23
-        m90qg3:
+        m70qg3:
           ansible_host: 192.168.10.24
       vars:
         ansible_user: root

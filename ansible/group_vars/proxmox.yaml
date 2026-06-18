@@ -15,8 +15,8 @@ proxmox_hosts:
     fqdn: m920q.lan
     ip: 192.168.10.23
     ip_cluster: 192.168.20.23
-  - short: m90qg3
-    fqdn: m90qg3.lan
+  - short: m70qg3
+    fqdn: m70qg3.lan
     ip: 192.168.10.24
     ip_cluster: 192.168.20.24
 
