@@ -1,28 +1,55 @@
 - name: Blacklist i915 driver
   ansible.builtin.lineinfile:
     path: /etc/modprobe.d/blacklist.conf
-    line: "blacklist i915"
+    line: 'blacklist i915'
     create: true
     state: present
+
+- name: Configure VFIO PCI device binding by vendor ID
+  ansible.builtin.lineinfile:
+    path: /etc/modprobe.d/vfio.conf
+    line: 'options vfio-pci ids={{ igpu_vfio_ids }}'
+    create: true
+    state: present
+  notify: Update initramfs
 
 - name: Load VFIO modules at boot
   ansible.builtin.lineinfile:
     path: /etc/modules-load.d/vfio.conf
-    line: "{{ item }}"
+    line: '{{ item }}'
     create: true
     state: present
   loop:
     - vfio
     - vfio_iommu_type1
     - vfio_pci
-    - vfio_virqfd
+
+- name: Read current GRUB cmdline
+  ansible.builtin.slurp:
+    src: /etc/default/grub
+  register: grub_file
+
+- name: Set required GRUB kernel parameters
+  ansible.builtin.replace:
+    path: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT=")([^"]*?)(\s*intel_iommu=on)?(\s*iommu=pt)?(\s*i915\.enable_guc=\d)?(\s*i915\.enable_fbc=\d)?(\s*video=efifb:off)?(\s*video=vesa:off)?([^"]*)"'
+    replace: '\1\2 intel_iommu=on iommu=pt i915.enable_guc=0 i915.enable_fbc=0 video=efifb:off video=vesa:off\9"'
+  notify:
+    - Update grub
+    - Update initramfs
 
 - name: Update initramfs
-  ansible.builtin.command: update-initramfs -u
+  ansible.builtin.command: update-initramfs -u -k all
   changed_when: true
+  listen: Update initramfs
+
+- name: Update grub
+  ansible.builtin.command: update-grub
+  changed_when: true
+  listen: Update grub
 
 - name: Reboot host
   ansible.builtin.reboot:
     reboot_timeout: 300
     post_reboot_delay: 30
-    msg: "Rebooting for VFIO/iGPU passthrough changes"
+    msg: 'Rebooting for VFIO/iGPU passthrough changes'

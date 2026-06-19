@@ -2,3 +2,4 @@ nic_offload_interface: nic0
 host_ip: 192.168.10.23
 host_ip_cluster: 192.168.20.23
 intel_igpu_enabled: true
+igpu_vfio_ids: 8086:3e92
