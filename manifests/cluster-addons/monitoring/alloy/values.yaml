@@ -27,7 +27,7 @@ alloy:
     image:
       registry: quay.io
       repository: prometheus-operator/prometheus-config-reloader
-      tag: v0.91.0@sha256:7d9e4eea5f1139e602508871f422b0116c60e87c662f3dcd234d5ab60cd0d8c1
+      tag: v0.92.0@sha256:3c48ed36b8a6a73a0b11a6e90a194fabf4069e76f32a44fece174b4d64e8ab0f
 
     securityContext:
       allowPrivilegeEscalation: false
