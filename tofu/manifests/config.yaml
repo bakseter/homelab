@@ -1,13 +1,13 @@
 nodes:
   m715q:
     cores: 4
-    memory: 32
+    memory: 24
     ip: 192.168.10.20
     virtualNodes:
       - hostname: m715q-worker-1
         type: worker
         cores: 4
-        memory: 24
+        memory: 18
         disk: 100
         ip: 192.168.30.111
         longhorn:
@@ -94,20 +94,16 @@ nodes:
 
   m70qg3:
     cores: 12
-    memory: 16
+    memory: 32
     ip: 192.168.10.24
     disk: 200
     virtualNodes:
       - hostname: m70qg3-worker-1
         type: worker
         cores: 12
-        memory: 12
+        memory: 24
         disk: 200
         ip: 192.168.30.141
-        #       longhorn:
-        #         enabled: true
-        #         diskSize: 931
-        #         pathInDatastore: '' # ls -l /dev/disk/by-id/
         igpu:
           enabled: true
           pci_id: '0000:00:02.0'
