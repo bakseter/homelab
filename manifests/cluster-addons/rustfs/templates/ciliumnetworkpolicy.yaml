@@ -6,7 +6,6 @@ metadata:
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/instance: rustfs
       app.kubernetes.io/name: rustfs
 
   ingress:

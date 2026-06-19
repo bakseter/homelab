@@ -1,60 +1,6 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: rustfs
-  namespace: monitoring
-spec:
-  endpointSelector:
-    matchLabels:
-      app.kubernetes.io/instance: loki
-      app.kubernetes.io/name: rustfs
-
-  ingress:
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: compactor
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: distributor
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: index-gateway
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: ingester
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: query-frontend
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: query-scheduler
-        - matchLabels:
-            app.kubernetes.io/name: loki
-            app.kubernetes.io/component: querier
-        - matchLabels:
-            app.kubernetes.io/instance: loki
-            app.kubernetes.io/name: create-s3-buckets
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
-
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
-            app.kubernetes.io/name: envoy
-            gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-int
-      toPorts:
-        - ports:
-            - port: '9001'
-              protocol: TCP
-
-  egress: []
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
   name: loki-create-s3-buckets
   namespace: monitoring
 spec:
@@ -80,7 +26,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/instance: loki
+            k8s:io.kubernetes.pod.namespace: rustfs
             app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
