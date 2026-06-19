@@ -183,9 +183,9 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
     for_each = try(each.value.igpu.enabled, false) ? [each.value.igpu] : []
 
     content {
-      device  = "hostpci0"
-      id      = hostpci.value.pci_id
-      pcie    = true # changed: PCIe mode required for 12th gen Alder Lake
+      device = "hostpci0"
+      id     = hostpci.value.pci_id
+      # pcie    = true # changed: PCIe mode required for 12th gen Alder Lake
       rombar  = true
       mapping = null
     }
