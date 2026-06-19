@@ -103,7 +103,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/instance: loki
+            k8s:io.kubernetes.pod.namespace: rustfs
             app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
@@ -214,7 +214,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/instance: loki
+            k8s:io.kubernetes.pod.namespace: rustfs
             app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
@@ -445,7 +445,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/instance: loki
+            k8s:io.kubernetes.pod.namespace: rustfs
             app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
@@ -546,7 +546,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/instance: loki
+            k8s:io.kubernetes.pod.namespace: rustfs
             app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
@@ -639,7 +639,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/instance: loki
+            k8s:io.kubernetes.pod.namespace: rustfs
             app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
@@ -707,7 +707,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/instance: loki
+            k8s:io.kubernetes.pod.namespace: rustfs
             app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
