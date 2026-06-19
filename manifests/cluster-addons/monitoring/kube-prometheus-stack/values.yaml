@@ -194,15 +194,27 @@ kube-prometheus-stack:
           regex: pod
 
   kube-state-metrics:
+    revisionHistoryLimit: 5
+
     image:
       registry: registry.k8s.io
       repository: kube-state-metrics/kube-state-metrics
       tag: 2.19.1@sha256:85108987d044b18a098126732f98602df408888c0f7d456241f5abefb9744bc1
 
-    revisionHistoryLimit: 5
-
   prometheusOperator:
     revisionHistoryLimit: 5
+
+    image:
+      registry: quay.io
+      repository: prometheus-operator/prometheus-operator
+      tag: v0.91.0@sha256:9e53e13139218aca79ee000172de73355e9174ef2904585bfad9497fc71aae2d
+
+    prometheusConfigReloader:
+      image:
+        registry: quay.io
+        repository: prometheus-operator/prometheus-config-reloader
+        tag: v0.91.0@sha256:7d9e4eea5f1139e602508871f422b0116c60e87c662f3dcd234d5ab60cd0d8c1
+
 
   nodeExporter:
     operatingSystems:
@@ -212,6 +224,11 @@ kube-prometheus-stack:
         enabled: false
 
   prometheus-node-exporter:
+    image:
+      registry: quay.io
+      repository: prometheus/node-exporter
+      tag: v1.11.1-distroless@sha256:6112664fd761bb964d8a2d3d0119d6c8402618a89edbb3a43c8f7b4090fb53c9
+
     prometheus:
       monitor:
         relabelings:
