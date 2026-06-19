@@ -1,11 +1,7 @@
 apiVersion: v2
-name: monitoring-umbrella
+name: loki-umbrella
 version: 0.1.0
 dependencies:
   - name: loki
     version: 17.3.1
     repository: oci://ghcr.io/grafana-community/helm-charts
-  - name: rustfs
-    alias: rustfs
-    version: 0.8.0
-    repository: https://charts.rustfs.com

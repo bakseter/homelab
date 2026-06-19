@@ -18,11 +18,11 @@ loki:
 
     storage_config:
       aws:
-        endpoint: http://loki-rustfs-svc.monitoring.svc.cluster.local:9000
+        endpoint: http://rustfs-svc.rustfs.svc.cluster.local:9000
         bucketnames: loki-chunks
         s3forcepathstyle: true
-        access_key_id: rustfsloki
-        secret_access_key: rustfsloki
+        access_key_id: rustfs
+        secret_access_key: rustfs
         insecure: true
 
     storage:
@@ -32,10 +32,10 @@ loki:
         ruler: loki-ruler
         admin: loki-admin
       s3:
-        endpoint: http://loki-rustfs-svc.monitoring.svc.cluster.local:9000
+        endpoint: http://rustfs-svc.rustfs.svc.cluster.local:9000
         region: us-east-1
-        secretAccessKey: rustfsloki
-        accessKeyId: rustfsloki
+        secretAccessKey: rustfs
+        accessKeyId: rustfr
         signatureVersion: v4
         s3ForcePathStyle: true
         insecure: true
@@ -138,43 +138,3 @@ loki:
     replicas: 0
   singleBinary:
     replicas: 0
-
-rustfs:
-  image:
-    rustfs:
-      repository: rustfs/rustfs
-      tag: 1.0.0-beta.8@sha256:fa19210ac4697c79d7ccca1ec9b0eb91aebacc6691991ffb14014bb3c67e6cc3
-    initImage:
-      repository: busybox
-      tag: stable@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
-
-  mode:
-    standalone:
-      enabled: true
-
-    distributed:
-      enabled: false
-
-  replicaCount: 2
-
-  config:
-    rustfs:
-      log_level: warn
-
-  secret:
-    rustfs:
-      access_key: rustfsloki
-      secret_key: rustfsloki
-
-  storageclass:
-    name: longhorn
-    dataStorageSize: 20Gi
-    logStorageSize: 2Gi
-
-  ingress:
-    enabled: false
-
-  podSecurityContext:
-    fsGroupChangePolicy: OnRootMismatch
-    seccompProfile:
-      type: RuntimeDefault

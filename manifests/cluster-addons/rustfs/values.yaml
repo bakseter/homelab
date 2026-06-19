@@ -14,7 +14,7 @@ rustfs:
     distributed:
       enabled: false
 
-  replicaCount: 0
+  replicaCount: 2
 
   config:
     rustfs:
