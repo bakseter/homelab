@@ -5,11 +5,12 @@ export TALOS_VERSION=1.13.4
 
 # Controlplane nodes, one at a time.
 #
-# Extensions: none
+# Extensions:
+# - qemu-guest-agent
 
-talosctl -n 192.168.30.100 upgrade --image factory.talos.dev/nocloud-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v${TALOS_VERSION}
-talosctl -n 192.168.30.110 upgrade --image factory.talos.dev/nocloud-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v${TALOS_VERSION}
-talosctl -n 192.168.30.120 upgrade --image factory.talos.dev/nocloud-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v${TALOS_VERSION}
+talosctl -n 192.168.30.100 upgrade --image factory.talos.dev/nocloud-installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v${TALOS_VERSION}
+talosctl -n 192.168.30.120 upgrade --image factory.talos.dev/nocloud-installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v${TALOS_VERSION}
+talosctl -n 192.168.30.130 upgrade --image factory.talos.dev/nocloud-installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v${TALOS_VERSION}
 
 # Intel worker nodes, one at a time.
 #
