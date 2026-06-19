@@ -9,6 +9,21 @@ node-feature-discovery:
       seccompProfile:
         type: RuntimeDefault
 
+    tolerations: []  # remove the control-plane toleration
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: node-role.kubernetes.io/control-plane
+                  operator: DoesNotExist
+  resources:
+    limits:
+      memory: 512Mi  # 4Gi default is absurd for what NFD master actually does
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
   worker:
     securityContext:
       seccompProfile:
