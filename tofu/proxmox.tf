@@ -184,9 +184,9 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
 
     content {
       device  = "hostpci0"
-      id      = hostpci.value.pci_id # e.g. "0000:00:02.0"
-      pcie    = try(hostpci.value.pcie, false)
-      rombar  = try(hostpci.value.rombar, true)
+      id      = hostpci.value.pci_id
+      pcie    = true # changed: PCIe mode required for 12th gen Alder Lake
+      rombar  = true
       mapping = null
     }
   }

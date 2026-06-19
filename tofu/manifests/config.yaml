@@ -65,8 +65,6 @@ nodes:
         igpu:
           enabled: true
           pci_id: '0000:00:02.0'
-          pcie: false
-          rombar: true
 
   m920q:
     cores: 6
@@ -93,8 +91,6 @@ nodes:
         igpu:
           enabled: true
           pci_id: '0000:00:02.0'
-          pcie: false
-          rombar: true
 
   m70qg3:
     cores: 12
@@ -108,12 +104,10 @@ nodes:
         memory: 12
         disk: 200
         ip: 192.168.30.141
-#       longhorn:
-#         enabled: true
-#         diskSize: 931
-#         pathInDatastore: '' # ls -l /dev/disk/by-id/
+        #       longhorn:
+        #         enabled: true
+        #         diskSize: 931
+        #         pathInDatastore: '' # ls -l /dev/disk/by-id/
         igpu:
           enabled: true
           pci_id: '0000:00:02.0'
-          pcie: false
-          rombar: true
