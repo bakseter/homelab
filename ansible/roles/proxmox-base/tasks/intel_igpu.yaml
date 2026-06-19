@@ -32,24 +32,23 @@
 - name: Set required GRUB kernel parameters
   ansible.builtin.replace:
     path: /etc/default/grub
-    regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT=")([^"]*?)(\s*intel_iommu=on)?(\s*iommu=pt)?(\s*i915\.enable_guc=\d)?(\s*i915\.enable_fbc=\d)?(\s*video=efifb:off)?(\s*video=vesa:off)?([^"]*)"'
-    replace: '\1\2 intel_iommu=on iommu=pt i915.enable_guc=0 i915.enable_fbc=0 video=efifb:off video=vesa:off\9"'
-  notify:
-    - Update grub
-    - Update initramfs
-
-- name: Update initramfs
-  ansible.builtin.command: update-initramfs -u -k all
-  changed_when: true
-  listen: Update initramfs
+    regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT=")([^"]*)"'
+    replace: '\1\2 intel_iommu=on iommu=pt i915.enable_guc=0 i915.enable_fbc=0 video=efifb:off video=vesa:off"'
+  register: grub_changed
 
 - name: Update grub
   ansible.builtin.command: update-grub
+  when: grub_changed.changed
   changed_when: true
-  listen: Update grub
+
+- name: Update initramfs
+  ansible.builtin.command: update-initramfs -u -k all
+  when: grub_changed.changed
+  changed_when: true
 
 - name: Reboot host
   ansible.builtin.reboot:
     reboot_timeout: 300
     post_reboot_delay: 30
     msg: 'Rebooting for VFIO/iGPU passthrough changes'
+  when: grub_changed.changed
