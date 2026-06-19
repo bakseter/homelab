@@ -23,9 +23,9 @@ spec:
           image: amazon/aws-cli:2.34.46@sha256:c9756d3e11fdfc02497e980c1cb94c678c31b6e38c93f6443291e52f71493720
           env:
             - name: AWS_ACCESS_KEY_ID
-              value: 'rustfsloki'
+              value: 'rustfs'
             - name: AWS_SECRET_ACCESS_KEY
-              value: 'rustfsloki'
+              value: 'rustfs'
             - name: AWS_DEFAULT_REGION
               value: 'us-east-1'
           command:
@@ -33,7 +33,7 @@ spec:
             - -c
             - |
               set -e
-              ENDPOINT="http://loki-rustfs-svc.monitoring.svc.cluster.local:9000"
+              ENDPOINT="http://rustfs-svc.rustfs.svc.cluster.local:9000"
               BUCKETS="loki-chunks loki-ruler loki-admin"
 
               echo "Testing connectivity..."
