@@ -227,7 +227,8 @@ kube-prometheus-stack:
     image:
       registry: quay.io
       repository: prometheus/node-exporter
-      tag: v1.11.1-distroless@sha256:6112664fd761bb964d8a2d3d0119d6c8402618a89edbb3a43c8f7b4090fb53c9
+      tag: v1.11.1-distroless
+      digest: sha256:6112664fd761bb964d8a2d3d0119d6c8402618a89edbb3a43c8f7b4090fb53c9
 
     prometheus:
       monitor:
