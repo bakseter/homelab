@@ -3,5 +3,6 @@ name: technitium-umbrella
 version: 0.1.0
 dependencies:
   - name: technitium-dnsserver
+    alias: technitium
     version: 1.11.0
     repository: https://charts.obeone.cloud

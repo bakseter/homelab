@@ -1,4 +1,4 @@
-technitum:
+technitium:
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
