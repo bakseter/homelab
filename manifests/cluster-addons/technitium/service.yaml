@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium
+  namespace: technitium
+spec:
+  ports:
+    - port: 5380
+      targetPort: 5380
+      protocol: TCP
+    - port: 53
+      targetPort: 53
+      protocol: TCP
+    - port: 53
+      targetPort: 53
+      protocol: UDP
