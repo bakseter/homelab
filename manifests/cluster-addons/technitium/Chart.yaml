@@ -1,7 +1,7 @@
 apiVersion: v2
-name: technitum-umbrella
+name: technitium-umbrella
 version: 0.1.0
 dependencies:
-  - name: technitum-dnsserver
+  - name: technitium-dnsserver
     version: 1.11.0
     repository: https://charts.obeone.cloud
