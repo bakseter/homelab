@@ -5,12 +5,15 @@ metadata:
   namespace: technitium
 spec:
   ports:
-    - port: 5380
+    - name: http-ui
+      port: 5380
       targetPort: 5380
       protocol: TCP
-    - port: 53
-      targetPort: 53
-      protocol: TCP
-    - port: 53
+    - name: dns-udp
+      port: 53
       targetPort: 53
       protocol: UDP
+    - name: dns-tcp
+      port: 53
+      targetPort: 53
+      protocol: TCP
