@@ -35,10 +35,10 @@ spec:
             - name: dns-https-1.1/2
               containerPort: 443
               protocol: TCP
-            - name: dns-http-reverse-proxy1
+            - name: dns-http-1
               containerPort: 80
               protocol: TCP
-            - name: dns-http-reverse-proxy2
+            - name: dns-http-2
               containerPort: 8053
               protocol: TCP
             - name: dhcp
