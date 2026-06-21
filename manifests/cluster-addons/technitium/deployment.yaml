@@ -82,8 +82,7 @@ spec:
           type: RuntimeDefault
       volumes:
         - name: config
-          # persistentVolumeClaim:
-          #   claimName: technitium-config
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: technitium-config
         - name: logs
           emptyDir: {}
