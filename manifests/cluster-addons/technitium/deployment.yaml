@@ -73,6 +73,12 @@ spec:
           volumeMounts:
             - name: logs
               mountPath: /var/log/technitium/dns
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
       securityContext:
         fsGroup: 65534
         runAsGroup: 65534
