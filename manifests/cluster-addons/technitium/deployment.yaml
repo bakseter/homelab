@@ -49,11 +49,9 @@ spec:
               value: '1'
             - name: DNS_SERVER_BLOCK_LIST_URLS
               value: 'https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro-onlydomains.txt'
-            - name: DNS_SERVER_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: technitium
-                  key: password
+          envFrom:
+            - secretRef:
+                name: technitium
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
