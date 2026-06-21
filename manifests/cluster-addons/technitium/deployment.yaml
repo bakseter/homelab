@@ -6,8 +6,6 @@ metadata:
 spec:
   replicas: 1
   revisionHistoryLimit: 5
-  strategy:
-    type: RollingUpdate
   template:
     spec:
       containers:
@@ -76,7 +74,8 @@ spec:
           type: RuntimeDefault
       volumes:
         - name: config
-          persistentVolumeClaim:
-            claimName: technitium-config
+          # persistentVolumeClaim:
+          #   claimName: technitium-config
+          emptyDir: {}
         - name: logs
           emptyDir: {}
