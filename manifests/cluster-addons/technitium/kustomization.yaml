@@ -7,9 +7,8 @@ labels:
       app.kubernetes.io/name: technitium
 
 resources:
-  - deployment.yaml
+  - statefulset.yaml
   - service.yaml
   - httproute.yaml
   - loadbalancer.yaml
   - sealedsecret.yaml
-  - persistentvolumeclaim.yaml
