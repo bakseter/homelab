@@ -49,6 +49,10 @@ spec:
               value: '1'
             - name: DNS_SERVER_BLOCK_LIST_URLS
               value: 'https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro-onlydomains.txt'
+            - name: DNS_SERVER_FORWARDERS
+              value: '1.1.1.1,8.8.8.8'
+            - name: DNS_SERVER_ENABLE_BLOCKING
+              value: 'true'
           envFrom:
             - secretRef:
                 name: technitium
