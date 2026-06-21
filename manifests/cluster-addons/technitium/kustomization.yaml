@@ -10,6 +10,5 @@ resources:
   - deployment.yaml
   - service.yaml
   - httproute.yaml
-  - persistentvolumeclaim.yaml
   - loadbalancer.yaml
   - sealedsecret.yaml
