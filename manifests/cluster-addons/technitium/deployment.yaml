@@ -44,6 +44,18 @@ spec:
             - name: dhcp
               containerPort: 67
               protocol: UDP
+          env:
+            - name: DNS_SERVER_DOMAIN
+              value: dns.local
+            - name: DNS_SERVER_LOG_MAX_LOG_FILE_DAYS
+              value: '1'
+            - name: DNS_SERVER_BLOCK_LIST_URLS
+              value: 'https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro-onlydomains.txt'
+            - name: DNS_SERVER_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: technitium
+                  key: password
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

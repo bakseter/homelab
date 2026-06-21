@@ -6,16 +6,24 @@ metadata:
 spec:
   type: kube-apiserver
   replicas: 2
-  tags: ['tag:k8s']
   kubeAPIServer:
     mode: auth
 ---
 apiVersion: tailscale.com/v1alpha1
 kind: ProxyGroup
 metadata:
-  name: ingress
+  name: envoy-gateway
   namespace: tailscale
 spec:
   type: ingress
   replicas: 2
-  tags: ['tag:k8s']
+---
+apiVersion: tailscale.com/v1alpha1
+kind: ProxyGroup
+metadata:
+  name: technitium
+  namespace: tailscale
+spec:
+  type: ingress
+  replicas: 2
+  tags: ['tag:k8s', 'tag:dns']

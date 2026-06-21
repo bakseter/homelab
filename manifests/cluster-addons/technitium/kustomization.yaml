@@ -11,3 +11,4 @@ resources:
   - service.yaml
   - httproute.yaml
   - persistentvolumeclaim.yaml
+  - loadbalancer.yaml
