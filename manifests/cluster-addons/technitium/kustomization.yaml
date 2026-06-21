@@ -12,3 +12,4 @@ resources:
   - httproute.yaml
   - persistentvolumeclaim.yaml
   - loadbalancer.yaml
+  - sealedsecret.yaml
