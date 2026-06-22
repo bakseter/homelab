@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pihole-sync
+  namespace: pihole
+spec:
+  jobTemplate:
+    metadata:
+      name: pihole-sync
+    spec:
+      template:
+        spec:
+          containers:
+            - name: pihole-sync
+              image: ghcr.io/lovelaze/nebula-sync:v0.11.2@sha256:951576b448c08df16cc6b46f90cc3b40c44e10dfb56e431dfd0f1ead7d435724
+              securityContext:
+                allowPrivilegeEscalation: true
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+              env:
+                - name: PRIMARY
+                  valueFrom:
+                    secretKeyRef:
+                      name: pihole-sync
+                      key: primary
+                - name: REPLICAS
+                  valueFrom:
+                    secretKeyRef:
+                      name: pihole-sync
+                      key: replicas
+                - name: FULL_SYNC
+                  value: 'true'
+                - name: RUN_GRAVITY
+                  value: 'true'
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 64Mi
+                limits:
+                  cpu: 100m
+                  memory: 128Mi
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            runAsGroup: 65534
+            fsGroup: 65534
+            seccompProfile:
+              type: RuntimeDefault
+          restartPolicy: OnFailure
+  schedule: '*/15 * * * *'
