@@ -37,6 +37,18 @@ spec:
       port: 53443
       targetPort: 53443
       protocol: TCP
+    - name: dns-udp
+      port: 53
+      targetPort: 53
+      protocol: UDP
+    - name: dns-tcp
+      port: 53
+      targetPort: 53
+      protocol: TCP
+    - name: http-web
+      port: 5380
+      targetPort: 5380
+      protocol: TCP
 ---
 apiVersion: v1
 kind: Service
@@ -52,6 +64,18 @@ spec:
       port: 53443
       targetPort: 53443
       protocol: TCP
+    - name: dns-udp
+      port: 53
+      targetPort: 53
+      protocol: UDP
+    - name: dns-tcp
+      port: 53
+      targetPort: 53
+      protocol: TCP
+    - name: http-web
+      port: 5380
+      targetPort: 5380
+      protocol: TCP
 ---
 apiVersion: v1
 kind: Service
@@ -66,4 +90,16 @@ spec:
     - name: cluster-tcp
       port: 53443
       targetPort: 53443
+      protocol: TCP
+    - name: dns-udp
+      port: 53
+      targetPort: 53
+      protocol: UDP
+    - name: dns-tcp
+      port: 53
+      targetPort: 53
+      protocol: TCP
+    - name: http-web
+      port: 5380
+      targetPort: 5380
       protocol: TCP
