@@ -8,7 +8,6 @@ labels:
 
 resources:
   - statefulset.yaml
-  - service.yaml
   - httproute.yaml
   - loadbalancer.yaml
   - sealedsecret.yaml

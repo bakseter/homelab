@@ -10,6 +10,10 @@ spec:
   type: LoadBalancer
   loadBalancerClass: tailscale
   ports:
+    - name: cluster-tcp
+      port: 53443
+      targetPort: 53443
+      protocol: TCP
     - name: dns-udp
       port: 53
       targetPort: 53
