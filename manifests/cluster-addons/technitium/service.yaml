@@ -22,3 +22,17 @@ spec:
       port: 5380
       targetPort: 5380
       protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium-primary
+spec:
+  type: ClusterIP
+  selector:
+    statefulset.kubernetes.io/pod-name: technitium-0
+  ports:
+    - name: cluster-tcp
+      port: 53443
+      targetPort: 53443
+      protocol: TCP
