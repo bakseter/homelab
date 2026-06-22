@@ -5,7 +5,7 @@ metadata:
   namespace: technitium
 spec:
   serviceName: technitium
-  replicas: 2
+  replicas: 3
   revisionHistoryLimit: 5
   template:
     spec:
@@ -66,6 +66,8 @@ spec:
               mountPath: /etc/dns
             - name: logs
               mountPath: /var/log/technitium/dns
+            - name: tmp
+              mountPath: /tmp
         - name: log-collector
           image: busybox:stable@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
           command: ['sh', '-c', 'tail -n+1 -F /var/log/technitium/dns/*.log']
@@ -77,6 +79,7 @@ spec:
             capabilities:
               drop:
                 - ALL
+              add: [NET_BIND_SERVICE]
             readOnlyRootFilesystem: true
       securityContext:
         fsGroup: 65534
@@ -87,6 +90,8 @@ spec:
           type: RuntimeDefault
       volumes:
         - name: logs
+          emptyDir: {}
+        - name: tmp
           emptyDir: {}
   volumeClaimTemplates:
     - metadata:
