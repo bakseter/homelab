@@ -28,7 +28,7 @@ metadata:
     l2-announce: 'true'
 spec:
   type: LoadBalancer
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
   ports:
     - name: console-http
       port: 5380
