@@ -13,8 +13,11 @@ spec:
         - name: technitium
           image: technitium/dns-server:15.2.0@sha256:23d3b63d959e997800b095fe93009b3fae271b5258234ff2ade8535cb33682c8
           ports:
-            - name: http-ui
+            - name: console-http
               containerPort: 5380
+              protocol: TCP
+            - name: console-https
+              containerPort: 53443
               protocol: TCP
             - name: dns-udp
               containerPort: 53

@@ -21,5 +21,5 @@ spec:
       backendRefs:
         - group: ''
           kind: Service
-          name: technitium
+          name: technitium-ui
           port: 5380

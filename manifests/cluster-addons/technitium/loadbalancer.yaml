@@ -29,7 +29,11 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - name: cluster-tcp
+    - name: console-http
+      port: 5380
+      targetPort: 5380
+      protocol: TCP
+    - name: console-https
       port: 53443
       targetPort: 53443
       protocol: TCP
@@ -41,3 +45,14 @@ spec:
       port: 53
       targetPort: 53
       protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium-ui
+  namespace: technitium
+spec:
+  ports:
+    - name: console-http
+      port: 5380
+      targetPort: 5380
