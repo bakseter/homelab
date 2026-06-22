@@ -2,12 +2,12 @@ admin:
   existingSecret: pihole
   passwordKey: password
 
-  serviceDns:
-    mixedService: true
-    type: LoadBalancer
-    loadBalancerClass: tailscale
-    annotations:
-      tailscale.com/hostname: dns
+serviceDns:
+  mixedService: true
+  type: LoadBalancer
+  loadBalancerClass: tailscale
+  annotations:
+    tailscale.com/hostname: dns
 
-  extraEnvVars:
-    FTLCONF_dns_listeningMode: all
+extraEnvVars:
+  FTLCONF_dns_listeningMode: all
