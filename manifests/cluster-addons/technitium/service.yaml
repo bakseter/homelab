@@ -27,10 +27,41 @@ apiVersion: v1
 kind: Service
 metadata:
   name: technitium-primary
+  namespace: technitium
 spec:
   type: ClusterIP
   selector:
     statefulset.kubernetes.io/pod-name: technitium-0
+  ports:
+    - name: cluster-tcp
+      port: 53443
+      targetPort: 53443
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium-secondary
+  namespace: technitium
+spec:
+  type: ClusterIP
+  selector:
+    statefulset.kubernetes.io/pod-name: technitium-1
+  ports:
+    - name: cluster-tcp
+      port: 53443
+      targetPort: 53443
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium-tertiary
+  namespace: technitium
+spec:
+  type: ClusterIP
+  selector:
+    statefulset.kubernetes.io/pod-name: technitium-2
   ports:
     - name: cluster-tcp
       port: 53443
