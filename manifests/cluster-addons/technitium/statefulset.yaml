@@ -9,16 +9,9 @@ spec:
   revisionHistoryLimit: 5
   template:
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: technitium
-              topologyKey: bakseter.net/physical-node
       containers:
         - name: technitium
-          image: technitium/dns-server:14.3.0@sha256:322b236403ca25028032f28736e2270a860527b030b162c9f82451c6494c4698
+          image: technitium/dns-server:15.2.0@sha256:23d3b63d959e997800b095fe93009b3fae271b5258234ff2ade8535cb33682c8
           ports:
             - name: http-ui
               containerPort: 5380
