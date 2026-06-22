@@ -4,7 +4,7 @@ metadata:
   name: technitium
   namespace: technitium
 spec:
-  serviceName: technitium-lan
+  serviceName: technitium
   replicas: 2
   revisionHistoryLimit: 5
   template:
@@ -44,8 +44,6 @@ spec:
               containerPort: 67
               protocol: UDP
           env:
-            - name: DNS_SERVER_DOMAIN
-              value: dns.local
             - name: DNS_SERVER_LOG_MAX_LOG_FILE_DAYS
               value: '1'
             - name: DNS_SERVER_BLOCK_LIST_URLS
