@@ -27,7 +27,7 @@
       community.routeros.api:
         path: ip firewall filter
         remove: "{{ item['.id'] }}"
-      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|proxmox-to-talos|proxmox-to-infra|infra-to-proxmox|infra-to-talos|infra-to-storage|talos-to-proxmox-prometheus-node-exporter|talos-to-infra|talos-to-storage|all-to-talos-cilium-subnet|all-to-media|media-to-wifi|drop-wifi-to-interal|drop-media-to-internal|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-all-inter-vlan|drop-wifi-router-mgmt') | list }}"
+      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|proxmox-to-talos|proxmox-to-infra|infra-to-proxmox|infra-to-talos|infra-to-storage|talos-to-proxmox-prometheus-node-exporter|talos-to-wifi|talos-to-infra|talos-to-storage|all-to-talos-cilium-subnet|all-to-media|media-to-wifi|drop-wifi-to-interal|drop-media-to-internal|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-all-inter-vlan|drop-wifi-router-mgmt') | list }}"
       ignore_errors: true
 
     # -------------------------
@@ -338,6 +338,13 @@
       community.routeros.api:
         path: ip firewall filter
         cmd: 'add chain=forward src-address=192.168.30.0/24 dst-address=192.168.10.0/24 dst-port=9100 protocol=tcp action=accept comment=talos-to-proxmox-prometheus-node-exporter'
+
+    # Technitium DNS secondary
+    # TODO: move to own VLAN
+    - name: Allow Talos to WiFi
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: 'add chain=forward src-address=192.168.30.0/24 dst-address=192.168.50.0/24 action=accept comment=talos-to-wifi'
 
     # Tailscale peer relay
     - name: Allow Talos to infra
