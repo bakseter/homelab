@@ -5,7 +5,7 @@ metadata:
   namespace: technitium
 spec:
   serviceName: technitium
-  replicas: 1
+  replicas: 3
   revisionHistoryLimit: 5
   template:
     spec:
@@ -25,30 +25,7 @@ spec:
             - name: dns-tcp
               containerPort: 53
               protocol: TCP
-            - name: dns-quic
-              containerPort: 853
-              protocol: UDP
-            - name: dns-tls
-              containerPort: 853
-              protocol: TCP
-            - name: dns-https-3
-              containerPort: 443
-              protocol: UDP
-            - name: dns-https-1-2
-              containerPort: 443
-              protocol: TCP
-            - name: dns-http-1
-              containerPort: 80
-              protocol: TCP
-            - name: dns-http-2
-              containerPort: 8053
-              protocol: TCP
-            - name: dhcp
-              containerPort: 67
-              protocol: UDP
           env:
-            - name: DNS_SERVER_DOMAIN
-              value: 'dns1'
             - name: DNS_SERVER_LOG_MAX_LOG_FILE_DAYS
               value: '1'
             - name: DNS_SERVER_BLOCK_LIST_URLS
