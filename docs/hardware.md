@@ -15,7 +15,7 @@ Rule of thumb is any workload should run inside Talos cluster as a Kubernetes po
 
 **CPU**: AMD Ryzen 3 PRO 2200GE (4 cores)
 
-**RAM**: 32GB DDR4 3200MHz SODIMM
+**RAM**: 24GB DDR4 2667Mhz SODIMM
 
 **Boot drive**: 256GB NVMe SSD
 
@@ -79,13 +79,25 @@ Rule of thumb is any workload should run inside Talos cluster as a Kubernetes po
 
 **NIC 2**: 2.5Gbe
 
+### `m70qg3`
+
+**OS**: Proxmox Virtual Environment
+
+**Model**: Lenovo Thinkcentre M70q Gen 3
+
+**CPU**: Intel Core i5-12400T (6 cores)
+
+**RAM**: 32GB DDR4 3200MHz SODIMM
+
+**Boot drive**: 256GB Generic NVMe SSD
+
+**NIC 1**: 1Gbe
+
 ## Management node
 
 Manages the rest of the homelab via OpenTofu and Ansible.
 Has direct access to e.g. the Proxmox/Talos cluster and NAS VLANs.
 Available via Tailscale only.
-
-Also runs a DNS server (Pihole), used as Tailscale primary DNS.
 
 ### `infra`
 
@@ -123,20 +135,31 @@ Used as dedicated Kubernetes storage via NFS (democratic-csi).
 
 **NIC 2**: 2.5Gbe
 
-## Networking
+## Backup DNS
 
-### Telia C1 Smart Router
+Runs backup Technitium DNS server.
+Available via Tailscale.
+
+### `pi`
+
+**OS**: Raspberry Pi OS Lite
+
+**Model**: Rasbpberry Pi Model 3B+
+
+# Networking
+
+## Telia C1 Smart Router
 
 Used only as modem, set to "bridge mode".
 
-### Mikrotik hAP ax3
+## Mikrotik hAP ax3
 
 Main router, connected to modem.
 
-### Mikrotik hAP ax S
+## Mikrotik hAP ax S
 
 Connected to main router via fiber, used as WiFi extender.
 
-### TP-Link SG108E
+## TP-Link SG108E
 
 Managed Gigabit switch, connected to main router via ethernet.
