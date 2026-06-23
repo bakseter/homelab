@@ -22,7 +22,6 @@ resource "tailscale_dns_nameservers" "global" {
     local.technitium_tailscale_ips,
     toset([
       "1.1.1.1",
-      "8.8.8.8",
     ])
   )
 }
