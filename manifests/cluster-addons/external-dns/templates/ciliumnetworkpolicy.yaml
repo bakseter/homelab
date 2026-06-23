@@ -21,6 +21,16 @@ spec:
             dns:
               - matchPattern: 'technitium-primary.technitium.svc.cluster.local'
 
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: technitium
+            app.kubernetes.io/name: technitium
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+
+
     - toEntities:
         - kube-apiserver
       toPorts:
