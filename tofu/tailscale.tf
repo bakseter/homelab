@@ -5,29 +5,30 @@ provider "tailscale" {
 }
 
 locals {
-  technitium_tailscale_ips = toset([
+  technitium_tailscale_ips = [
     "100.85.36.251", # k8s
     "100.88.208.56", # pi
-  ])
+  ]
 
-  domains = toset([
+  domains = [
     "bakseter.net",
     "int.bakseter.net",
     "sre.bakseter.net",
-  ])
+  ]
 }
 
 resource "tailscale_dns_nameservers" "global" {
-  nameservers = setunion(
+  nameservers = concat(
     local.technitium_tailscale_ips,
-    toset([
+    [
       "1.1.1.1",
-    ])
+      "8.8.8.8",
+    ]
   )
 }
 
 resource "tailscale_dns_split_nameservers" "domains" {
-  for_each = local.domains
+  for_each = toset(local.domains)
 
   domain      = each.key
   nameservers = local.technitium_tailscale_ips
