@@ -1,13 +1,13 @@
 provider "tailscale" {
   oauth_client_id     = var.tailscale_oauth_client_id
   oauth_client_secret = var.tailscale_oauth_client_secret
-  tailnet             = "bakseter"
+  tailnet             = "bakseter.github"
 }
 
 locals {
   technitium_tailscale_ips = toset([
     "100.85.36.251", # k8s
-    #   "100.88.208.56", # pi
+    "100.88.208.56", # pi
   ])
 
   domains = toset([
