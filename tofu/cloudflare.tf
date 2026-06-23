@@ -6,8 +6,8 @@ provider "cloudflare" {
 locals {
   envoy_gateway = "http://envoy-cloudflared-cloudflared-gateway-7fece151.envoy-gateway-system.svc.cluster.local:80"
   public_domains = [
-    "bakseter.net",
-    # "bakseter.no",
+    "bakseter.no",
+    # # "bakseter.net",
     # "mandagsmiddag.no",
   ]
 }
@@ -23,47 +23,29 @@ resource "cloudflare_zone" "domain" {
   type = "full"
 }
 
-resource "random_id" "tunnel-secret" {
-  for_each = toset(local.public_domains)
-
+resource "random_id" "homelab" {
   byte_length = 35
 }
 
-resource "cloudflare_zero_trust_tunnel_cloudflared" "tunnel" {
-  for_each = toset(local.public_domains)
-
+resource "cloudflare_zero_trust_tunnel_cloudflared" "homelab" {
   account_id    = var.cloudflare_account_id
-  name          = each.key
+  name          = "homelab"
   config_src    = "cloudflare"
-  tunnel_secret = random_id.tunnel-secret[each.key].b64_std
+  tunnel_secret = sensitive(random_id.homelab.b64_std)
 }
 
 data "cloudflare_zero_trust_tunnel_cloudflared_token" "token" {
-  for_each = toset(local.public_domains)
-
   account_id = var.cloudflare_account_id
-  tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.tunnel[each.key].id
+  tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab.id
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "config" {
-  for_each = toset(local.public_domains)
-
   account_id = var.cloudflare_account_id
-  tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.tunnel[each.key].id
+  tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.homelab.id
   source     = "cloudflare"
 
   config = {
-    ingress = [
-      {
-        hostname = each.key
-        service  = local.envoy_gateway
-      },
-      {
-        hostname = "*.${each.key}"
-        service  = local.envoy_gateway
-      },
-      { service = "http_status:404" }
-    ]
+    ingress = []
   }
 }
 
@@ -72,7 +54,7 @@ resource "cloudflare_dns_record" "tunnel" {
 
   zone_id = cloudflare_zone.domain[each.key].id
   name    = each.key
-  content = "${cloudflare_zero_trust_tunnel_cloudflared.tunnel[each.key].id}.cfargotunnel.com"
+  content = "${cloudflare_zero_trust_tunnel_cloudflared.homelab.id}.cfargotunnel.com"
   type    = "CNAME"
   ttl     = 1
   proxied = true
