@@ -9,6 +9,13 @@ spec:
   ingress: []
 
   egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
+
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: kube-system
@@ -30,17 +37,9 @@ spec:
             - port: '53'
               protocol: ANY
 
-
-    - toEntities:
-        - kube-apiserver
-      toPorts:
-        - ports:
-            - port: '6443'
-              protocol: TCP
-
     - toCIDR:
-        - 192.168.60.200/32 # pihole
+        - 192.168.50.177/32 # pi
       toPorts:
         - ports:
-            - port: '8080'
-              protocol: TCP
+            - port: '53'
+              protocol: ANY
