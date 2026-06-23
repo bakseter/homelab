@@ -18,33 +18,3 @@ spec:
       port: 53
       targetPort: 53
       protocol: TCP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: technitium-lan
-  namespace: technitium
-  labels:
-    l2-announce: 'true'
-spec:
-  type: LoadBalancer
-  externalTrafficPolicy: Cluster
-  selector:
-    statefulset.kubernetes.io/pod-name: technitium-0
-  ports:
-    - name: console-http
-      port: 5380
-      targetPort: 5380
-      protocol: TCP
-    - name: console-https
-      port: 53443
-      targetPort: 53443
-      protocol: TCP
-    - name: dns-udp
-      port: 53
-      targetPort: 53
-      protocol: UDP
-    - name: dns-tcp
-      port: 53
-      targetPort: 53
-      protocol: TCP
