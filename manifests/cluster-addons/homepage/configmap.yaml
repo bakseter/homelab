@@ -248,6 +248,13 @@ data:
             podSelector: >-
               app=longhorn-ui
 
+        - Technitium:
+            href: https://technitium.int.bakseter.net
+            description: DNS server
+            icon: technitium.svg
+            namespace: technitium
+            app: technitium
+
         - RustFS:
             href: https://rustfs.int.bakseter.net
             description: S3 storage
@@ -284,18 +291,6 @@ data:
             namespace: monitoring
             app: alertmanager
 
-  bookmarks.yaml: |
-    - Quick links:
-        - GitHub:
-            - abbr: GH
-              href: https://github.com/bakseter/homelab
-        - Artifact Hub:
-            - abbr: AH
-              href: https://artifacthub.io
-        - Bitwarden:
-            - abbr: BW
-              href: https://vault.bakseter.net
-
   custom.css: |
     /* Tighten up card padding slightly */
     .service-card {
@@ -310,3 +305,4 @@ data:
   custom.js: ''
   docker.yaml: ''
   proxmox.yaml: ''
+  bookmarks.yaml: ''
