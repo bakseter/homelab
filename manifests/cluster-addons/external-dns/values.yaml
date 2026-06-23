@@ -1,22 +1,61 @@
-external-dns:
-  provider: pihole
+technitium:
+  provider: rfc2136
   policy: sync
   registry: noop
 
-  extraArgs:
-    - --pihole-server=http://192.168.60.200:8080
-    - --pihole-api-version=6
-    - --gateway-label-filter=external-dns==enabled
-
   sources:
     - gateway-httproute
-
   domainFilters:
     - bakseter.net
 
+  extraArgs:
+    - --rfc2136-host=technitium-primary.technitium.svc.cluster.local
+    - --rfc2136-port=53
+    - --rfc2136-zone=bakseter.net
+    - --rfc2136-tsig-secret-alg=hmac-sha256
+    - --rfc2136-tsig-axfr
+    - --gateway-label-filter=external-dns==enabled
+
   env:
-    - name: EXTERNAL_DNS_PIHOLE_PASSWORD
+    - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
       valueFrom:
         secretKeyRef:
-          name: pihole-admin
-          key: password
+          name: technitium
+          key: rfc2136-tsig-secret
+
+    - name: EXTERNAL_DNS_RFC2136_TSIG_KEYNAME
+      valueFrom:
+        secretKeyRef:
+          name: technitium
+          key: rfc2136-tsig-keyname
+
+#technitium-backup:
+#  provider: rfc2136
+#  policy: sync
+#  registry: noop
+#
+#  sources:
+#    - gateway-httproute
+#  domainFilters:
+#    - bakseter.net
+#
+#  extraArgs:
+#    - --rfc2136-host=192.168.50.177
+#    - --rfc2136-port=53
+#    - --rfc2136-zone=bakseter.net
+#    - --rfc2136-tsig-secret-alg=hmac-sha256
+#    - --rfc2136-tsig-axfr
+#    - --gateway-label-filter=external-dns==enabled
+#
+#  env:
+#    - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
+#      valueFrom:
+#        secretKeyRef:
+#          name: technitium-backup
+#          key: rfc2136-tsig-secret
+#
+#    - name: EXTERNAL_DNS_RFC2136_TSIG_KEYNAME
+#      valueFrom:
+#        secretKeyRef:
+#          name: technitium-backup
+#          key: rfc2136-tsig-keyname

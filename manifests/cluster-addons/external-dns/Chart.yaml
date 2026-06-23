@@ -3,5 +3,10 @@ name: external-dns-umbrella
 version: 0.1.0
 dependencies:
   - name: external-dns
+    alias: technitium
+    version: 1.21.1
+    repository: https://kubernetes-sigs.github.io/external-dns
+  - name: external-dns
+    alias: technitium-backup
     version: 1.21.1
     repository: https://kubernetes-sigs.github.io/external-dns
