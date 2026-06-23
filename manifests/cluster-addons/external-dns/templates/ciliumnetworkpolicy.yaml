@@ -9,6 +9,18 @@ spec:
   ingress: []
 
   egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: 'technitium-primary.technitium.svc.cluster.local'
+
     - toEntities:
         - kube-apiserver
       toPorts:
