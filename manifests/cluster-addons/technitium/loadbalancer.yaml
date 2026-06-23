@@ -22,7 +22,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: technitium-primary-lan
+  name: technitium-lan
   namespace: technitium
   labels:
     l2-announce: 'true'
