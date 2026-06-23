@@ -1,13 +1,28 @@
 terraform {
   required_providers {
+    authentik = {
+      source  = "goauthentik/authentik"
+      version = "2026.5.0"
+    }
+
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "5.21.1"
+    }
+
     helm = {
       source  = "hashicorp/helm"
       version = "3.2.0"
     }
 
-    authentik = {
-      source  = "goauthentik/authentik"
-      version = "2026.5.0"
+    null = {
+      source  = "hashicorp/null"
+      version = "3.3.0"
+    }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "3.9.0"
     }
 
     time = {
@@ -28,11 +43,6 @@ terraform {
     proxmox = {
       source  = "bpg/proxmox"
       version = "0.110.0"
-    }
-
-    null = {
-      source  = "hashicorp/null"
-      version = "3.3.0"
     }
   }
 }

@@ -16,6 +16,15 @@ variable "tailscale_oauth_client_secret" {
   sensitive = true
 }
 
+variable "cloudflare_api_token" {
+  type      = string
+  sensitive = true
+}
+
+variable "cloudflare_account_id" {
+  type = string
+}
+
 variable "authentik_url" {
   type = string
 }
