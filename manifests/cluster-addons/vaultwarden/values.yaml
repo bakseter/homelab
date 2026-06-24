@@ -46,7 +46,7 @@ database:
   existingSecretKey: uri
 
 sso:
-  enabled: true
+  enabled: false
   onlySSO: true
   enforceSSO: true
   pkce: false
