@@ -4,15 +4,17 @@ provider "cloudflare" {
 
 locals {
   envoy_gateway = "http://envoy-cloudflared-cloudflared-gateway-7fece151.envoy-gateway-system.svc.cluster.local:80"
+  domains = [
+    "bakseter.net"
+  ]
   public_domains = [
     "bakseter.no",
-    "bakseter.net",
     "mandagsmiddag.no",
   ]
 }
 
 resource "cloudflare_zone" "domain" {
-  for_each = toset(local.public_domains)
+  for_each = toset(concat(local.domains, local.public_domains))
 
   account = {
     id = var.cloudflare_account_id
@@ -38,43 +40,32 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
   source     = "cloudflare"
 
   config = {
-    ingress = [
-      {
-        hostname       = "bakseter.net"
-        origin_request = {}
-        service        = local.envoy_gateway
-      },
-      {
-        hostname       = "authentik.bakseter.net"
-        origin_request = {}
-        service        = local.envoy_gateway
-      },
-      {
-        hostname       = "*.mandagsmiddag.no"
-        origin_request = {}
-        service        = local.envoy_gateway
-      },
-      {
-        hostname       = "mandagsmiddag.no"
-        origin_request = {}
-        service        = local.envoy_gateway
-      },
-      {
-        hostname       = "*.bakseter.no"
-        origin_request = {}
-        service        = local.envoy_gateway
-      },
-      {
-        hostname       = "bakseter.no"
-        origin_request = {}
-        service        = local.envoy_gateway
-      },
-      {
-        service = "http_status:404"
-      },
-    ]
+    ingress = concat(
+      flatten(
+        [for domain in local.public_domains :
+          [
+            {
+              hostname       = "*.${domain}"
+              origin_request = {}
+              service        = local.envoy_gateway
+            },
+            {
+              hostname       = domain
+              origin_request = {}
+              service        = local.envoy_gateway
+            }
+          ]
+        ]
+      ),
+      [{ service = "http_status:404" }]
+    )
   }
 }
+/*
+      [{
+        service = "http_status:404"
+      }]
+      */
 
 resource "cloudflare_dns_record" "tunnel-apex" {
   for_each = toset(local.public_domains)
@@ -98,18 +89,10 @@ resource "cloudflare_dns_record" "tunnel-wildcard" {
   proxied = true
 }
 
-resource "cloudflare_dns_record" "authentik" {
-  zone_id = cloudflare_zone.domain["bakseter.net"].id
-  name    = "authentik.bakseter.net"
-  content = "${cloudflare_zero_trust_tunnel_cloudflared.homelab.id}.cfargotunnel.com"
-  type    = "CNAME"
-  ttl     = 1
-  proxied = true
-}
 
 ## Email
 
-resource "cloudflare_dns_record" "email-cname" {
+resource "cloudflare_dns_record" "bakseter-no-email-cname" {
   for_each = tomap({
     "protonmail._domainkey.bakseter.no" : "protonmail.domainkey.dy24vvdj7a2bqr5hvsxwoc7qfhmnk522sw5rmc34ynnoo45ncfp6a.domains.proton.ch",
     "protonmail2._domainkey.bakseter.no" : "protonmail2.domainkey.dy24vvdj7a2bqr5hvsxwoc7qfhmnk522sw5rmc34ynnoo45ncfp6a.domains.proton.ch",
@@ -124,30 +107,31 @@ resource "cloudflare_dns_record" "email-cname" {
   proxied = false
 }
 
-resource "cloudflare_dns_record" "email-mx" {
+resource "cloudflare_dns_record" "bakseter-no-email-mx" {
   for_each = tomap({
-    "bakseter.no" : "mail.protonmail.ch",
-    "bakseter.no" : "mailsec.protonmail.ch",
+    "mail.protonmail.ch"    = 10,
+    "mailsec.protonmail.ch" = 20,
   })
 
-  zone_id = cloudflare_zone.domain["bakseter.no"].id
-  name    = each.key
-  content = each.value
-  type    = "MX"
-  ttl     = 1
-  proxied = false
+  zone_id  = cloudflare_zone.domain["bakseter.no"].id
+  name     = "bakseter.no"
+  content  = each.key
+  type     = "MX"
+  ttl      = 1
+  proxied  = false
+  priority = each.value
 }
 
-resource "cloudflare_dns_record" "email-txt" {
+resource "cloudflare_dns_record" "bakseter-no-email-txt" {
   for_each = tomap({
-    "bakseter.no" : "protonmail-verification=fa6fb8716c3cdce363ac0e8ad66946e85fcec662",
-    "bakseter.no" : "v=spf1 include:_spf.protonmail.ch ~all",
-    "bakseter.no" : "v=DMARC1; p=quarantine",
+    "\"protonmail-verification=fa6fb8716c3cdce363ac0e8ad66946e85fcec662\"" = "bakseter.no"
+    "\"v=spf1 include:_spf.protonmail.ch ~all\""                           = "bakseter.no"
+    "\"v=DMARC1; p=quarantine\""                                           = "_dmarc.bakseter.no"
   })
 
   zone_id = cloudflare_zone.domain["bakseter.no"].id
-  name    = each.key
-  content = each.value
+  name    = each.value
+  content = each.key
   type    = "TXT"
   ttl     = 1
   proxied = false

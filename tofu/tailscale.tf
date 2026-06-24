@@ -9,8 +9,7 @@ locals {
     "100.85.36.251", # k8s
     "100.88.208.56", # pi
   ]
-
-  domains = [
+  tailscale_domains = [
     "bakseter.net",
     "int.bakseter.net",
     "sre.bakseter.net",
@@ -28,7 +27,7 @@ resource "tailscale_dns_nameservers" "global" {
 }
 
 resource "tailscale_dns_split_nameservers" "domains" {
-  for_each = toset(local.domains)
+  for_each = toset(local.tailscale_domains)
 
   domain      = each.key
   nameservers = local.technitium_tailscale_ips
