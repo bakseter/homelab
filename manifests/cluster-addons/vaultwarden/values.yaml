@@ -17,6 +17,9 @@ securityContext:
 
 domain: https://vaultwarden.bakseter.no
 
+strategy:
+  type: Recreate
+
 image:
   registry: docker.io
   repository: vaultwarden/server
