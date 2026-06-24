@@ -82,6 +82,8 @@ kind: Application
 metadata:
   name: five31
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     namespace: five31

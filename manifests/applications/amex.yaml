@@ -73,6 +73,8 @@ kind: Application
 metadata:
   name: amex
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     namespace: amex

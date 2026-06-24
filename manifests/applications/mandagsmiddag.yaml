@@ -88,6 +88,8 @@ kind: Application
 metadata:
   name: mandagsmiddag
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     namespace: mandagsmiddag

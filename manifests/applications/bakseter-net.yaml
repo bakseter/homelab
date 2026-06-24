@@ -37,6 +37,8 @@ kind: Application
 metadata:
   name: bakseter-net
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     namespace: bakseter-net
