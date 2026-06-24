@@ -150,11 +150,11 @@ data:
             namespace: mandagsmiddag
             app: mandagsmiddag-frontend
 
-        - bakseter.net:
-            href: https://bakseter.net
+        - bakseter.no:
+            href: https://bakseter.no
             description: Personal homepage
-            icon: https://bakseter.net/favicon.ico
-            namespace: bakseter-net
+            icon: https://bakseter.no/favicon.ico
+            namespace: bakseter-no
             app: web
             podSelector: >-
               app=web
@@ -231,7 +231,7 @@ data:
             app: argocd-server
 
         - Authentik:
-            href: https://authentik.bakseter.net
+            href: https://authentik.bakseter.no
             description: Identity provider
             icon: authentik.svg
             namespace: authentik

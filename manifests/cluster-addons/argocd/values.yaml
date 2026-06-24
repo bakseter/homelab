@@ -23,7 +23,7 @@ argo-cd:
           id: authentik
           name: Authentik
           config:
-            issuer: https://authentik.bakseter.net/application/o/argocd/
+            issuer: https://authentik.bakseter.no/application/o/argocd/
             clientID: argocd
             clientSecret: $argocd-authentik:clientSecret
             insecureEnableGroups: true

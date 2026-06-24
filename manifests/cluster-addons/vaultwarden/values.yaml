@@ -15,7 +15,7 @@ securityContext:
       - ALL
   readOnlyRootFilesystem: true
 
-domain: https://vaultwarden.bakseter.net
+domain: https://vaultwarden.bakseter.no
 
 image:
   registry: docker.io
@@ -48,7 +48,7 @@ sso:
   enforceSSO: true
   pkce: false
   ignoreEmailVerification: true
-  authority: https://authentik.bakseter.net/application/o/vaultwarden/
+  authority: https://authentik.bakseter.no/application/o/vaultwarden/
   scopes: 'openid profile email offline_access'
   existingSecret: vaultwarden-sso-secret
   clientId:

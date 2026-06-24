@@ -64,7 +64,7 @@ spec:
       domain: 'grafana.sre.bakseter.net'
       root_url: 'https://grafana.sre.bakseter.net'
     auth:
-      signout_redirect_url: 'https://authentik.bakseter.net/application/o/grafana/end-session/'
+      signout_redirect_url: 'https://authentik.bakseter.no/application/o/grafana/end-session/'
       oauth_auto_login: 'true'
       disable_login_form: 'true'
     auth.generic_oauth:
@@ -72,7 +72,7 @@ spec:
       enabled: 'true'
       client_id: 'grafana'
       scopes: 'openid profile email entitlements'
-      auth_url: 'https://authentik.bakseter.net/application/o/authorize/'
+      auth_url: 'https://authentik.bakseter.no/application/o/authorize/'
       token_url: 'http://authentik-server.authentik.svc.cluster.local/application/o/token/'
       api_url: 'http://authentik-server.authentik.svc.cluster.local/application/o/userinfo/'
       auth_style: 'InParams'

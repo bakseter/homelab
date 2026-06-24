@@ -63,8 +63,8 @@ spec:
                 - monitoring
 
     - toFQDNs:
-        - matchName: 'authentik.bakseter.net'
-        - matchName: 'bakseter.net'
+        - matchName: 'authentik.bakseter.no'
+        - matchName: 'bakseter.no'
         - matchName: 'mandagsmiddag.no'
       toPorts:
         - ports:

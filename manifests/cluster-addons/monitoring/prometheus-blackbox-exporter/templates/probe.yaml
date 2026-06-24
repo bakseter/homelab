@@ -15,8 +15,8 @@ spec:
   targets:
     staticConfig:
       static:
-        - https://authentik.bakseter.net
-        - https://bakseter.net
+        - https://authentik.bakseter.no
+        - https://bakseter.no
         - https://mandagsmiddag.no
       labels:
         probe_type: http
@@ -43,8 +43,8 @@ spec:
   targets:
     staticConfig:
       static:
-        - https://authentik.bakseter.net
-        - https://bakseter.net
+        - https://authentik.bakseter.no
+        - https://bakseter.no
         - https://mandagsmiddag.no
       labels:
         probe_type: tls
