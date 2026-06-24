@@ -106,3 +106,49 @@ resource "cloudflare_dns_record" "authentik" {
   ttl     = 1
   proxied = true
 }
+
+## Email
+
+resource "cloudflare_dns_record" "email-cname" {
+  for_each = tomap({
+    "protonmail._domainkey.bakseter.no" : "protonmail.domainkey.dy24vvdj7a2bqr5hvsxwoc7qfhmnk522sw5rmc34ynnoo45ncfp6a.domains.proton.ch",
+    "protonmail2._domainkey.bakseter.no" : "protonmail2.domainkey.dy24vvdj7a2bqr5hvsxwoc7qfhmnk522sw5rmc34ynnoo45ncfp6a.domains.proton.ch",
+    "protonmail3._domainkey.bakseter.no" : "protonmail3.domainkey.dy24vvdj7a2bqr5hvsxwoc7qfhmnk522sw5rmc34ynnoo45ncfp6a.domains.proton.ch",
+  })
+
+  zone_id = cloudflare_zone.domain["bakseter.no"].id
+  name    = each.key
+  content = each.value
+  type    = "CNAME"
+  ttl     = 1
+  proxied = false
+}
+
+resource "cloudflare_dns_record" "email-mx" {
+  for_each = tomap({
+    "bakseter.no" : "mail.protonmail.ch",
+    "bakseter.no" : "mailsec.protonmail.ch",
+  })
+
+  zone_id = cloudflare_zone.domain["bakseter.no"].id
+  name    = each.key
+  content = each.value
+  type    = "MX"
+  ttl     = 1
+  proxied = false
+}
+
+resource "cloudflare_dns_record" "email-txt" {
+  for_each = tomap({
+    "bakseter.no" : "protonmail-verification=fa6fb8716c3cdce363ac0e8ad66946e85fcec662",
+    "bakseter.no" : "v=spf1 include:_spf.protonmail.ch ~all",
+    "bakseter.no" : "v=DMARC1; p=quarantine",
+  })
+
+  zone_id = cloudflare_zone.domain["bakseter.no"].id
+  name    = each.key
+  content = each.value
+  type    = "TXT"
+  ttl     = 1
+  proxied = false
+}

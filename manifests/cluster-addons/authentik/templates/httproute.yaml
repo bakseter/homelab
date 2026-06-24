@@ -12,6 +12,7 @@ spec:
 
   hostnames:
     - authentik.bakseter.net
+    - authentik.bakseter.no
 
   rules:
     - matches:
