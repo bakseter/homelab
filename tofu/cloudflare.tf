@@ -11,10 +11,14 @@ locals {
     "bakseter.no",
     "mandagsmiddag.no",
   ]
+  all_domains = concat(local.domains, local.public_domains)
 }
 
+
+## DNS zones
+
 resource "cloudflare_zone" "domain" {
-  for_each = toset(concat(local.domains, local.public_domains))
+  for_each = toset(local.all_domains)
 
   account = {
     id = var.cloudflare_account_id
@@ -22,6 +26,41 @@ resource "cloudflare_zone" "domain" {
   name = each.key
   type = "full"
 }
+
+resource "cloudflare_zone_setting" "always-use-https" {
+  for_each = toset(local.all_domains)
+
+  zone_id    = cloudflare_zone.domain[each.key].id
+  setting_id = "always_use_https"
+  value      = "on"
+}
+
+resource "cloudflare_zone_setting" "tls-1-3" {
+  for_each = toset(local.all_domains)
+
+  zone_id    = cloudflare_zone.domain[each.key].id
+  setting_id = "tls_1_3"
+  value      = "zrt"
+}
+
+resource "cloudflare_zone_setting" "security-header" {
+  for_each = toset(local.all_domains)
+
+  zone_id    = cloudflare_zone.domain[each.key].id
+  setting_id = "security_header"
+  value = {
+    strict_transport_security = {
+      enabled            = true
+      include_subdomains = true
+      max_age            = 15552000
+      nosniff            = true
+      preload            = true
+    }
+  }
+}
+
+
+## Tunnel
 
 resource "cloudflare_zero_trust_tunnel_cloudflared" "homelab" {
   account_id = var.cloudflare_account_id
@@ -61,11 +100,6 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "homelab" {
     )
   }
 }
-/*
-      [{
-        service = "http_status:404"
-      }]
-      */
 
 resource "cloudflare_dns_record" "tunnel-apex" {
   for_each = toset(local.public_domains)
