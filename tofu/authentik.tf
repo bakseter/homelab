@@ -83,7 +83,7 @@ resource "authentik_outpost" "mandagsmiddag" {
 
   config = jsonencode(
     {
-      authentik_host         = "https://authentik.bakseter.net"
+      authentik_host         = "https://authentik.bakseter.no"
       log_level              = "info"
       object_naming_template = "ak-outpost-%(name)s"
       refresh_interval       = "minutes=5"

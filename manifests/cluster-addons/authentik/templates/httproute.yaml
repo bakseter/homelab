@@ -11,7 +11,6 @@ spec:
       kind: Gateway
 
   hostnames:
-    - authentik.bakseter.net
     - authentik.bakseter.no
 
   rules:
