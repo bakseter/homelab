@@ -3,7 +3,7 @@ kind: Kustomization
 
 helmCharts:
   - name: vaultwarden
-    version: 0.40.0
+    version: 0.41.0
     repo: https://guerzon.github.io/vaultwarden
     releaseName: vaultwarden
     namespace: vaultwarden
