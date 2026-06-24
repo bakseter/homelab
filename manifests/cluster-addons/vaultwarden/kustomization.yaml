@@ -13,7 +13,6 @@ resources:
   - ciliumnetworkpolicy.yaml
   - cluster.yaml
   - httproute.yaml
-  - vaultwarden-sso-secret.yaml
 
 patches:
   - target:

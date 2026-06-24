@@ -47,14 +47,3 @@ database:
 
 sso:
   enabled: false
-  onlySSO: true
-  enforceSSO: true
-  pkce: false
-  ignoreEmailVerification: true
-  authority: https://authentik.bakseter.no/application/o/vaultwarden/
-  scopes: 'openid profile email offline_access'
-  existingSecret: vaultwarden-sso-secret
-  clientId:
-    existingSecretKey: clientId
-  clientSecret:
-    existingSecretKey: clientSecret
