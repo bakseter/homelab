@@ -23,5 +23,5 @@ spec:
                 operator: In
                 values:
                   - authentik
-                  - bakseter-net
+                  - bakseter-no
                   - mandagsmiddag
