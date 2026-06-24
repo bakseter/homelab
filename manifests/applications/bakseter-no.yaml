@@ -1,15 +1,15 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: bakseter-net
+  name: bakseter-no
   namespace: argocd
 spec:
-  description: bakseter.net application
+  description: bakseter.no application
   destinations:
-    - namespace: bakseter-net
+    - namespace: bakseter-no
       name: admin@homelab
   sourceRepos:
-    - https://github.com/bakseter/bakseter.net.git
+    - https://github.com/bakseter/bakseter.no.git
   clusterResourceWhitelist:
     - group: ''
       kind: Namespace
@@ -35,18 +35,18 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: bakseter-net
+  name: bakseter-no
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: bakseter-net
+    namespace: bakseter-no
     name: admin@homelab
-  project: bakseter-net
+  project: bakseter-no
   source:
     path: manifests
-    repoURL: https://github.com/bakseter/bakseter.net.git
+    repoURL: https://github.com/bakseter/bakseter.no.git
     targetRevision: HEAD
   syncPolicy:
     automated:
