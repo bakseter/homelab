@@ -166,8 +166,9 @@ resource "authentik_provider_oauth2" "argocd" {
 
   allowed_redirect_uris = [
     {
-      matching_mode = "strict"
-      url           = "https://argocd.sre.bakseter.net/api/dex/callback"
+      matching_mode     = "strict"
+      redirect_uri_type = "authorization"
+      url               = "https://argocd.sre.bakseter.net/api/dex/callback"
     }
   ]
 }
