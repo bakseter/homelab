@@ -8,7 +8,7 @@ authentik:
     image:
       repository: ghcr.io/goauthentik/server
       tag: 2026.5.3
-      digest: sha256:3ddf09bbf69ded6a9634ecd753a01608d477f811e99bb5ffe9fc2ef7ad1c6581
+      digest: sha256:377ee38726785f98aafc3665202ad198a366fa979b0f61c0660a9c05e3a9b1b3
     securityContext:
       runAsNonRoot: true
       runAsUser: 65534
@@ -48,7 +48,7 @@ authentik:
         cpu: 100m
         memory: 1Gi
       limits:
-        cpu: 1500m
+        cpu: 2
         memory: 2Gi
 
     metrics:
