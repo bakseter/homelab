@@ -3,5 +3,5 @@ name: cryptpad-umbrella
 version: 0.1.0
 dependencies:
   - name: cryptpad
-    version: 0.0.23
+    version: 0.0.24
     repository: oci://ghcr.io/cryptpad/helm
