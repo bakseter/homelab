@@ -28,7 +28,8 @@ immich:
         containers:
           main:
             image:
-              tag: v2.7.5@sha256:a2501141440f10516d329fdfba2c68082e19eb9ba6016c061ac80d23beadf7f3
+              repository: ghcr.io/immich-app/immich-machine-learning
+              tag: v3.0.1@sha256:cb2128c5cbc554fdaa2a036fb4419c808a9f3e0f27170e569dd9e727243da909
             resources:
               limits:
                 cpu: 4
@@ -62,7 +63,8 @@ immich:
         containers:
           main:
             image:
-              tag: 9.1-alpine@sha256:34f4f659e02a67cfdf3995d11ae432219c936005055b2cd39a042e86280e053e
+              repository: docker.io/valkey/valkey
+              tag: 9.1-alpine@sha256:a35428eba9043cc0b79dbe54100f0c92784f2de00ad09b01182bfb1c5c83d1bd
 
   server:
     enabled: true
@@ -90,7 +92,8 @@ immich:
         containers:
           main:
             image:
-              tag: v2.7.5@sha256:c15bff75068effb03f4355997d03dc7e0fc58720c2b54ad6f7f10d1bc57efaa5
+              repository: ghcr.io/immich-app/immich-server
+              tag: v3.0.1@sha256:46dedfc5848f7313bd6b584ea9f2648057430307aad6de56de968f6710a72cae
             resources:
               limits:
                 cpu: 2
