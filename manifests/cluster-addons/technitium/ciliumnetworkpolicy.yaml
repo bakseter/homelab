@@ -33,6 +33,14 @@ spec:
             - port: '5380'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: technitium
+      toPorts:
+        - ports:
+            - port: '53443'
+              protocol: TCP
+
   egress:
     - toCIDR:
         - 1.1.1.1/32
