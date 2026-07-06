@@ -9,6 +9,14 @@ spec:
   ingress:
     - fromEndpoints:
         - matchLabels:
+            app.kubernetes.io/name: technitium
+      toPorts:
+        - ports:
+            - port: '53443'
+              protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: tailscale
             tailscale.com/parent-resource: technitium
         - matchLabels:
@@ -33,7 +41,8 @@ spec:
             - port: '5380'
               protocol: TCP
 
-    - fromEndpoints:
+  egress:
+    - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: technitium
       toPorts:
@@ -41,7 +50,6 @@ spec:
             - port: '53443'
               protocol: TCP
 
-  egress:
     - toCIDR:
         - 1.1.1.1/32
         - 8.8.8.8/32
