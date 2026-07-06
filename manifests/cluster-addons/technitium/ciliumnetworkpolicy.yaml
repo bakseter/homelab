@@ -12,6 +12,8 @@ spec:
             app.kubernetes.io/name: technitium
       toPorts:
         - ports:
+            - port: '53'
+              protocol: TCP
             - port: '53443'
               protocol: TCP
 
@@ -47,6 +49,8 @@ spec:
             app.kubernetes.io/name: technitium
       toPorts:
         - ports:
+            - port: '53'
+              protocol: TCP
             - port: '53443'
               protocol: TCP
 
