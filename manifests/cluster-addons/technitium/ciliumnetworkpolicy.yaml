@@ -64,3 +64,6 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
+          icmp:
+            - fields:
+                - type: '8'
