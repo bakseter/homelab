@@ -153,6 +153,18 @@ spec:
           - type: '8'
 
   egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
     - toEntities:
         - world
 
