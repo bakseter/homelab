@@ -270,7 +270,7 @@ resource "authentik_provider_oauth2" "five31" {
     {
       matching_mode     = "strict"
       redirect_uri_type = "authorization"
-      url               = "http://five31.bakseter.net/oauth2/callback"
+      url               = "https://five31.bakseter.net/oauth2/callback"
     }
   ]
 }
