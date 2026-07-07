@@ -47,9 +47,6 @@ spec:
     - group: 'rbac.authorization.k8s.io'
       kind: RoleBinding
 
-    - group: 'networking.k8s.io'
-      kind: NetworkPolicy
-
     - group: 'cilium.io'
       kind: CiliumNetworkPolicy
 
@@ -76,6 +73,9 @@ spec:
 
     - group: 'batch'
       kind: CronJob
+
+    - group: 'gateway.envoyproxy.io'
+      kind: SecurityPolicy
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
