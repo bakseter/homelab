@@ -178,7 +178,17 @@ resource "authentik_application" "argocd" {
 
 resource "authentik_group" "argocd-admins" {
   name  = "argocd-admins"
-  users = [data.authentik_user.andreas.id]
+  users = [data.authentik_user.a.id]
+}
+
+resource "authentik_policy_binding" "argocd-access" {
+  for_each = toset([
+    authentik_group.argocd-admins.id,
+  ])
+
+  target = authentik_application.argocd.uuid
+  group  = each.key
+  order  = 0
 }
 
 
@@ -218,12 +228,23 @@ resource "authentik_application" "grafana" {
 
 resource "authentik_group" "grafana-admins" {
   name  = "grafana-admins"
-  users = [data.authentik_user.andreas.id]
+  users = [data.authentik_user.a.id]
 }
 
 resource "authentik_group" "grafana-viewers" {
   name  = "grafana-viewers"
-  users = [data.authentik_user.emil.id]
+  users = [data.authentik_user.e.id]
+}
+
+resource "authentik_policy_binding" "grafana-access" {
+  for_each = toset([
+    authentik_group.grafana-admins.id,
+    authentik_group.grafana-viewers.id
+  ])
+
+  target = authentik_application.grafana.uuid
+  group  = each.key
+  order  = 0
 }
 
 resource "authentik_application_entitlement" "grafana-admins" {
@@ -286,7 +307,8 @@ resource "authentik_application" "five31" {
 resource "authentik_group" "five31-users" {
   name = "five31-users"
   users = [
-    data.authentik_user.andreas.id,
+    data.authentik_user.a.id,
+    data.authentik_user.n.id,
   ]
 }
 
@@ -299,18 +321,22 @@ resource "authentik_policy_binding" "five31-access" {
 
 #### RBAC
 
-data "authentik_user" "andreas" {
+data "authentik_user" "a" {
   pk = "17"
 }
 
-data "authentik_user" "emil" {
+data "authentik_user" "e" {
   pk = "19"
+}
+
+data "authentik_user" "n" {
+  pk = "67"
 }
 
 resource "authentik_group" "mandagsmiddag-admins" {
   name = "mandagsmiddag-admins"
   users = [
-    data.authentik_user.andreas.id,
-    data.authentik_user.emil.id,
+    data.authentik_user.a.id,
+    data.authentik_user.e.id,
   ]
 }
