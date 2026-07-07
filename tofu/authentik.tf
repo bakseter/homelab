@@ -43,11 +43,6 @@ resource "authentik_provider_proxy" "mandagsmiddag-backend" {
   mode                  = "forward_single"
 }
 
-import {
-  id = "mandagsmiddag-frontend"
-  to = authentik_application.mandagsmiddag-frontend
-}
-
 resource "authentik_application" "mandagsmiddag-frontend" {
   name              = "Mandagsmiddag"
   slug              = "mandagsmiddag-frontend"
@@ -187,7 +182,6 @@ resource "authentik_group" "argocd-admins" {
 }
 
 
-
 #### Grafana
 
 resource "authentik_provider_oauth2" "grafana" {
@@ -251,6 +245,54 @@ resource "authentik_policy_binding" "grafana-admins-entitlement" {
 resource "authentik_policy_binding" "grafana-viewers-entitlement" {
   target = authentik_application_entitlement.grafana-viewers.id
   group  = authentik_group.grafana-viewers.id
+  order  = 0
+}
+
+
+#### five31
+
+resource "authentik_provider_oauth2" "five31" {
+  name      = "five31"
+  client_id = "five31"
+
+  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
+  invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
+
+  sub_mode = "user_username"
+
+  signing_key       = data.authentik_certificate_key_pair.default.id
+  property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
+
+  access_token_validity  = "hours=1"
+  refresh_token_validity = "days=30"
+
+  allowed_redirect_uris = [
+    {
+      matching_mode     = "strict"
+      redirect_uri_type = "authorization"
+      url               = "http://five31.bakseter.net/oauth2/callback"
+    }
+  ]
+}
+
+resource "authentik_application" "five31" {
+  name              = "5/3/1 Program"
+  slug              = "five31"
+  protocol_provider = authentik_provider_oauth2.five31.id
+
+  meta_launch_url = "https://five31.bakseter.net"
+}
+
+resource "authentik_group" "five31-users" {
+  name = "five31-users"
+  users = [
+    data.authentik_user.andreas.id,
+  ]
+}
+
+resource "authentik_policy_binding" "five31-access" {
+  target = authentik_application.five31.uuid
+  group  = authentik_group.five31-users.id
   order  = 0
 }
 

@@ -8,7 +8,7 @@ output "authentik_grafana_client_secret" {
   sensitive = true
 }
 
-output "authentik_vaultwarden_client_secret" {
-  value     = authentik_provider_oauth2.vaultwarden.client_secret
+output "authentik_five31_client_secret" {
+  value     = authentik_provider_oauth2.five31.client_secret
   sensitive = true
 }
