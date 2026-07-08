@@ -75,6 +75,13 @@ spec:
               - matchPattern: '*'
 
     - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
+
+    - toEntities:
         - world
 
     - toEntities:
@@ -126,6 +133,13 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
+
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
 
     - toEntities:
         - world
