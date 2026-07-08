@@ -75,14 +75,16 @@ spec:
               - matchPattern: '*'
 
     - toEntities:
-        - kube-apiserver
-      toPorts:
-        - ports:
-            - port: '6443'
-              protocol: TCP
+        - world
 
     - toEntities:
-        - world
+        - host
+      toPorts:
+        - ports:
+            - port: '1900'
+              protocol: UDP
+            - port: '5351'
+              protocol: UDP
 
     - toEndpoints:
         - matchLabels:
@@ -124,13 +126,6 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
-
-    - toEntities:
-        - kube-apiserver
-      toPorts:
-        - ports:
-            - port: '6443'
-              protocol: TCP
 
     - toEntities:
         - world
