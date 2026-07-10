@@ -28,6 +28,9 @@ authentik:
   server:
     replicas: 1
 
+    podAnnotations:
+      instrumentation.opentelemetry.io/inject-python: 'true'
+
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
