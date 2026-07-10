@@ -39,7 +39,15 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
         talos_schematic_id      = talos_image_factory_schematic.talos.id
         talos_version           = local.talos_version
       }
+    ),
+    /*
+    templatefile(
+      "${path.module}/manifests/override-k8s-version-patches.yaml.tmpl",
+      {
+        k8s_version = "1.35.0"
+      }
     )
+    */
   ])
 }
 
@@ -82,7 +90,15 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
         talos_schematic_id      = talos_image_factory_schematic.talos.id
         talos_version           = local.talos_version
       }
+    ),
+    /*
+    templatefile(
+      "${path.module}/manifests/override-k8s-version-patches.yaml.tmpl",
+      {
+        k8s_version = "1.35.0"
+      }
     )
+    */
   ])
 }
 
