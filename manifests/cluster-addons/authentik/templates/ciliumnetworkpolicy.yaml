@@ -52,6 +52,15 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4318'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
             app.kubernetes.io/instance: authentik-database
         - matchLabels:
             cnpg.io/poolerName: authentik-pooler-rw

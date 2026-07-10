@@ -2,7 +2,7 @@ apiVersion: opentelemetry.io/v1alpha1
 kind: Instrumentation
 metadata:
   name: instrumentation
-  namespace: monitoring
+  namespace: authentik
 spec:
   exporter:
     endpoint: http://alloy.monitoring.svc.cluster.local:4318
