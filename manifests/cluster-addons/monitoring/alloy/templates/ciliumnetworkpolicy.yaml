@@ -8,7 +8,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: alloy
 
-  ingress: []
+  # No ingress policy, everything should reach Alloy.
 
   egress:
     - toEndpoints:
@@ -30,6 +30,14 @@ spec:
       toPorts:
         - ports:
             - port: '8080'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: tempo
+      toPorts:
+        - ports:
+            - port: '4317'
               protocol: TCP
 
     - toEntities:
