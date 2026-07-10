@@ -55,6 +55,14 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            app.kubernetes.io/name: tempo
+      toPorts:
+        - ports:
+            - port: '3100'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: authentik
             app.kubernetes.io/instance: authentik
             app.kubernetes.io/component: server
