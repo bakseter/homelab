@@ -82,7 +82,7 @@ nodes:
         type: worker
         cores: 6
         memory: 18
-        disk: 200
+        disk: 100
         ip: 192.168.30.131
         longhorn:
           enabled: true
