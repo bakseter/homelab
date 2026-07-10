@@ -9,7 +9,14 @@ spec:
       app.kubernetes.io/instance: tempo
       app.kubernetes.io/name: create-s3-buckets
 
-  ingress: []
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: 4317
+              protocol: TCP
 
   egress:
     - toEndpoints:
