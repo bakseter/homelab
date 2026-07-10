@@ -19,3 +19,12 @@ spec:
                     matchLabels:
                       gateway.envoyproxy.io/owning-gateway-name: cloudflared-gateway
                   topologyKey: bakseter.net/physical-node
+  telemetry:
+    tracing:
+      samplingRate: 100
+      provider:
+        backendRefs:
+        - name: alloy
+          namespace: monitoring
+          port: 4317
+        type: OpenTelemetry
