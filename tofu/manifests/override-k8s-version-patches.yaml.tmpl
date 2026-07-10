@@ -1,10 +1,10 @@
 machine:
   kubelet:
-      image: ghcr.io/siderolabs/kubelet:${k8s_version}
+      image: ghcr.io/siderolabs/kubelet:v${k8s_version}
 cluster:
   apiServer:
-      image: registry.k8s.io/kube-apiserver:${k8s_version}
+      image: registry.k8s.io/kube-apiserver:v${k8s_version}
   controllerManager:
-      image: registry.k8s.io/kube-controller-manager:${k8s_version}
+      image: registry.k8s.io/kube-controller-manager:v${k8s_version}
   scheduler:
       image: registry.k8s.io/kube-scheduler:v${k8s_version}
