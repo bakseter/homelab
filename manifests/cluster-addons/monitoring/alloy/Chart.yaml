@@ -3,5 +3,5 @@ name: monitoring-umbrella
 version: 0.1.0
 dependencies:
   - name: alloy
-    version: 1.10.0
+    version: 1.10.1
     repository: https://grafana.github.io/helm-charts
