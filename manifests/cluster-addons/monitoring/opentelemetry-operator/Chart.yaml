@@ -1,0 +1,7 @@
+apiVersion: v2
+name: opentelemetry-operator-umbrella
+version: 0.1.0
+dependencies:
+  - name: opentelemetry-operator
+    version: 0.119.0
+    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
