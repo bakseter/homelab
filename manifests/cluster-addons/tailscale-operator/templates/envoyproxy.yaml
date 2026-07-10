@@ -51,6 +51,15 @@ spec:
           tailscale.com/hostname: gateway-envoy-home
           tailscale.com/proxy-group: envoy-gateway
           tailscale.com/tags: 'tag:k8s,tag:home'
+  telemetry:
+    tracing:
+      samplingRate: 50%
+      provider:
+        backendRefs:
+        - name: alloy
+          namespace: monitoring
+          port: 4317
+        type: OpenTelemetry
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
@@ -78,3 +87,12 @@ spec:
           tailscale.com/hostname: gateway-envoy-sre
           tailscale.com/proxy-group: envoy-gateway
           tailscale.com/tags: 'tag:k8s,tag:sre'
+  telemetry:
+    tracing:
+      samplingRate: 50%
+      provider:
+        backendRefs:
+        - name: alloy
+          namespace: monitoring
+          port: 4317
+        type: OpenTelemetry
