@@ -12,6 +12,14 @@ spec:
   ingress:
     - fromEndpoints:
         - matchLabels:
+            app: grafana
+      toPorts:
+        - ports:
+            - port: '3100'
+              protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
             app.kubernetes.io/name: alloy
       toPorts:
         - ports:
