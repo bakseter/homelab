@@ -2,6 +2,7 @@ apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource
 metadata:
   name: loki
+  namespace: monitoring
 spec:
   instanceSelector:
     matchLabels:
@@ -23,6 +24,7 @@ apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource
 metadata:
   name: prometheus
+  namespace: monitoring
 spec:
   instanceSelector:
     matchLabels:
@@ -41,6 +43,7 @@ apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource
 metadata:
   name: alertmanager
+  namespace: monitoring
 spec:
   instanceSelector:
     matchLabels:
@@ -53,4 +56,23 @@ spec:
     access: proxy
     basicAuth: false
     url: http://alertmanager-operated.monitoring.svc.cluster.local:9093
+    isDefault: false
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: tempo
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  allowCrossNamespaceImport: true
+  datasource:
+    name: tempo
+    uid: tempo
+    type: tempo
+    access: proxy
+    basicAuth: false
+    url: http://tempo.monitoring.svc.cluster.local:3100
     isDefault: false
