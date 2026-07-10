@@ -1,0 +1,18 @@
+tempo:
+  tempo:
+    registry: docker.io
+    repository: grafana/tempo
+    # tag: ""
+
+    reportingEnabled: false
+
+    storage:
+      trace:
+        backend: s3
+
+        s3:
+          bucket: tempo
+          endpoint: http://rustfs-svc.rustfs.svc.cluster.local:9000
+          access_key: rustfs
+          secret_key: rustfs
+          insecure: true

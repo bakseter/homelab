@@ -35,7 +35,7 @@ loki:
         endpoint: http://rustfs-svc.rustfs.svc.cluster.local:9000
         region: us-east-1
         secretAccessKey: rustfs
-        accessKeyId: rustfr
+        accessKeyId: rustfs
         signatureVersion: v4
         s3ForcePathStyle: true
         insecure: true

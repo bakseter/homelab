@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: tempo-create-s3-buckets
+  namespace: monitoring
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: '-5'
+    helm.sh/hook-delete-policy: before-hook-creation
+  labels:
+    app.kubernetes.io/instance: tempo
+    app.kubernetes.io/name: create-s3-buckets
+spec:
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: tempo
+        app.kubernetes.io/name: create-s3-buckets
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: create-s3-buckets
+          image: amazon/aws-cli:2.34.46@sha256:c9756d3e11fdfc02497e980c1cb94c678c31b6e38c93f6443291e52f71493720
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              value: 'rustfs'
+            - name: AWS_SECRET_ACCESS_KEY
+              value: 'rustfs'
+            - name: AWS_DEFAULT_REGION
+              value: 'us-east-1'
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              ENDPOINT="http://rustfs-svc.rustfs.svc.cluster.local:9000"
+              BUCKETS="tempo"
+
+              echo "Testing connectivity..."
+              aws --endpoint-url "$ENDPOINT" s3 ls || echo "FATAL: cannot reach endpoint"
+
+              for BUCKET in $BUCKETS; do
+                echo "Creating bucket: $BUCKET"
+                if aws --endpoint-url "$ENDPOINT" s3api create-bucket --bucket "$BUCKET" 2>&1; then
+                  echo "✓ $BUCKET created"
+                else
+                  echo "checking if $BUCKET already exists..."
+                  aws --endpoint-url "$ENDPOINT" s3api head-bucket --bucket "$BUCKET" 2>&1 && \
+                    echo "✓ $BUCKET already exists, OK" || \
+                    echo "✗ $BUCKET failed and does not exist — real error"
+                fi
+              done
