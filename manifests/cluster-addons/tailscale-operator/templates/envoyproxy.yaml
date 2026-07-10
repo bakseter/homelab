@@ -53,7 +53,7 @@ spec:
           tailscale.com/tags: 'tag:k8s,tag:home'
   telemetry:
     tracing:
-      samplingRate: 50%
+      samplingRate: 0.5
       provider:
         backendRefs:
         - name: alloy
@@ -89,7 +89,7 @@ spec:
           tailscale.com/tags: 'tag:k8s,tag:sre'
   telemetry:
     tracing:
-      samplingRate: 50%
+      samplingRate: 0.5
       provider:
         backendRefs:
         - name: alloy
