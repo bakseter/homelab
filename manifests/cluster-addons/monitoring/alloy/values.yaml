@@ -186,7 +186,8 @@ alloy:
           }
 
           output {
-            logs = [otelcol.processor.attributes.otlp_hints.input]
+            logs   = [otelcol.processor.attributes.otlp_hints.input]
+            traces = [otelcol.processor.batch.traces.input]
           }
         }
 
@@ -221,4 +222,20 @@ alloy:
           }
 
           forward_to = [loki.write.default.receiver]
+        }
+
+        otelcol.processor.batch "traces" {
+          output {
+            traces = [otelcol.exporter.otlp.tempo.input]
+          }
+        }
+
+        otelcol.exporter.otlp "tempo" {
+          client {
+            endpoint = "tempo.monitoring.svc.cluster.local:4317"
+
+            tls {
+              insecure = true
+            }
+          }
         }
