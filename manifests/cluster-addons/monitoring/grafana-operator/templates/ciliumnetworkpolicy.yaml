@@ -58,7 +58,7 @@ spec:
             app.kubernetes.io/name: tempo
       toPorts:
         - ports:
-            - port: '3100'
+            - port: '3200'
               protocol: TCP
 
     - toEndpoints:

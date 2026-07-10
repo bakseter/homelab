@@ -50,7 +50,7 @@ spec:
             app: grafana
       toPorts:
         - ports:
-            - port: '3100'
+            - port: '3200'
               protocol: TCP
 
     - fromEndpoints:

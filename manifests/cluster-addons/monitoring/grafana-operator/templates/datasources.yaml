@@ -55,5 +55,5 @@ spec:
     type: tempo
     access: proxy
     basicAuth: false
-    url: http://tempo.monitoring.svc.cluster.local:3100
+    url: http://tempo.monitoring.svc.cluster.local:3200
     isDefault: false
