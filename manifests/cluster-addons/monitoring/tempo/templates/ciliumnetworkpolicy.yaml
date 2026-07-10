@@ -9,6 +9,41 @@ spec:
       app.kubernetes.io/instance: tempo
       app.kubernetes.io/name: create-s3-buckets
 
+  ingress: []
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: rustfs
+            app.kubernetes.io/name: rustfs
+      toPorts:
+        - ports:
+            - port: '9000'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: tempo
+  namespace: monitoring
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: tempo
+      app.kubernetes.io/name: tempo
+
   ingress:
     - fromEndpoints:
         - matchLabels:
