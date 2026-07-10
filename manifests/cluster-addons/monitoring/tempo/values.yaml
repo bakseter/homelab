@@ -12,7 +12,7 @@ tempo:
 
         s3:
           bucket: tempo
-          endpoint: http://rustfs-svc.rustfs.svc.cluster.local:9000
+          endpoint: rustfs-svc.rustfs.svc.cluster.local:9000
           access_key: rustfs
           secret_key: rustfs
           insecure: true
