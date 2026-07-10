@@ -16,3 +16,7 @@ tempo:
           access_key: rustfs
           secret_key: rustfs
           insecure: true
+
+    metricsGenerator:
+      enabled: true
+      # remoteWriteUrl: http://prometheus-operated.monitoring.svc.cluster.local:9090/api/v1/write
