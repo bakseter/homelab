@@ -52,6 +52,11 @@ alloy:
         targetPort: 4317
         protocol: TCP
 
+      - name: otlp-http
+        port: 4318
+        targetPort: 4318
+        protocol: TCP
+
     enableReporting: false
 
     configMap:
@@ -183,6 +188,10 @@ alloy:
         otelcol.receiver.otlp "apps" {
           grpc {
             endpoint = "0.0.0.0:4317"
+          }
+
+          http {
+            endpoint = "0.0.0.0:4318"
           }
 
           output {
