@@ -43,7 +43,7 @@ spec:
             - port: '10080'
               protocol: TCP
 
-    - fromEndpoints:
+    - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: monitoring
             app.kubernetes.io/name: alloy
