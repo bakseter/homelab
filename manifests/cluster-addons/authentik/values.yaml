@@ -63,6 +63,12 @@ authentik:
           release: kube-prometheus-stack
 
     env:
+      - name: PYTHONPATH
+        value: /ak-root/venv/lib/python3.14/site-packages
+
+      - name: DJANGO_SETTINGS_MODULE
+        value: authentik.root.settings
+
       - name: AUTHENTIK_LISTEN__TRUSTED_PROXY_CIDRS
         value: 10.244.0.0/16
 
