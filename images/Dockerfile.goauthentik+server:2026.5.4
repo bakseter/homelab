@@ -14,4 +14,4 @@ RUN uv pip install --python /ak-root/.venv/bin/python3 \
 
 USER 65534
 
-ENTRYPOINT ["dumb-init", "--", "/ak-root/.venv/bin/opentelemetry-instrument", "ak"]
+ENTRYPOINT ["dumb-init", "--", "ak"]
