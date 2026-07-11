@@ -6,9 +6,9 @@ authentik:
   global:
     revisionHistoryLimit: 5
     image:
-      repository: ghcr.io/goauthentik/server
+      repository: ghcr.io/bakseter/homelab/goauthentik/server
       tag: 2026.5.4
-      digest: sha256:a8e80071e5938cca7c8d03461a56740041f274d721100974e042b6d265001f50
+      digest: sha256:9af060ff23b4b2d33f46f4cf187e36d117492983a6142cf2fae1ff5fa078668d
     securityContext:
       runAsNonRoot: true
       runAsUser: 65534
