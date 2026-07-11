@@ -28,8 +28,8 @@ authentik:
   server:
     replicas: 1
 
-    podAnnotations:
-      instrumentation.opentelemetry.io/inject-python: 'true'
+#   podAnnotations:
+#     instrumentation.opentelemetry.io/inject-python: 'true'
 
     affinity:
       podAntiAffinity:
@@ -163,8 +163,8 @@ authentik:
         value: '4'
 
   worker:
-    podAnnotations:
-      instrumentation.opentelemetry.io/inject-python: 'true'
+#   podAnnotations:
+#     instrumentation.opentelemetry.io/inject-python: 'true'
 
     containerSecurityContext:
       allowPrivilegeEscalation: false
