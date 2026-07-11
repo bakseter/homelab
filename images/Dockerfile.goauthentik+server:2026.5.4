@@ -12,6 +12,8 @@ RUN uv pip install --python /ak-root/.venv/bin/python3 \
       opentelemetry-instrumentation-psycopg \
     && /ak-root/.venv/bin/opentelemetry-bootstrap -a install
 
+COPY --chown=65534:65534 gunicorn.conf.py /lifecycle/gunicorn.conf.py
+
 USER 65534
 
 ENTRYPOINT ["dumb-init", "--", "ak"]
