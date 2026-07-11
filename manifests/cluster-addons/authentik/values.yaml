@@ -25,7 +25,7 @@ authentik:
     image:
       repository: ghcr.io/bakseter/homelab/goauthentik/server
       tag: 2026.5.4
-      digest: sha256:a3db00648b0edf88bbda6e31431b87e45708d9c6062302b26ae6af7d03b95022
+      digest: sha256:fcbd2197271fddfb8505926f3e85bcf9cbc8a9a2f62898dd80e743c9504d64d1
 
     replicas: 1
 
