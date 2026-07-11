@@ -49,5 +49,5 @@ jobs:
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           file: ${{ steps.get-env.outputs.dockerfile }}
-          push: ${{ github.ref == 'refs/heads/master && github.event_name == 'push' }} 
+          push: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }} 
           tags: ${{ steps.get-env.outputs.image-name-with-tag }}
