@@ -5,10 +5,6 @@ authentik:
 
   global:
     revisionHistoryLimit: 5
-    image:
-      repository: ghcr.io/bakseter/homelab/goauthentik/server
-      tag: 2026.5.4
-      digest: sha256:a3db00648b0edf88bbda6e31431b87e45708d9c6062302b26ae6af7d03b95022
     securityContext:
       runAsNonRoot: true
       runAsUser: 65534
@@ -26,6 +22,11 @@ authentik:
         release: kube-prometheus-stack
 
   server:
+    image:
+      repository: ghcr.io/bakseter/homelab/goauthentik/server
+      tag: 2026.5.4
+      digest: sha256:a3db00648b0edf88bbda6e31431b87e45708d9c6062302b26ae6af7d03b95022
+
     replicas: 1
 
     affinity:
@@ -204,6 +205,11 @@ authentik:
         value: 'k8s.container.name=server,k8s.deployment.name=authentik-server,k8s.namespace.name=authentik,k8s.node.name=$(OTEL_NODE_NAME),k8s.pod.name=$(OTEL_POD_NAME),service.namespace=authentik,service.version=2026.5.4'
 
   worker:
+    image:
+      repository: ghcr.io/goauthentik/server
+      tag: 2026.5.4
+      digest: sha256:a8e80071e5938cca7c8d03461a56740041f274d721100974e042b6d265001f50
+
     containerSecurityContext:
       allowPrivilegeEscalation: false
       capabilities:
