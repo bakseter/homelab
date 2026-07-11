@@ -8,4 +8,4 @@ spec:
     matchLabels:
       cnpg.io/cluster: authentik-database
   podMetricsEndpoints:
-  - port: metrics
+    - port: metrics
