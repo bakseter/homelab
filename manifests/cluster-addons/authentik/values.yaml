@@ -163,6 +163,9 @@ authentik:
         value: '4'
 
   worker:
+    podAnnotations:
+      instrumentation.opentelemetry.io/inject-python: 'true'
+
     containerSecurityContext:
       allowPrivilegeEscalation: false
       capabilities:
