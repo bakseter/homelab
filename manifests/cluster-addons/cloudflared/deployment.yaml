@@ -7,6 +7,10 @@ spec:
   replicas: 2
   revisionHistoryLimit: 5
   template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-go: 'true'
+        instrumentation.opentelemetry.io/otel-go-auto-target-exe: 'cloudflared'
     spec:
       affinity:
         podAntiAffinity:
@@ -20,13 +24,13 @@ spec:
               topologyKey: bakseter.net/physical-node
       securityContext:
         runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
-        fsGroup: 65534
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
         seccompProfile:
           type: RuntimeDefault
         supplementalGroups:
-          - 65534
+          - 65532
         sysctls:
           # Allows ICMP traffic (ping, traceroute) to resources behind cloudflared.
           - name: net.ipv4.ping_group_range
