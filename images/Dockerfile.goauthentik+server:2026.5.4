@@ -4,10 +4,14 @@ FROM ghcr.io/goauthentik/server:2026.5.4
 COPY --from=uv /uv /usr/local/bin/uv
 
 USER root
+
 RUN uv pip install --python /ak-root/.venv/bin/python3 \
       opentelemetry-distro \
       opentelemetry-exporter-otlp \
       opentelemetry-instrumentation-django \
       opentelemetry-instrumentation-psycopg \
     && /ak-root/.venv/bin/opentelemetry-bootstrap -a install
+
 USER 65534
+
+ENTRYPOINT ["dumb-init", "--", "/ak-root/.venv/bin/opentelemetry-instrument", "ak"]
