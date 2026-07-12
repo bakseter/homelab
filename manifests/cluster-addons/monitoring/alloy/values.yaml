@@ -81,7 +81,6 @@ alloy:
               "cnpg-system",
               "cryptpad",
               "democratic-csi",
-              "envoy-gateway-system",
               "external-dns",
               "five31",
               "homepage",
