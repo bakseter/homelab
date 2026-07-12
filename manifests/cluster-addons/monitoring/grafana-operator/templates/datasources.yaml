@@ -71,7 +71,7 @@ spec:
         filterByTraceID: true
         filterBySpanID: false
         customQuery: true
-        query: '{cluster="homelab"} |= "$${__trace.traceId}"'
+        query: '{cluster="homelab"} |= "${__trace.traceId}"'
       lokiSearch:
         datasourceUid: loki
       serviceMap:
