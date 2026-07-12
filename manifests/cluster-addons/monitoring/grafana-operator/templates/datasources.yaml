@@ -23,7 +23,7 @@ spec:
         - datasourceUid: tempo
           matcherRegex: '"trace_id":"(\w+)"'
           name: TraceID
-          url: '$${__value.raw}'
+          url: '${__value.raw}'
           urlDisplayLabel: 'View Trace'
 ---
 apiVersion: grafana.integreatly.org/v1beta1
