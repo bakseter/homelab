@@ -6,6 +6,8 @@ tempo:
 
     reportingEnabled: false
 
+    retention: 14d
+
     storage:
       trace:
         backend: s3
