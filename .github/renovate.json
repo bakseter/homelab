@@ -2,5 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended", "helpers:pinGitHubActionDigestsToSemver"],
   "commitMessagePrefix": "⬆️",
-  "minimumReleaseAge": "3 day"
+  "minimumReleaseAge": "3 day",
+  "kubernetes": {
+    "managerFilePatterns": ["/manifests/cluster-addons/.+\\.yaml$/"]
+  }
 }
