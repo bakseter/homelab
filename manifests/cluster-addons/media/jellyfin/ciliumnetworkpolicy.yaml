@@ -33,10 +33,10 @@ spec:
             - port: '8096'
               protocol: TCP
 
-    # LAN loadbalancer
+    # TODO: find way to further restrict this
+    # For LAN loadbalancer
     - fromEntities:
-        - host
-        - remote-node
+        - world
       toPorts:
         - ports:
             - port: '8096'

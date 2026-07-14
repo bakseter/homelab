@@ -31,7 +31,8 @@ spec:
             - port: '5055'
               protocol: TCP
 
-    # TODO: harden
+    # TODO: find way to further restrict this
+    # For LAN loadbalancer
     - fromEntities:
         - world
       toPorts:
