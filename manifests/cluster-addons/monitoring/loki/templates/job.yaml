@@ -20,7 +20,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: create-s3-buckets
-          image: amazon/aws-cli:2.34.46@sha256:c9756d3e11fdfc02497e980c1cb94c678c31b6e38c93f6443291e52f71493720
+          image: amazon/aws-cli:2.35.21@sha256:238583846e731f31c9848dae26c5a560769ff35c4c5368a4cb6be5816683e485
           env:
             - name: AWS_ACCESS_KEY_ID
               value: 'rustfs'
