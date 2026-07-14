@@ -6,7 +6,7 @@ tempo:
 
     reportingEnabled: false
 
-    retention: 14d
+    retention: 336h # 14 days
 
     storage:
       trace:
