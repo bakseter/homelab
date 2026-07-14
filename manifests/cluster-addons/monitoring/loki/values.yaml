@@ -56,7 +56,7 @@ loki:
     limits_config:
       allow_structured_metadata: true
       volume_enabled: true
-      retention_period: 720h
+      retention_period: 1440h
 
     ruler:
       enable_api: true
@@ -81,13 +81,13 @@ loki:
   deploymentMode: Distributed
 
   ingester:
-    replicas: 2
+    replicas: 3
     zoneAwareReplication:
       enabled: false
 
   querier:
-    replicas: 2
-    maxUnavailable: 1
+    replicas: 3
+    maxUnavailable: 2
 
   queryFrontend:
     replicas: 2
@@ -97,8 +97,8 @@ loki:
     replicas: 2
 
   distributor:
-    replicas: 2
-    maxUnavailable: 1
+    replicas: 3
+    maxUnavailable: 2
 
   compactor:
     replicas: 1
@@ -115,7 +115,7 @@ loki:
   chunksCache:
     enabled: false
     # default is 500MB, with limited memory keep this smaller
-    writebackSizeLimit: 150MB
+    writebackSizeLimit: 200MB
 
   gateway:
     enabled: true
