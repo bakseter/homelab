@@ -34,8 +34,9 @@ spec:
               protocol: TCP
 
     # LAN loadbalancer
-    - fromCIDR:
-        - 10.244.0.0/16 # CiliumNode CIDR
+    - fromEntities:
+        - host
+        - remote-node
       toPorts:
         - ports:
             - port: '8096'
