@@ -30,7 +30,7 @@ spec:
           - name: net.ipv4.ping_group_range
             value: '65532 65532'
       containers:
-        - image: cloudflare/cloudflared:2026.6.1@sha256:6d91c121b803126f7a5344005d17a9324788fc09d305b6e2560ec6040a7ae283
+        - image: cloudflare/cloudflared:2026.7.1@sha256:188bb03589a32affed3cf4d0590565ffe67b78866e6b5582574afab2b705bafe
           name: cloudflared
           env:
             # Defines an environment variable for the tunnel token.
