@@ -33,9 +33,9 @@ spec:
             - port: '8096'
               protocol: TCP
 
-    # TODO: lock down
-    - fromEntities:
-        - world
+    # LAN loadbalancer
+    - fromCIDR:
+        - 192.168.0.0/16
       toPorts:
         - ports:
             - port: '8096'
@@ -44,6 +44,7 @@ spec:
   egress:
     - toFQDNs:
         - matchPattern: '*.jellyfin.org'
+        - matchPattern: '*.mirror.jellyfin.org'
         #
         - matchPattern: '*.theaudiodb.com'
         - matchName: 'musicbrainz.org'
