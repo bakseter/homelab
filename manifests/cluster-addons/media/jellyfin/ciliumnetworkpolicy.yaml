@@ -35,7 +35,7 @@ spec:
 
     # LAN loadbalancer
     - fromCIDR:
-        - 192.168.0.0/16
+        - 10.244.0.0/16 # CiliumNode CIDR
       toPorts:
         - ports:
             - port: '8096'
