@@ -1,16 +1,16 @@
 ---
-- name: Configure MikroTik hAP ax3 - Firewall, NordVPN, WiFi
+- name: Configure MikroTik RB5009 - Firewall, NordVPN, WiFi
   hosts: localhost
   gather_facts: false
   become: false
   vars_files:
-    - group_vars/all/hap_ax3.yaml
+    - group_vars/all/rb5009.yaml
 
   module_defaults:
     group/community.routeros.api:
-      hostname: '{{ hap_ax3_host }}'
-      username: '{{ hap_ax3_username }}'
-      password: '{{ hap_ax3_password }}'
+      hostname: '{{ rb5009_host }}'
+      username: '{{ rb5009_username }}'
+      password: '{{ rb5009_password }}'
       tls: false
 
   tasks:
@@ -211,12 +211,12 @@
     - name: Upload certificate via SCP
       ansible.builtin.command:
         cmd: >
-          sshpass -p {{ hap_ax3_password }}
+          sshpass -p {{ rb5009_password }}
           scp -O
           -o StrictHostKeyChecking=no
           -o UserKnownHostsFile=/dev/null
           /tmp/root.der
-          {{ hap_ax3_username }}@{{ hap_ax3_host }}:root.der
+          {{ rb5009_username }}@{{ rb5009_host }}:root.der
 
     - name: Import NordVPN root certificate
       community.routeros.api:

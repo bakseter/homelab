@@ -1,16 +1,16 @@
 ---
-- name: Configure MikroTik hAP ax3 - VLANs and DHCP
+- name: Configure MikroTik RB5009 - VLANs and DHCP
   hosts: localhost
   gather_facts: false
   become: false
   vars_files:
-    - group_vars/all/hap_ax3.yaml
+    - group_vars/all/rb5009.yaml
 
   module_defaults:
     group/community.routeros.api:
-      hostname: '{{ hap_ax3_host }}'
-      username: '{{ hap_ax3_username }}'
-      password: '{{ hap_ax3_password }}'
+      hostname: '{{ rb5009_host }}'
+      username: '{{ rb5009_username }}'
+      password: '{{ rb5009_password }}'
       tls: false
 
   tasks:
@@ -63,20 +63,11 @@
           pvid: '50'
           frame-types: admit-only-untagged-and-priority-tagged
 
-    - name: Set wifi1 bridge port to VLAN 50
+    - name: Set ether6 as access port to VLAN 50
       community.routeros.api_find_and_modify:
         path: interface bridge port
         find:
-          interface: wifi1
-        values:
-          pvid: '50'
-          frame-types: admit-only-untagged-and-priority-tagged
-
-    - name: Set wifi2 bridge port to VLAN 50
-      community.routeros.api_find_and_modify:
-        path: interface bridge port
-        find:
-          interface: wifi2
+          interface: ether6
         values:
           pvid: '50'
           frame-types: admit-only-untagged-and-priority-tagged
@@ -186,14 +177,14 @@
         values:
           bridge: bridge
           tagged: 'bridge'
-          untagged: 'ether2,ether3,ether4,ether5'
+          untagged: 'ether2,ether3,ether4,ether5,ether6'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 88) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
     - name: Add bridge VLAN 88 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=88 tagged=bridge untagged=ether2,ether3,ether4,ether5'
+        cmd: 'add bridge=bridge vlan-ids=88 tagged=bridge untagged=ether2,ether3,ether4,ether5,ether6'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 88) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
@@ -259,14 +250,14 @@
         values:
           bridge: bridge
           tagged: 'bridge,ether2'
-          untagged: 'ether4,ether5,wifi1,wifi2'
+          untagged: 'ether4,ether5,ether6'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 50) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
     - name: Add bridge VLAN 50 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether4,ether5,wifi1,wifi2'
+        cmd: 'add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether4,ether5,ether6'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 50) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
