@@ -72,6 +72,24 @@
           pvid: '50'
           frame-types: admit-only-untagged-and-priority-tagged
 
+    - name: Set ether7 as access port to VLAN 50
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: ether7
+        values:
+          pvid: '50'
+          frame-types: admit-only-untagged-and-priority-tagged
+
+    - name: Set ether8 as access port to VLAN 10 (management port)
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: ether8
+        values:
+          pvid: '10'
+          frame-types: admit-only-untagged-and-priority-tagged
+
     # -------------------------
     # Cleanup - defconf DHCP server only
     # -------------------------
@@ -111,46 +129,6 @@
         path: interface list member
         remove: "{{ item['.id'] }}"
       loop: "{{ _iface_list_cleanup | selectattr('interface', 'match', '^\\*[0-9A-Fa-f]+$') | list }}"
-      ignore_errors: true
-
-    # -------------------------
-    # Cleanup - stale media virtual APs only
-    # -------------------------
-    - name: Gather WiFi interfaces
-      community.routeros.api:
-        path: interface wifi
-        cmd: 'print'
-      register: _wifi_raw
-
-    - name: Normalize WiFi interface list
-      set_fact:
-        _wifi_list: '{{ _wifi_raw.msg if (_wifi_raw.msg is iterable and _wifi_raw.msg is not string) else [] }}'
-
-    - name: Remove stale media virtual APs
-      community.routeros.api:
-        path: interface wifi
-        remove: "{{ item['.id'] }}"
-      loop: "{{ _wifi_list | selectattr('name', 'defined') | selectattr('name', 'search', 'media') | list }}"
-      ignore_errors: true
-
-    # -------------------------
-    # Cleanup - stale media bridge ports only
-    # -------------------------
-    - name: Gather bridge ports
-      community.routeros.api:
-        path: interface bridge port
-        cmd: 'print'
-      register: _bridge_ports_raw
-
-    - name: Normalize bridge port list
-      set_fact:
-        _bridge_ports_list: '{{ _bridge_ports_raw.msg if (_bridge_ports_raw.msg is iterable and _bridge_ports_raw.msg is not string) else [] }}'
-
-    - name: Remove stale media bridge ports
-      community.routeros.api:
-        path: interface bridge port
-        remove: "{{ item['.id'] }}"
-      loop: "{{ _bridge_ports_list | selectattr('interface', 'defined') | selectattr('interface', 'search', 'media') | list }}"
       ignore_errors: true
 
     # -------------------------
@@ -240,6 +218,24 @@
         path: interface bridge vlan
         cmd: 'add bridge=bridge vlan-ids=30 tagged=bridge,ether2'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 30) | selectattr('dynamic', 'equalto', false) | list | length == 0
+      ignore_errors: true
+
+    - name: Update bridge VLAN 40 if present
+      community.routeros.api_find_and_modify:
+        path: interface bridge vlan
+        find:
+          vlan-ids: '40'
+        values:
+          bridge: bridge
+          tagged: 'bridge,ether2'
+      when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 40) | selectattr('dynamic', 'equalto', false) | list | length > 0
+      ignore_errors: true
+
+    - name: Add bridge VLAN 40 if absent
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: 'add bridge=bridge vlan-ids=40 tagged=bridge,ether2'
+      when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 40) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
     - name: Update bridge VLAN 50 if present

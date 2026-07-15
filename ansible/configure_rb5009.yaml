@@ -200,103 +200,6 @@
       ignore_errors: true
 
     # -------------------------
-    # NordVPN IKEv2 - Certificate
-    # -------------------------
-    - name: Fetch NordVPN root certificate locally
-      ansible.builtin.get_url:
-        url: https://downloads.nordcdn.com/certificates/root.der
-        dest: /tmp/root.der
-        force: true
-
-    - name: Upload certificate via SCP
-      ansible.builtin.command:
-        cmd: >
-          sshpass -p {{ rb5009_password }}
-          scp -O
-          -o StrictHostKeyChecking=no
-          -o UserKnownHostsFile=/dev/null
-          /tmp/root.der
-          {{ rb5009_username }}@{{ rb5009_host }}:root.der
-
-    - name: Import NordVPN root certificate
-      community.routeros.api:
-        path: certificate
-        cmd: 'import file-name=root.der'
-
-    # -------------------------
-    # NordVPN IKEv2 - IPsec config
-    # -------------------------
-    - name: Add IPsec profile for NordVPN
-      community.routeros.api:
-        path: ip ipsec profile
-        cmd: 'add name=NordVPN enc-algorithm=aes-256 hash-algorithm=sha256 dh-group=modp2048'
-
-    - name: Add IPsec proposal for NordVPN
-      community.routeros.api:
-        path: ip ipsec proposal
-        cmd: 'add name=NordVPN pfs-group=none enc-algorithms=aes-256-cbc auth-algorithms=sha256'
-
-    - name: Add IPsec policy group for NordVPN
-      community.routeros.api:
-        path: ip ipsec policy group
-        cmd: 'add name=NordVPN'
-
-    - name: Add IPsec policy template for NordVPN
-      community.routeros.api:
-        path: ip ipsec policy
-        cmd: 'add dst-address=0.0.0.0/0 group=NordVPN proposal=NordVPN src-address=0.0.0.0/0 template=yes'
-
-    - name: Add IPsec mode-config for NordVPN
-      community.routeros.api:
-        path: ip ipsec mode-config
-        cmd: 'add name=NordVPN responder=no'
-
-    - name: Add NordVPN peer
-      community.routeros.api:
-        path: ip ipsec peer
-        cmd: 'add address={{ nordvpn_server }} exchange-mode=ike2 name=NordVPN profile=NordVPN'
-
-    - name: Add NordVPN identity
-      community.routeros.api:
-        path: ip ipsec identity
-        cmd: "add auth-method=eap certificate=\"\" eap-methods=eap-mschapv2 generate-policy=port-strict mode-config=NordVPN peer=NordVPN policy-template-group=NordVPN username={{ nordvpn_username | trim | replace('\n', '') }} password={{ nordvpn_password | trim | replace('\n', '') }}"
-
-    # -------------------------
-    # NordVPN - Address lists
-    # -------------------------
-    - name: Add VLAN subnets to nordvpn-local address list
-      community.routeros.api:
-        path: ip firewall address-list
-        cmd: 'add address={{ vlan.subnet }} list=nordvpn-local comment={{ vlan.name }}'
-      loop: "{{ vlans | selectattr('vpn', 'equalto', true) | list }}"
-      loop_control:
-        loop_var: vlan
-
-    - name: Assign address list to NordVPN mode-config
-      community.routeros.api_find_and_modify:
-        path: ip ipsec mode-config
-        find:
-          name: NordVPN
-        values:
-          src-address-list: nordvpn-local
-
-    # -------------------------
-    # NordVPN - MSS clamp
-    # -------------------------
-    - name: Add MSS clamp for IPSec MTU fix
-      community.routeros.api:
-        path: ip firewall mangle
-        cmd: 'add chain=forward protocol=tcp tcp-flags=syn action=change-mss new-mss=1360 passthrough=yes comment=ipsec-mss-fix'
-
-    # -------------------------
-    # NordVPN - DNS leak prevention
-    # -------------------------
-    - name: Set NordVPN DNS servers
-      community.routeros.api:
-        path: ip dns
-        cmd: 'set servers=103.86.96.100,103.86.99.100 allow-remote-requests=yes'
-
-    # -------------------------
     # Firewall forward rules
     # -------------------------
     - name: Allow established and related
@@ -410,31 +313,101 @@
         cmd: 'add chain=input src-address=192.168.50.0/24 dst-port=22,80,8291,8728,8729 protocol=tcp action=drop comment=drop-wifi-router-mgmt'
 
     # -------------------------
-    # WiFi SSID and security
+    # NordVPN IKEv2 - Certificate
     # -------------------------
-    - name: Configure wifi1 5GHz
-      community.routeros.api_find_and_modify:
-        path: interface wifi
-        find:
-          default-name: wifi1
-        values:
-          configuration.ssid: '{{ wifi_ssid }}'
-          configuration.mode: ap
-          security.authentication-types: wpa2-psk,wpa3-psk
-          security.passphrase: '{{ wifi_password }}'
-          disabled: 'no'
+    - name: Fetch NordVPN root certificate locally
+      ansible.builtin.get_url:
+        url: https://downloads.nordcdn.com/certificates/root.der
+        dest: /tmp/root.der
+        force: true
 
-    - name: Configure wifi2 2.4GHz
+    - name: Upload certificate via SCP
+      ansible.builtin.command:
+        cmd: >
+          sshpass -p {{ rb5009_password }}
+          scp -O
+          -o StrictHostKeyChecking=no
+          -o UserKnownHostsFile=/dev/null
+          /tmp/root.der
+          {{ rb5009_username }}@{{ rb5009_host }}:root.der
+
+    - name: Import NordVPN root certificate
+      community.routeros.api:
+        path: certificate
+        cmd: 'import file-name=root.der'
+
+    # -------------------------
+    # NordVPN IKEv2 - IPsec config
+    # -------------------------
+    - name: Add IPsec profile for NordVPN
+      community.routeros.api:
+        path: ip ipsec profile
+        cmd: 'add name=NordVPN enc-algorithm=aes-256 hash-algorithm=sha256 dh-group=modp2048'
+
+    - name: Add IPsec proposal for NordVPN
+      community.routeros.api:
+        path: ip ipsec proposal
+        cmd: 'add name=NordVPN pfs-group=none enc-algorithms=aes-256-cbc auth-algorithms=sha256'
+
+    - name: Add IPsec policy group for NordVPN
+      community.routeros.api:
+        path: ip ipsec policy group
+        cmd: 'add name=NordVPN'
+
+    - name: Add IPsec policy template for NordVPN
+      community.routeros.api:
+        path: ip ipsec policy
+        cmd: 'add dst-address=0.0.0.0/0 group=NordVPN proposal=NordVPN src-address=0.0.0.0/0 template=yes'
+
+    - name: Add IPsec mode-config for NordVPN
+      community.routeros.api:
+        path: ip ipsec mode-config
+        cmd: 'add name=NordVPN responder=no'
+
+    - name: Add NordVPN peer
+      community.routeros.api:
+        path: ip ipsec peer
+        cmd: 'add address={{ nordvpn_server }} exchange-mode=ike2 name=NordVPN profile=NordVPN'
+
+    - name: Add NordVPN identity
+      community.routeros.api:
+        path: ip ipsec identity
+        cmd: "add auth-method=eap certificate=\"\" eap-methods=eap-mschapv2 generate-policy=port-strict mode-config=NordVPN peer=NordVPN policy-template-group=NordVPN username={{ nordvpn_username | trim | replace('\n', '') }} password={{ nordvpn_password | trim | replace('\n', '') }}"
+
+    # -------------------------
+    # NordVPN - Address lists
+    # -------------------------
+    - name: Add VLAN subnets to nordvpn-local address list
+      community.routeros.api:
+        path: ip firewall address-list
+        cmd: 'add address={{ vlan.subnet }} list=nordvpn-local comment={{ vlan.name }}'
+      loop: "{{ vlans | selectattr('vpn', 'equalto', true) | list }}"
+      loop_control:
+        loop_var: vlan
+
+    - name: Assign address list to NordVPN mode-config
       community.routeros.api_find_and_modify:
-        path: interface wifi
+        path: ip ipsec mode-config
         find:
-          default-name: wifi2
+          name: NordVPN
         values:
-          configuration.ssid: '{{ wifi_ssid }}'
-          configuration.mode: ap
-          security.authentication-types: wpa2-psk,wpa3-psk
-          security.passphrase: '{{ wifi_password }}'
-          disabled: 'no'
+          src-address-list: nordvpn-local
+
+    # -------------------------
+    # NordVPN - MSS clamp
+    # -------------------------
+    - name: Add MSS clamp for IPSec MTU fix
+      community.routeros.api:
+        path: ip firewall mangle
+        cmd: 'add chain=forward protocol=tcp tcp-flags=syn action=change-mss new-mss=1360 passthrough=yes comment=ipsec-mss-fix'
+
+    # -------------------------
+    # NordVPN - DNS leak prevention
+    # -------------------------
+    - name: Set NordVPN DNS servers
+      community.routeros.api:
+        path: ip dns
+        cmd: 'set servers=103.86.96.100,103.86.99.100 allow-remote-requests=yes'
 
   post_tasks:
     - name: Verify firewall rules

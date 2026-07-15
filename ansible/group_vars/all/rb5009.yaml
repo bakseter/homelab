@@ -65,7 +65,7 @@ vlans:
     dhcp_pool_end: 192.168.80.200
     vpn: false
 
-rb5009_host: 192.168.88.1
+rb5009_host: 192.168.50.1
 rb5009_username: admin
 rb5009_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
