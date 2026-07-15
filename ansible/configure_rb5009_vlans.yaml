@@ -22,7 +22,7 @@
         path: system identity
         find: {}
         values:
-          name: hap-ax3
+          name: rb5009
 
     # -------------------------
     # Bridge ports
