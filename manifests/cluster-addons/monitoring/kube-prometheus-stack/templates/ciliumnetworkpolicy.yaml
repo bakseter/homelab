@@ -21,6 +21,8 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: homepage
             app.kubernetes.io/name: homepage
+        - matchLabels:
+            app.kubernetes.io/name: tempo
       toPorts:
         - ports:
             - port: '9090'

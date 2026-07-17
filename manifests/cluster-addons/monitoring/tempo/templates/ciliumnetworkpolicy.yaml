@@ -82,3 +82,11 @@ spec:
         - ports:
             - port: '9000'
               protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '9090'
+              protocol: TCP

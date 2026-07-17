@@ -21,4 +21,24 @@ tempo:
 
     metricsGenerator:
       enabled: true
-      # remoteWriteUrl: http://prometheus-operated.monitoring.svc.cluster.local:9090/api/v1/write
+      remoteWriteUrl: http://prometheus-operated.monitoring.svc.cluster.local:9090/api/v1/write
+
+    overrides:
+      defaults:
+        metrics_generator:
+          processors:
+            - service-graphs
+            - span-metrics
+          # classic + native during migration; needs native-histograms
+          # enabled on Prometheus (which you're adding)
+          generate_native_histograms: both
+          processor:
+            span_metrics:
+              enable_target_info: true # emits target_info for resource-attr joins
+              dimensions: # extra RED-metric labels — keep low-card
+                - k8s.namespace.name
+                - k8s.deployment.name
+                - http.route
+            service_graphs:
+              dimensions:
+                - k8s.namespace.name
