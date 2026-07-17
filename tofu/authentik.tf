@@ -14,10 +14,6 @@ data "authentik_flow" "default-provider-authorization-implicit-consent" {
   slug = "default-provider-authorization-implicit-consent"
 }
 
-data "authentik_flow" "default-provider-authorization-explicit-consent" {
-  slug = "default-provider-authorization-explicit-consent"
-}
-
 data "authentik_flow" "default-provider-invalidation-flow" {
   slug = "default-provider-invalidation-flow"
 }
@@ -25,6 +21,7 @@ data "authentik_flow" "default-provider-invalidation-flow" {
 
 #### Application auth
 
+# TODO: remove
 resource "authentik_provider_proxy" "mandagsmiddag-frontend" {
   name                  = "mandagsmiddag-frontend"
   external_host         = "https://mandagsmiddag.no"
@@ -34,6 +31,7 @@ resource "authentik_provider_proxy" "mandagsmiddag-frontend" {
   mode                  = "forward_single"
 }
 
+# TODO: remove
 resource "authentik_provider_proxy" "mandagsmiddag-backend" {
   name                  = "mandagsmiddag-backend"
   external_host         = "https://mandagsmiddag.no/api"
@@ -43,6 +41,7 @@ resource "authentik_provider_proxy" "mandagsmiddag-backend" {
   mode                  = "forward_single"
 }
 
+# TODO: remove
 resource "authentik_application" "mandagsmiddag-frontend" {
   name              = "Mandagsmiddag"
   slug              = "mandagsmiddag-frontend"
@@ -51,6 +50,7 @@ resource "authentik_application" "mandagsmiddag-frontend" {
   meta_icon = "https://mandagsmiddag.no/icon.png"
 }
 
+# TODO: remove
 resource "authentik_application" "mandagsmiddag-backend" {
   name              = "mandagsmiddag-backend"
   slug              = "mandagsmiddag-backend"
@@ -64,10 +64,12 @@ resource "authentik_application" "mandagsmiddag-backend" {
 
 #### OIDC integrations
 
+# TODO: remove
 data "authentik_service_connection_kubernetes" "local" {
   name = "Local Kubernetes Cluster"
 }
 
+# TODO: remove
 resource "authentik_outpost" "mandagsmiddag" {
   name = "mandagsmiddag"
   protocol_providers = [
@@ -317,6 +319,55 @@ resource "authentik_policy_binding" "five31-access" {
   group  = authentik_group.five31-users.id
   order  = 0
 }
+
+
+#### mandagsmiddag
+
+resource "authentik_provider_oauth2" "mandagsmiddag" {
+  name      = "mandagsmiddag"
+  client_id = "mandagsmiddag"
+
+  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
+  invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
+
+  sub_mode = "user_username"
+
+  signing_key       = data.authentik_certificate_key_pair.default.id
+  property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
+
+  access_token_validity  = "hours=1"
+  refresh_token_validity = "days=30"
+
+  allowed_redirect_uris = [
+    {
+      matching_mode     = "strict"
+      redirect_uri_type = "authorization"
+      url               = "https://mandagsmiddag.no/oauth2/callback"
+    }
+  ]
+}
+
+resource "authentik_application" "mandagsmiddag" {
+  name              = "mandagsmiddag"
+  slug              = "mandagsmiddag"
+  protocol_provider = authentik_provider_oauth2.mandagsmiddag.id
+
+  meta_launch_url = "https://mandagsmiddag.no"
+  meta_icon       = "https://mandagsmiddag.no/icon.png"
+}
+
+/*
+resource "authentik_group" "mandagsmiddag-users" {
+  name = "mandagsmiddag-mandagsmiddag"
+  users = []
+}
+
+resource "authentik_policy_binding" "mandagsmiddag-access" {
+  target = authentik_application.five31.uuid
+  group  = authentik_group.five31-users.id
+  order  = 0
+}
+*/
 
 
 #### RBAC
