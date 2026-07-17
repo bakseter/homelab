@@ -17,8 +17,6 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: monitoring
             app: grafana
-        - matchLabels:
-            app.kubernetes.io/name: authentik-outpost-proxy
       toPorts:
         - ports:
             - port: '9000'
@@ -126,55 +124,6 @@ spec:
 
     - toEntities:
         - kube-apiserver
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: authentik-outpost-proxy
-  namespace: authentik
-spec:
-  endpointSelector:
-    matchLabels:
-      app.kubernetes.io/name: authentik-outpost-proxy
-
-  ingress:
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
-            gateway.envoyproxy.io/owning-gateway-name: cloudflared-gateway
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
-
-  egress:
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kube-system
-            k8s-app: kube-dns
-      toPorts:
-        - ports:
-            - port: '53'
-              protocol: ANY
-          rules:
-            dns:
-              - matchPattern: '*'
-
-    - toEndpoints:
-        - matchLabels:
-            app.kubernetes.io/instance: authentik
-            app.kubernetes.io/component: server
-      toPorts:
-        - ports:
-            - port: '9000'
-              protocol: TCP
-
-    - toFQDNs:
-        - matchPattern: '*'
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

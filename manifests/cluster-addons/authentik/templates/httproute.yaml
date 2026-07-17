@@ -5,10 +5,10 @@ metadata:
   namespace: authentik
 spec:
   parentRefs:
-    - name: cloudflared-gateway
-      namespace: cloudflared
-      group: gateway.networking.k8s.io # for argocd diff
+    - group: gateway.networking.k8s.io
       kind: Gateway
+      name: cloudflared-gateway
+      namespace: cloudflared
 
   hostnames:
     - authentik.bakseter.no
@@ -20,8 +20,8 @@ spec:
             value: /
 
       backendRefs:
-        - name: authentik-server
+        - group: ''
+          kind: Service
+          name: authentik-server
           port: 80
-          group: '' # for argocd diff
-          kind: Service # for argocd diff
-          weight: 1 # for argocd diff
+          weight: 1
