@@ -7,7 +7,7 @@ spec:
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      name: cloudflared-gateway
+      name: cloudflared
       namespace: cloudflared
 
   hostnames:
