@@ -58,6 +58,18 @@ loki:
       volume_enabled: true
       retention_period: 1440h
 
+      otlp_config:
+        resource_attributes:
+          ignore_defaults: true
+          attributes_config:
+          - action: index_label
+            attributes:
+              - service.name
+              - service.namespace
+              - deployment.environment.name
+              - k8s.namespace.name
+              - k8s.cluster.name
+
     ruler:
       enable_api: true
 
