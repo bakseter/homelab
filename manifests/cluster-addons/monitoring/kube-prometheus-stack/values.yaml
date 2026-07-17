@@ -71,11 +71,6 @@ kube-prometheus-stack:
               requests:
                 storage: 75Gi
 
-      metricRelabelings:
-        - sourceLabels: [__name__]
-          regex: '.*_bucket'
-          action: drop
-
       additionalScrapeConfigs:
         - job_name: proxmox-nodes
           static_configs:
@@ -115,6 +110,23 @@ kube-prometheus-stack:
       kubeSchedulerAlerting: false
       kubeSchedulerRecording: false
       windows: false
+
+  kubeApiServer:
+    serviceMonitor:
+       metricRelabelings:
+        - action: drop
+          sourceLabels: [__name__]
+          regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
+        - action: drop
+          sourceLabels: [__name__]
+          regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
+
+  kubelet:
+    serviceMonitor:
+      metricRelabelings:
+        - action: drop
+          sourceLabels: [__name__]
+          regex: rest_client_request_duration_seconds_(bucket|sum|count)
 
   alertmanager:
     enabled: true
