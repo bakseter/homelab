@@ -17,14 +17,21 @@ spec:
     url: http://loki-gateway.monitoring.svc.cluster.local
     isDefault: false
     jsonData:
-      httpMethod: GET
-      maxLines: 1000
       derivedFields:
-        - datasourceUid: tempo
-          matcherRegex: '"trace_id":"(\w+)"'
-          name: TraceID
+        - name: trace_id
+          matcherType: label
+          matcherRegex: 'trace_id'
+          datasourceUid: tempo
           url: '${__value.raw}'
-          urlDisplayLabel: 'View Trace'
+          urlDisplayLabel: 'View trace'
+
+        # Fallback for logs where trace_id is only in the body text:
+        - name: trace_id_body
+          matcherType: regex
+          matcherRegex: "trace[_-]?id[\"'=:\\s]+([a-fA-F0-9]{32})"
+          datasourceUid: tempo
+          url: '${__value.raw}'
+          urlDisplayLabel: 'View trace'
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource
@@ -43,7 +50,13 @@ spec:
     access: proxy
     basicAuth: false
     url: http://prometheus-operated.monitoring.svc.cluster.local:9090
-    isDefault: false
+    isDefault: true
+    jsonData:
+      httpMethod: POST
+      exemplarTraceIdDestinations:
+        - name: trace_id
+          datasourceUid: tempo
+          urlDisplayLabel: 'View trace'
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource
@@ -66,13 +79,34 @@ spec:
     jsonData:
       tracesToLogsV2:
         datasourceUid: loki
-        spanStartTimeShift: '-5m'
-        spanEndTimeShift: '5m'
+        spanStartTimeShift: '-1h'
+        spanEndTimeShift: '1h'
         filterByTraceID: true
         filterBySpanID: false
-        customQuery: true
-        query: '{cluster="homelab"} |= "${__trace.traceId}"'
+        tags:
+          - key: service.name
+            value: service_name
+          - key: k8s.namespace.name
+            value: k8s_namespace_name
+
+      tracesToMetrics:
+        datasourceUid: prometheus
+        spanStartTimeShift: '-1h'
+        spanEndTimeShift: '1h'
+        tags:
+          - key: service.name
+            value: service
+        queries:
+          - name: 'Request rate'
+            query: 'sum(rate(traces_spanmetrics_calls_total{$__tags}[5m]))'
+          - name: 'p99 latency'
+            query: 'histogram_quantile(0.99, sum(rate(traces_spanmetrics_latency_bucket{$__tags}[5m])) by (le))'
+
       lokiSearch:
         datasourceUid: loki
+
       serviceMap:
         datasourceUid: prometheus
+
+      nodeGraph:
+        enabled: true

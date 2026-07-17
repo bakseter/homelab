@@ -17,6 +17,12 @@ kube-prometheus-stack:
 
       externalUrl: https://prometheus.int.bakseter.net
 
+      # for Tempo
+      enableRemoteWriteReceiver: true
+      enableFeatures:
+        - exemplar-storage
+        - native-histograms
+
       serviceMonitorNamespaceSelector:
         matchExpressions:
           - key: kubernetes.io/metadata.name
