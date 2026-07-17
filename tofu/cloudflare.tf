@@ -3,7 +3,7 @@ provider "cloudflare" {
 }
 
 locals {
-  envoy_gateway = "http://envoy-cloudflared-cloudflared-gateway-7fece151.envoy-gateway-system.svc.cluster.local:80"
+  envoy_gateway = "http://envoy-cloudflared-cloudflared-60c155f1.envoy-gateway-system.svc.cluster.local:80"
   domains = [
     "bakseter.net"
   ]
