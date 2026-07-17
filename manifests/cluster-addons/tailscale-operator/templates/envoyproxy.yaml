@@ -1,7 +1,7 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
-  name: tailscale-proxy-int
+  name: tailscale-int
   namespace: tailscale
 spec:
   provider:
@@ -15,7 +15,7 @@ spec:
               requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
                     matchLabels:
-                      gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-int
+                      gateway.envoyproxy.io/owning-gateway-name: int-bakseter-net
                   topologyKey: bakseter.net/physical-node
       envoyService:
         type: LoadBalancer
@@ -28,7 +28,7 @@ spec:
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
-  name: tailscale-proxy-home
+  name: tailscale-home
   namespace: tailscale
 spec:
   provider:
@@ -42,7 +42,7 @@ spec:
               requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
                     matchLabels:
-                      gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-home
+                      gateway.envoyproxy.io/owning-gateway-name: home-bakseter-net
                   topologyKey: bakseter.net/physical-node
       envoyService:
         type: LoadBalancer
@@ -84,7 +84,7 @@ spec:
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
-  name: tailscale-proxy-sre
+  name: tailscale-sre
   namespace: tailscale
 spec:
   provider:
@@ -98,7 +98,7 @@ spec:
               requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
                     matchLabels:
-                      gateway.envoyproxy.io/owning-gateway-name: bakseter-net-gateway-sre
+                      gateway.envoyproxy.io/owning-gateway-name: sre-bakseter-net
                   topologyKey: bakseter.net/physical-node
       envoyService:
         type: LoadBalancer

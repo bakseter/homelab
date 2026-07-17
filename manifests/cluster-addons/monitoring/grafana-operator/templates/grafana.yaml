@@ -10,7 +10,7 @@ spec:
       parentRefs:
         - group: gateway.networking.k8s.io
           kind: Gateway
-          name: bakseter-net-gateway-sre
+          name: sre-bakseter-net
           namespace: tailscale
 
       hostnames:

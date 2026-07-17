@@ -7,7 +7,7 @@ spec:
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      name: bakseter-net-gateway-int
+      name: int-bakseter-net
       namespace: tailscale
 
   hostnames:
@@ -20,8 +20,8 @@ spec:
             value: /
 
       backendRefs:
-        - name: hubble-ui
+        - group: ''
+          kind: Service
+          name: hubble-ui
           port: 80
-          group: '' # for argocd diff
-          kind: Service # for argocd diff
-          weight: 1 # for argocd diff
+          weight: 1
