@@ -209,7 +209,7 @@ resource "authentik_policy_binding" "five31-access" {
 #### mandagsmiddag
 
 resource "authentik_provider_oauth2" "mandagsmiddag" {
-  name      = "mandagsmiddag"
+  name      = "Mandagsmiddag"
   client_id = "mandagsmiddag"
 
   authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
