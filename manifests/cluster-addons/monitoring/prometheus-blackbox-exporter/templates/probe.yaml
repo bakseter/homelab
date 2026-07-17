@@ -44,7 +44,7 @@ spec:
     staticConfig:
       static:
         - https://authentik.bakseter.no
-        - https://bakseter.no
+        - https://bakseter.no/status
         - https://mandagsmiddag.no
       labels:
         probe_type: tls
