@@ -82,6 +82,9 @@ spec:
 
     - group: 'gateway.envoyproxy.io'
       kind: SecurityPolicy
+
+    - group: 'bitnami.com'
+      kind: SealedSecret
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
