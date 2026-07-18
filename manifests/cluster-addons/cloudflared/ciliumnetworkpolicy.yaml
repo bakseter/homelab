@@ -56,11 +56,9 @@ spec:
         - world
       toPorts:
         - ports:
+            - port: '80'
+              protocol: TCP
             - port: '443'
               protocol: TCP
-        - ports:
             - port: '7844'
-              protocol: UDP
-        - ports:
-            - port: '7844'
-              protocol: TCP
+              protocol: ANY
