@@ -170,3 +170,22 @@ resource "cloudflare_dns_record" "bakseter-no-email-txt" {
   ttl     = 1
   proxied = false
 }
+
+
+## Security rules
+
+resource "cloudflare_ruleset" "mandagsmiddag-geoip-block" {
+  zone_id     =  cloudflare_zone.domain["mandagsmiddag.no"].id
+  name        = "GeoIP Allow List Rule"
+  description = "Block all traffic except allowed countries"
+  kind        = "zone"
+  phase       = "http_request_firewall_custom"
+
+  rules = [
+    {
+      action      = "block"
+      description = "Block non-allowed countries"
+      expression  = "not ip.src.country in {\"NO\"}"
+      enabled     = true
+    }
+  ]
