@@ -1,6 +1,6 @@
 FROM ghcr.io/astral-sh/uv:latest AS uv
 
-FROM ghcr.io/goauthentik/server:2026.5.4
+FROM ghcr.io/goauthentik/server:2026.5.5
 COPY --from=uv /uv /usr/local/bin/uv
 
 USER root
