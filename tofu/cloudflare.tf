@@ -197,7 +197,10 @@ resource "cloudflare_ruleset" "mandagsmiddag-geoip-block" {
 resource "cloudflare_bot_management" "domain" {
   for_each = toset(local.public_domains)
 
-  zone_id    = cloudflare_zone.domain[each.key].id
-  fight_mode = true
-  enable_js  = true
+  zone_id               = cloudflare_zone.domain[each.key].id
+  fight_mode            = true
+  enable_js             = true
+  ai_bots_protection    = "block"
+  is_robots_txt_managed = true
+  crawler_protection    = true
 }
