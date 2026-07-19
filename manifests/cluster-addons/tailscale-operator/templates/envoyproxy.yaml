@@ -7,6 +7,14 @@ spec:
   provider:
     type: Kubernetes
     kubernetes:
+      envoyService:
+        name: tailscale-int-gateway
+        type: LoadBalancer
+        loadBalancerClass: tailscale
+        annotations:
+          tailscale.com/hostname: gateway-envoy-int
+          tailscale.com/proxy-group: envoy-gateway
+          tailscale.com/tags: 'tag:k8s'
       envoyDeployment:
         name: tailscale-int-gateway
         replicas: 2
@@ -18,14 +26,6 @@ spec:
                     matchLabels:
                       gateway.envoyproxy.io/owning-gateway-name: tailscale-int
                   topologyKey: bakseter.net/physical-node
-      envoyService:
-        name: tailscale-int-gateway
-        type: LoadBalancer
-        loadBalancerClass: tailscale
-        annotations:
-          tailscale.com/hostname: gateway-envoy-int
-          tailscale.com/proxy-group: envoy-gateway
-          tailscale.com/tags: 'tag:k8s'
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
@@ -36,6 +36,14 @@ spec:
   provider:
     type: Kubernetes
     kubernetes:
+      envoyService:
+        name: tailscale-home-gateway
+        type: LoadBalancer
+        loadBalancerClass: tailscale
+        annotations:
+          tailscale.com/hostname: gateway-envoy-home
+          tailscale.com/proxy-group: envoy-gateway
+          tailscale.com/tags: 'tag:k8s,tag:home'
       envoyDeployment:
         name: tailscale-home-gateway
         replicas: 2
@@ -47,14 +55,6 @@ spec:
                     matchLabels:
                       gateway.envoyproxy.io/owning-gateway-name: tailscale-home
                   topologyKey: bakseter.net/physical-node
-      envoyService:
-        name: tailscale-home-gateway
-        type: LoadBalancer
-        loadBalancerClass: tailscale
-        annotations:
-          tailscale.com/hostname: gateway-envoy-home
-          tailscale.com/proxy-group: envoy-gateway
-          tailscale.com/tags: 'tag:k8s,tag:home'
   telemetry:
     accessLog:
       settings:
@@ -86,7 +86,6 @@ spec:
               requested_server_name: '%REQUESTED_SERVER_NAME%'
               route_name: '%ROUTE_NAME%'
               trace_id: '%TRACE_ID%'
-
           sinks:
             - type: OpenTelemetry
               openTelemetry:
@@ -94,25 +93,23 @@ spec:
                   - name: alloy
                     namespace: monitoring
                     port: 4317
+                resourceAttributes:
+                  'service.name': tailscale-home-gateway
+                  'k8s.cluster.name': homelab
+
     tracing:
       samplingRate: 100
       provider:
         type: OpenTelemetry
+        serviceName: tailscale-home-gateway
         backendRefs:
           - name: alloy
             namespace: monitoring
             port: 4317
-      customTags:
-        'k8s.pod.name':
-          type: Environment
-          environment:
-            name: ENVOY_POD_NAME
-            defaultValue: '-'
-        'k8s.namespace.name':
-          type: Environment
-          environment:
-            name: ENVOY_POD_NAMESPACE
-            defaultValue: 'envoy-gateway-system'
+      tags:
+        'k8s.cluster.name': homelab
+        'k8s.pod.name': '%ENVIRONMENT(ENVOY_POD_NAME)%'
+        'k8s.namespace.name': '%ENVIRONMENT(ENVOY_POD_NAMESPACE)%'
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
@@ -123,6 +120,14 @@ spec:
   provider:
     type: Kubernetes
     kubernetes:
+      envoyService:
+        name: tailscale-sre-gateway
+        type: LoadBalancer
+        loadBalancerClass: tailscale
+        annotations:
+          tailscale.com/hostname: gateway-envoy-sre
+          tailscale.com/proxy-group: envoy-gateway
+          tailscale.com/tags: 'tag:k8s,tag:sre'
       envoyDeployment:
         name: tailscale-sre-gateway
         replicas: 2
@@ -134,14 +139,6 @@ spec:
                     matchLabels:
                       gateway.envoyproxy.io/owning-gateway-name: tailscale-sre
                   topologyKey: bakseter.net/physical-node
-      envoyService:
-        name: tailscale-sre-gateway
-        type: LoadBalancer
-        loadBalancerClass: tailscale
-        annotations:
-          tailscale.com/hostname: gateway-envoy-sre
-          tailscale.com/proxy-group: envoy-gateway
-          tailscale.com/tags: 'tag:k8s,tag:sre'
   telemetry:
     accessLog:
       settings:
@@ -173,7 +170,6 @@ spec:
               requested_server_name: '%REQUESTED_SERVER_NAME%'
               route_name: '%ROUTE_NAME%'
               trace_id: '%TRACE_ID%'
-
           sinks:
             - type: OpenTelemetry
               openTelemetry:
@@ -181,22 +177,20 @@ spec:
                   - name: alloy
                     namespace: monitoring
                     port: 4317
+                resourceAttributes:
+                  'service.name': tailscale-sre-gateway
+                  'k8s.cluster.name': homelab
+
     tracing:
       samplingRate: 100
       provider:
         type: OpenTelemetry
+        serviceName: tailscale-sre-gateway
         backendRefs:
           - name: alloy
             namespace: monitoring
             port: 4317
-      customTags:
-        'k8s.pod.name':
-          type: Environment
-          environment:
-            name: ENVOY_POD_NAME
-            defaultValue: '-'
-        'k8s.namespace.name':
-          type: Environment
-          environment:
-            name: ENVOY_POD_NAMESPACE
-            defaultValue: 'envoy-gateway-system'
+      tags:
+        'k8s.cluster.name': homelab
+        'k8s.pod.name': '%ENVIRONMENT(ENVOY_POD_NAME)%'
+        'k8s.namespace.name': '%ENVIRONMENT(ENVOY_POD_NAMESPACE)%'
