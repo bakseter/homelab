@@ -6,9 +6,21 @@ metadata:
 spec:
   exporter:
     endpoint: http://alloy.monitoring.svc.cluster.local:4318
+
   propagators:
     - tracecontext
     - baggage
+
   sampler:
     type: parentbased_traceidratio
     argument: '1'
+
+  resource:
+    resourceAttributes:
+      service.namespace: cloudflared
+      deployment.environment.name: production
+      k8s.cluster.name: homelab
+      network.role: ingress
+
+  defaults:
+    useLabelsForResourceAttributes: true
