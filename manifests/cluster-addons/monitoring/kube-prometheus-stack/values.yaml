@@ -113,7 +113,7 @@ kube-prometheus-stack:
 
   kubeApiServer:
     serviceMonitor:
-       metricRelabelings:
+      metricRelabelings:
         - action: drop
           sourceLabels: [__name__]
           regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket

@@ -9,7 +9,7 @@ node-feature-discovery:
       seccompProfile:
         type: RuntimeDefault
 
-    tolerations: []  # remove the control-plane toleration
+    tolerations: [] # remove the control-plane toleration
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -19,7 +19,7 @@ node-feature-discovery:
                   operator: DoesNotExist
   resources:
     limits:
-      memory: 512Mi  # 4Gi default is absurd for what NFD master actually does
+      memory: 512Mi # 4Gi default is absurd for what NFD master actually does
     requests:
       cpu: 100m
       memory: 128Mi

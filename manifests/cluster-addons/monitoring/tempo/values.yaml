@@ -24,8 +24,8 @@ tempo:
       remoteWriteUrl: http://prometheus-operated.monitoring.svc.cluster.local:9090/api/v1/write
       processor:
         local_blocks:
-          flush_to_storage: true      # query historical data, not just the recent in-memory window
-          filter_server_spans: false  # include client/internal spans, not only server-kind
+          flush_to_storage: true # query historical data, not just the recent in-memory window
+          filter_server_spans: false # include client/internal spans, not only server-kind
       traces_storage:
         path: /var/tempo/generator/traces
 

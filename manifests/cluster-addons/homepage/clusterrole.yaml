@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: homepage
 rules:
   - apiGroups:
-      - ""
+      - ''
     resources:
       - namespaces
       - pods

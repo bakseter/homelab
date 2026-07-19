@@ -12,10 +12,10 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app.kubernetes.io/name: technitium
-            topologyKey: bakseter.net/physical-node
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: technitium
+              topologyKey: bakseter.net/physical-node
       containers:
         - name: technitium
           image: technitium/dns-server:15.4.0@sha256:df7d90ef0f7b6fff6916d291a7022cd902290cc31c3141d4158b6c375a641b41
@@ -69,7 +69,8 @@ spec:
               mountPath: /tmp
         - name: log-collector
           image: busybox:stable@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
-          command: ['/bin/sh', '-c', 'tail -n+1 -F /var/log/technitium/dns/*.log']
+          command:
+            ['/bin/sh', '-c', 'tail -n+1 -F /var/log/technitium/dns/*.log']
           volumeMounts:
             - name: logs
               mountPath: /var/log/technitium/dns
