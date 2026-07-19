@@ -11,3 +11,7 @@ cert-manager:
       enabled: true
       labels:
         release: kube-prometheus-stack
+
+  # bakseter.net is hosted on Cloudflare
+  dns01RecursiveNameservers: 1.1.1.1
+  dns01RecursiveNameserversOnly: true
