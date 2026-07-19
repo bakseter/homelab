@@ -1,7 +1,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: int-bakseter-net
+  name: tailscale-int
   namespace: tailscale
   labels:
     external-dns: enabled
@@ -25,12 +25,12 @@ spec:
         certificateRefs:
           - group: ''
             kind: Secret
-            name: int-bakseter-net-tls
+            name: tailscale-int-tls
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: home-bakseter-net
+  name: tailscale-home
   namespace: tailscale
   labels:
     external-dns: enabled
@@ -54,12 +54,12 @@ spec:
         certificateRefs:
           - group: ''
             kind: Secret
-            name: home-bakseter-net-tls
+            name: tailscale-home-tls
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: sre-bakseter-net
+  name: tailscale-sre
   namespace: tailscale
   labels:
     external-dns: enabled
@@ -83,4 +83,4 @@ spec:
         certificateRefs:
           - group: ''
             kind: Secret
-            name: sre-bakseter-net-tls
+            name: tailscale-sre-tls
