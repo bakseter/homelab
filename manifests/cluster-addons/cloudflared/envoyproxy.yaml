@@ -8,8 +8,10 @@ spec:
     type: Kubernetes
     kubernetes:
       envoyService:
+        name: cloudflared-gateway
         type: ClusterIP
       envoyDeployment:
+        name: cloudflared-gateway
         replicas: 2
         pod:
           affinity:
