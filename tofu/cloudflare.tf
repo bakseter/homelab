@@ -202,5 +202,5 @@ resource "cloudflare_bot_management" "domain" {
   enable_js             = true
   ai_bots_protection    = "block"
   is_robots_txt_managed = true
-  crawler_protection    = true
+  crawler_protection    = "enabled"
 }
