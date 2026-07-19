@@ -175,7 +175,7 @@ resource "cloudflare_dns_record" "bakseter-no-email-txt" {
 ## Security rules
 
 resource "cloudflare_ruleset" "mandagsmiddag-geoip-block" {
-  zone_id     =  cloudflare_zone.domain["mandagsmiddag.no"].id
+  zone_id     = cloudflare_zone.domain["mandagsmiddag.no"].id
   name        = "GeoIP Allow List Rule"
   description = "Block all traffic except allowed countries"
   kind        = "zone"
@@ -189,3 +189,15 @@ resource "cloudflare_ruleset" "mandagsmiddag-geoip-block" {
       enabled     = true
     }
   ]
+}
+
+
+## Bot management
+
+resource "cloudflare_bot_management" "domain" {
+  for_each = toset(local.public_domains)
+
+  zone_id    = cloudflare_zone.domain[each.key].id
+  fight_mode = true
+  enable_js  = true
+}
