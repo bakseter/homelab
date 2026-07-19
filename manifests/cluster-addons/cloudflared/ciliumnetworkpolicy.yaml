@@ -60,6 +60,12 @@ spec:
               protocol: ANY # NOTE: could maybe be 'UDP'?
 
     - toFQDNs:
+        - matchPattern: '*.v2.argotunnel.com'
+      icmps:
+        - fields:
+            - type: '8'
+
+    - toFQDNs:
         - matchName: 'api.cloudflare.com'
       toPorts:
         - ports:
