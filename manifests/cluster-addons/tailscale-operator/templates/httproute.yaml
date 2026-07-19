@@ -5,7 +5,7 @@ metadata:
   namespace: tailscale
 spec:
   parentRefs:
-    - name: int-bakseter-net
+    - name: tailscale-int
       sectionName: http
   rules:
     - filters:
@@ -21,7 +21,7 @@ metadata:
   namespace: tailscale
 spec:
   parentRefs:
-    - name: home-bakseter-net
+    - name: tailscale-home
       sectionName: http
   rules:
     - filters:
@@ -37,7 +37,7 @@ metadata:
   namespace: tailscale
 spec:
   parentRefs:
-    - name: sre-bakseter-net
+    - name: tailscale-sre
       sectionName: http
   rules:
     - filters:

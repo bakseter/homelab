@@ -7,7 +7,7 @@ spec:
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      name: int-bakseter-net
+      name: tailscale-int
       namespace: tailscale
 
   hostnames:
