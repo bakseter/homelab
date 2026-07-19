@@ -52,13 +52,16 @@ spec:
             - port: '4318'
               protocol: TCP
 
-    - toEntities:
-        - world
+    - toFQDNs:
+        - matchPattern: '*.v2.argotunnel.com'
       toPorts:
         - ports:
-            - port: '80'
-              protocol: TCP
+            - port: '7844'
+              protocol: ANY # NOTE: could maybe be 'UDP'?
+
+    - toFQDNs:
+        - matchName: 'api.cloudflare.com'
+      toPorts:
+        - ports:
             - port: '443'
               protocol: TCP
-            - port: '7844'
-              protocol: ANY
