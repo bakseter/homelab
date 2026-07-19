@@ -32,6 +32,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: technitium
             app.kubernetes.io/name: technitium
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
       toPorts:
         - ports:
             - port: '53'
