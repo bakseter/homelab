@@ -4,5 +4,5 @@ version: 0.1.0
 dependencies:
   - name: rustfs
     alias: rustfs
-    version: 0.10.0
+    version: 0.8.0
     repository: https://charts.rustfs.com
