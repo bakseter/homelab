@@ -152,14 +152,18 @@ Available via Tailscale.
 
 Used only as modem, set to "bridge mode".
 
-## Mikrotik hAP ax3
+## Mikrotik RB5009UPr+S+IN
 
 Main router, connected to modem.
 
+## Mikrotik hAP ax3
+
+WiFi access point, connected to router via ethernet.
+
 ## Mikrotik hAP ax S
 
-Connected to main router via fiber, used as WiFi extender.
+Extra Wi-Fi access point, connected to router via fiber.
 
 ## TP-Link SG108E
 
-Managed Gigabit switch, connected to main router via ethernet.
+Managed Gigabit switch, connected to router via ethernet.

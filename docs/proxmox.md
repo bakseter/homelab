@@ -17,5 +17,5 @@ All VMs run Talos Linux. No other VMs exist; everything else should run inside t
 
 ## Ansible
 
-Promox hosts are managed via Ansible, see [ansible/](../ansible/).
+Proxmox hosts are managed via Ansible, see [ansible/](../ansible/).
 Not much is done there except configure things like `/etc/hosts` and network interfaces for VLANs.

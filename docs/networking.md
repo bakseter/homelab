@@ -2,20 +2,35 @@
 
 ## VLANs
 
-- 10: management
-  - router
-  - switch
+### `10` - management
 
-- 20: proxmox cluster
-  - m715q
-  - m715q2
-  - m720q
-  - m920q
+Router and Proxmox hosts.
 
-- 30: talos
-  - 1 CP & 1 worker each (except m920q, only 1 worker)
+### `20` - cluster
 
-- 40: desktop (dhcp)
-  - runs OpenTofu & Ansible
+Proxmox cluster (corosync).
 
-- 50: wifi (dhcp)
+### `30` - talos
+
+Talos VMs.
+
+### `40` - gaming (dhcp)
+
+Reserved for gaming desktop (no VPN).
+
+### `50` - wifi (dhcp)
+
+Everything connected to WiFi: laptops, phones, etc..
+
+### `60` - infra (dhcp)
+
+For single management machine, gets access to all VLANs.
+This means to access router, you must SSH to this node.
+
+### `70` - storage (dhcp)
+
+NAS.
+
+### `80` - media (dhcp)
+
+Media players (no VPN).

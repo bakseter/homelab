@@ -2,8 +2,7 @@
 
 ## Ansible
 
-Used for configuring the Proxmox hosts, Mikrotik hAP ax3
-and Mikrotik hAP ax S.
+Used for configuring the Proxmox hosts and Mikrotik router + APs.
 
 ## OpenTofu
 
