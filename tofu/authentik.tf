@@ -50,7 +50,7 @@ resource "authentik_provider_oauth2" "argocd" {
     {
       matching_mode     = "strict"
       redirect_uri_type = "authorization"
-      url               = "https://argocd.sre.bakseter.net/api/dex/callback"
+      url               = "https://argocd.sre.bakseter.net/auth/callback"
     }
   ]
 }
