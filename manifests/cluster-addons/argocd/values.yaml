@@ -17,22 +17,12 @@ argo-cd:
       url: https://argocd.sre.bakseter.net
 
       admin.enabled: false
-      dex.config: |
-        connectors:
-        - type: oidc
-          id: authentik
-          name: Authentik
-          config:
-            issuer: https://authentik.bakseter.no/application/o/argocd/
-            clientID: argocd
-            clientSecret: $argocd-authentik:clientSecret
-            insecureEnableGroups: true
-            getUserInfo: true
-            userNameKey: preferred_username
-            scopes:
-              - openid
-              - profile
-              - email
+      oidc.config: |
+        name: Authentik
+        issuer: https://authentik.bakseter.no/application/o/argocd/
+        clientID: argocd
+        clientSecret: $argocd-authentik:clientSecret
+        requestedScopes: ["openid", "profile", "email", "groups"]
 
       kustomize.buildOptions: --enable-helm
 
@@ -46,7 +36,7 @@ argo-cd:
         g, argocd-admins, role:org-admin
 
     dex:
-      enabled: true
+      enabled: false
 
   notifications:
     enabled: false
