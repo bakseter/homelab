@@ -35,19 +35,17 @@ argo-cd:
         p, role:org-admin, applicationsets, sync, *, allow
         g, argocd-admins, role:org-admin
 
-    dex:
-      enabled: false
-
+  dex:
+    enabled: false
   notifications:
     enabled: false
-
   redis-ha:
     enabled: false
 
   controller:
     replicas: 1
 
-    resouces:
+    resources:
       requests:
         cpu: 100m
         memory: 512Mi
@@ -126,22 +124,6 @@ argo-cd:
       limits:
         cpu: 100m
         memory: 256Mi
-
-    metrics:
-      enabled: true
-      serviceMonitor:
-        enabled: true
-        additionalLabels:
-          release: kube-prometheus-stack
-
-  dex:
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64Mi
-      limits:
-        cpu: 200m
-        memory: 512Mi
 
     metrics:
       enabled: true
