@@ -191,7 +191,7 @@ resource "cloudflare_ruleset" "mandagsmiddag-geoip-block" {
   ]
 }
 
-resource "cloudflare_ruleset" "mandagsmiddag-geoip-block" {
+resource "cloudflare_ruleset" "bakseter-no-geoip-block" {
   zone_id     = cloudflare_zone.domain["bakseter.no"].id
   name        = "GeoIP Allow List Rule"
   description = "Block all traffic outside of EU"
