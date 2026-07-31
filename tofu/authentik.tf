@@ -51,6 +51,11 @@ resource "authentik_provider_oauth2" "argocd" {
       matching_mode     = "strict"
       redirect_uri_type = "authorization"
       url               = "https://argocd.sre.bakseter.net/auth/callback"
+    },
+    {
+      matching_mode     = "strict"
+      redirect_uri_type = "authorization"
+      url               = "http://localhost:8085/auth/callback"
     }
   ]
 }
