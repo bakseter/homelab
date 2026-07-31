@@ -202,7 +202,7 @@ resource "cloudflare_ruleset" "bakseter-no-geoip-block" {
     {
       action      = "block"
       description = "Block non-EU"
-      expression  = "not ip.geoip.continent in {\"EU\"})"
+      expression  = "not ip.geoip.continent in {\"EU\"}"
       enabled     = true
     }
   ]
