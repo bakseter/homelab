@@ -177,15 +177,32 @@ resource "cloudflare_dns_record" "bakseter-no-email-txt" {
 resource "cloudflare_ruleset" "mandagsmiddag-geoip-block" {
   zone_id     = cloudflare_zone.domain["mandagsmiddag.no"].id
   name        = "GeoIP Allow List Rule"
-  description = "Block all traffic except allowed countries"
+  description = "Block all traffic outside of Norway"
   kind        = "zone"
   phase       = "http_request_firewall_custom"
 
   rules = [
     {
       action      = "block"
-      description = "Block non-allowed countries"
+      description = "Block non-Norway"
       expression  = "not ip.src.country in {\"NO\"}"
+      enabled     = true
+    }
+  ]
+}
+
+resource "cloudflare_ruleset" "mandagsmiddag-geoip-block" {
+  zone_id     = cloudflare_zone.domain["bakseter.no"].id
+  name        = "GeoIP Allow List Rule"
+  description = "Block all traffic outside of EU"
+  kind        = "zone"
+  phase       = "http_request_firewall_custom"
+
+  rules = [
+    {
+      action      = "block"
+      description = "Block non-EU"
+      expression  = "not ip.geoip.continent in {\"EU\"})"
       enabled     = true
     }
   ]
