@@ -24,6 +24,7 @@ data "authentik_property_mapping_provider_scope" "scopes" {
     "goauthentik.io/providers/oauth2/scope-profile",
     "goauthentik.io/providers/oauth2/scope-email",
     "goauthentik.io/providers/oauth2/scope-entitlements",
+    "goauthentik.io/providers/oauth2/scope-offline_access",
   ]
 }
 
