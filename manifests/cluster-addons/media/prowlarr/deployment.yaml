@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: prowlarr
-          image: ghcr.io/home-operations/prowlarr:2.5.1.5464@sha256:5014bec2085b72759570ae958cdee251956c059bf82ca6244a3ce99e1c327a12
+          image: ghcr.io/home-operations/prowlarr:2.6.0.5494@sha256:f2db7fc93c2c26476de74695b565bfced0f39255cdba30fedf6d1ec45789f818
           ports:
             - containerPort: 9696
               name: http
