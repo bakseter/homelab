@@ -81,9 +81,15 @@ resource "authentik_group" "argocd-admins" {
   users = [data.authentik_user.a.id]
 }
 
+resource "authentik_group" "argocd-viewers" {
+  name  = "argocd-viewers"
+  users = [data.authentik_user.e.id]
+}
+
 resource "authentik_policy_binding" "argocd-access" {
   for_each = toset([
     authentik_group.argocd-admins.id,
+    authentik_group.argocd-viewers.id,
   ])
 
   target = authentik_application.argocd.uuid
