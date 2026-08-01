@@ -2,5 +2,5 @@ seerr:
   image:
     registry: ghcr.io
     repository: seerr-team/seerr
-    tag: v3.4.0
+    tag: v3.4.1
     sha: d206d9e4056bb90178297df58047791196e7721e6dc19384579b0530702fe086
