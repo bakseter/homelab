@@ -87,13 +87,15 @@ resource "authentik_group" "argocd-viewers" {
 }
 
 resource "authentik_policy_binding" "argocd-access" {
-  for_each = toset([
-    authentik_group.argocd-admins.id,
-    authentik_group.argocd-viewers.id,
-  ])
+  for_each = {
+    for id, idx in toset([
+      authentik_group.argocd-admins.id,
+      authentik_group.argocd-viewers.id
+    ]) : "${idx}" => id
+  }
 
   target = authentik_application.argocd.uuid
-  group  = each.key
+  group  = each.value
   order  = 0
 }
 
@@ -143,13 +145,15 @@ resource "authentik_group" "grafana-viewers" {
 }
 
 resource "authentik_policy_binding" "grafana-access" {
-  for_each = toset([
-    authentik_group.grafana-admins.id,
-    authentik_group.grafana-viewers.id
-  ])
+  for_each = {
+    for id, idx in toset([
+      authentik_group.grafana-admins.id,
+      authentik_group.grafana-viewers.id
+    ]) : "${idx}" => id
+  }
 
   target = authentik_application.grafana.uuid
-  group  = each.key
+  group  = each.value
   order  = 0
 }
 
