@@ -233,6 +233,10 @@ resource "authentik_provider_oauth2" "mandagsmiddag" {
   signing_key       = data.authentik_certificate_key_pair.default.id
   property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
 
+  access_code_validity   = "minutes=1"
+  access_token_validity  = "hours=1"
+  refresh_token_validity = "days=30"
+
   allowed_redirect_uris = [
     {
       matching_mode     = "strict"
