@@ -231,7 +231,7 @@ kube-prometheus-stack:
       image:
         registry: quay.io
         repository: prometheus-operator/prometheus-config-reloader
-        tag: v0.92.1@sha256:74550ba3e8bf93f47bc574231090d340ae9c01d25cd11ff74799e65f9fdb9a48
+        tag: v0.93.0@sha256:0ccb22ca9f3f6fd9f76ce95585d18bd2e363d421c534dde710be4bd13caa551d
 
   nodeExporter:
     operatingSystems:
