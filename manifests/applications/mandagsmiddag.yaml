@@ -112,3 +112,22 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+---
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: mandagsmiddag
+  namespace: argocd
+spec:
+  applicationRefs:
+    - namePattern: mandagsmiddag
+      images:
+        - alias: mandagsmiddag-frontend
+          imageName: ghcr.io/bakseter/mandagsmiddag/frontend:latest
+          commonUpdateSettings:
+            updateStrategy: digest
+
+        - alias: mandagsmiddag-backend
+          imageName: ghcr.io/bakseter/mandagsmiddag/backend:latest
+          commonUpdateSettings:
+            updateStrategy: digest
