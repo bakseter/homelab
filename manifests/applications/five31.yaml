@@ -103,3 +103,22 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+---
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: five31
+  namespace: argocd
+spec:
+  applicationRefs:
+    - namePattern: five31
+      images:
+        - alias: five31-frontend
+          imageName: ghcr.io/bakseter/five31/frontend:latest
+          commonUpdateSettings:
+            updateStrategy: digest
+
+        - alias: five31-backend
+          imageName: ghcr.io/bakseter/five31/backend:latest
+          commonUpdateSettings:
+            updateStrategy: digest
