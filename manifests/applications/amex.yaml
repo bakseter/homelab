@@ -94,3 +94,22 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+---
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: amex
+  namespace: argocd
+spec:
+  applicationRefs:
+    - namePattern: amex
+      images:
+        - alias: amex-frontend
+          imageName: ghcr.io/bakseter/amex/frontend:latest
+          commonUpdateSettings:
+            updateStrategy: digest
+
+        - alias: amex-backend
+          imageName: ghcr.io/bakseter/amex/backend:latest
+          commonUpdateSettings:
+            updateStrategy: digest
