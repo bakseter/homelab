@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-image-updater
+  namespace: argocd
+spec:
+  destination:
+    namespace: argocd
+    name: admin@homelab
+  project: default
+  source:
+    path: manifests/cluster-addons/argocd-image-updater
+    repoURL: https://github.com/bakseter/homelab.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
