@@ -58,3 +58,17 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+---
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: bakseter-no
+  namespace: argocd
+spec:
+  applicationRefs:
+    - namePattern: bakseter-no
+      images:
+        - alias: bakseter.no
+          imageName: ghcr.io/bakseter/bakseter.no:latest
+          commonUpdateSettings:
+            updateStrategy: digest
