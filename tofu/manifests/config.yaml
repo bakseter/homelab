@@ -25,14 +25,14 @@ nodes:
         type: controlplane
         cores: 2
         memory: 6
-        disk: 25
+        disk: 50
         ip: 192.168.30.120
 
       - hostname: m715q2-worker-1
         type: worker
         cores: 4
         memory: 6
-        disk: 35
+        disk: 50
         ip: 192.168.30.121
         longhorn:
           enabled: true
