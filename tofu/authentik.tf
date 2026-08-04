@@ -47,6 +47,11 @@ resource "authentik_provider_oauth2" "argocd" {
   signing_key       = data.authentik_certificate_key_pair.default.id
   property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
 
+  grant_types = [
+    "authorization_code",
+    "refresh_token",
+  ]
+
   allowed_redirect_uris = [
     {
       matching_mode     = "strict"
@@ -113,6 +118,11 @@ resource "authentik_provider_oauth2" "grafana" {
 
   signing_key       = data.authentik_certificate_key_pair.default.id
   property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
+
+  grant_types = [
+    "authorization_code",
+    "refresh_token",
+  ]
 
   allowed_redirect_uris = [
     {
@@ -197,6 +207,11 @@ resource "authentik_provider_oauth2" "five31" {
   access_token_validity  = "hours=1"
   refresh_token_validity = "days=30"
 
+  grant_types = [
+    "authorization_code",
+    "refresh_token",
+  ]
+
   allowed_redirect_uris = [
     {
       matching_mode     = "strict"
@@ -243,13 +258,13 @@ resource "authentik_provider_oauth2" "mandagsmiddag" {
   signing_key       = data.authentik_certificate_key_pair.default.id
   property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
 
-  access_code_validity   = "minutes=1"
+  access_code_validity   = "minutes=2"
   access_token_validity  = "hours=1"
   refresh_token_validity = "days=30"
 
   grant_types = [
-    "Authorization Code",
-    "Refresh token",
+    "authorization_code",
+    "refresh_token",
   ]
 
   allowed_redirect_uris = [
@@ -277,8 +292,8 @@ resource "authentik_group" "mandagsmiddag-users" {
 }
 
 resource "authentik_policy_binding" "mandagsmiddag-access" {
-  target = authentik_application.five31.uuid
-  group  = authentik_group.five31-users.id
+  target = authentik_application.mandagsmiddag.uuid
+  group  = authentik_group.mandagsmiddag-users.id
   order  = 0
 }
 */
