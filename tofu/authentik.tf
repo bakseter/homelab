@@ -88,10 +88,10 @@ resource "authentik_group" "argocd-viewers" {
 
 resource "authentik_policy_binding" "argocd-access" {
   for_each = {
-    for idx, id in toset([
+    for idx, id in [
       authentik_group.argocd-admins.id,
       authentik_group.argocd-viewers.id
-    ]) : "${idx}" => id
+    ] : "${idx}" => id
   }
 
   target = authentik_application.argocd.uuid
@@ -146,10 +146,10 @@ resource "authentik_group" "grafana-viewers" {
 
 resource "authentik_policy_binding" "grafana-access" {
   for_each = {
-    for idx, id in toset([
+    for idx, id in [
       authentik_group.grafana-admins.id,
       authentik_group.grafana-viewers.id
-    ]) : "${idx}" => id
+    ] : "${idx}" => id
   }
 
   target = authentik_application.grafana.uuid
