@@ -247,6 +247,11 @@ resource "authentik_provider_oauth2" "mandagsmiddag" {
   access_token_validity  = "hours=1"
   refresh_token_validity = "days=30"
 
+  grant_types = [
+    "Authorization Code",
+    "Refresh token",
+  ]
+
   allowed_redirect_uris = [
     {
       matching_mode     = "strict"
