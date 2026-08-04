@@ -18,9 +18,10 @@ machine:
   kubelet:
     extraArgs:
       rotate-server-certificates: true
-      image-gc-high-threshold: '60'
-      image-gc-low-threshold: '40'
-      minimum-image-ttl-duration: 2m
+    extraConfig:
+      imageGCHighThresholdPercent: 60
+      imageGCLowThresholdPercent: 40
+      imageMinimumGCAge: '5m'
   nodeLabels:
     bakseter.net/physical-node: ${physical_node_name}
     bakseter.net/node: ${hostname}
