@@ -96,6 +96,9 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: config
+        labels:
+          recurring-job.longhorn.io/source: enabled
+          recurring-job-group.longhorn.io/hetzner-backup: enabled
       spec:
         accessModes: ['ReadWriteOnce']
         resources:
