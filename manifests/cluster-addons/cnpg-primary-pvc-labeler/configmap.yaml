@@ -6,7 +6,7 @@ metadata:
 data:
   label-primary-pvcs.sh: |
     #!/bin/sh
-    set -eux
+    set -eu
 
     # ns/pvc that SHOULD be labelled: the primary pod's PVC shares its name.
     kubectl get cluster.postgresql.cnpg.io -A \
@@ -22,7 +22,7 @@ data:
 
     while IFS=/ read -r ns pvc; do
       echo "labeling pvc $pvc in namespace $ns"
-      kubectl -n "$ns" label pvc "$pvc" --overwrite \
+      kubectl -n "$ns" label pvc "$pvc" \
         recurring-job-group.longhorn.io/hetzner-backup=enabled \
         recurring-job.longhorn.io/source=enabled
     done < /tmp/want
