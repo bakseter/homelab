@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cnpg-primary-pvc-labeler
+  namespace: cnpg-primary-pvc-labeler
+data:
+  label-primary-pvcs.sh: |
+    #!/bin/sh
+    set -eux
+
+    # ns/pvc that SHOULD be labelled: the primary pod's PVC shares its name.
+    kubectl get cluster.postgresql.cnpg.io -A \
+      -l bakseter.net/backup-primary=true \
+      -o jsonpath='{range .items[*]}{.metadata.namespace}/{.status.currentPrimary}{"\n"}{end}' \
+      | grep -v '/$' | sort -u > /tmp/want
+
+    # ns/pvc that ARE labelled right now.
+    kubectl get pvc -A \
+      -l recurring-job-group.longhorn.io/hetzner-backup=enabled,app.kubernetes.io/managed-by=cloudnative-pg \
+      -o jsonpath='{range .items[*]}{.metadata.namespace}/{.metadata.name}{"\n"}{end}' \
+      | sort -u > /tmp/have
+
+    while IFS=/ read -r ns pvc; do
+      echo "labeling pvc $pvc in namespace $ns"
+      kubectl -n "$ns" label pvc "$pvc" --overwrite \
+        recurring-job-group.longhorn.io/hetzner-backup=enabled \
+        recurring-job.longhorn.io/source=enabled
+    done < /tmp/want
+
+    # Labelled but no longer primary.
+    comm -23 /tmp/have /tmp/want | while IFS=/ read -r ns pvc; do
+      echo "un-labeling pvc $pvc in namespace $ns"
+      kubectl -n "$ns" label pvc "$pvc" \
+        recurring-job-group.longhorn.io/hetzner-backup- \
+        recurring-job.longhorn.io/source-
+    done
