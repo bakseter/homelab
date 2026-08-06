@@ -4,7 +4,7 @@ metadata:
   name: hetzner-backup
   namespace: longhorn-system
 spec:
-  cron: '0 3 */2 * *'
+  cron: '0 3 * * *'
   task: backup
   retain: 3
   concurrency: 1
