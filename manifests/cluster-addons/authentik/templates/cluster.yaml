@@ -3,13 +3,10 @@ kind: Cluster
 metadata:
   name: authentik-database
   namespace: authentik
+  labels:
+    bakseter.net/backup-primary: 'true'
 spec:
   instances: 3
-  inheritedMetadata:
-    labels:
-      recurring-job.longhorn.io/source: enabled
-      recurring-job-group.longhorn.io/hetzner-backup: enabled
-      recurring-job-group.longhorn.io/fstrim: enabled
   affinity:
     nodeSelector:
       node.longhorn.io/create-default-disk: 'true'

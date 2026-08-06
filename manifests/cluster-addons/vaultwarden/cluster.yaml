@@ -3,11 +3,9 @@ kind: Cluster
 metadata:
   name: vaultwarden-database
   namespace: vaultwarden
+  labels:
+    bakseter.net/backup-primary: 'true'
 spec:
   instances: 1
-  inheritedMetadata:
-    labels:
-      recurring-job.longhorn.io/source: enabled
-      recurring-job-group.longhorn.io/hetzner-backup: enabled
   storage:
     size: 2Gi
