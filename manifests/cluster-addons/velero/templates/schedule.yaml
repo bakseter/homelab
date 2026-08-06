@@ -12,7 +12,7 @@ spec:
     includedResources:
       - persistentvolumeclaims
       - persistentvolumes
-      - sealedsecrets
+      - secrets
     labelSelector:
       matchLabels:
         bakseter.net/backup: 'true'
