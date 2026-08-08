@@ -2,7 +2,7 @@ argo-cd:
   global:
     revisionHistoryLimit: 5
     networkPolicy:
-      create: true
+      create: false
 
   configs:
     repositories:
