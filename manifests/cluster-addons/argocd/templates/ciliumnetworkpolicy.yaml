@@ -102,9 +102,7 @@ spec:
               - matchPattern: '*'
 
     - toEntities:
-        # TODO: don't use world
-        # - kube-apiserver
-        - world
+        - kube-apiserver
       toPorts:
         - ports:
             - port: '6443'
