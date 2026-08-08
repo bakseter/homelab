@@ -56,8 +56,15 @@ spec:
     - toFQDNs:
         - matchName: authentik.bakseter.no
       toPorts:
-        - ports: 
+        - ports:
             - port: '443'
+              protocol: TCP
+
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
@@ -95,7 +102,7 @@ spec:
               - matchPattern: '*'
 
     - toEntities:
-        # TODO: don't use world 
+        # TODO: don't use world
         # - kube-apiserver
         - world
       toPorts:
