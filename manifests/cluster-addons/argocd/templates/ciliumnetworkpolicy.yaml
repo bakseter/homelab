@@ -134,6 +134,15 @@ spec:
         - ports:
             - port: '6379'
               protocol: TCP
+
+    # Not covered by 'kube-apiserver', since IP is hardcoded
+    # (this could as well have been another clusters API server)
+    - toCIDR:
+        - 192.168.30.190/32
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
