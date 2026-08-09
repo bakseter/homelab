@@ -13,7 +13,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: monitoring
-            app.kubernetes.io/name: prometheus-blacbox-exporter
+            app.kubernetes.io/name: prometheus-blackbox-exporter
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: envoy-gateway-system
             gateway.envoyproxy.io/owning-gateway-name: tailscale-sre
@@ -253,7 +253,7 @@ spec:
             app.kubernetes.io/name: prometheus
       toPorts:
         - ports:
-            - port: '8082'
+            - port: '8080'
               protocol: TCP
 
   egress:
