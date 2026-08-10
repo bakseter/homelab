@@ -150,8 +150,9 @@ resource "authentik_group" "grafana-admins" {
 }
 
 resource "authentik_group" "grafana-viewers" {
-  name  = "grafana-viewers"
-  users = [data.authentik_user.e.id]
+  name = "grafana-viewers"
+  # users = [data.authentik_user.e.id]
+  users = []
 }
 
 resource "authentik_policy_binding" "grafana-access" {
