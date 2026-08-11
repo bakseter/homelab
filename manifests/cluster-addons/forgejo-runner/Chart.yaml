@@ -1,0 +1,7 @@
+apiVersion: v2
+name: forgejo-runner-umbrella
+version: 0.1.0
+dependencies:
+  - name: forgejo-runner
+    version: 0.7.5
+    repository: oci://code.forgejo-runner.org/forgejo-helm
