@@ -211,6 +211,7 @@ spec:
         - matchName: charts.longhorn.io
         - matchName: charts.rustfs.com
         - matchName: cloudnative-pg.github.io
+        - matchName: codeberg.org
         - matchName: democratic-csi.github.io
         - matchName: code.forgejo.org
         - matchName: github.com
