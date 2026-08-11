@@ -14,7 +14,7 @@ forgejo:
         - ALL
   #   readOnlyRootFilesystem: true
 
-  httproute:
+  httpRoute:
     enabled: true
 
     parentRefs:
