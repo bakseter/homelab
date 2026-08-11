@@ -4,4 +4,4 @@ version: 0.1.0
 dependencies:
   - name: forgejo-runner
     version: 0.7.5
-    repository: oci://code.forgejo.org/forgejo-helm
+    repository: oci://code.forgejo.org/forgejo-helm/forgejo
