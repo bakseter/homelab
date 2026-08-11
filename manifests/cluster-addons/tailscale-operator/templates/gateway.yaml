@@ -26,6 +26,20 @@ spec:
           - group: ''
             kind: Secret
             name: tailscale-int-tls
+    - name: ssh
+      protocol: TCP
+      port: 22
+      allowedRoutes:
+        kinds:
+        - kind: TCPRoute
+        namespaces:
+          from: Selector
+          selector:
+            matchExpressions:
+              - key: kubernetes.io/metadata.name
+                operator: In
+                values:
+                  - forgejo
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway

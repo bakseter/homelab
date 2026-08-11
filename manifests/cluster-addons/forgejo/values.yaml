@@ -25,3 +25,20 @@ forgejo:
 
     hostnames:
       - git.int.bakseter.net
+
+  tcpRoute:
+    enabled: true
+
+    parentRefs:
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        name: tailscale-int
+        namespace: tailscale
+        sectionName: ssh
+
+# gitea:
+#   oauth:
+#     - name: 'Authentik'
+#       provider: 'openidConnect'
+#       key: 'hello'
+#       autoDiscoverUrl: 'https://authentik.bakseter.no/application/o/forgejo/.well-known/openid-configuration'
