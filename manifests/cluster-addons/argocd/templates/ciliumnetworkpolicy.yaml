@@ -244,6 +244,15 @@ spec:
         - ports:
             - port: '6379'
               protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: forgejo
+            app.kubernetes.io/name: forgejo
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
