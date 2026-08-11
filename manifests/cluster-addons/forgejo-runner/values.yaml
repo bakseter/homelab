@@ -1,9 +1,9 @@
 forgejo-runner:
+  knownLastVersion: true
+
   runner:
     config:
       file:
-        log:
-          level: 'info'
         runner:
           file: '.runner'
           capacity: 1
