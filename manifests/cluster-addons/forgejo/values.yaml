@@ -1,1 +1,12 @@
-forgejo: {}
+forgejo:
+  httproute:
+    enabled: true
+
+    parentRefs:
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        name: tailscale-int
+        namespace: tailscale
+
+    hostnames:
+      - git.int.bakseter.net
