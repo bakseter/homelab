@@ -212,6 +212,7 @@ spec:
         - matchName: charts.rustfs.com
         - matchName: cloudnative-pg.github.io
         - matchName: democratic-csi.github.io
+        - matchName: code.forgejo.org
         - matchName: github.com
         - matchName: ghcr.io
         - matchName: intel.github.io
