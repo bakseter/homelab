@@ -12,7 +12,7 @@ forgejo:
     capabilities:
       drop:
         - ALL
-    readOnlyRootFilesystem: true
+  #   readOnlyRootFilesystem: true
 
   httproute:
     enabled: true
