@@ -38,6 +38,13 @@ spec:
         - ports:
             - port: '5000'
               protocol: TCP
+
+    - toFQDNs:
+        - matchName: registry-1.docker.io
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
