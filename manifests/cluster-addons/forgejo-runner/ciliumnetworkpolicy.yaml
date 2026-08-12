@@ -43,6 +43,8 @@ spec:
         - matchName: registry-1.docker.io
         - matchName: production.cloudfront.docker.com
         - matchName: dl-cdn.alpinelinux.org
+        - matchName: registry.npmjs.org
+        - matchName: proxy.golang.org
       toPorts:
         - ports:
             - port: '443'
