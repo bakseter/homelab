@@ -11,7 +11,7 @@ spec:
       namespace: tailscale
 
   hostnames:
-    - pkg.int.bakseter.net
+    - pkgs.int.bakseter.net
 
   rules:
     - matches:

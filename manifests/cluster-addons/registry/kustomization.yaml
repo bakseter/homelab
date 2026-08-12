@@ -7,8 +7,9 @@ labels:
       app.kubernetes.io/name: registry
 
 resources:
-  # - ciliumnetworkpolicy.yaml
+  - ciliumnetworkpolicy.yaml
   - configmap.yaml
   - deployment.yaml
+  - httproute.yaml
   - persistentvolumeclaim.yaml
   - service.yaml
