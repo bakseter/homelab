@@ -1,8 +1,9 @@
 forgejo:
   podSecurityContext:
-    runAsUser: 65534
-    runAsGroup: 65534
-    fsGroup: 65534
+    # user 'git' has uid/gid 1000
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
     runAsNonRoot: true
     seccompProfile:
       type: RuntimeDefault
