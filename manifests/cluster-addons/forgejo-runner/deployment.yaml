@@ -15,6 +15,12 @@ spec:
       labels:
         app.kubernetes.io/name: buildkitd
     spec:
+      nodeSelector:
+        node-role.bakseter.net/build: 'true'
+      tolerations:
+        - key: node-role.bakseter.net/build
+          operator: Exists
+          effect: NoSchedule
       containers:
         - name: buildkitd
           image: moby/buildkit:v0.32.2-rootless@sha256:504731e577c20559c00f968f33219f30115e70be29ab96728d1d06e963fc494b
