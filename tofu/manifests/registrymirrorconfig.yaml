@@ -1,9 +1,9 @@
 # TODO: don't do this.
 #
-# kubcetl -n forgejo get svc forgejo-http -o jsonpath='{.spec.clusterIP}' ; echo
+# kubcetl -n registry get svc registry -o jsonpath='{.spec.clusterIP}' ; echo
 #
 apiVersion: v1alpha1
 kind: RegistryMirrorConfig
-name: 'forgejo-http.forgejo.svc.cluster.local:3000'
+name: registry.registry.svc.cluster.local:5000
 endpoints:
-  - url: http://10.106.38.190:3000
+  - url: http://10.106.38.200:5000
