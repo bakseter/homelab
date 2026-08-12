@@ -41,7 +41,6 @@ spec:
 
     - toFQDNs:
         - matchName: registry-1.docker.io
-        - matchName: auth.docker.io
       toPorts:
         - ports:
             - port: '443'
@@ -117,4 +116,11 @@ spec:
       toPorts:
         - ports:
             - port: '3000'
+              protocol: TCP
+
+    - toFQDNs:
+        - matchName: auth.docker.io
+      toPorts:
+        - ports:
+            - port: '443'
               protocol: TCP
