@@ -94,6 +94,12 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
     file(
       "${path.module}/manifests/registrymirrorconfig.yaml",
     ),
+    templatefile(
+      "${path.module}/manifests/registryauthconfig.yaml.tmpl",
+      {
+        forgejo_admin_password = var.forgejo_admin_password,
+      }
+    ),
     /*
     templatefile(
       "${path.module}/manifests/override-k8s-version-patches.yaml.tmpl",

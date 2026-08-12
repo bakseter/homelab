@@ -33,3 +33,8 @@ variable "authentik_token" {
   type      = string
   sensitive = true
 }
+
+variable "forgejo_admin_password" {
+  type      = string
+  sensitive = true
+}

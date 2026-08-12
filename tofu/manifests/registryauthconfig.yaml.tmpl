@@ -1,0 +1,10 @@
+# TODO: don't do this.
+#
+# kubectl -n forgejo get secret forgejo-admin -o jsonpath='{.data.password}' | base64 -d ; echo
+#
+apiVersion: v1alpha1
+kind: RegistryAuthConfig
+name: 10.96.44.20:3000
+username: gitea_admin
+# changes on forgejo reboot :)
+password: ${forgejo_admin_password}
