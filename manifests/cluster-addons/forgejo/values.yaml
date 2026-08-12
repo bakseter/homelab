@@ -37,6 +37,14 @@ forgejo:
         namespace: tailscale
         sectionName: ssh
 
+  persistence:
+    enabled: true
+
+    size: 10Gi
+    labels:
+      recurring-job.longhorn.io/source: enabled
+      recurring-job-group.longhorn.io/hetzner-backup: enabled
+
   gitea:
     config:
       service:
