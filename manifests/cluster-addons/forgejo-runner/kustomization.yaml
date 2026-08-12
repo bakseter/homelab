@@ -9,6 +9,7 @@ resources:
   - ciliumnetworkpolicy.yaml
   - configmap.yaml
   - deployment.yaml
+  - job.yaml
   - persistentvolumeclaim.yaml
   - sealedsecret.yaml
   - service.yaml

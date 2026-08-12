@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: runner-register
+  namespace: forgejo-runner
+  annotations:
+    argocd.argoproj.io/sync-wave: '-1'
+spec:
+  template:
+    metadata:
+      app.kubernetes.io/name: runner-register
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: register
+          image: data.forgejo.org/forgejo/runner:13@sha256:7fb853bfe73c229be6349398359c0a7bd01fadfd17c106607b2221150b799ed2
+          command:
+            - forgejo-runner
+            - register
+            - --no-interactive
+            - --instance
+            - http://forgejo-http.forgejo.svc.cluster.local:3000
+            - --token
+            - $(TOKEN)
+            - --name
+            - k8s-runner
+            - --labels
+            - host:host
+          env:
+            - name: TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: runner-token
+                  key: token
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /state
+              name: state
+          workingDir: /state
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: state
+          persistentVolumeClaim:
+            claimName: runner-state

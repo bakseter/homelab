@@ -91,14 +91,6 @@ spec:
             - daemon
             - --config
             - /config/config.yml
-          env:
-            - name: FORGEJO_INSTANCE_URL
-              value: http://forgejo-http.forgejo.svc.cluster.local:3000
-            - name: FORGEJO_RUNNER_REGISTRATION_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: runner-token
-                  key: token
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
