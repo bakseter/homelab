@@ -38,7 +38,7 @@ nodes:
           enabled: true
         # TODO: move disk to m70qg3-worker-1
         longhorn:
-          enabled: true
+          enabled: false
           diskSize: 238
           pathInDatastore: '/dev/disk/by-id/ata-Micron_MTFDDAK256TDL_193823DF41CD' # ls -l /dev/disk/by-id/
 
