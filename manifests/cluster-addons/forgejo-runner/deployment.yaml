@@ -66,8 +66,8 @@ spec:
           type: Unconfined
       volumes:
         - name: cache
-          persistentVolumeClaim:
-            claimName: buildkit-cache
+          emptyDir:
+            sizeLimit: 5Gi
         - name: config
           configMap:
             name: buildkitd-config
