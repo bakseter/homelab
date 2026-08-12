@@ -1,0 +1,18 @@
+FROM moby/buildkit:v0.32.2 AS buildkit
+
+FROM data.forgejo.org/forgejo/runner:13
+
+USER root
+
+RUN apk add --no-cache \
+      git \
+      bash \
+      curl \
+      ca-certificates \
+      openssh-client \
+      tar \
+      jq
+
+COPY --from=buildkit /usr/bin/buildctl /usr/local/bin/buildctl
+
+USER 1000
