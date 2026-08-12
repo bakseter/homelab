@@ -132,8 +132,7 @@ resource "authentik_provider_oauth2" "grafana" {
     }
   ]
 
-  logout_uri    = "https://grafana.sre.bakseter.net/logout"
-  logout_method = "frontchannel"
+  logout_uri = "https://grafana.sre.bakseter.net/logout"
 }
 
 resource "authentik_application" "grafana" {
@@ -298,6 +297,59 @@ resource "authentik_policy_binding" "mandagsmiddag-access" {
   order  = 0
 }
 */
+
+
+#### forgejo
+
+resource "authentik_provider_oauth2" "forgejo" {
+  name      = "forgejo"
+  client_id = "forgejo"
+
+  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
+  invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
+
+  sub_mode = "user_username"
+
+  signing_key       = data.authentik_certificate_key_pair.default.id
+  property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
+
+  access_token_validity  = "hours=1"
+  refresh_token_validity = "days=30"
+
+  grant_types = [
+    "authorization_code",
+    "refresh_token",
+  ]
+
+  allowed_redirect_uris = [
+    {
+      matching_mode     = "strict"
+      redirect_uri_type = "authorization"
+      url               = "https://git.int.bakseter.net/oauth2/authentik/callback"
+    }
+  ]
+}
+
+resource "authentik_application" "forgejo" {
+  name              = "Forgejo"
+  slug              = "forgejo"
+  protocol_provider = authentik_provider_oauth2.forgejo.id
+
+  meta_launch_url = "https://git.int.bakseter.net"
+}
+
+resource "authentik_group" "forgejo-users" {
+  name = "forgejo-users"
+  users = [
+    data.authentik_user.a.id,
+  ]
+}
+
+resource "authentik_policy_binding" "forgejo-access" {
+  target = authentik_application.forgejo.uuid
+  group  = authentik_group.forgejo-users.id
+  order  = 0
+}
 
 
 #### RBAC

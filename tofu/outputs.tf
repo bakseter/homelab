@@ -17,3 +17,8 @@ output "authentik_mandagsmiddag_client_secret" {
   value     = authentik_provider_oauth2.mandagsmiddag.client_secret
   sensitive = true
 }
+
+output "authentik_forgejo_client_secret" {
+  value     = authentik_provider_oauth2.forgejo.client_secret
+  sensitive = true
+}
