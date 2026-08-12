@@ -325,7 +325,7 @@ resource "authentik_provider_oauth2" "forgejo" {
     {
       matching_mode     = "strict"
       redirect_uri_type = "authorization"
-      url               = "https://git.int.bakseter.net/user/oauth2/authentik/callback"
+      url               = "https://git.int.bakseter.net/user/oauth2/Authentik/callback"
     }
   ]
 }
