@@ -42,6 +42,7 @@ spec:
     - toFQDNs:
         - matchName: registry-1.docker.io
         - matchName: production.cloudfront.docker.com
+        - matchName: dl-cdn.alpinelinux.org
       toPorts:
         - ports:
             - port: '443'
