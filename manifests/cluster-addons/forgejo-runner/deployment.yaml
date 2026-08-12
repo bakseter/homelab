@@ -23,10 +23,9 @@ spec:
           effect: NoSchedule
       containers:
         - name: buildkitd
-          image: moby/buildkit:v0.32.2-rootless@sha256:504731e577c20559c00f968f33219f30115e70be29ab96728d1d06e963fc494b
+          image: moby/buildkit:v0.32.2
           args:
             - --addr=tcp://0.0.0.0:1234
-            - --oci-worker-no-process-sandbox
           ports:
             - containerPort: 1234
               name: grpc
@@ -39,30 +38,21 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 30
           securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-              add:
-                - SETUID
-                - SETGID
+            privileged: true
           resources:
             requests:
               cpu: 200m
               memory: 512Mi
             limits:
-              memory: 4Gi
+              cpu: 4
+              memory: 5Gi
           volumeMounts:
             - name: cache
-              mountPath: /home/user/.local/share/buildkit
+              mountPath: /var/lib/buildkit
             - name: config
-              mountPath: /home/user/.config/buildkit
+              mountPath: /etc/buildkit
       hostUsers: false
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
         seccompProfile:
           type: Unconfined
       volumes:
