@@ -23,7 +23,7 @@ spec:
           effect: NoSchedule
       containers:
         - name: buildkitd
-          image: moby/buildkit:v0.32.2
+          image: moby/buildkit:v0.32.2@sha256:28a898719c18a33f4e8000685287fa36fd0dd9560c6440227d3a732d79bb41d8
           args:
             - --addr=tcp://0.0.0.0:1234
           ports:
@@ -82,7 +82,7 @@ spec:
     spec:
       containers:
         - name: runner
-          image: data.forgejo.org/forgejo/runner:13@sha256:7fb853bfe73c229be6349398359c0a7bd01fadfd17c106607b2221150b799ed2
+          image: ghcr.io/bakseter/homelab/data.forgejo.org/forgejo/runner:13@sha256:92554e3dd59ea051a4731002fb9a63497da228f63889b155141b5f844d8a48c0
           command:
             - forgejo-runner
             - daemon
