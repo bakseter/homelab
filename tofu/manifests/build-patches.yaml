@@ -1,6 +1,10 @@
 machine:
   sysctls:
     user.max_user_namespaces: '11255'
+
+  nodeLabels:
+    node-role.bakseter.net/build: 'true'
+
   kubelet:
     extraConfig:
       # Not registered after creation, so must be manually applied.
