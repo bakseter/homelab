@@ -57,6 +57,7 @@ spec:
               mountPath: /home/user/.local/share/buildkit
             - name: config
               mountPath: /home/user/.config/buildkit
+      hostUsers: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
