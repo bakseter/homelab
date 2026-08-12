@@ -37,7 +37,11 @@ forgejo:
         namespace: tailscale
         sectionName: ssh
 
-# gitea:
+  gitea:
+    config:
+      service:
+        REQUIRE_SIGNIN_VIEW: false
+
 #   oauth:
 #     - name: 'Authentik'
 #       provider: 'openidConnect'
