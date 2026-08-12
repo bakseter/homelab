@@ -45,7 +45,7 @@ forgejo:
       oauth2_client:
         ENABLE_AUTO_REGISTRATION: true
 
-  oauth2:
+  oauth:
     - name: 'Authentik'
       provider: 'openidConnect'
       existingSecret: forgejo-oauth-secret
