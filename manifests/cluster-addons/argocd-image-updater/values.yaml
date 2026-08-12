@@ -1,1 +1,8 @@
-argocd-image-updater: {}
+argocd-image-updater:
+  config:
+    registries:
+      - name: internal
+        api_url: http://registry.registry.svc.cluster.local:5000
+        prefix: registry.registry.svc.cluster.local:5000
+        insecure: yes
+        default: false
