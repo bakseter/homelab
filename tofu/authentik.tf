@@ -338,8 +338,8 @@ resource "authentik_application" "forgejo" {
   meta_launch_url = "https://git.int.bakseter.net"
 }
 
-resource "authentik_group" "forgejo-users" {
-  name = "forgejo-users"
+resource "authentik_group" "forgejo-admins" {
+  name = "forgejo-admins"
   users = [
     data.authentik_user.a.id,
   ]
