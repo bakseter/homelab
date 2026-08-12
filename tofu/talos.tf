@@ -95,7 +95,7 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
       "${path.module}/manifests/registrymirrorconfig.yaml",
     ),
     try(each.value.build.enabled, true) ? file(
-      "${path.module}/manifests/taints-patches.yaml.tmpl",
+      "${path.module}/manifests/build-patches.yaml",
     ) : "",
     /*
     templatefile(
