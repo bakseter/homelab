@@ -347,7 +347,7 @@ resource "authentik_group" "forgejo-admins" {
 
 resource "authentik_policy_binding" "forgejo-access" {
   target = authentik_application.forgejo.uuid
-  group  = authentik_group.forgejo-users.id
+  group  = authentik_group.forgejo-admins.id
   order  = 0
 }
 
