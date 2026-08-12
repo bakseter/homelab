@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry
+  namespace: registry
+spec:
+  # define here so it's pinned, must be free
+  clusterIP: 10.106.38.200
+  ports:
+    - name: http
+      port: 5000
