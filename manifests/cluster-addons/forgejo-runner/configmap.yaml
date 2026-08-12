@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: buildkitd-config
+  namespace: forgejo-runner
+data:
+  buildkitd.toml: |
+    [registry."registry.registry.svc.cluster.local:5000"]
+      http = true
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: runner-config
+  namespace: forgejo-runner
+data:
+  config.yml: |
+    runner:
+      file: /state/.runner
+      capacity: 2
+      timeout: 1h
+      shutdown_timeout: 3h
+      insecure: false
+      fetch_timeout: 5s
+      fetch_interval: 2s
+      labels:
+        - host:host
+    cache:
+      enabled: false
+    container:
+      network: ""
+      privileged: false
+      options:
+      valid_volumes: []
+      docker_host: "-"
+      force_pull: false
+    host:
+      workdir_parent: /workspace

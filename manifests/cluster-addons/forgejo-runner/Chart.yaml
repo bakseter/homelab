@@ -1,8 +1,0 @@
-apiVersion: v2
-name: forgejo-runner-umbrella
-version: 0.1.0
-dependencies:
-  - name: forgejo-runner
-    version: 0.7.6
-    # TODO: use official chart when it's released
-    repository: oci://codeberg.org/wrenix/helm-charts
