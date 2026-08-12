@@ -1,0 +1,11 @@
+machine:
+  sysctls:
+    user.max_user_namespaces: '11255'
+  kubelet:
+    extraConfig:
+      # Not registered after creation, so must be manually applied.
+      # Kept here for reproducability.
+      registerWithTaints:
+        - key: node-role.bakseter.net/build
+          value: 'true'
+          effect: NoSchedule
