@@ -1,0 +1,26 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: registry
+  namespace: registry
+spec:
+  endpointSelector: {}
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            gateway.envoyproxy.io/owning-gateway-name: tailscale-int
+      toPorts:
+        - ports:
+            - port: '5000'
+              protocol: TCP
+
+    - fromEntities:
+        - cluster
+      toPorts:
+        - ports:
+            - port: '5000'
+              protocol: TCP
+
+  egress: []
