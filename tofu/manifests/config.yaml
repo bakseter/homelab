@@ -34,6 +34,11 @@ nodes:
         memory: 6
         disk: 50
         ip: 192.168.30.121
+        taints:
+          - key: node-role.bakseter.net/build
+            value: 'true'
+            effect: NoSchedule
+        # TODO: move disk to m70qg3-worker-1
         longhorn:
           enabled: true
           diskSize: 238

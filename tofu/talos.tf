@@ -94,6 +94,12 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
     file(
       "${path.module}/manifests/registrymirrorconfig.yaml",
     ),
+    try(each.value.taints, []) != [] ? templatefile(
+      "${path.module}/manifests/taints-patches.yaml.tmpl",
+      {
+        taints = each.value.taints,
+      }
+    ) : "",
     /*
     templatefile(
       "${path.module}/manifests/override-k8s-version-patches.yaml.tmpl",

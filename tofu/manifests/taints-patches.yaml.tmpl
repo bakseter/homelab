@@ -1,0 +1,9 @@
+machine:
+  kubelet:
+    extraConfig:
+      registerWithTaints:
+      %{~ for taint in taints ~}
+        - key: '${taint.key}'
+          value: '${taint.value}'
+          effect: '${taint.effect}'
+      %{~ endfor ~}
