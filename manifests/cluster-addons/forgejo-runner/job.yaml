@@ -8,7 +8,8 @@ metadata:
 spec:
   template:
     metadata:
-      app.kubernetes.io/name: runner-register
+      labels:
+        app.kubernetes.io/name: runner-register
     spec:
       restartPolicy: OnFailure
       containers:
