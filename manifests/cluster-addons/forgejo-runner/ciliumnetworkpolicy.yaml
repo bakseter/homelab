@@ -85,6 +85,13 @@ spec:
         - ports:
             - port: '1234'
               protocol: TCP
+
+    - toFQDNs:
+        - matchName: auth.docker.io
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -116,11 +123,4 @@ spec:
       toPorts:
         - ports:
             - port: '3000'
-              protocol: TCP
-
-    - toFQDNs:
-        - matchName: auth.docker.io
-      toPorts:
-        - ports:
-            - port: '443'
               protocol: TCP
