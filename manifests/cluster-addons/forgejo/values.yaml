@@ -45,10 +45,10 @@ forgejo:
       oauth2_client:
         ENABLE_AUTO_REGISTRATION: true
 
-  oauth:
-    - name: 'Authentik'
-      provider: 'openidConnect'
-      existingSecret: forgejo-oauth-secret
-      autoDiscoverUrl: 'https://authentik.bakseter.no/application/o/forgejo/.well-known/openid-configuration'
-      iconUrl: 'https://authentik.bakseter.no/static/dist/assets/icons/icon.png'
-      scopes: 'email profile'
+    oauth:
+      - name: 'Authentik'
+        provider: 'openidConnect'
+        existingSecret: forgejo-oauth-secret
+        autoDiscoverUrl: 'https://authentik.bakseter.no/application/o/forgejo/.well-known/openid-configuration'
+        iconUrl: 'https://authentik.bakseter.no/static/dist/assets/icons/icon.png'
+        scopes: 'email profile'
