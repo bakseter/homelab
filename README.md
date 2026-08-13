@@ -6,7 +6,7 @@ Most, if not all, of the components are managed by Infrastructure-as-Code.
 
 See `docs/` for more information.
 
-## Overview
+## TL;DR
 
 - Proxmox VE is manually installed on each physical host, bare metal.
 
@@ -21,14 +21,20 @@ See `docs/` for more information.
 ## What's running?
 
 As a platform engineer, Kubernetes-lover and Cloud Native-enthusiast, I'm mostly running
-CNCF-related technologies I either already know and love, or ones I want to test out privately.
+Linux/CNCF-related technologies I either already know and love, or ones I want to test out privately.
 
-(might not be 100% up to date)
+_(list might not be 100% up to date)_
 
-## Core services
+### Infrastructure
 
-- **Proxmox VE** for virtualization
-- **Talos Linux** as node OS
+- **NixOS** as management node OS
+- **Ansible** for managing bare-metal clients
+- **OpenTofu** for infrastructure management
+- **Proxmox VE** for virtualization platform
+- **Talos Linux** as Kubernetes node OS
+
+### Core Kubernetes services
+
 - **Cilium** as CNI
 - **Argo CD** for GitOps
 - **Sealed Secrets** for secret management
@@ -38,17 +44,25 @@ CNCF-related technologies I either already know and love, or ones I want to test
 - **Velero** for backups
 - **Loki**, **Grafana Operator**, **Tempo**, **Prometheus**, **Alertmanager** and **Pushover** for monitoring
 - **Authentik** as authentication provider
-- **Cloudflare Tunnels** for public access
+- **cloudflared** for public access
 - **Tailscale Operator** for private access
 - **Envoy Gateway** with **Gateway API** for routing from Cloudflare/Tailscale to workloads
 - **cert-manager** for certificates
 - **Technitium** and **external-dns** for private DNS with Tailscale
 - **Cloudnative-PG** for PostgreSQL
-- **Forgejo** for private Git and private runners
+- **Forgejo** for private git and private CI/CD
 - **Harbor** and **Trivy** for image pull-trough cache and scanning
 - **`registry:3`** for private container registry
 
-## Apps
+### Third-party services
+
+- **Cloudflare** for domains, DNS and tunnels
+- **GitHub** for public git and CI/CD (duh)
+- **Tailscale** for private access platform
+- **Hetzner Cloud** for Longhorn and Velero backups
+- **Pushover** for alerts from monitoring stack
+
+### Apps
 
 - **Immich** for photos
 - **Jellyfin**, **Seerr**, **Radarr**, **Sonarr**, **Lidarr**, **Prowlarr** and **sabnzbd** for media management
@@ -57,7 +71,7 @@ CNCF-related technologies I either already know and love, or ones I want to test
 - **Homepage** for landing page
 - **Cryptpad** for office suite
 
-## Hobby projects
+### Hobby projects
 
 - [bakseter.no](https://bakseter.no)
 - [Mandagsmiddag](https://github.com/bakseter/mandagsmiddag)
