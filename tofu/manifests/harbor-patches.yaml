@@ -11,3 +11,10 @@ name: docker.io
 endpoints:
   - url: https://harbor.int.bakseter.net/v2/proxy-dockerhub
     overridePath: true
+---
+apiVersion: v1alpha1
+kind: RegistryMirrorConfig
+name: gchr.io
+endpoints:
+  - url: https://harbor.int.bakseter.net/v2/proxy-ghcr
+    overridePath: true
