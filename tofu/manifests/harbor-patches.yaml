@@ -14,7 +14,7 @@ endpoints:
 ---
 apiVersion: v1alpha1
 kind: RegistryMirrorConfig
-name: gchr.io
+name: ghcr.io
 endpoints:
   - url: https://harbor.int.bakseter.net/v2/proxy-ghcr
     overridePath: true
