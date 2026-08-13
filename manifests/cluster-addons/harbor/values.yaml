@@ -17,3 +17,8 @@ harbor:
 
       hosts:
         - harbor.int.bakseter.net
+
+  persistence:
+    persistentVolumeClaim:
+      registry:
+        size: 50Gi
