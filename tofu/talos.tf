@@ -92,11 +92,14 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
       }
     ),
     file(
-      "${path.module}/manifests/registrymirrorconfig.yaml",
+      "${path.module}/manifests/registry3-patches.yaml",
     ),
     try(each.value.build.enabled, false) ? file(
       "${path.module}/manifests/build-patches.yaml",
     ) : "",
+    file(
+      "${path.module}/manifests/harbor-patches.yaml",
+    ),
     /*
     templatefile(
       "${path.module}/manifests/override-k8s-version-patches.yaml.tmpl",

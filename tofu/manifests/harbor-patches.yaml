@@ -1,0 +1,13 @@
+machine:
+  network:
+    extraHostEntries:
+      - ip: 10.111.229.80 # svc/tailscale-int-gateway
+        aliases:
+          - harbor.int.bakseter.net
+---
+apiVersion: v1alpha1
+kind: RegistryMirrorConfig
+name: docker.io
+endpoints:
+  - url: https://harbor.int.bakseter.net/v2/proxy-dockerhub
+    overridePath: true
