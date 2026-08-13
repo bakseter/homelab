@@ -2,8 +2,12 @@ harbor:
   updateStrategy:
     type: Recreate
 
+  externalURL: https://harbor.int.bakseter.net
+
   expose:
     type: route
+    tls:
+      enabled: false
     route:
       parentRefs:
         - group: gateway.networking.k8s.io
