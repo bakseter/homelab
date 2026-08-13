@@ -163,7 +163,7 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
   }
 
   dynamic "disk" {
-    for_each = try(each.value.longhorn.enabled, null) != null ? [1] : []
+    for_each = try(each.value.longhorn.enabled, false) ? [1] : []
 
     content {
       datastore_id      = ""
