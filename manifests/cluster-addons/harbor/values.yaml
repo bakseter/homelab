@@ -1,8 +1,12 @@
 harbor:
   expose:
-    type: ingress
-    tls:
-      enabled: false
+    type: route
+    route:
+      parentRefs:
+        - group: gateway.networking.k8s.io
+          kind: Gateway
+          name: tailscale-int
+          namespace: tailscale
 
-  notary:
-    enabled: false
+      hosts:
+        - harbor.int.bakseter.net
