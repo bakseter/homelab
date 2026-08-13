@@ -40,6 +40,9 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
         talos_version           = local.talos_version
       }
     ),
+    file(
+      "${path.module}/manifests/harbor-patches.yaml",
+    ),
     /*
     templatefile(
       "${path.module}/manifests/override-k8s-version-patches.yaml.tmpl",
