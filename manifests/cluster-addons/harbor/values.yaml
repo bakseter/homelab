@@ -1,1 +1,8 @@
-harbor: {}
+harbor:
+  expose:
+    type: ingress
+    tls:
+      enabled: false
+
+  notary:
+    enabled: false
