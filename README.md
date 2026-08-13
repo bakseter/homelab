@@ -17,3 +17,49 @@ See `docs/` for more information.
 
 - After the Talos Linux cluster is bootstrapped and Cilium + Argo CD is installed,
   Argo CD is used to manage the rest of the configuration. See the `manifests/` directory.
+
+## What's running?
+
+As a platform engineer, Kubernetes-lover and Cloud Native-enthusiast, I'm mostly running
+CNCF-related technologies I either already know and love, or ones I want to test out privately.
+
+(might not be 100% up to date)
+
+## Core services
+
+- **Proxmox VE** for virtualization
+- **Talos Linux** as node OS
+- **Cilium** as CNI
+- **Argo CD** for GitOps
+- **Sealed Secrets** for secret management
+- **Longhorn** for block storage
+- **RustFS** for S3 storage
+- **democratic-csi** and **TrueNAS** for NFS storage
+- **Velero** for backups
+- **Loki**, **Grafana Operator**, **Tempo**, **Prometheus**, **Alertmanager** and **Pushover** for monitoring
+- **Authentik** as authentication provider
+- **Cloudflare Tunnels** for public access
+- **Tailscale Operator** for private access
+- **Envoy Gateway** with **Gateway API** for routing from Cloudflare/Tailscale to workloads
+- **cert-manager** for certificates
+- **Technitium** and **external-dns** for private DNS with Tailscale
+- **Cloudnative-PG** for PostgreSQL
+- **Forgejo** for private Git and private runners
+- **Harbor** and **Trivy** for image pull-trough cache and scanning
+- **`registry:3`** for private container registry
+
+## Apps
+
+- **Immich** for photos
+- **Jellyfin**, **Seerr**, **Radarr**, **Sonarr**, **Lidarr**, **Prowlarr** and **sabnzbd** for media management
+- **Audiobookshelf** for podcasts
+- **Vaultwarden** for password management
+- **Homepage** for landing page
+- **Cryptpad** for office suite
+
+## Hobby projects
+
+- [bakseter.no](https://bakseter.no)
+- [Mandagsmiddag](https://github.com/bakseter/mandagsmiddag)
+- [AMEX](https://github.com/bakseter/amex)
+- [five31](https://github.com/bakseter/five31)
