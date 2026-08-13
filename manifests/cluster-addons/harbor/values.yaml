@@ -1,4 +1,7 @@
 harbor:
+  updateStrategy:
+    type: Recreate
+
   expose:
     type: route
     route:
