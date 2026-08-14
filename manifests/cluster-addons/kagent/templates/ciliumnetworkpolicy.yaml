@@ -13,7 +13,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: kagent 
-            component: controller
+            app.kubernetes.io/component: controller
       toPorts:
         - ports:
             - port: '8080'
@@ -35,7 +35,7 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: kagent 
-            component: controller
+            app.kubernetes.io/component: controller
       toPorts:
         - ports:
             - port: '8083'
