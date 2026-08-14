@@ -3,7 +3,7 @@
 ```bash
 export TALOS_VERSION=1.13.4
 
-# Controlplane nodes, one at a time.
+# Controlplane nodes.
 #
 # Extensions:
 # - qemu-guest-agent
@@ -12,7 +12,7 @@ talosctl -n 192.168.30.100 upgrade --image factory.talos.dev/nocloud-installer/c
 talosctl -n 192.168.30.120 upgrade --image factory.talos.dev/nocloud-installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v${TALOS_VERSION}
 talosctl -n 192.168.30.130 upgrade --image factory.talos.dev/nocloud-installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v${TALOS_VERSION}
 
-# Intel worker nodes, one at a time.
+# Intel worker nodes.
 #
 # Extensions:
 # - i915
@@ -23,9 +23,20 @@ talosctl -n 192.168.30.130 upgrade --image factory.talos.dev/nocloud-installer/c
 
 talosctl -n 192.168.30.101 upgrade --image factory.talos.dev/nocloud-installer/eed1860a28ccc6fdb77f1f41ab0ae2a20c19bc6101618d416d5d72ec919bf679:v${TALOS_VERSION}
 talosctl -n 192.168.30.131 upgrade --image factory.talos.dev/nocloud-installer/eed1860a28ccc6fdb77f1f41ab0ae2a20c19bc6101618d416d5d72ec919bf679:v${TALOS_VERSION}
-talosctl -n 192.168.30.141 upgrade --image factory.talos.dev/nocloud-installer/eed1860a28ccc6fdb77f1f41ab0ae2a20c19bc6101618d416d5d72ec919bf679:v${TALOS_VERSION}
 
-# AMD worker nodes, one at a time.
+# Intel worker nodes with gVisor.
+#
+# Extensions:
+# - gvisor
+# - i915
+# - intel-ucode
+# - iscsi-tools
+# - qemu-guest-agent
+# - util-linux-tools
+
+talosctl -n 192.168.30.141 upgrade --image factory.talos.dev/nocloud-installer/21f708953bd21c14e92aee1ebf21890951d93372183a5c185072d9b97a009447:v${TALOS_VERSION}
+
+# AMD worker nodes.
 #
 # Extensions:
 # - iscsi-tools

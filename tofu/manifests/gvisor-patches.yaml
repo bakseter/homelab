@@ -1,0 +1,3 @@
+machine:
+  nodeLabels:
+    gvisor.io/enabled: 'true'

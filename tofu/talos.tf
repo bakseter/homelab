@@ -103,6 +103,9 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
     file(
       "${path.module}/manifests/harbor-patches.yaml",
     ),
+    try(each.value.gvisor.enabled, false) ? file(
+      "${path.module}/manifests/gvisor-patches.yaml",
+    ) : "",
     /*
     templatefile(
       "${path.module}/manifests/override-k8s-version-patches.yaml.tmpl",
