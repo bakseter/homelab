@@ -1,0 +1,19 @@
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: git-mcp
+  namespace: kagent
+spec:
+  transportType: http
+  deployment:
+    image: node:22-trixie
+    port: 3000
+    cmd: npx
+    args: ["-y", "@cyanheads/git-mcp-server"]
+    env:
+      GIT_AUTHOR_NAME: labster
+      GIT_AUTHOR_EMAIL: labster@kagent.local
+      GIT_COMMITTER_NAME: labster
+      GIT_COMMITTER_EMAIL: labster@kagent.local
+      MCP_TRANSPORT_TYPE: http
+      MCP_HTTP_PORT: "3000"

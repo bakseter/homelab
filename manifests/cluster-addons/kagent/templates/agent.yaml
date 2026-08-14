@@ -10,6 +10,16 @@ spec:
     runtime: go
     modelConfig: mistral-medium-3-5
 
+    tools:
+      - type: McpServer
+        mcpServer:
+          apiGroup: kagent.dev
+          kind: MCPServer
+          name: git-mcp
+        requiredApproval:
+          - git_push
+          - git_commit
+
     systemMessage: |-
       You're a helpful agent, made by the kagent team.
 
@@ -23,6 +33,14 @@ spec:
           - ALWAYS format your response as Markdown
           - Your response will include a summary of actions you took and an explanation of the result
           - If you created any artifacts such as files or resources, you will include those in your response as well
+
+      # Git
+          You have git tools available via an MCP server with a persistent working
+          directory at /workspace. To work with a repository:
+            1. Clone it into /workspace/<repo-name> if not already present
+            2. Read, modify, and commit within that directory
+            3. Push only when the user explicitly asks — this requires their approval
+          Repositories live on the internal Forgejo instance at http://forgejo-http.forgejo.svc.cluster.local:3000
 
     deployment:
       imageRegistry: ghcr.io
