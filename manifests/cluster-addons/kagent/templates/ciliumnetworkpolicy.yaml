@@ -43,7 +43,14 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: kagent
+            app.kubernetes.io/name: kagent-tools
+      toPorts:
+        - ports:
+            - port: '8084'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
             app.kubernetes.io/name: git-mcp
       toPorts:
         - ports:
