@@ -1,6 +1,6 @@
 kagent:
   ui:
-    httproute:
+    httpRoute:
       parentRefs:
         - group: gateway.networking.k8s.io
           kind: Gateway
