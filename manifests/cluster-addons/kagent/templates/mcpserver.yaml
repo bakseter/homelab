@@ -6,22 +6,24 @@ metadata:
 spec:
   transportType: stdio
   deployment:
-    image: node:22-trixie
-    cmd: npx
-    args: ['-y', '@cyanheads/git-mcp-server']
+    image: ghcr.io/bakseter/homelab/git-mcp:2.15.1@sha256:a44ad3559b031d01a7bf47d9124d249ec9d1296b96ef0d5e0ab1bc2d859dcfbb
+    cmd: git-mcp-server
+    args: []
     env:
       GIT_AUTHOR_NAME: labster
       GIT_AUTHOR_EMAIL: labster@kagent.local
       GIT_COMMITTER_NAME: labster
       GIT_COMMITTER_EMAIL: labster@kagent.local
-    secretRefs:
-      - name: forgejo-creds
     volumes:
       - name: workspace
+        emptyDir: {}
+      - name: tmp
         emptyDir: {}
     volumeMounts:
       - name: workspace
         mountPath: /workspace
+      - name: tmp
+        mountPath: /tmp
     podSecurityContext:
       runAsNonRoot: true
       seccompProfile:

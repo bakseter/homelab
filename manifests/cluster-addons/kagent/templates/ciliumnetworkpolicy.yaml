@@ -108,10 +108,3 @@ spec:
         - ports:
             - port: '3000'
               protocol: TCP
-
-    - toFQDNs:
-        - matchName: registry.npmjs.org
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
