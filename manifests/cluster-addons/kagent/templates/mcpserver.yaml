@@ -38,8 +38,6 @@ spec:
       HOME: /home/node
       GIT_AUTHOR_NAME: labster
       GIT_AUTHOR_EMAIL: labster@kagent.local
-    secretRefs:
-      - name: forgejo-creds
     volumes:
       - name: workspace
         persistentVolumeClaim:
