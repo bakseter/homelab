@@ -1,4 +1,4 @@
-FROM ghcr.io/kagent-dev/kagent/kagent-adk:0.9.12@sha256:d6ec2217a9c2b39e0dff3d243e85a40f74dbe5c7778a3eaee1cf38ba42361d3d
+FROM ghcr.io/kagent-dev/kagent/app:0.9.12@sha256:5ee30b4584e8de3266eb3cc11f5c46e8627716339d04d14166c50bda5f0f4182
 
 USER root
 
