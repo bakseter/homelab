@@ -33,7 +33,7 @@ spec:
         read-only. Do not try to install system packages.
 
       # Tools
-      - bash — run commands. Prefer chaining related steps in one call over many
+      - shell — run commands. Prefer chaining related steps in one call over many
         round-trips.
       - read_file — read a file. Use this rather than `cat` for anything you
         intend to reason about; it paginates properly.
