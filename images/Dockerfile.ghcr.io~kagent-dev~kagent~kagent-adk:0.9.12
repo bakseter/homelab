@@ -1,0 +1,10 @@
+FROM ghcr.io/kagent-dev/kagent/kagent-adk:0.9.12@sha256:d6ec2217a9c2b39e0dff3d243e85a40f74dbe5c7778a3eaee1cf38ba42361d3d
+
+USER root
+
+RUN apk update && \
+    apk add --no-cache git curl ca-certificates go nodejs
+
+ENV PATH=/usr/local/go/bin:$PATH GOTOOLCHAIN=local
+
+USER 65534:65534
