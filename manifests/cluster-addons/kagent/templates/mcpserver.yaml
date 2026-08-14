@@ -1,3 +1,29 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mcp-workspace
+  namespace: kagent
+spec:
+  accessModes: [ReadWriteMany]
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: git-mcp
+  namespace: kagent
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fs-mcp
+  namespace: kagent
+automountServiceAccountToken: false
+---
 apiVersion: kagent.dev/v1alpha1
 kind: MCPServer
 metadata:
@@ -6,22 +32,90 @@ metadata:
 spec:
   transportType: stdio
   deployment:
-    image: ghcr.io/bakseter/homelab/git-mcp:2.15.1@sha256:a44ad3559b031d01a7bf47d9124d249ec9d1296b96ef0d5e0ab1bc2d859dcfbb
+    image: ghcr.io/bakseter/homelab/mcp-tools:v1
     cmd: git-mcp-server
-    args: []
     env:
+      HOME: /home/node
       GIT_AUTHOR_NAME: labster
       GIT_AUTHOR_EMAIL: labster@kagent.local
+    secretRefs:
+      - name: forgejo-creds
     volumes:
       - name: workspace
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: mcp-workspace
       - name: tmp
-        emptyDir: {}
+        emptyDir:
+          sizeLimit: 512Mi
+      - name: home
+        emptyDir:
+          sizeLimit: 512Mi
     volumeMounts:
       - name: workspace
         mountPath: /workspace
       - name: tmp
         mountPath: /tmp
+      - name: home
+        mountPath: /home/node
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: "1"
+        memory: 512Mi
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      seccompProfile:
+        type: RuntimeDefault
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
+---
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: fs-mcp
+  namespace: kagent
+spec:
+  transportType: stdio
+  deployment:
+    image: ghcr.io/bakseter/homelab/mcp-tools:v1
+    cmd: mcp-server-filesystem
+    args:
+      - /workspace
+    env:
+      HOME: /home/node
+    volumes:
+      - name: workspace
+        persistentVolumeClaim:
+          claimName: mcp-workspace
+      - name: tmp
+        emptyDir:
+          sizeLimit: 256Mi
+      - name: home
+        emptyDir:
+          sizeLimit: 256Mi
+    volumeMounts:
+      - name: workspace
+        mountPath: /workspace
+      - name: tmp
+        mountPath: /tmp
+      - name: home
+        mountPath: /home/node
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: '1'
+        memory: 512Mi
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 65534
@@ -35,10 +129,3 @@ spec:
         drop:
           - ALL
       readOnlyRootFilesystem: true
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: git-mcp
-  namespace: kagent
-automountServiceAccountToken: false
