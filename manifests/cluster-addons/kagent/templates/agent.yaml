@@ -54,6 +54,15 @@ spec:
     deployment:
       imageRegistry: ghcr.io
 
+      volumes:
+        - name: tmp
+          emtpyDir:
+            sizeLimit: 2Gi
+
+      volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:
