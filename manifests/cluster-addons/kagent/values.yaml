@@ -39,6 +39,8 @@ kagent:
     enabled: false
   istio-agent:
     enabled: false
+  k8s-agent:
+    enabled: false
   kgateway-agent:
     enabled: false
   observability-agent:
