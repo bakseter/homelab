@@ -85,6 +85,9 @@ spec:
         - matchLabels:
             app.kubernetes.io/managed-by: kagent
             app.kubernetes.io/name: labster
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
       toPorts:
         - ports:
             - port: '3000'

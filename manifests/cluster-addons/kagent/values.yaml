@@ -14,7 +14,7 @@ kagent:
   providers:
     default: openAI
     openAI:
-      modeL: mistral-medium-3-5
+      model: mistral-medium-3-5
 
   controller:
     agentImage:
