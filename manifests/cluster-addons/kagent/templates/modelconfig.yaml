@@ -1,0 +1,12 @@
+apiVersion: kagent.dev/v1alpha2
+kind: ModelConfig
+metadata:
+  name: mistral-medium-3-5
+  namespace: kagent
+spec:
+  apiKeySecret: kagent-mistral
+  apiKeySecretKey: MISTRAL_API_KEY
+  model: mistral-medium-3-5
+  provider: OpenAI
+  openAI:
+    baseUrl: https://api.mistral.ai/v1
