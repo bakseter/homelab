@@ -43,6 +43,14 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            app.kubernetes.io/name: kagent-tools
+      toPorts:
+        - ports:
+            - port: '8084'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: forgejo
             app.kubernetes.io/name: forgejo
       toPorts:

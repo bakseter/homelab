@@ -10,6 +10,14 @@ spec:
     runtime: python
     modelConfig: mistral-medium-3-5
 
+    tools:
+      - type: McpServer
+        mcpServer:
+          name: kagent-tool-server
+          kind: RemoteMCPServer
+          toolNames:
+            - shell
+
     systemMessage: |-
       You are labster, a coding agent. You work on repositories hosted on an
       internal Forgejo instance, inside a container that has git, go, node and
