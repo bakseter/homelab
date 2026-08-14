@@ -6,7 +6,7 @@ metadata:
 spec:
   transportType: stdio
   deployment:
-    image: node:22-trixie
+    image: node:24-trixie
     cmd: npx
     args: ['-y', '@cyanheads/git-mcp-server']
     env:
