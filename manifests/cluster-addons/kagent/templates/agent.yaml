@@ -18,7 +18,6 @@ spec:
           toolNames:
             - shell
 
-        tools:
       - type: McpServer
         mcpServer:
           apiGroup: kagent.dev
