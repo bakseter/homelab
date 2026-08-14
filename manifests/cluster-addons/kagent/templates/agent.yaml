@@ -99,10 +99,14 @@ spec:
           mountPath: /home
 
       env:
-        HOME: /home/agent
-        GOCACHE: /home/agent/.cache/go-build
-        GOMODCACHE: /home/agent/.cache/go-mod
-        npm_config_cache: /home/agent/.npm
+        - name: HOME
+          value: /home/agent
+        - name: GOCACHE
+          value: /home/agent/.cache/go-build
+        - name: GOMODCACHE
+          value: /home/agent/.cache/go-mod
+        - name: npm_config_cache
+          value: /home/agent/.npm
 
       resources:
         requests:
