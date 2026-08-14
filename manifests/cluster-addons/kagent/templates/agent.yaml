@@ -16,6 +16,15 @@ spec:
           apiGroup: kagent.dev
           kind: MCPServer
           name: git-mcp
+          toolNames:
+            - git_clone
+            - git_status
+            - git_add
+            - git_commit
+            - git_log
+            - git_fetch
+            - git_pull
+            - git_push
           requireApproval:
             - git_push
             - git_commit
