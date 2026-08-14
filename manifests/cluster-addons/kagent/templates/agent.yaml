@@ -29,6 +29,13 @@ spec:
             - git_push
             - git_commit
 
+      - type: McpServer
+        mcpServer:
+          name: kagent-tool-server
+          kind: RemoteMCPServer
+          toolNames:
+            - shell
+
     systemMessage: |-
       You're a helpful agent, made by the kagent team.
 
