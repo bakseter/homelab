@@ -26,7 +26,7 @@ jobs:
         image:
           - data.forgejo.org/forgejo/runner:13
           - git-mcp:2.15.1
-          - ghcr.io/kagent-dev/kagent/app:0.9.12
+          - ghcr.io/kagent-dev/kagent/app:0.10.0-rc2
 
     steps:
       - name: Checkout repository
