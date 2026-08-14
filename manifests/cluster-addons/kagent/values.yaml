@@ -1,4 +1,15 @@
 kagent:
+  ui:
+    httproute:
+      parentRefs:
+        - group: gateway.networking.k8s.io
+          kind: Gateway
+          name: tailscale-int
+          namespace: tailscale
+
+      hostnames:
+        - kagent.int.bakseter.net
+
   argo-rollouts-agent:
     enabled: false
   cilium-debug-agent:
@@ -17,9 +28,7 @@ kagent:
     enabled: false
   promql-agent:
     enabled: false
-
   grafana-mcp:
     enabled: false
-
   querydoc:
     enabled: false
