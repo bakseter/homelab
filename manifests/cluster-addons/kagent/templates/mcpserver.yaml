@@ -22,6 +22,16 @@ spec:
     volumeMounts:
       - name: workspace
         mountPath: /workspace
+    podSecurityContext:
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+    securityContext:
+      allowPrivilegeEscalation: true
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
 ---
 apiVersion: v1
 kind: ServiceAccount
