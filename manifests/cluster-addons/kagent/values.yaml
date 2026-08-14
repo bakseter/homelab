@@ -11,6 +11,11 @@ kagent:
     seccompProfile:
       type: RuntimeDefault
 
+  providers:
+    default: openAI
+    openAI:
+      modeL: mistral-medium-3-5
+
   ui:
     httpRoute:
       parentRefs:
