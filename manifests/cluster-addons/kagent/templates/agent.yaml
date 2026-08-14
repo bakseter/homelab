@@ -22,7 +22,7 @@ spec:
           - If you created any artifacts such as files or resources, you will include those in your response as well
     deployment:
       securityContext:
-        allowPrivilegeEscalation: true
+        allowPrivilegeEscalation: false
         capabilities:
           drop:
             - ALL
