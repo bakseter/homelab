@@ -22,3 +22,10 @@ spec:
     volumeMounts:
       - name: workspace
         mountPath: /workspace
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: git-mcp
+  namespace: kagent
+automountServiceAccountToken: false
