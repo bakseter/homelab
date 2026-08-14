@@ -43,15 +43,15 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: kagent-tools
+            app.kubernetes.io/name: git-mcp
       toPorts:
         - ports:
-            - port: '8084'
+            - port: '3000'
               protocol: TCP
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: git-mcp
+            app.kubernetes.io/name: fs-mcp
       toPorts:
         - ports:
             - port: '3000'
@@ -59,12 +59,6 @@ spec:
 
     - toFQDNs:
         - matchName: api.mistral.ai
-        - matchName: proxy.golang.org
-        - matchName: sum.golang.org
-        - matchName: registry.npmjs.org
-        - matchName: github.com
-        - matchName: codeload.github.com
-        - matchName: objects.githubusercontent.com
       toPorts:
         - ports:
             - port: '443'
@@ -114,3 +108,28 @@ spec:
         - ports:
             - port: '3000'
               protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: fs-mcp
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: fs-mcp
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: labster
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
+  egress: []

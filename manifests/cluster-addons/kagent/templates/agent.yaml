@@ -11,38 +11,17 @@ spec:
     modelConfig: mistral-medium-3-5
 
     tools:
-#     - type: McpServer
-#       mcpServer:
-#         name: kagent-tool-server
-#         kind: RemoteMCPServer
-#         toolNames:
-#           - shell
-
       - type: McpServer
         mcpServer:
           apiGroup: kagent.dev
           kind: MCPServer
           name: git-mcp
-          toolNames:
-            - git_clone
-            - git_status
-            - git_clean
-            - git_add
-            - git_commit
-            - git_diff
-            - git_log
-            - git_show
-            - git_blame
-            - git_reflog
-            - git_changelog_analyze
-            - git_branch
-            - git_checkout
-            - git_remote
-            - git_fetch
-            - git_pull
-            - git_push
-          requireApproval:
-            - git_push
+
+      - type: McpServer
+        mcpServer:
+          apiGroup: kagent.dev
+          kind: MCPServer
+          name: fs-mcp
 
     systemMessage: |-
     systemMessage: |-
