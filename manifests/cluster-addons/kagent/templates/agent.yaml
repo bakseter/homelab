@@ -16,9 +16,9 @@ spec:
           apiGroup: kagent.dev
           kind: MCPServer
           name: git-mcp
-        requiredApproval:
-          - git_push
-          - git_commit
+          requireApproval:
+            - git_push
+            - git_commit
 
     systemMessage: |-
       You're a helpful agent, made by the kagent team.
