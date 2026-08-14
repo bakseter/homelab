@@ -16,6 +16,12 @@ kagent:
     openAI:
       modeL: mistral-medium-3-5
 
+  controller:
+    agentImage:
+      registry: ghcr.io
+      repository: bakseter/homelab/ghcr.io/kagent-dev/kagent/app
+      tag: 0.9.12@sha256:71e56d9993fe845329cb41e1937d823b243464b09b813a2cb06965b6209be146
+
   ui:
     httpRoute:
       parentRefs:
