@@ -51,8 +51,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: forgejo
-            app.kubernetes.io/name: forgejo
+            app.kubernetes.io/name: git-mcp
       toPorts:
         - ports:
             - port: '3000'
@@ -69,4 +68,46 @@ spec:
       toPorts:
         - ports:
             - port: '443'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: git-mcp
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: git-mcp
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: labster
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: forgejo
+            app.kubernetes.io/name: forgejo
+      toPorts:
+        - ports:
+            - port: '3000'
               protocol: TCP
