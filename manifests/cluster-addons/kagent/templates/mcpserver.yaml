@@ -4,16 +4,21 @@ metadata:
   name: git-mcp
   namespace: kagent
 spec:
-  transportType: http
+  transportType: stdio
   deployment:
     image: node:22-trixie
-    port: 3000
     cmd: npx
-    args: ["-y", "@cyanheads/git-mcp-server"]
+    args: ['-y', '@cyanheads/git-mcp-server']
     env:
       GIT_AUTHOR_NAME: labster
       GIT_AUTHOR_EMAIL: labster@kagent.local
       GIT_COMMITTER_NAME: labster
       GIT_COMMITTER_EMAIL: labster@kagent.local
-      MCP_TRANSPORT_TYPE: http
-      MCP_HTTP_PORT: "3000"
+    secretRefs:
+      - name: forgejo-creds
+    volumes:
+      - name: workspace
+        emptyDir: {}
+    volumeMounts:
+      - name: workspace
+        mountPath: /workspace

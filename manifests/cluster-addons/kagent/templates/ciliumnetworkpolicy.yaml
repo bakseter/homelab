@@ -12,7 +12,7 @@ spec:
   ingress:
     - fromEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: kagent 
+            app.kubernetes.io/name: kagent
             app.kubernetes.io/component: controller
       toPorts:
         - ports:
@@ -34,11 +34,20 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: kagent 
+            app.kubernetes.io/name: kagent
             app.kubernetes.io/component: controller
       toPorts:
         - ports:
             - port: '8083'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+            app.kubernetes.io/name: git-mcp
+      toPorts:
+        - ports:
+            - port: '3000'
               protocol: TCP
 
     - toEndpoints:
@@ -52,3 +61,57 @@ spec:
 
     - toFQDNs:
         - matchName: api.mistral.ai
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
+
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: git-mcp
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: git-mcp
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: labster
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: forgejo
+            app.kubernetes.io/name: forgejo
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
+    - toFQDNs:
+        - matchName: registry.npmjs.org
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
