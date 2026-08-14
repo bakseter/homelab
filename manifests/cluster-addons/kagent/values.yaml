@@ -1,1 +1,7 @@
-kagent: {}
+kagent:
+  argo-rollouts-agent:
+    enabled: false
+  istio-agent:
+    enabled: false
+  kgateway-agent:
+    enabled: false
