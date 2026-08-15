@@ -40,8 +40,6 @@ spec:
       GIT_AUTHOR_EMAIL: labster@kagent.local
       GIT_COMMITTER_NAME: labster
       GIT_COMMITTER_EMAIL: labster@kagent.local
-    secretRefs:
-      - name: forgejo-creds
     volumes:
       - name: workspace
         persistentVolumeClaim:
@@ -52,6 +50,13 @@ spec:
       - name: home
         emptyDir:
           sizeLimit: 512Mi
+      - name: git-creds
+        secret:
+          secretName: forgejo-creds
+          defaultMode: 0400
+          items:
+            - key: credentials
+              path: git-credentials
     volumeMounts:
       - name: workspace
         mountPath: /workspace
@@ -59,12 +64,16 @@ spec:
         mountPath: /tmp
       - name: home
         mountPath: /home/node
+      - name: git-creds
+        mountPath: /etc/git-credentials
+        subPath: git-credentials
+        readOnly: true
     resources:
       requests:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: "1"
+        cpu: '1'
         memory: 512Mi
     podSecurityContext:
       runAsNonRoot: true
