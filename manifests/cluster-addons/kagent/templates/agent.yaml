@@ -16,12 +16,38 @@ spec:
           apiGroup: kagent.dev
           kind: MCPServer
           name: git-mcp
+          toolNames:
+            - git_clone
+            - git_set_working_dir
+            - git_status
+            - git_diff
+            - git_log
+            - git_add
+            - git_commit
+            - git_branch
+            - git_checkout
+            - git_push
+            - git_pull
+            - git_remote
+          requireApprovals:
+            - git_push
 
       - type: McpServer
         mcpServer:
           apiGroup: kagent.dev
           kind: MCPServer
           name: fs-mcp
+          toolNames:
+            - read_text_file
+            - read_multiple_files
+            - list_directory	
+            - directory_tree	
+            - search_files	
+            - list_allowed_directories	
+            - create_directory	
+            - write_file	
+            - edit_file	
+            - move_file
 
     systemMessage: |-
         You are labster, a coding agent. You work on repositories hosted on an

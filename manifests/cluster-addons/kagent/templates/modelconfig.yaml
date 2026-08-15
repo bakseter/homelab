@@ -10,3 +10,16 @@ spec:
   provider: OpenAI
   openAI:
     baseUrl: https://api.mistral.ai/v1
+---
+apiVersion: kagent.dev/v1alpha2
+kind: ModelConfig
+metadata:
+  name: zai-glm-5-2
+  namespace: kagent
+spec:
+  apiKeySecret: kagent-mistral
+  apiKeySecretKey: MISTRAL_API_KEY
+  model: zai-glm-5-2
+  provider: OpenAI
+  openAI:
+    baseUrl: https://api.mistral.ai/v1
