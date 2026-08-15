@@ -104,7 +104,7 @@ alloy:
               "external-dns",
               "five31",
               "forgejo",
-              "forgejo-runner"
+              "forgejo-runner",
               "harbor",
               "immich",
               "inteldeviceplugins-system",
