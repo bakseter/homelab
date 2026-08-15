@@ -29,7 +29,7 @@ spec:
             - git_push
             - git_pull
             - git_remote
-          requireApprovals:
+          requireApproval:
             - git_push
 
       - type: McpServer
