@@ -8,7 +8,7 @@ spec:
 
   declarative:
     runtime: python
-    modelConfig: mistral-medium-3-5
+    modelConfig: zai-glm-5-2
 
     tools:
       - type: McpServer
