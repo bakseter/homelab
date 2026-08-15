@@ -61,7 +61,7 @@ spec:
 
         Clone using the plain URL, with no credentials in it — authentication
         is handled for you. For example:
-        http://forgejo-http.forgejo.svc.cluster.local:3000/bakseter/sceneseer
+        http://forgejo-http.forgejo.svc.cluster.local:3000/bakseter/cool-project
 
         Your changes are real. Files you write persist and commits you make
         are actual commits.

@@ -40,7 +40,7 @@ spec:
       GIT_AUTHOR_EMAIL: labster@kagent.local
       GIT_COMMITTER_NAME: labster
       GIT_COMMITTER_EMAIL: labster@kagent.local
-      GIT_SIGN_COMMITS: false
+      GIT_SIGN_COMMITS: 'false'
     volumes:
       - name: workspace
         persistentVolumeClaim:
