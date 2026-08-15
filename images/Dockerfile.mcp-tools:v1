@@ -5,6 +5,11 @@ RUN npm install -g \
       @cyanheads/git-mcp-server@2.15.1 \
  && npm cache clean --force
 
+RUN <<EOF cat > /etc/gitconfig
+[credential]
+    helper = store --file=/etc/git-credentials
+EOF
+
 USER 65534:65534
 
 WORKDIR /workspace
