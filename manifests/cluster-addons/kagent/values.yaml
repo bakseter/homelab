@@ -24,6 +24,8 @@ kagent:
 
   ui:
     httpRoute:
+      enabled: true
+
       parentRefs:
         - group: gateway.networking.k8s.io
           kind: Gateway
