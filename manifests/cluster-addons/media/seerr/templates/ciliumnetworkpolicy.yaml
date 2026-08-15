@@ -3,12 +3,6 @@ kind: CiliumNetworkPolicy
 metadata:
   name: seerr
   namespace: media
-  annotations:
-    gethomepage.dev/enabled: 'true'
-    gethomepage.dev/description: Media requests
-    gethomepage.dev/group: Media
-    gethomepage.dev/icon: seerr.png
-    gethomepage.dev/name: Seerr
 spec:
   endpointSelector:
     matchLabels:
@@ -23,9 +17,6 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: monitoring
             app.kubernetes.io/name: prometheus-blackbox-exporter
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: homepage
-            app.kubernetes.io/name: homepage
       toPorts:
         - ports:
             - port: '5055'

@@ -19,9 +19,6 @@ spec:
         - matchLabels:
             app: grafana
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: homepage
-            app.kubernetes.io/name: homepage
-        - matchLabels:
             app.kubernetes.io/name: tempo
       toPorts:
         - ports:
