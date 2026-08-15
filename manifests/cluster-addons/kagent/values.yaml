@@ -35,6 +35,12 @@ kagent:
       hostnames:
         - kagent.int.bakseter.net
 
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+
   argo-rollouts-agent:
     enabled: false
   cilium-debug-agent:
