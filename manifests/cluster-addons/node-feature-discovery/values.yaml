@@ -18,11 +18,11 @@ node-feature-discovery:
                 - key: node-role.kubernetes.io/control-plane
                   operator: DoesNotExist
   resources:
-    limits:
-      memory: 512Mi # 4Gi default is absurd for what NFD master actually does
     requests:
       cpu: 100m
       memory: 128Mi
+    limits:
+      memory: 512Mi
 
   worker:
     securityContext:
