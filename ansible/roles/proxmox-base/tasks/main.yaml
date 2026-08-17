@@ -61,6 +61,7 @@
   apt:
     name:
       - vim
+      - fastfetch
       - lm-sensors
       - expect
       - prometheus-node-exporter
