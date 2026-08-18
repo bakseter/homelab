@@ -16,16 +16,6 @@ locals {
   ]
 }
 
-resource "tailscale_dns_nameservers" "global" {
-  nameservers = concat(
-    local.technitium_tailscale_ips,
-    [
-      "1.1.1.1",
-      "8.8.8.8",
-    ]
-  )
-}
-
 resource "tailscale_dns_split_nameservers" "domains" {
   for_each = toset(local.tailscale_domains)
 
