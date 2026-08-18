@@ -1,0 +1,263 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: envoy-gateway
+  namespace: envoy-gateway-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: envoy-gateway
+      app.kubernetes.io/name: envoy-gateway
+      control-plane: envoy-gateway
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            gateway.envoyproxy.io/owning-gateway-name: tailscale-home
+            gateway.envoyproxy.io/owning-gateway-namespace: tailscale
+            app.kubernetes.io/component: proxy
+        - matchLabels:
+            gateway.envoyproxy.io/owning-gateway-name: tailscale-sre
+            gateway.envoyproxy.io/owning-gateway-namespace: tailscale
+            app.kubernetes.io/component: proxy
+        - matchLabels:
+            gateway.envoyproxy.io/owning-gateway-name: tailscale-int
+            gateway.envoyproxy.io/owning-gateway-namespace: tailscale
+            app.kubernetes.io/component: proxy
+        - matchLabels:
+            gateway.envoyproxy.io/owning-gateway-name: cloudflared
+            gateway.envoyproxy.io/owning-gateway-namespace: cloudflared
+            app.kubernetes.io/component: proxy
+      toPorts:
+        - ports:
+            - port: '18000'
+              protocol: TCP
+
+  egress: []
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cloudflared
+  namespace: envoy-gateway-system
+spec:
+  endpointSelector:
+    matchLabels:
+      gateway.envoyproxy.io/owning-gateway-name: cloudflared
+      gateway.envoyproxy.io/owning-gateway-namespace: cloudflared
+      app.kubernetes.io/component: proxy
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cloudflared
+            app.kubernetes.io/name: cloudflared
+      toPorts:
+        - ports:
+            - port: '10080'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: envoy-gateway
+            app.kubernetes.io/name: envoy-gateway
+            control-plane: envoy-gateway
+      toPorts:
+        - ports:
+            - port: '18000'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+        - matchExpressions:
+            - key: k8s:io.kubernetes.pod.namespace
+              operator: In
+              values:
+                # Same list in cloudflared/gateway.yaml
+                - authentik
+                - bakseter-no
+                - mandagsmiddag
+                #
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: tailscale-home
+  namespace: envoy-gateway-system
+spec:
+  endpointSelector:
+    matchLabels:
+      gateway.envoyproxy.io/owning-gateway-name: tailscale-home
+      gateway.envoyproxy.io/owning-gateway-namespace: tailscale
+      app.kubernetes.io/component: proxy
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tailscale
+            tailscale.com/parent-resource-type: proxygroup
+            tailscale.com/parent-resource: envoy-gateway
+      toPorts:
+        - ports:
+            - port: '10443'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: envoy-gateway
+            app.kubernetes.io/name: envoy-gateway
+            control-plane: envoy-gateway
+      toPorts:
+        - ports:
+            - port: '18000'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    # Any pod in any other namespace
+    - toEndpoints:
+        - matchExpressions:
+            - key: k8s:io.kubernetes.pod.namespace
+              operator: NotIn
+              values:
+                - envoy-gateway-system
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: tailscale-int
+  namespace: envoy-gateway-system
+spec:
+  endpointSelector:
+    matchLabels:
+      gateway.envoyproxy.io/owning-gateway-name: tailscale-int
+      gateway.envoyproxy.io/owning-gateway-namespace: tailscale
+      app.kubernetes.io/component: proxy
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tailscale
+            tailscale.com/parent-resource-type: proxygroup
+            tailscale.com/parent-resource: envoy-gateway
+      toPorts:
+        - ports:
+            - port: '10443'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: envoy-gateway
+            app.kubernetes.io/name: envoy-gateway
+            control-plane: envoy-gateway
+      toPorts:
+        - ports:
+            - port: '18000'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    # Any pod in any other namespace
+    - toEndpoints:
+        - matchExpressions:
+            - key: k8s:io.kubernetes.pod.namespace
+              operator: NotIn
+              values:
+                - envoy-gateway-system
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: tailscale-sre
+  namespace: envoy-gateway-system
+spec:
+  endpointSelector:
+    matchLabels:
+      gateway.envoyproxy.io/owning-gateway-name: tailscale-sre
+      gateway.envoyproxy.io/owning-gateway-namespace: tailscale
+      app.kubernetes.io/component: proxy
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tailscale
+            tailscale.com/parent-resource-type: proxygroup
+            tailscale.com/parent-resource: envoy-gateway
+      toPorts:
+        - ports:
+            - port: '10443'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: envoy-gateway
+            app.kubernetes.io/name: envoy-gateway
+            control-plane: envoy-gateway
+      toPorts:
+        - ports:
+            - port: '18000'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    # Any pod in any other namespace
+    - toEndpoints:
+        - matchExpressions:
+            - key: k8s:io.kubernetes.pod.namespace
+              operator: NotIn
+              values:
+                - envoy-gateway-system
