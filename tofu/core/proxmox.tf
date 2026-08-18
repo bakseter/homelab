@@ -1,3 +1,15 @@
+provider "proxmox" {
+  endpoint = "https://192.168.10.23:8006"
+
+  username = var.proxmox_username
+  password = var.proxmox_password
+  insecure = true
+
+  ssh {
+    agent = true
+  }
+}
+
 data "talos_image_factory_extensions_versions" "initial-talos" {
   talos_version = local.initial_talos_version
 

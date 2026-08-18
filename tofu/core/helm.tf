@@ -92,7 +92,7 @@ resource "null_resource" "argocd-add-cluster" {
 }
 
 locals {
-  root_app_manifest = file("${path.module}/../manifests/root.yaml")
+  root_app_manifest = file("${path.module}/../../manifests/root.yaml")
 }
 
 resource "null_resource" "kubectl-apply-root" {
