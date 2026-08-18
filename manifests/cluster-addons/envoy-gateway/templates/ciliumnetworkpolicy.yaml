@@ -190,6 +190,10 @@ spec:
         - ports:
             - port: '10443'
               protocol: TCP
+        # forgejo ssh
+        - ports:
+            - port: '10022'
+              protocol: TCP
 
     - fromEntities:
         - remote-node
