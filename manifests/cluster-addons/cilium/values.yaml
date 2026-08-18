@@ -87,6 +87,9 @@ cilium:
     ui:
       enabled: true
 
+    dropEventEmitter:
+      enabled: true
+
     metrics:
       enableOpenMetrics: true
 
