@@ -1,0 +1,17 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kubelet-serving-cert-approver
+  namespace: kubelet-serving-cert-approver
+spec:
+  endpointSelector: {}
+
+  ingress: []
+
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
