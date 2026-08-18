@@ -33,6 +33,13 @@ spec:
             - port: '18000'
               protocol: TCP
 
+    - fromEntities:
+        - remote-node
+      toPorts:
+        - ports:
+            - port: '9443'
+              protocol: TCP
+
   egress: []
 ---
 apiVersion: cilium.io/v2
@@ -123,6 +130,13 @@ spec:
             - port: '10443'
               protocol: TCP
 
+    - fromEntities:
+        - remote-node
+      toPorts:
+        - ports:
+            - port: '10443'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
@@ -177,6 +191,13 @@ spec:
             - port: '10443'
               protocol: TCP
 
+    - fromEntities:
+        - remote-node
+      toPorts:
+        - ports:
+            - port: '10443'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
@@ -226,6 +247,13 @@ spec:
             k8s:io.kubernetes.pod.namespace: tailscale
             tailscale.com/parent-resource-type: proxygroup
             tailscale.com/parent-resource: envoy-gateway
+      toPorts:
+        - ports:
+            - port: '10443'
+              protocol: TCP
+
+    - fromEntities:
+        - remote-node
       toPorts:
         - ports:
             - port: '10443'
