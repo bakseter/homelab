@@ -23,7 +23,7 @@ harbor:
   database:
     type: external
     external:
-      host: harbor-database.harbor.svc.cluster.local
+      host: harbor-database-rw.harbor.svc.cluster.local
       username: app
       existingSecret: harbor-database-app
 
