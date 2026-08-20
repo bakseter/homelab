@@ -25,6 +25,7 @@ harbor:
     external:
       host: harbor-database-rw.harbor.svc.cluster.local
       username: app
+      coreDatabase: app
       existingSecret: harbor-database-app
 
   registry:
