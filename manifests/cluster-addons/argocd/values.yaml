@@ -4,6 +4,10 @@ argo-cd:
     networkPolicy:
       create: false
 
+    image:
+      repository: quay.io/argoproj/argocd
+      tag: v3.5.1@sha256:0deb1a1c917629b960ead995ae3b6069450a866992676599658687ef9a641ee8
+
   configs:
     repositories:
       argocd:
@@ -41,6 +45,11 @@ argo-cd:
     enabled: false
   redis-ha:
     enabled: false
+
+  redis:
+    image:
+      repository: ecr-public.aws.com/docker/library/redis
+      tag: 8.6.4-alpine@sha256:2cc044fc5a07c9b701f8f1255a309ae9ad7856e694ac03513bf3648c01e40763
 
   controller:
     replicas: 1
