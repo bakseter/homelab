@@ -156,6 +156,7 @@ spec:
         - Include relevant tool output, especially errors and diffs.
         - Name the files you changed and what changed in each.
     deployment:
+      replicas: 0
       imageRegistry: ghcr.io
 
       volumes:
