@@ -24,7 +24,7 @@ authentik:
   server:
     image:
       repository: ghcr.io/goauthentik/server
-      tag: 2026.8.0
+      tag: 2026.8.0@sha256:7421753cfea67e89a6d295a1f0173ccea3866b33768c88dad90453b151cdcfd5
       digest: sha256:7421753cfea67e89a6d295a1f0173ccea3866b33768c88dad90453b151cdcfd5
 
     replicas: 1
@@ -206,7 +206,7 @@ authentik:
   worker:
     image:
       repository: ghcr.io/goauthentik/server
-      tag: 2026.8.0
+      tag: 2026.8.0@sha256:7421753cfea67e89a6d295a1f0173ccea3866b33768c88dad90453b151cdcfd5
       digest: sha256:7421753cfea67e89a6d295a1f0173ccea3866b33768c88dad90453b151cdcfd5
 
     containerSecurityContext:
