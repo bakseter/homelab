@@ -1,9 +1,38 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "helpers:pinGitHubActionDigestsToSemver"],
+  "extends": [
+    "config:best-practices",
+    "helpers:pinGitHubActionDigestsToSemver"
+  ],
   "commitMessagePrefix": "⬆️",
-  "minimumReleaseAge": "3 day",
+  "minimumReleaseAge": "3 days",
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
   "kubernetes": {
-    "managerFilePatterns": ["/manifests/cluster-addons/.+\\.yaml$/"]
-  }
+    "managerFilePatterns": ["/^manifests/cluster-addons/.+\\.yaml$/"]
+  },
+  "packageRules": [
+    {
+      "description": "Only Docker Hub returns image timestamps; without this, GHCR/Quay/ECR/registry.k8s.io are held forever",
+      "matchDatasources": ["docker"],
+      "minimumReleaseAgeBehaviour": "timestamp-optional"
+    },
+    {
+      "description": "Pinning a floating tag is safer than leaving it unpinned - don't delay it",
+      "matchUpdateTypes": ["pinDigest"],
+      "minimumReleaseAge": null
+    },
+    {
+      "matchPackageNames": ["/authentik/"],
+      "groupName": "authentik"
+    },
+    {
+      "matchPackageNames": ["/sealed-secrets/"],
+      "groupName": "sealed-secrets"
+    },
+    {
+      "matchPackageNames": ["/prometheus/", "/kube-state-metrics/"],
+      "groupName": "kube-prometheus-stack"
+    }
+  ]
 }
