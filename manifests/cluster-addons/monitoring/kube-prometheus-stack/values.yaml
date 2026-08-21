@@ -12,8 +12,8 @@ kube-prometheus-stack:
       image:
         registry: quay.io
         repository: prometheus/prometheus
-        tag: v3.14.0-distroless@sha256:50c707e96da5ade383cb1707790576480485e93de06aa60ad8802cb5f744bd0a
-        sha: 64f71bb84e03c855948418b0fc5dea53e9543d8e3fc9931598f583805507f05e
+        tag: v3.14.0-distroless
+        sha: 50c707e96da5ade383cb1707790576480485e93de06aa60ad8802cb5f744bd0a
 
       externalUrl: https://prometheus.int.bakseter.net
 
@@ -135,8 +135,8 @@ kube-prometheus-stack:
       image:
         registry: quay.io
         repository: prometheus/alertmanager
-        tag: v0.34.0@sha256:690c7b525f4367aa91f73e2f91c632206d32e97c6384bdbf2fb7a861b420340d
-        sha: 9e082985f56f4c8c9f724e18f2288c6708f472e56a5286b8863d080434ea065d
+        tag: v0.34.0
+        sha: 690c7b525f4367aa91f73e2f91c632206d32e97c6384bdbf2fb7a861b420340d
 
       externalUrl: https://alertmanager.int.bakseter.net
       secrets:
@@ -244,8 +244,8 @@ kube-prometheus-stack:
     image:
       registry: quay.io
       repository: prometheus/node-exporter
-      tag: v1.12.1-distroless@sha256:8c9bac11973b94b59be88d6e11fee4429aa743c8846cdc75d65b18db33f6a106
-      digest: sha256:6112664fd761bb964d8a2d3d0119d6c8402618a89edbb3a43c8f7b4090fb53c9
+      tag: v1.12.1-distroless
+      digest: sha256:8c9bac11973b94b59be88d6e11fee4429aa743c8846cdc75d65b18db33f6a106
 
     prometheus:
       monitor:
