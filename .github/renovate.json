@@ -1,9 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:best-practices",
-    "helpers:pinGitHubActionDigestsToSemver"
-  ],
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigestsToSemver"],
   "commitMessagePrefix": "⬆️",
   "minimumReleaseAge": "3 days",
   "prConcurrentLimit": 0,
