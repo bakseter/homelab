@@ -84,7 +84,7 @@ spec:
     spec:
       containers:
         - name: runner
-          image: ghcr.io/bakseter/homelab/data.forgejo.org/forgejo/runner:13@sha256:6b615bd92254541803ce161a454745bdd0ee0469303a5d163b92d1a6d6eb3fec
+          image: ghcr.io/bakseter/homelab/data.forgejo.org/forgejo/runner:13@sha256:5d44c07770b855a69761076951de31b5e09740debfb0f90c1b62ee2decc602e4
           command:
             - forgejo-runner
             - daemon
