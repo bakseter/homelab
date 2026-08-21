@@ -18,11 +18,6 @@
       "minimumReleaseAgeBehaviour": "timestamp-optional"
     },
     {
-      "description": "Pinning a floating tag is safer than leaving it unpinned - don't delay it",
-      "matchUpdateTypes": ["pinDigest"],
-      "minimumReleaseAge": null
-    },
-    {
       "matchPackageNames": ["/authentik/"],
       "groupName": "authentik"
     },
