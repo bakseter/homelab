@@ -3,5 +3,5 @@ name: sealed-secrets-umbrella
 version: 0.1.0
 dependencies:
   - name: sealed-secrets
-    version: 2.19.2
+    version: 2.19.3
     repository: https://bitnami.github.io/sealed-secrets
