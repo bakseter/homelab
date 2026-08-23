@@ -2,7 +2,7 @@ sealed-secrets:
   image:
     registry: docker.io
     repository: bitnami/sealed-secrets-controller
-    tag: 0.39.0@sha256:92c3eac36bd692790ff3c32c8b71fac6a9dbcc4566dd3a683b20982eb4a6e823
+    tag: 0.39.1@sha256:0e5ecab23801caa61b79420488d005377a7264b278c969ee8f78d937daec6931
 
   containerSecurityContext:
     allowPrivilegeEscalation: false
