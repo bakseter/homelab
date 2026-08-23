@@ -185,7 +185,7 @@ resource "cloudflare_ruleset" "mandagsmiddag-geoip-block" {
     {
       action      = "block"
       description = "Block non-Norway and non-Portugal"
-      expression  = "not ip.src.country in {\"NO\", \"PT\"}"
+      expression  = "not ip.src.country in {\"NO\" \"PT\"}"
       enabled     = true
     }
   ]
