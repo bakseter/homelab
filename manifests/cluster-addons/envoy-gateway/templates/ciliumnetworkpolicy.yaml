@@ -108,11 +108,7 @@ spec:
               protocol: TCP
 
     - toFQDNs:
-      - matchName: authentik.bakseter.no
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
+        - matchName: authentik.bakseter.no
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -176,11 +172,7 @@ spec:
                 - envoy-gateway-system
 
     - toFQDNs:
-      - matchName: authentik.bakseter.no
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
+        - matchName: authentik.bakseter.no
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -248,11 +240,7 @@ spec:
                 - envoy-gateway-system
 
     - toFQDNs:
-      - matchName: authentik.bakseter.no
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
+        - matchName: authentik.bakseter.no
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -316,8 +304,4 @@ spec:
                 - envoy-gateway-system
 
     - toFQDNs:
-      - matchName: authentik.bakseter.no
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
+        - matchName: authentik.bakseter.no
