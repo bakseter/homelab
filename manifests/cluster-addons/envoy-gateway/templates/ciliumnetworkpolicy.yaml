@@ -107,8 +107,11 @@ spec:
             - port: '4317'
               protocol: TCP
 
-    - toFQDNs:
-        - matchName: authentik.bakseter.no
+    - toEntities:
+        - world
+
+#   - toFQDNs:
+#       - matchName: authentik.bakseter.no
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -171,8 +174,11 @@ spec:
               values:
                 - envoy-gateway-system
 
-    - toFQDNs:
-        - matchName: authentik.bakseter.no
+    - toEntities:
+        - world
+
+#   - toFQDNs:
+#       - matchName: authentik.bakseter.no
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -239,8 +245,11 @@ spec:
               values:
                 - envoy-gateway-system
 
-    - toFQDNs:
-        - matchName: authentik.bakseter.no
+    - toEntities:
+        - world
+
+#   - toFQDNs:
+#       - matchName: authentik.bakseter.no
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -303,5 +312,8 @@ spec:
               values:
                 - envoy-gateway-system
 
-    - toFQDNs:
-        - matchName: authentik.bakseter.no
+    - toEntities:
+        - world
+
+#   - toFQDNs:
+#       - matchName: authentik.bakseter.no
