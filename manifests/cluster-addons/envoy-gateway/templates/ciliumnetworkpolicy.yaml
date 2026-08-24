@@ -107,11 +107,13 @@ spec:
             - port: '4317'
               protocol: TCP
 
+    # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
         - world
-
-#   - toFQDNs:
-#       - matchName: authentik.bakseter.no
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -174,11 +176,13 @@ spec:
               values:
                 - envoy-gateway-system
 
+    # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
         - world
-
-#   - toFQDNs:
-#       - matchName: authentik.bakseter.no
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -245,11 +249,13 @@ spec:
               values:
                 - envoy-gateway-system
 
+    # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
         - world
-
-#   - toFQDNs:
-#       - matchName: authentik.bakseter.no
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -312,8 +318,10 @@ spec:
               values:
                 - envoy-gateway-system
 
+    # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
         - world
-
-#   - toFQDNs:
-#       - matchName: authentik.bakseter.no
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
