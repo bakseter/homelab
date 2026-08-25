@@ -3,5 +3,5 @@ name: tempo-umbrella
 version: 0.1.0
 dependencies:
   - name: tempo
-    version: 2.2.4
+    version: 2.3.0
     repository: oci://ghcr.io/grafana-community/helm-charts
