@@ -110,10 +110,6 @@ spec:
     # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
         - world
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -182,10 +178,6 @@ spec:
     # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
         - world
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -258,10 +250,6 @@ spec:
     # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
         - world
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -330,7 +318,3 @@ spec:
     # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
         - world
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
