@@ -153,6 +153,9 @@ spec:
             control-plane: envoy-gateway
       toPorts:
         - ports:
+            - port: '10080'
+              protocol: TCP
+        - ports:
             - port: '18000'
               protocol: TCP
 
@@ -203,6 +206,9 @@ spec:
             tailscale.com/parent-resource-type: proxygroup
             tailscale.com/parent-resource: envoy-gateway
       toPorts:
+        - ports:
+            - port: '10080'
+              protocol: TCP
         - ports:
             - port: '10443'
               protocol: TCP
@@ -276,6 +282,9 @@ spec:
             tailscale.com/parent-resource-type: proxygroup
             tailscale.com/parent-resource: envoy-gateway
       toPorts:
+        - ports:
+            - port: '10080'
+              protocol: TCP
         - ports:
             - port: '10443'
               protocol: TCP
