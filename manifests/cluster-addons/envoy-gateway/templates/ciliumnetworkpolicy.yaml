@@ -52,6 +52,14 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
+
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
+
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
