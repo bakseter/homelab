@@ -25,3 +25,10 @@ spec:
       memory: 512Mi
     limits:
       memory: 2Gi
+  bootstrap:
+    recovery:
+      volumeSnapshots:
+        storage:
+          name: authentik-database-3
+          kind: PersistentVolumeClaim
+          apiGroup: ''
