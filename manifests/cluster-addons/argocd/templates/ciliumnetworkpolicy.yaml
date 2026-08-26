@@ -216,6 +216,7 @@ spec:
         - matchName: democratic-csi.github.io
         - matchName: github.com
         - matchName: helm.goharbor.io
+        - matchName: helm.cilium.io
         - matchName: ghcr.io
         - matchName: intel.github.io
         - matchName: kubernetes-sigs.github.io
