@@ -84,6 +84,10 @@ spec:
       app.kubernetes.io/instance: immich
       app.kubernetes.io/name: valkey
 
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+
   ingress:
     - fromEndpoints:
         - matchLabels:

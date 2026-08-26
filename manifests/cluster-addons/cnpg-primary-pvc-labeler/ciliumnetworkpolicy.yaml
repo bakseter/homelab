@@ -7,6 +7,10 @@ spec:
   endpointSelector:
     matchLabels: {}
 
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+
   ingress: []
 
   egress:

@@ -8,6 +8,10 @@ spec:
     matchLabels:
       app: longhorn-ui
 
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+
   ingress:
     - fromEndpoints:
         - matchLabels:

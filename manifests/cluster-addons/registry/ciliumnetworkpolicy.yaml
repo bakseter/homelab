@@ -6,6 +6,10 @@ metadata:
 spec:
   endpointSelector: {}
 
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+
   ingress:
     - fromEndpoints:
         - matchLabels:

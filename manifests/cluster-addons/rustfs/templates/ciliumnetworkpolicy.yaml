@@ -8,6 +8,10 @@ spec:
     matchLabels:
       app.kubernetes.io/name: rustfs
 
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+
   ingress:
     - fromEndpoints:
         - matchLabels:

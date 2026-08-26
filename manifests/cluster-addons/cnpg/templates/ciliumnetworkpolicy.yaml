@@ -9,7 +9,9 @@ spec:
       app.kubernetes.io/instance: cnpg
       app.kubernetes.io/name: cloudnative-pg
 
-  ingress: []
+  enableDefaultDeny:
+    ingress: true
+    egress: true
 
   egress:
     - toEntities:

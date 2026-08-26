@@ -119,6 +119,10 @@ spec:
     matchLabels:
       app.kubernetes.io/name: fs-mcp
 
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+
   ingress:
     - fromEndpoints:
         - matchLabels:
