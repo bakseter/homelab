@@ -13,7 +13,7 @@ spec:
       toPorts:
         - ports:
             - port: '53'
-              protocol: TCP
+              protocol: ANY
             - port: '53443'
               protocol: TCP
 
@@ -50,7 +50,7 @@ spec:
       toPorts:
         - ports:
             - port: '53'
-              protocol: TCP
+              protocol: ANY
             - port: '53443'
               protocol: TCP
 
