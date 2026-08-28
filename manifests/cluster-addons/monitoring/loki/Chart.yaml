@@ -3,5 +3,5 @@ name: loki-umbrella
 version: 0.1.0
 dependencies:
   - name: loki
-    version: 18.11.3
+    version: 18.11.4
     repository: oci://ghcr.io/grafana-community/helm-charts
