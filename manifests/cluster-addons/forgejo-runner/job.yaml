@@ -14,7 +14,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: register
-          image: data.forgejo.org/forgejo/runner:13@sha256:7fb853bfe73c229be6349398359c0a7bd01fadfd17c106607b2221150b799ed2
+          image: data.forgejo.org/forgejo/runner:13@sha256:c4af85fd9f0dd03788676a534781a87c71aa2c6a37737143e017eb94d4312952
           command:
             - forgejo-runner
             - register
