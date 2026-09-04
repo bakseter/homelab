@@ -3,5 +3,5 @@ name: kube-prometheus-stack-umbrella
 version: 0.1.0
 dependencies:
   - name: kube-prometheus-stack
-    version: 88.6.5
+    version: 89.2.0
     repository: oci://ghcr.io/prometheus-community/charts
