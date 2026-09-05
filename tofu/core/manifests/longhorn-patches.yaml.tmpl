@@ -1,21 +1,17 @@
 machine:
-  disks:
-    - device: /dev/sdb
-      partitions:
-        - mountpoint: /var/lib/longhorn
-
-  nodeLabels:
-    node.longhorn.io/create-default-disk: "true"
-
   kubelet:
     extraMounts:
-      - destination: /var/lib/longhorn
+      - destination: /var/mnt/longhorn
         type: bind
-        source: /var/lib/longhorn
+        source: /var/mnt/longhorn
         options:
           - bind
           - rshared
           - rw
+
+  nodeLabels:
+    node.longhorn.io/create-default-disk: "true"
+
   %{~ if length(extension_image_refs) > 0 ~}
   install:
     extensions:
@@ -23,3 +19,11 @@ machine:
       - image: ${image_ref}
     %{~ endfor ~}
   %{~ endif ~}
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: longhorn
+provisioning:
+  diskSelector:
+    match: '${path_in_datastore}' in disk.symlinks
+  grow: false
