@@ -20,7 +20,7 @@ kagent:
     agentImage:
       registry: ghcr.io
       repository: bakseter/homelab/ghcr.io/kagent-dev/kagent/app
-      tag: 0.10.0-rc2@sha256:c85838551cf37115840c3d23591aeebcff42a8b3966f75787d5ab75d896928ea
+      tag: 0.10.0-rc2@sha256:af0eba4cd4c59e2b398edb513e5e733b28967083b34cbc96df0c28fa51f429d2
 
   ui:
     httpRoute:
