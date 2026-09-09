@@ -9,7 +9,14 @@ that image is sometimes a faded scan of a physical sleeve.
 This plugin therefore treats the release group as the authority on *which*
 artwork is correct, and iTunes as a source of a clean copy of it. iTunes
 serves the label-supplied digital master rather than a user scan, so it is
-used when the CAA image is missing or below a size threshold.
+used when the CAA image is missing or too small.
+
+Quality is judged on pixel dimensions via Pillow, not file size: file size
+tracks visual complexity as much as resolution, so a flat 1200x1200 digital
+cover can weigh less than a busy 600x600 scan.
+
+Requests to the Cover Art Archive are retried on 5xx and timeouts, since
+they are served by the Internet Archive and fail transiently.
 
 Multi-disc aware: writes into every directory the album's tracks live in,
 plus their common parent.
@@ -23,9 +30,10 @@ Enable with:
       sources: [release-group, itunes]
       filenames: [folder.jpg, cover.jpg]
       variants: [front-1200, front]
-      min_bytes: 500000        # below this, try the next source
+      min_pixels: 1000         # min width AND height to accept a source
       itunes_size: 1200
-      itunes_min_ratio: 0.6    # title similarity guard
+      itunes_min_ratio: 0.6
+      retries: 3
       parent_dir: yes
       delay: 1.0
       timeout: 30
@@ -39,6 +47,7 @@ Usage:
 """
 
 import difflib
+import io
 import os
 import re
 import time
@@ -48,6 +57,11 @@ import requests
 from beets import ui
 from beets.plugins import BeetsPlugin
 
+try:
+    from PIL import Image
+except ImportError:  # pragma: no cover
+    Image = None
+
 CAA_RG = "https://coverartarchive.org/release-group"
 ITUNES_SEARCH = "https://itunes.apple.com/search"
 
@@ -55,25 +69,30 @@ ITUNES_SEARCH = "https://itunes.apple.com/search"
 # rewritable to larger values.
 ITUNES_SIZE_RE = re.compile(r"/\d+x\d+bb\.(jpg|png)$")
 
+RETRY_STATUS = (500, 502, 503, 504, 429)
+
 
 class CoverRGPlugin(BeetsPlugin):
     def __init__(self):
         super().__init__()
         self.config.add(
             {
-                # Tried in order. A source is used when it returns an image
-                # of at least min_bytes; otherwise the next one is tried.
-                # The best image seen wins if none clears the threshold.
+                # Tried in order. A source wins when its image is at least
+                # min_pixels on both axes; otherwise the next is tried and
+                # the largest image seen is used as a fallback.
                 "sources": ["release-group", "itunes"],
                 # Jellyfin checks folder.* before cover.*.
                 "filenames": ["folder.jpg", "cover.jpg"],
                 "variants": ["front-1200", "front"],
-                "min_bytes": 500000,
+                "min_pixels": 1000,
                 "itunes_size": 1200,
                 "itunes_country": "us",
                 # Reject an iTunes hit whose album title is less similar
                 # than this to the tagged one (0..1).
                 "itunes_min_ratio": 0.6,
+                # Retries for transient Internet Archive failures.
+                "retries": 3,
+                "retry_backoff": 2.0,
                 "parent_dir": True,
                 "delay": 1.0,
                 "timeout": 30,
@@ -82,6 +101,10 @@ class CoverRGPlugin(BeetsPlugin):
         )
         if self.config["auto"].get(bool):
             self.import_stages = [self._import_stage]
+        if Image is None:
+            self._log.warning(
+                "Pillow not installed; falling back to file size for quality"
+            )
 
     # ---- command ---------------------------------------------------------
 
@@ -127,6 +150,85 @@ class CoverRGPlugin(BeetsPlugin):
             self._handle(
                 task.album, False, False, self.config["sources"].as_str_seq()
             )
+
+    # ---- http ------------------------------------------------------------
+
+    def _headers(self):
+        return {"User-Agent": "beets-coverrg/2.1 (self-hosted jellyfin)"}
+
+    def _get(self, url, label, what, params=None, retry=True):
+        """GET with retries on transient failures.
+
+        Returns the response, or None when it failed for good. A 404 is
+        returned as-is; it is a legitimate "not here" answer.
+        """
+        timeout = self.config["timeout"].as_number()
+        attempts = self.config["retries"].get(int) if retry else 1
+        backoff = self.config["retry_backoff"].as_number()
+
+        for attempt in range(1, attempts + 1):
+            try:
+                resp = requests.get(url, params=params,
+                                    headers=self._headers(), timeout=timeout)
+            except (requests.Timeout, requests.ConnectionError) as exc:
+                if attempt < attempts:
+                    wait = backoff * attempt
+                    self._log.debug(
+                        "{}: {} attempt {}/{} failed ({}); retrying in {}s",
+                        label, what, attempt, attempts, exc, wait,
+                    )
+                    time.sleep(wait)
+                    continue
+                self._log.warning("{} request failed: {}: {}",
+                                  what, label, exc)
+                return None
+            except requests.RequestException as exc:
+                self._log.warning("{} request failed: {}: {}",
+                                  what, label, exc)
+                return None
+
+            if resp.status_code in RETRY_STATUS and attempt < attempts:
+                wait = backoff * attempt
+                self._log.debug(
+                    "{}: {} http {} (attempt {}/{}); retrying in {}s",
+                    label, what, resp.status_code, attempt, attempts, wait,
+                )
+                time.sleep(wait)
+                continue
+
+            return resp
+
+        return None
+
+    # ---- quality ---------------------------------------------------------
+
+    def _dimensions(self, data):
+        if Image is None or not data:
+            return None
+        try:
+            with Image.open(io.BytesIO(data)) as im:
+                return im.size
+        except Exception as exc:  # noqa: BLE001 - any decode failure
+            self._log.debug("cannot read image dimensions: {}", exc)
+            return None
+
+    def _score(self, data):
+        """Comparable quality score, and a human-readable description."""
+        dims = self._dimensions(data)
+        if dims:
+            w, h = dims
+            return min(w, h), f"{w}x{h}"
+        # No Pillow, or an undecodable image: fall back to bytes. Scale it
+        # down so it never outranks a real pixel measurement.
+        return len(data) / 10000.0, f"{len(data) // 1024} KB"
+
+    def _acceptable(self, data):
+        floor = self.config["min_pixels"].get(int)
+        dims = self._dimensions(data)
+        if dims is None:
+            # Cannot measure; accept only if it is at least plausibly big.
+            return len(data) >= 200000
+        return dims[0] >= floor and dims[1] >= floor
 
     # ---- directories -----------------------------------------------------
 
@@ -179,14 +281,13 @@ class CoverRGPlugin(BeetsPlugin):
                             len(dirs), label)
             return "skipped"
 
-        data, origin = self._best(album, label, sources)
+        data, origin, desc = self._best(album, label, sources)
         if data is None:
             return "no_art"
 
         if pretend:
             for t in pending:
-                self._log.info("would write {} bytes from {}: {}",
-                               len(data), origin, t)
+                self._log.info("would write {} from {}: {}", desc, origin, t)
             return "written"
 
         wrote = sum(1 for dest in pending if self._write(dest, data, label))
@@ -194,16 +295,15 @@ class CoverRGPlugin(BeetsPlugin):
             return "failed"
 
         self._log.info(
-            "ok ({} KB from {}, {} file(s) across {} dir(s)): {}",
-            len(data) // 1024, origin, wrote, len(dirs), label,
+            "ok ({} from {}, {} file(s) across {} dir(s)): {}",
+            desc, origin, wrote, len(dirs), label,
         )
         return "written"
 
     def _best(self, album, label, sources):
-        """Try each source in order; return the first image clearing
-        min_bytes, else the largest image any source returned."""
-        floor = self.config["min_bytes"].get(int)
-        best = (None, None)
+        """Try each source in order; return the first acceptable image,
+        else the highest-scoring image any source returned."""
+        best = (None, None, None, -1.0)
 
         for name in sources:
             if name == "release-group":
@@ -214,27 +314,26 @@ class CoverRGPlugin(BeetsPlugin):
                 self._log.warning("unknown source: {}", name)
                 continue
 
-            if data is None:
+            if not data:
                 continue
-            if len(data) >= floor:
-                return data, name
-            self._log.debug("{}: {} only {} KB, below floor",
-                            label, name, len(data) // 1024)
-            if best[0] is None or len(data) > len(best[0]):
-                best = (data, name)
+
+            score, desc = self._score(data)
+            if self._acceptable(data):
+                return data, name, desc
+
+            self._log.debug("{}: {} gave {}, below floor", label, name, desc)
+            if score > best[3]:
+                best = (data, name, desc, score)
 
         if best[0] is not None:
-            self._log.debug("{}: falling back to best available ({})",
-                            label, best[1])
-            return best
+            self._log.debug("{}: no source cleared the floor, using {} ({})",
+                            label, best[1], best[2])
+            return best[0], best[1], best[2]
 
         self._log.info("no art: {}", label)
-        return None, None
+        return None, None, None
 
     # ---- sources ---------------------------------------------------------
-
-    def _headers(self):
-        return {"User-Agent": "beets-coverrg/2.0 (self-hosted jellyfin)"}
 
     def _from_caa(self, album, label):
         rgid = album.mb_releasegroupid
@@ -242,14 +341,9 @@ class CoverRGPlugin(BeetsPlugin):
             self._log.debug("no release-group id: {}", label)
             return None
 
-        timeout = self.config["timeout"].as_number()
         for variant in self.config["variants"].as_str_seq():
-            url = f"{CAA_RG}/{rgid}/{variant}"
-            try:
-                resp = requests.get(url, headers=self._headers(),
-                                    timeout=timeout)
-            except requests.RequestException as exc:
-                self._log.warning("caa request failed: {}: {}", label, exc)
+            resp = self._get(f"{CAA_RG}/{rgid}/{variant}", label, "caa")
+            if resp is None:
                 return None
             if resp.status_code == 200 and resp.content:
                 return resp.content
@@ -265,7 +359,6 @@ class CoverRGPlugin(BeetsPlugin):
         if not title:
             return None
 
-        timeout = self.config["timeout"].as_number()
         params = {
             "term": f"{artist} {title}".strip(),
             "entity": "album",
@@ -273,13 +366,17 @@ class CoverRGPlugin(BeetsPlugin):
             "limit": 5,
             "country": self.config["itunes_country"].as_str(),
         }
+        resp = self._get(ITUNES_SEARCH, label, "itunes", params=params)
+        if resp is None or resp.status_code != 200:
+            if resp is not None:
+                self._log.warning("itunes http {}: {}",
+                                  resp.status_code, label)
+            return None
+
         try:
-            resp = requests.get(ITUNES_SEARCH, params=params,
-                                headers=self._headers(), timeout=timeout)
-            resp.raise_for_status()
             results = resp.json().get("results", [])
-        except (requests.RequestException, ValueError) as exc:
-            self._log.warning("itunes request failed: {}: {}", label, exc)
+        except ValueError as exc:
+            self._log.warning("itunes bad json: {}: {}", label, exc)
             return None
 
         hit = self._match(results, artist, title, label)
@@ -293,16 +390,14 @@ class CoverRGPlugin(BeetsPlugin):
         size = self.config["itunes_size"].get(int)
         big = ITUNES_SIZE_RE.sub(rf"/{size}x{size}bb.jpg", art)
 
-        try:
-            img = requests.get(big, headers=self._headers(), timeout=timeout)
-            if img.status_code != 200 or not img.content:
-                # Requested size may not exist; fall back to what was given.
-                img = requests.get(art, headers=self._headers(),
-                                   timeout=timeout)
-            if img.status_code == 200 and img.content:
-                return img.content
-        except requests.RequestException as exc:
-            self._log.warning("itunes image failed: {}: {}", label, exc)
+        img = self._get(big, label, "itunes image")
+        if img is not None and img.status_code == 200 and img.content:
+            return img.content
+
+        # Requested size may not exist; fall back to what was given.
+        img = self._get(art, label, "itunes image", retry=False)
+        if img is not None and img.status_code == 200 and img.content:
+            return img.content
         return None
 
     def _match(self, results, artist, title, label):
