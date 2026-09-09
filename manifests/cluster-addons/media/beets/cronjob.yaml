@@ -27,8 +27,8 @@ spec:
                 - |
                   set -e
                   beet import -A -q /media/music
-                  beet mbsync
-                  beet coverrg
+                  beet mbsync "added:$(date -d '-3 days' +%Y-%m-%d).."
+                  beet coverrg -f "added:$(date -d '-3 days' +%Y-%m-%d).."
               env:
                 - name: HOME
                   value: /config
