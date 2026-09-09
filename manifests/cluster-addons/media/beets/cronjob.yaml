@@ -1,0 +1,84 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: beets
+  namespace: media
+spec:
+  schedule: '30 4 * * *'
+  timeZone: Europe/Oslo
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: beets
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: beets
+              image: ghcr.io/bakseter/homelab/beets:2.4.0@sha256:7b49573fd20222dd12483f338c96f8949c7acff4bd30648c22f78fd837bd7e27
+              command: ['/bin/sh', '-c']
+              args:
+                - |
+                  set -e
+                  beet import -A -q /media/music
+                  beet mbsync
+                  beet coverrg
+              env:
+                - name: HOME
+                  value: /config
+                - name: BEETSDIR
+                  value: /config
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 256Mi
+                limits:
+                  memory: 1Gi
+              volumeMounts:
+                - mountPath: /config
+                  name: config
+                - mountPath: /config/config.yaml
+                  name: beets-config
+                  subPath: config.yaml
+                  readOnly: true
+                - mountPath: /config/plugins
+                  name: beets-plugins
+                  readOnly: true
+                - mountPath: /media
+                  name: media
+                - mountPath: /tmp
+                  name: tmp
+          securityContext:
+            fsGroup: 65534
+            runAsGroup: 65534
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+          volumes:
+            - name: config
+              persistentVolumeClaim:
+                claimName: beets-config
+            - name: beets-config
+              configMap:
+                name: beets-config
+            - name: beets-plugins
+              configMap:
+                name: beets-plugins
+            - name: media
+              persistentVolumeClaim:
+                claimName: shared-media
+            - emptyDir: {}
+              name: tmp

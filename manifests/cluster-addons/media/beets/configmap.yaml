@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: beets-config
+  namespace: media
+data:
+  config.yaml: |
+    # ---- paths ----------------------------------------------------------
+    # Adjust to wherever your music actually lives inside shared-media.
+    directory: /media/music
+    library: /config/library.db
+
+    # ---- do not touch the layout ----------------------------------------
+    # Lidarr owns the directory structure. beets only rewrites tags in place.
+    import:
+      copy: no
+      move: no
+      write: yes
+      incremental: yes        # remember directories already processed
+      quiet_fallback: skip    # non-interactive: skip rather than guess wrong
+      duplicate_action: keep
+      log: /config/import.log
+
+    # ---- the whole point: original release date --------------------------
+    # Sets year/month/day to the release date of the ORIGINAL version of the
+    # album rather than the pressing that was matched. year == original_year.
+    original_date: yes
+
+    per_disc_numbering: no
+    id3v23: no
+    art_filename: cover
+
+    # ---- edition preference ---------------------------------------------
+    match:
+      preferred:
+        media: [CD, Digital Media]
+        countries: [US, GB, XW]
+        original_year: yes    # bias matching toward original pressings
+      ignored_media: [DVD, DVD-Video, Blu-ray, HD-DVD, VHS]
+      ignore_video_tracks: yes
+      ignore_data_tracks: yes
+
+    musicbrainz:
+      searchlimit: 10
+
+    # ---- plugins ---------------------------------------------------------
+    pluginpath: /config/plugins
+    plugins: musicbrainz mbsync coverrg
+
+    coverrg:
+      filename: folder.jpg
+      variants: [front-1200, front]
+      delay: 1.0
+      timeout: 30
+      auto: no

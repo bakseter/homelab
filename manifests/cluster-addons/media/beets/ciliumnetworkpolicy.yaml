@@ -1,0 +1,46 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: beets
+  namespace: media
+spec:
+  endpointSelector:
+    matchLabels: {}
+
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+
+  ingress: []
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s-app: kube-dns
+            k8s:io.kubernetes.pod.namespace: kube-system
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toFQDNs:
+        - matchName: musicbrainz.org
+        - matchName: coverartarchive.org
+        - matchName: archive.org
+        - matchPattern: '*.archive.org'
+        - matchPattern: '*.*.archive.org'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: jellyfin
+      toPorts:
+        - ports:
+            - port: '8096'
+              protocol: TCP
