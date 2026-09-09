@@ -1,4 +1,4 @@
-FROM python:3.13-slim
+FROM python:3.14-slim
  
 RUN pip install --no-cache-dir \
       "beets[fetchart]==2.4.0" \
