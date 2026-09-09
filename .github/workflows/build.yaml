@@ -25,8 +25,9 @@ jobs:
       matrix:
         image:
           - data.forgejo.org/forgejo/runner:13
-          - ghcr.io/kagent-dev/kagent/app:0.10.0-rc2
+          - ghcr.io/kagent-dev/kagent/app:0.10.1
           - mcp-tools:v1
+          - beet:2.4.0
 
     steps:
       - name: Checkout repository

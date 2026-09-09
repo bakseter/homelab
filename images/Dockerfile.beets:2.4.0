@@ -1,0 +1,14 @@
+FROM python:3.13-slim
+ 
+RUN pip install --no-cache-dir \
+      "beets[fetchart]==2.4.0" \
+      pillow && \
+    rm -rf /root/.cache
+ 
+ENV HOME=/config
+ENV BEETSDIR=/config
+ENV PYTHONDONTWRITEBYTECODE=1
+ 
+USER 65534:65534
+ 
+ENTRYPOINT ["beet"]
