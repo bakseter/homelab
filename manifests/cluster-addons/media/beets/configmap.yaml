@@ -47,9 +47,16 @@ data:
     pluginpath: /config/plugins
     plugins: musicbrainz mbsync coverrg
 
+
     coverrg:
-      filename: folder.jpg
+      sources: [release-group, itunes]
+      filenames: [folder.jpg, cover.jpg]
       variants: [front-1200, front]
+      min_bytes: 500000
+      itunes_size: 1200
+      itunes_country: us
+      itunes_min_ratio: 0.6
+      parent_dir: yes
       delay: 1.0
       timeout: 30
       auto: no

@@ -5,7 +5,12 @@ metadata:
   namespace: media
 spec:
   endpointSelector:
-    matchLabels: {}
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - beets
+          - beets-debug
 
   enableDefaultDeny:
     ingress: true
@@ -32,6 +37,8 @@ spec:
         - matchName: archive.org
         - matchPattern: '*.archive.org'
         - matchPattern: '*.*.archive.org'
+        - matchName: itunes.apple.com
+        - matchPattern: '*.mzstatic.com'
       toPorts:
         - ports:
             - port: '443'
