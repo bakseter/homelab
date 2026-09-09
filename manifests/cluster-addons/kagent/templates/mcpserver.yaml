@@ -33,7 +33,7 @@ spec:
   transportType: stdio
   deployment:
     replicas: 0
-    image: ghcr.io/bakseter/homelab/mcp-tools:v1@sha256:bc95a7fd06f56cc5ae3322c5d77fcf70253c20f89c609ad34554f98b1170f668
+    image: ghcr.io/bakseter/homelab/mcp-tools:v1@sha256:7b9097b860817644963ebefb62df5830984dfb58dc45304ae4af9c74e3b87ab3
     cmd: git-mcp-server
     env:
       HOME: /home/node
@@ -99,7 +99,7 @@ spec:
   transportType: stdio
   deployment:
     replicas: 0
-    image: ghcr.io/bakseter/homelab/mcp-tools:v1@sha256:bc95a7fd06f56cc5ae3322c5d77fcf70253c20f89c609ad34554f98b1170f668
+    image: ghcr.io/bakseter/homelab/mcp-tools:v1@sha256:7b9097b860817644963ebefb62df5830984dfb58dc45304ae4af9c74e3b87ab3
     cmd: mcp-server-filesystem
     args:
       - /workspace
