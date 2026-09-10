@@ -73,6 +73,16 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
   node                        = each.value.ip
 
   config_patches = compact([
+    try(each.value.longhorn.enabled, false) ? templatefile(
+      "${path.module}/manifests/longhorn-patches.yaml.tmpl",
+      {
+        extension_image_refs = data.talos_image_factory_extensions_versions.talos.extensions_info.*.ref
+        path_in_datastore    = try(each.value.longhorn.pathInDatastore, "")
+      },
+    ) : "",
+    try(each.value.igpu.enabled, false) ? file(
+      "${path.module}/manifests/igpu-patches.yaml",
+    ) : "",
     templatefile(
       "${path.module}/manifests/default-patches.yaml.tmpl",
       {
@@ -96,22 +106,6 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
     ),
     try(each.value.gvisor.enabled, false) ? file(
       "${path.module}/manifests/gvisor-patches.yaml",
-    ) : "",
-    # Longhorn split into two since there was problem having two yaml documents in single file
-    try(each.value.longhorn.enabled, false) ? templatefile(
-      "${path.module}/manifests/longhorn-base-patches.yaml.tmpl",
-      {
-        extension_image_refs = data.talos_image_factory_extensions_versions.talos.extensions_info.*.ref
-      },
-    ) : "",
-    try(each.value.longhorn.enabled, false) ? templatefile(
-      "${path.module}/manifests/longhorn-disk-patches.yaml.tmpl",
-      {
-        path_in_datastore = try(each.value.longhorn.pathInDatastore, "")
-      },
-    ) : "",
-    try(each.value.igpu.enabled, false) ? file(
-      "${path.module}/manifests/igpu-patches.yaml",
     ) : "",
     /*
     templatefile(
