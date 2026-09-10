@@ -28,9 +28,9 @@ apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
   image: factory.talos.dev/installer/${talos_schematic_id}:${talos_version}
-  provisioning:
-    diskSelector:
-      match: disk.dev_path == '/dev/sda'
+provisioning:
+  diskSelector:
+    match: disk.dev_path == '/dev/sda'
 ---
 apiVersion: v1alpha1
 kind: KubeClusterConfig
