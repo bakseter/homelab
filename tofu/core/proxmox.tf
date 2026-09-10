@@ -179,7 +179,7 @@ resource "proxmox_virtual_environment_vm" "talos-worker" {
 
     content {
       datastore_id      = ""
-      path_in_datastore = each.value.longhorn.pathInDatastore
+      path_in_datastore = each.value.longhorn.diskPath
 
       interface   = "scsi1"
       size        = each.value.longhorn.diskSize
