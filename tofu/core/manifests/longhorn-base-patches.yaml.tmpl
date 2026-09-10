@@ -19,11 +19,3 @@ machine:
       - image: ${image_ref}
     %{~ endfor ~}
   %{~ endif ~}
----
-apiVersion: v1alpha1
-kind: UserVolumeConfig
-name: longhorn
-provisioning:
-  diskSelector:
-    match: '${path_in_datastore}' in disk.symlinks
-  grow: false
