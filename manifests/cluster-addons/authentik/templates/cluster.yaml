@@ -13,7 +13,7 @@ spec:
       recurring-job-group.longhorn.io/fstrim: enabled
   affinity:
     nodeSelector:
-      node.longhorn.io/create-default-disk: 'true'
+      node.longhorn.io/create-default-disk: 'config'
     enablePodAntiAffinity: true
     topologyKey: bakseter.net/physical-node
     podAntiAffinityType: required
@@ -25,3 +25,10 @@ spec:
       memory: 512Mi
     limits:
       memory: 2Gi
+  bootstrap:
+    recovery:
+      volumeSnapshots:
+        storage:
+          name: authentik-database-1
+          kind: PersistentVolumeClaim
+          apiGroup: ''
