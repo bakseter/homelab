@@ -13,7 +13,7 @@ nodes:
         longhorn:
           enabled: true
           diskSize: 465
-          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S7EWNL0X362167X' # ls -l /dev/disk/by-id/
+          diskPath: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S7EWNL0X362167X' # ls -l /dev/disk/by-id/
 
   m715q2:
     cores: 4
@@ -59,7 +59,7 @@ nodes:
         longhorn:
           enabled: true
           diskSize: 465
-          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNL0Y702707H' # ls -l /dev/disk/by-id/
+          diskPath: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNL0Y702707H' # ls -l /dev/disk/by-id/
         igpu:
           enabled: true
           pci_id: '0000:00:02.0'
@@ -85,7 +85,7 @@ nodes:
         longhorn:
           enabled: true
           diskSize: 931
-          pathInDatastore: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_1TB_S75CNS0Y903567P' # ls -l /dev/disk/by-id/
+          diskPath: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_1TB_S75CNS0Y903567P' # ls -l /dev/disk/by-id/
         igpu:
           enabled: true
           pci_id: '0000:00:02.0'
@@ -105,7 +105,10 @@ nodes:
         longhorn:
           enabled: true
           diskSize: 238
-          pathInDatastore: '/dev/disk/by-id/ata-Micron_MTFDDAK256TDL_193823DF41CD' # ls -l /dev/disk/by-id/
+          diskPath: '/dev/disk/by-id/ata-Micron_MTFDDAK256TDL_193823DF41CD' # ls -l /dev/disk/by-id/
+          mountPath: /var/lib/longhorn
+          volume:
+            uuid: ec163f1e-42d2-4fe6-a6fe-f3b7c83029ac # talosctl -n <ip> get discoveredvolume
         igpu:
           enabled: true
           pci_id: '0000:00:02.0'

@@ -77,7 +77,9 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
       "${path.module}/manifests/longhorn-patches.yaml.tmpl",
       {
         extension_image_refs = data.talos_image_factory_extensions_versions.talos.extensions_info.*.ref
-        path_in_datastore    = try(each.value.longhorn.pathInDatastore, "")
+        mount_path           = try(each.value.longhorn.mountPath, "")
+        disk_path            = try(each.value.longhorn.diskPath, "")
+        volume_uuid          = try(each.value.longhorn.volume.uuid, "")
       },
     ) : "",
     try(each.value.igpu.enabled, false) ? file(

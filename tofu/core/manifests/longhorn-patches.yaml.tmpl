@@ -1,7 +1,7 @@
 machine:
   kubelet:
     extraMounts:
-      - destination: /var/mnt/longhorn
+      - destination: ${mount_path}
         type: bind
         source: /var/mnt/longhorn
         options:
@@ -19,11 +19,21 @@ machine:
       - image: ${image_ref}
     %{~ endfor ~}
   %{~ endif ~}
+%{~ if volume_uuid != "" ~}
 ---
 apiVersion: v1alpha1
 kind: UserVolumeConfig
 name: longhorn
 provisioning:
   diskSelector:
-    match: "'${path_in_datastore}' in disk.symlinks"
+    match: "'${disk_path}' in disk.symlinks"
   grow: false
+%{~ else ~}
+---
+apiVersion: v1alpha1
+kind: ExistingVolumeConfig
+name: longhorn
+discovery:
+  volumeSelector:
+    match: volume.uuid == 'volume_uuid'
+%{~ endif ~}
