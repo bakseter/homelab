@@ -1,16 +1,8 @@
 machine:
-  kubelet:
-    extraMounts:
-      - destination: ${mount_path}
-        type: bind
-        source: /var/mnt/longhorn
-        options:
-          - bind
-          - rshared
-          - rw
-
   nodeLabels:
-    node.longhorn.io/create-default-disk: "true"
+    node.longhorn.io/create-default-disk: 'config'
+  nodeAnnotations:
+    node.longhorn.io/default-disks-config: '[{"path":"/var/mnt/longhorn","allowScheduling":true}]'
 
   %{~ if length(extension_image_refs) > 0 ~}
   install:
