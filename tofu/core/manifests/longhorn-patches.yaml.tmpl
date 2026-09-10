@@ -25,5 +25,5 @@ kind: UserVolumeConfig
 name: longhorn
 provisioning:
   diskSelector:
-    match: '${path_in_datastore}' in disk.symlinks
+    match: "'${path_in_datastore}' in disk.symlinks"
   grow: false
