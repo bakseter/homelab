@@ -19,7 +19,7 @@ machine:
       - image: ${image_ref}
     %{~ endfor ~}
   %{~ endif ~}
-%{~ if volume_uuid != "" ~}
+%{~ if volume_uuid == "" ~}
 ---
 apiVersion: v1alpha1
 kind: UserVolumeConfig
@@ -35,5 +35,5 @@ kind: ExistingVolumeConfig
 name: longhorn
 discovery:
   volumeSelector:
-    match: volume.uuid == 'volume_uuid'
+    match: volume.uuid == '${volume_uuid}'
 %{~ endif ~}
