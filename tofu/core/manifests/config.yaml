@@ -14,6 +14,8 @@ nodes:
           enabled: true
           diskSize: 465
           diskPath: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S7EWNL0X362167X' # ls -l /dev/disk/by-id/
+          volume:
+            uuid: dd9a75f0-c715-4be2-adc9-6421f4bcf267 # talosctl -n <ip> get discoveredvolume
 
   m715q2:
     cores: 4
@@ -60,6 +62,8 @@ nodes:
           enabled: true
           diskSize: 465
           diskPath: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNL0Y702707H' # ls -l /dev/disk/by-id/
+          volume:
+            uuid: 27b499a7-a936-4dd6-b861-0ad18a3ebfbd # talosctl -n <ip> get discoveredvolume
         igpu:
           enabled: true
           pci_id: '0000:00:02.0'
@@ -86,6 +90,8 @@ nodes:
           enabled: true
           diskSize: 931
           diskPath: '/dev/disk/by-id/ata-Samsung_SSD_870_EVO_1TB_S75CNS0Y903567P' # ls -l /dev/disk/by-id/
+          volume:
+            uuid: d2a3313b-1ad4-4263-9493-d2fd9f01beac # talosctl -n <ip> get discoveredvolume
         igpu:
           enabled: true
           pci_id: '0000:00:02.0'
