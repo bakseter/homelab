@@ -45,3 +45,11 @@ machine:
         vip:
           ip: ${virtual_ip_controlplane}
         %{~ endif ~}
+---
+apiVersion: v1alpha1
+kind: FilesystemTrimConfig
+interval: 168h0m0s # one week
+---
+apiVersion: v1alpha1
+kind: SecurityProfileConfig
+workloadIsolation: true
