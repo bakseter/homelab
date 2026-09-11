@@ -3,8 +3,6 @@ cluster:
   etcd:
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
-  controlPlane:
-    endpoint: https://${virtual_ip_controlplane}:6443
   %{~ endif ~}
 
 machine:
@@ -34,11 +32,11 @@ provisioning:
   diskSelector:
     match: disk.dev_path == '/dev/sda'
 ---
-#apiVersion: v1alpha1
-#kind: KubeClusterConfig
-#clusterName: homelab
-#endpoint: https://${virtual_ip_controlplane}:6443
-#---
+apiVersion: v1alpha1
+kind: KubeClusterConfig
+clusterName: homelab
+endpoint: https://${virtual_ip_controlplane}:6443
+---
 apiVersion: v1alpha1
 kind: KubeletConfig
 extraArgs:
