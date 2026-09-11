@@ -42,6 +42,7 @@ apiVersion: v1alpha1
 kind: KubeServiceAccountConfig
 issuer:
   issuerURL: https://${virtual_ip_controlplane}:6443
+---
 %{~ endif ~}
 apiVersion: v1alpha1
 kind: KubeletConfig
