@@ -10,7 +10,7 @@ cert-manager:
 
     image:
       repository: quay.io/jetstack/cert-manager-webhook
-      tag: v1.21.1@sha256:d8b3961b51c8c7320633f8208dc46bf88aa13804d0f7cbe48a096b2c523cee42
+      tag: v1.21.2@sha256:a60e2dac46dbb8a7f3df95c54ce941012f54c2fe022f0ee55aaa1ab40ed957ae
 
   cainjector:
     enabled: true
