@@ -18,7 +18,7 @@ cert-manager:
 
     image:
       repository: quay.io/jetstack/cert-manager-cainjector
-      tag: v1.21.1@sha256:ccf6b919ec0500745a47a910118f834f9636d0aac1ff221245cd2557ed8c7c98
+      tag: v1.21.2@sha256:c85268c64f2e0e76684bf5fe8906caff34b82523561c6affe0fae3546bd87562
 
   crds:
     enabled: true
