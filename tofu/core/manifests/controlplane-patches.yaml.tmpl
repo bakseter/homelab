@@ -1,0 +1,13 @@
+cluster:
+  etcd:
+    extraArgs:
+      listen-metrics-urls: http://0.0.0.0:2381
+---
+apiVersion: v1alpha1
+kind: KubeServiceAccountConfig
+issuer:
+  issuerURL: https://${virtual_ip_controlplane}:6443
+---
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+enabled: false
