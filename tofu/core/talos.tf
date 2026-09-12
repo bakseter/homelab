@@ -40,6 +40,12 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
         talos_version           = local.talos_version
       }
     ),
+    templatefile(
+      "${path.module}/manifests/controlplane-patches.yaml.tmpl",
+      {
+        virtual_ip_controlplane = local.virtual_ip_controlplane
+      }
+    ),
     file(
       "${path.module}/manifests/harbor-patches.yaml",
     ),
