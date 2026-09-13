@@ -23,6 +23,27 @@ spec:
       name: oda-mcp-bootstrap
       namespace: kagent
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oda-mcp-bootstrap-script
+  namespace: kagent
+data:
+  bootstrap.sh: |
+    #!/bin/sh
+    set -eu
+    D="$HOME/.mcp-auth/mcp-remote-v1"
+    mkdir -p "$D"
+    for f in /bootstrap/*; do
+      [ -e "$f" ] || continue
+      b=$(basename "$f")
+      if [ ! -e "$D/$b" ]; then
+        cp "$f" "$D/$b"
+        chmod 600 "$D/$b"
+      fi
+    done
+    exec npx -y mcp-remote@0.13.5 https://oda.com/mcp
+---
 apiVersion: kagent.dev/v1alpha1
 kind: MCPServer
 metadata:
@@ -38,20 +59,7 @@ spec:
     replicas: 1
     cmd: /bin/sh
     args:
-      - -c
-      - |
-        set -eu
-        D="$HOME/.mcp-auth/mcp-remote-v1"
-        mkdir -p "$D"
-        for f in /bootstrap/*; do
-          [ -e "$f" ] || continue
-          b=$(basename "$f")
-          if [ ! -e "$D/$b" ]; then
-            cp "$f" "$D/$b"
-            chmod 600 "$D/$b"
-          fi
-        done
-        exec npx -y mcp-remote@0.13.5 https://oda.com/mcp
+      - /scripts/bootstrap.sh
     env:
       HOME: /data
       NPM_CONFIG_CACHE: /data/.npm
@@ -61,6 +69,9 @@ spec:
       - name: bootstrap
         mountPath: /bootstrap
         readOnly: true
+      - name: scripts
+        mountPath: /scripts
+        readOnly: true
     volumes:
       - name: auth
         persistentVolumeClaim:
@@ -69,6 +80,10 @@ spec:
         secret:
           secretName: oda-mcp-bootstrap
           defaultMode: 0400
+      - name: scripts
+        configMap:
+          name: oda-mcp-bootstrap-script
+          defaultMode: 0555
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 1000
