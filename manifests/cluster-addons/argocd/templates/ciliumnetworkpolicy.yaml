@@ -220,6 +220,7 @@ spec:
         - matchName: ghcr.io
         - matchName: intel.github.io
         - matchName: kubernetes-sigs.github.io
+        - matchName: open-telemetry.github.io
         - matchName: pkgs.tailscale.com
         - matchName: pkg-containers.githubusercontent.com
         - matchName: production.cloudfront.docker.com
