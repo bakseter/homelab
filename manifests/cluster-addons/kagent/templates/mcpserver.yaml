@@ -1,143 +1,88 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mcp-workspace
+  name: oda-mcp-auth
   namespace: kagent
 spec:
-  accessModes: [ReadWriteMany]
-  storageClassName: longhorn
+  accessModes: ["ReadWriteOnce"]
   resources:
     requests:
-      storage: 10Gi
+      storage: 100Mi
 ---
-apiVersion: v1
-kind: ServiceAccount
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
 metadata:
-  name: git-mcp
+  name: oda-mcp-bootstrap
   namespace: kagent
-automountServiceAccountToken: false
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: fs-mcp
-  namespace: kagent
-automountServiceAccountToken: false
+spec:
+  encryptedData:
+    b6f74be1535849863fdebfed8d8bf223_client_info.json: AgC4J47IXXSAusWU1v8Tpr+SmXMllHLTz/mYlXND8iiDyBE28sbmti7AG2i9Jbf/8rxxvIswReuQ6NN3WO3sKbNGA/zZqiS/IJ60Ll4ZBOJ+0fzmi+6oz/FSYBGee8LR4cKWezTy/p9NogqrvOk1D6tl71aC4uN5gKHz0EDSDaAT3D0AW/I4LDZRL4WmBVCVTQDw1LjqBfVGiTXoi3dd6dFOlOh1pcOJlKi77oO2Bu7JCzhNzH1gnAAjzmUbjGypB/g0f4YEqDiW4sb/U++ZEvEOLz+n9rhDh8lkXUR+RNXExxlMRcAdDsbbtoWIiTZNRVGu5Urjm6RlAWHMK8ATXd1buAvFMlkJ+g/CZP97Fa/9T9W0qjT7jgALphxzl57fe2x+iUz+tmPBzhoZ0g95lmZVTIatRn/GhsipY7iK0eV03WQle8olohquVheH9tkmEAzjyWBujQoGwF9n/pduQmfo8kOXj0oJCQ2ZWeSik8GU844Tj5ALojvgZoiO/vcfVJj/TAqnb6DTn5zmfI9y4p0KKP05Q/d8ELnsUajpbE3XLJqKbhdeXYQvJcR1QnCReg0xSu7gq5zpANzO+HRotAJxWoAh/30958m0yF/71OUQvRBU5+dZ0kjFYFLiH5MpZggpe8x6BgwJWTrvmu7k5iGIIGRKVFnWYSsBd0X//J0Tokdd0nV05O2qp2fqKUurx0beg4w/VLPqMK6hc58eVPvV7FPJ2hFQ8FM2f8buU0pnTGgVtM+SSq5erYw2g7NrA0evfB0O0wkgeBH4kg4vO6WzsRIK7E1KYUdyKI9zkgNGvjZTqcMY7fTSs5pi7Q/Xnp+BC2jQULQmkFFp7WmPRAzRE1u93Ir3xmbe5mpjaU7rJam3ufpnQ9EgEKutJX98tdh1OCD0MlnP3NxGm52m3Cc4pY8+Ze06mRCZ/cU0vR9JwUbUVV1tG9Id5iz2cnM0ng9S2AAMptRzUHWFJPBj5PpzN/LM4MxJPWRgSWVc8CcCsbiO8GgvUty3qTfTsMERFN2uYHRMXN2MVG+9gSdUeFWBrNS/h8vHU4MltxxYAmQqaEYpjLweU+bKkMsS2y1YhMHyo0dc+sBCVfNR5MbtC9m//Qk6
+    b6f74be1535849863fdebfed8d8bf223_tokens.json: AgA9RNnlw3j6JbcKohVxsHutRXAJx+u83N5wjx3iui3SNF2Bc/MlCBeqVUgE5tY1OF6Ooja2lrQd9ZYLT4MsMtJtjAJ96fWDSiaRcjv4qoCJ44YR9l7boaBL/kHNbSImXpqRICTqvoNuOqv8MVBApVjp10w6OcfcoYXiieLyCuL5QYG8CNPt5rlB4wJmB/2KcESfvdazjQniY/4cWLVpJaaNyJBq1ojSHKyTyqVszPXPmbmYuQfLdkiA6cCE0DkYWcos6/0CmPZMRfG6nOxtaBFUPIiDVX3N89BfDxNz9K6ZDKUSR1DBUa6rjYo79iBHCde70fmy/doACppMH+weK6A4c5OI4b2ZgbMNPPVPpYPbR6q8XsFvgDH7hhxQ7nVSwbBEWrsmdmzsXbkretfTRQTiByfSQk1a0caarBTU67RBIKBwu6heJF5ifFKoUpZ2wALNx+/ZR744872Tagzd8J/zOGq9YLtcyg59TR0XQLiJHZWeLJEos3dY6YecE1TEGQhh26ImrFcCVELeUjWgWEu4Zs3jr6JgfmbX53Ci6z9UZve3PGsBXxlh2Vs3VIKBzClaNyBrltT27OKnpZmL9kKp/HcgIGGOUkOwL9Qoysd8JTVyFHsC4WrcA+X1YXHx0mTnngiXC7DBtB1dX6acrL/rJrr8IjooZLPP7bEUeV16g20iR+gRi42mVmnuO3xB88u89MoPhPts5PLO5zGupp/LHloUMyiQuCcp6iwQrAQjjy/C2V4sbO3tLJ7vpqs+om6CW564IjphFlZ17Orop+NusD1Hi9+EbyNBjssu4Mh3aS1r0LVbTkgOCbwN7xCd59TaNwtZk9mhc9JDr2dTLnWAEOT6f8c61H/O7rgJeH2zoHsJq0P3gPCUTIo0AhLUI30RbWG0ivhGYrzWe2cXF9GA6Bk06hzhEJH3CKqO1CaP/Ewh2zoca/ZsF8UW+9bT2Cs99UYXdcHKvJgC3XUPIYU9znZCX42ufT335SLcqc/0c0pQTALxhJIbOMoMg3sTyfoN2pz6cg0GMgh6Qz/ZZeyXmjDSiMbGZzoc
+  template:
+    metadata:
+      name: oda-mcp-bootstrap
+      namespace: kagent
 ---
 apiVersion: kagent.dev/v1alpha1
 kind: MCPServer
 metadata:
-  name: git-mcp
+  name: oda-mcp
   namespace: kagent
 spec:
   transportType: stdio
+  stdioTransport: {}
+  timeout: 60s
   deployment:
-    replicas: 0
-    image: ghcr.io/bakseter/homelab/mcp-tools:v1
-    cmd: git-mcp-server
-    env:
-      HOME: /home/node
-      GIT_AUTHOR_NAME: labster
-      GIT_AUTHOR_EMAIL: labster@kagent.local
-      GIT_COMMITTER_NAME: labster
-      GIT_COMMITTER_EMAIL: labster@kagent.local
-      GIT_SIGN_COMMITS: 'false'
-    volumes:
-      - name: workspace
-        persistentVolumeClaim:
-          claimName: mcp-workspace
-      - name: tmp
-        emptyDir:
-          sizeLimit: 512Mi
-      - name: home
-        emptyDir:
-          sizeLimit: 512Mi
-      - name: git-creds
-        secret:
-          secretName: forgejo-creds
-          defaultMode: 0400
-          items:
-            - key: credentials
-              path: git-credentials
-    volumeMounts:
-      - name: workspace
-        mountPath: /workspace
-      - name: tmp
-        mountPath: /tmp
-      - name: home
-        mountPath: /home/node
-      - name: git-creds
-        mountPath: /etc/git-credentials
-        subPath: git-credentials
-        readOnly: true
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        memory: 512Mi
-    podSecurityContext:
-      runAsNonRoot: true
-      runAsUser: 65534
-      runAsGroup: 65534
-      fsGroup: 65534
-      seccompProfile:
-        type: RuntimeDefault
-    securityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-      readOnlyRootFilesystem: true
----
-apiVersion: kagent.dev/v1alpha1
-kind: MCPServer
-metadata:
-  name: fs-mcp
-  namespace: kagent
-spec:
-  transportType: stdio
-  deployment:
-    replicas: 0
-    image: ghcr.io/bakseter/homelab/mcp-tools:v1
-    cmd: mcp-server-filesystem
+    image: node:24-alpine@sha256:50c8e8ca1d27439048670df5883f32d57cf81cff6233222c893fd0d9884cbd81
+    port: 3000
+    replicas: 1
+    cmd: /bin/sh
     args:
-      - /workspace
+      - -c
+      - |
+        set -eu
+        D="$HOME/.mcp-auth/mcp-remote-v1"
+        mkdir -p "$D"
+        for f in /bootstrap/*; do
+          [ -e "$f" ] || continue
+          b=$(basename "$f")
+          if [ ! -e "$D/$b" ]; then
+            cp "$f" "$D/$b"
+            chmod 600 "$D/$b"
+          fi
+        done
+        exec npx -y mcp-remote@0.13.5 https://oda.com/mcp
     env:
-      HOME: /home/node
-    volumes:
-      - name: workspace
-        persistentVolumeClaim:
-          claimName: mcp-workspace
-      - name: tmp
-        emptyDir:
-          sizeLimit: 256Mi
-      - name: home
-        emptyDir:
-          sizeLimit: 256Mi
+      HOME: /data
+      NPM_CONFIG_CACHE: /data/.npm
     volumeMounts:
-      - name: workspace
-        mountPath: /workspace
-      - name: tmp
-        mountPath: /tmp
-      - name: home
-        mountPath: /home/node
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        memory: 512Mi
+      - name: auth
+        mountPath: /data
+      - name: bootstrap
+        mountPath: /bootstrap
+        readOnly: true
+    volumes:
+      - name: auth
+        persistentVolumeClaim:
+          claimName: oda-mcp-auth
+      - name: bootstrap
+        secret:
+          secretName: oda-mcp-bootstrap
+          defaultMode: 0400
     podSecurityContext:
       runAsNonRoot: true
-      runAsUser: 65534
-      runAsGroup: 65534
-      fsGroup: 65534
-      seccompProfile:
-        type: RuntimeDefault
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
-        drop:
+        drop: 
           - ALL
       readOnlyRootFilesystem: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        memory: 1Gi

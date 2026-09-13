@@ -43,15 +43,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: git-mcp
-      toPorts:
-        - ports:
-            - port: '3000'
-              protocol: TCP
-
-    - toEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: fs-mcp
+            app.kubernetes.io/name: oda-mcp
       toPorts:
         - ports:
             - port: '3000'
@@ -67,12 +59,12 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: git-mcp
+  name: oda-mcp
   namespace: kagent
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: git-mcp
+      app.kubernetes.io/name: oda-mcp
 
   ingress:
     - fromEndpoints:
@@ -100,40 +92,6 @@ spec:
             dns:
               - matchPattern: '*'
 
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: forgejo
-            app.kubernetes.io/name: forgejo
-      toPorts:
-        - ports:
-            - port: '3000'
-              protocol: TCP
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: fs-mcp
-  namespace: kagent
-spec:
-  endpointSelector:
-    matchLabels:
-      app.kubernetes.io/name: fs-mcp
-
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress:
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/managed-by: kagent
-            app.kubernetes.io/name: labster
-        - matchLabels:
-            app.kubernetes.io/name: kagent
-            app.kubernetes.io/component: controller
-      toPorts:
-        - ports:
-            - port: '3000'
-              protocol: TCP
-
-  egress: []
+    - toFQDNs:
+      - matchName: oda.com
+      - matchName: npmjs.com
