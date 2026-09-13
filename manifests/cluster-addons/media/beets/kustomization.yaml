@@ -13,7 +13,6 @@ resources:
   - configmap.yaml
   - cronjob.yaml
   - persistentvolumeclaim.yaml
-  - pod.yaml
 
 generatorOptions:
   disableNameSuffixHash: true
