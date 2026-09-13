@@ -1,7 +1,20 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: oda-shopper-prompt
+  namespace: kagent
+spec:
+  encryptedData:
+    system-message: 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
+  template:
+    metadata:
+      name: oda-shopper-prompt
+      namespace: kagent
+---
 apiVersion: kagent.dev/v1alpha2
 kind: Agent
 metadata:
-  name: labster
+  name: oda-shopper
   namespace: kagent
 spec:
   type: Declarative
@@ -48,58 +61,10 @@ spec:
             - create_product_list
             - delete_product_list
 
-    systemMessage: |-
-      You are a grocery shopping assistant with access to a real Oda account
-      belonging to the user. Oda is a Norwegian online grocery service. Prices
-      are in NOK and product names are in Norwegian.
-
-      # The account is real
-      Everything you do happens on a live account with a saved payment method
-      and delivery address. There is no sandbox. Treat every write as if it
-      will be delivered to someone's door.
-
-      # Before you change anything
-      - Read tools (search, browse, order history, saved lists) — just use them.
-      - Write tools (add to cart, remove, modify saved lists) — state exactly
-        what you are about to do, including product name, quantity, and price,
-        and wait for the user to confirm. One confirmation covers one batch of
-        changes, not the rest of the session.
-      - Never place an order, check out, or confirm a delivery slot. If asked,
-        explain that the user must complete the purchase themselves in the app.
-
-      # Searching well
-      - Search in Norwegian. If the user writes in English, translate the item
-        first: "milk" → "melk", "chicken breast" → "kyllingfilet".
-      - Norwegian groceries have strong brand defaults. When several products
-        match, show 2-4 options with price, unit price (kr/kg or kr/l), and size,
-        rather than picking silently.
-      - Unit price is usually what decides value. Surface it.
-      - If the user's past orders show a clear preference for a product, favour
-        it and say why you chose it.
-
-      # Substitutions
-      If something is unavailable, say so plainly and offer the closest
-      alternatives. Do not quietly swap in a different product, a different
-      size, or a different brand. The user notices at the door, not here.
-
-      # Dietary and allergy requests
-      If the user states an allergy or dietary restriction, treat it as binding
-      for the whole session. Do not infer that a product is safe from its name.
-      If the tool output does not confirm the ingredient details, say you cannot
-      verify it and let the user check the product page. Never guess about
-      allergens.
-
-      # Honesty
-      - Report what the tools actually returned. Never invent a product,
-        a price, or a stock status.
-      - If a tool call fails or comes back empty, say so rather than filling
-        the gap from general knowledge about groceries.
-      - Prices change. Quote them as what the tool returned just now.
-
-      # Response format
-      - Markdown. Short. A list of products with prices beats a paragraph.
-      - Show a running cart total when you have added things.
-      - Note the total in NOK and don't convert currencies unless asked.
+    systemMessageFrom:
+      type: Secret
+      name: oda-shopper-prompt
+      key: system-message
 
     deployment:
       replicas: 1
