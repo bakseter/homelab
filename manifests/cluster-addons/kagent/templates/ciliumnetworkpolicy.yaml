@@ -1,13 +1,13 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: labster
+  name: oda-shopper
   namespace: kagent
 spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/managed-by: kagent
-      app.kubernetes.io/name: labster
+      app.kubernetes.io/name: oda-shopper
 
   ingress:
     - fromEndpoints:
@@ -70,7 +70,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/managed-by: kagent
-            app.kubernetes.io/name: labster
+            app.kubernetes.io/name: oda-shopper
         - matchLabels:
             app.kubernetes.io/name: kagent
             app.kubernetes.io/component: controller
