@@ -94,4 +94,4 @@ spec:
 
     - toFQDNs:
       - matchName: oda.com
-      - matchName: npmjs.com
+      - matchName: registry.npmjs.org
