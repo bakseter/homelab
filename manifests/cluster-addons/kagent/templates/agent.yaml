@@ -42,7 +42,7 @@ spec:
             - unique_for_you
           requireApproval:
             - clear_cart
-            - maniupulate_cart
+            - manipulate_cart
             - select_delivery_slot
             - manipulate_product_list
             - create_product_list
