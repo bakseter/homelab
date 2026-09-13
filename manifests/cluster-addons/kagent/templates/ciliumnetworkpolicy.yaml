@@ -39,8 +39,8 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-          app.kubernetes.io/managed-by: kagent
-          app.kubernetes.io/name: oda-shopper
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: oda-shopper
       toPorts:
         - ports:
             - port: '8080'
