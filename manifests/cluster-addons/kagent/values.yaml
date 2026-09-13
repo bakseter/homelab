@@ -39,6 +39,32 @@ kagent:
                 type: PathPrefix
                 value: /
 
+  otel:
+    tracing:
+      enabled: true
+      exporter:
+        otlp:
+          endpoint: http://alloy.monitoring.svc.cluster.local:4317
+          timeout: 15
+          insecure: true
+
+    logging:
+      enabled: true
+      exporter:
+        otlp:
+          endpoint: http://alloy.monitoring.svc.cluster.local:4317
+          timeout: 15
+          insecure: true
+
+  kmcp:
+    enabled: false
+  kagent-tools:
+    enabled: false
+  grafana-mcp:
+    enabled: false
+  querydoc:
+    enabled: false
+
   argo-rollouts-agent:
     enabled: false
   cilium-debug-agent:
@@ -58,8 +84,4 @@ kagent:
   observability-agent:
     enabled: false
   promql-agent:
-    enabled: false
-  grafana-mcp:
-    enabled: false
-  querydoc:
     enabled: false
