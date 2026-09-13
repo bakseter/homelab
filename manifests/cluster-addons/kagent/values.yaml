@@ -27,11 +27,11 @@ kagent:
       parentRefs:
         - group: gateway.networking.k8s.io
           kind: Gateway
-          name: tailscale-int
+          name: tailscale-home
           namespace: tailscale
 
       hostnames:
-        - kagent.int.bakseter.net
+        - kagent.bakseter.net
 
       rules:
         - matches:

@@ -16,6 +16,37 @@ spec:
           apiGroup: kagent.dev
           kind: MCPServer
           name: oda-mcp
+          toolNames:
+            - clear_cart
+            - create_product_list
+            - delete_product_list
+            - get_brand
+            - get_cart
+            - get_category
+            - get_delivery_slots
+            - get_dinner_lists
+            - get_liked_recipes
+            - get_order
+            - get_orders
+            - get_product_list
+            - get_product_lists
+            - get_purchased_recipes
+            - likely_to_buy
+            - manipulate_cart
+            - manipulate_product_list
+            - order_tracking
+            - product_search
+            - recipe_search
+            - select_delivery_slot
+            - similar_and_related_products
+            - unique_for_you
+          requireApproval:
+            - clear_cart
+            - maniupulate_cart
+            - select_delivery_slot
+            - manipulate_product_list
+            - create_product_list
+            - delete_product_list
 
     systemMessage: |-
       You are a grocery shopping assistant with access to a real Oda account
