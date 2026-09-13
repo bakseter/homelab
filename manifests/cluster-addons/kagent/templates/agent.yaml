@@ -88,6 +88,14 @@ spec:
             - ALL
         readOnlyRootFilesystem: true
 
+      volumes:
+        - name: tmp
+          emptyDir: {}
+
+      volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+
       podSecurityContext:
         runAsNonRoot: true
         runAsUser: 65534
