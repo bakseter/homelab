@@ -1,3 +1,109 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: oda-mcp-auth
+  namespace: kagent
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: oda-mcp-bootstrap
+  namespace: kagent
+spec:
+  encryptedData:
+    b6f74be1535849863fdebfed8d8bf223_client_info.json: AgAykdUPfvkt45NYlgRLMbqxY4DNvaejxWY0plxskLQyQI6Jx6AgpoX2Px6L0ihaGn6dX3dXrmNh0WslKRUR20pEO9NGcFWx6pVoyYHUdkhQVi36aubdyrI/OwY1bh/14doXs+R3B2b0tJcIT43ryQRBshH5cCWn9RPeXknVII4SLQtKnjemaDjPz9pFthaF04p4L0AwTSW/aUEwtsj1Bnpr24feqsULjN3Uf/KVpx/p2lV1OFS5dVMGlotUW+VA2kZzQsVAQ6cz5WnalBsOupLB9kvKy4WeVOX18rQw2tnqQf4g77K6OI/qucgRnvKwVRb9jk0sTFx8y9M1GhwGDQ3yLR9RlfcYOV1cyFMfXbDQedcQ/dyn25OwU3R2/u9ZHXdMUxPeZbSRE8jqMwHyPi/tRXzc6Nk8f9Yu5QoyzCaHod4Ldh3yCs1GxkvFdfg7P9VaaDiCOjK4iAnsF1xvsTaAIJ/8MltEpoE9ujyxnuApH2XIQTcN7BEzDWntGhGQQZHY0bit6Mn9CPrNp5DXVpjaXv9dW7Fs7fn0gSX9gbygR/fon0LEUzZEBwvahtHjttziFcTOD008KPs0UNkp711PvrHetI1t6kMDlOuccLP0zbP0w3E8nC47bZ82NHAy9xGnKcxqFPNEuJ7cZQIRBZMM4GDrFgxgpv6Dhrz+B4N672cliuESD3/b9sWXpB1LAGJLv1yAj4HkH2UzSdWCkWFNj3BuTud1MjlBjvl7bxTOSy4HeZtckjqoA/PhFw23WbMDN9ofiOzzMc4dYQzpGiH9RodYDNm1YvMFdI97vWr12rLqJqzy/doxIV461sv0xZoVcDWM2cpo7+aaxq9LJ6FIHcFY9tczeighTDTnwC/cn4wANlzx4XTQkZgMcOpszKyW/ktdn3GOovT/JYgNmoF0srZxampRc6H2n7JNOYLT1kdfjVaOaChJEdBtSMVlHWtyukvj1ymxyG/0VOOepDlANwvBkfuerxfrW2cxAgpOQcdMq4wMNPzcnNo3aUnDTj1dBKMrgB+89Dz3J2vHYHwuzm3QqRyWY2br3BD+KlcQMFG/XZtE6T5c1/OYhYSJCj9fRJcPsx6XqlW0RCz4GN3jBF+K
+    b6f74be1535849863fdebfed8d8bf223_tokens.json: AgBN9V29W6rLrnPFEMBQkTNTZVTnxZWUs7HQOgQsv8cRV6eFohqMr/t48yeKTI54BF1YOVVFPjft4R1ujMiqaK1AnralLwspF2OdDaoWVQv+EYL8LLziW6nRNuYuAHQ9Muz+8vETcpKUWS93pESNeCisM1e1J5U89uWtL/cc9ZJTXRqHTjNo/uz/IucuU0ecs7sJGfwTD/4jO4FHEDtKm712iu7Kpk0ahu/z8SGWFNPAa6tsJUq5r/wd43gxFY9OsYW/icSJ9rjojAHo1ysm2lgea2+LX2BkcJvG4kg+EVfQQB4X8L/9ojfWFqw9c8MUNmQUWjbSPEnFOU8Abe8yHLVnGfGQ7+eC6otxFOvo47G58CfAmQvebQ6BpSeJwHFe+RbIaF23ygtl+OBjHnYmQtoHrxM1+jOgiO+A3yevpH761EyAN1FjK3hLMxgxuz1f7dLhrVkXElB48098qQr+fdMLcXFB7WhDfdsgUnq5QRR4TvN4fa80/dY1+CqAA0lV/QUyiQnTadaXYDbcRXzoRnc5d7lJpcOv+5qJ+3tr1EVG+ZBJlg7uMTZojI1zdqIFdpg7PnVExaO03BSmcZDUU6QZP01ULBxZy7zu5rV+CEjJvT0esHvpnIjTRv2Vxoz5xbVJYveQrRIzSmErS6UShQ807zyT91X7yQA68jL/IPEFL6cAHcQ+upDW+TNit6Zd1m+B8ufNG4HcRvOKVpaSLNf0S5jBfokXGnqHSU2CpvOm7NffOLr1WHPnA/mo0o4OWm+chULij0odIJANeiTIJ3+3UsDzmb71uhg3YXzFI3PgZJaCtJUBMCsvw0yi80+tzchD9gjLYZWqzlIwpIwgwQXOrbW6PP7X00KkCUjHcJQvxX1XHCZ004rUpKd4euF+lw/6XJe2cfP0rD+iqg+m70iR5U89o6UHEaWFArfkRX+u+Gsw6M6LyW9mhLon5disTyBLH9fGl5IWWcIsY65Kzr6rggP097OmqqI8CMTRitNOQC82I3n0KwMvWdpOy7rdgqw4sZtjRuC6twKtCrBYDl7661usSAjxATEm
+  template:
+    metadata:
+      name: oda-mcp-bootstrap
+      namespace: kagent
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oda-mcp-bootstrap-script
+  namespace: kagent
+data:
+  bootstrap.sh: |
+    #!/bin/sh
+    set -eu
+    D="$HOME/.mcp-auth/mcp-remote-v1"
+    mkdir -p "$D"
+    for f in /bootstrap/*; do
+      [ -e "$f" ] || continue
+      b=$(basename "$f")
+      if [ ! -e "$D/$b" ]; then
+        cp "$f" "$D/$b"
+        chmod 600 "$D/$b"
+      fi
+    done
+    exec npx -y mcp-remote@0.13.5 https://oda.com/mcp
+---
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: oda-mcp
+  namespace: kagent
+spec:
+  transportType: stdio
+  stdioTransport: {}
+  timeout: 60s
+  deployment:
+    image: node:24-alpine@sha256:50c8e8ca1d27439048670df5883f32d57cf81cff6233222c893fd0d9884cbd81
+    port: 3000
+    replicas: 1
+    cmd: /bin/sh
+    args:
+      - /scripts/bootstrap.sh
+    env:
+      HOME: /data
+      NPM_CONFIG_CACHE: /data/.npm
+    volumeMounts:
+      - name: auth
+        mountPath: /data
+      - name: bootstrap
+        mountPath: /bootstrap
+        readOnly: true
+      - name: scripts
+        mountPath: /scripts
+        readOnly: true
+    volumes:
+      - name: auth
+        persistentVolumeClaim:
+          claimName: oda-mcp-auth
+      - name: bootstrap
+        secret:
+          secretName: oda-mcp-bootstrap
+          defaultMode: 0400
+      - name: scripts
+        configMap:
+          name: oda-mcp-bootstrap-script
+          defaultMode: 0555
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      seccompProfile:
+        type: RuntimeDefault
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: 
+          - ALL
+      readOnlyRootFilesystem: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        memory: 1Gi
+---
 apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
 metadata:
@@ -21,6 +127,7 @@ spec:
 
   declarative:
     modelConfig: zai-glm-5-2
+    stream: true
 
     tools:
       - type: McpServer
@@ -71,10 +178,10 @@ spec:
 
       resources:
         requests:
-          cpu: 500m
-          memory: 1Gi
+          cpu: 100m
+          memory: 128Mi
         limits:
-          memory: 4Gi
+          memory: 1Gi
 
       securityContext:
         allowPrivilegeEscalation: false
