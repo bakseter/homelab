@@ -56,6 +56,18 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            k8s:io.kubernetes.pod.namespace: amex
+            app.kubernetes.io/name: amex-backend
+      toPorts:
+        - ports:
+            - port: '8000'
+              protocol: TCP
+          rules:
+            http:
+              - path: '/mcp/.*'
+
+    - toEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: monitoring
             app.kubernetes.io/name: alloy
       toPorts:
