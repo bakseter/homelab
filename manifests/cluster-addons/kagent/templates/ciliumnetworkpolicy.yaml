@@ -64,7 +64,7 @@ spec:
               protocol: TCP
           rules:
             http:
-              - path: '/mcp/.*'
+              - path: '/mcp$'
 
     - toEndpoints:
         - matchLabels:
@@ -306,4 +306,4 @@ spec:
               protocol: TCP
           rules:
             http:
-              - path: '/mcp/.*'
+              - path: '/mcp$*'
