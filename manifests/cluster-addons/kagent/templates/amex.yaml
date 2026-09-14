@@ -1,0 +1,91 @@
+apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: amex-mcp
+  namespace: kagent
+spec:
+  description: Amex statement data
+  protocol: STREAMABLE_HTTP
+  url: http://amex-backend.amex.svc.cluster.local:8000/mcp
+  timeout: 30s
+  sseReadTimeout: 5m0s
+  terminateOnClose: true
+---
+apiVersion: kagent.dev/v1alpha2
+kind: Agent
+metadata:
+  name: amex-agent
+  namespace: kagent
+spec:
+  description: Answers questions about credit card spending and who owes what.
+  type: Declarative
+  declarative:
+    modelConfig: zai-glm-5-2
+    stream: true
+
+    tools:
+      - type: McpServer
+        mcpServer:
+          apiGroup: kagent.dev
+          kind: RemoteMCPServer
+          name: amex-mcp
+          toolNames:
+            - list_invoices
+            - get_invoice_summary
+            - search_transactions
+            - list_categories
+            - update_transaction
+          requireApproval:
+            - update_transaction
+
+    systemMessageFrom:
+      type: Secret
+      name: amex-agent-prompt
+      key: system-message
+
+    deployment:
+      replicas: 1
+      imageRegistry: ghcr.io
+
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          memory: 1Gi
+
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+
+      volumes:
+        - name: tmp
+          emptyDir: {}
+
+      volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+
+      podSecurityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: amex-agent-prompt
+  namespace: kagent
+spec:
+  encryptedData:
+    system-message: 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
+  template:
+    metadata:
+      name: amex-agent-prompt
+      namespace: kagent

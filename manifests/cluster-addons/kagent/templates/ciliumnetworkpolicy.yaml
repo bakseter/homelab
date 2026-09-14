@@ -240,3 +240,51 @@ spec:
     - toFQDNs:
       - matchName: oda.com
       - matchName: registry.npmjs.org
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: amex-mcp
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: amex-mcp
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: amex-agent
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: amex
+            app.kubernetes.io/name: amex-backend
+      toPorts:
+        - ports:
+            - port: '8000'
+              protocol: TCP
+          rules:
+            http:
+              - path: '/mcp/.*'
