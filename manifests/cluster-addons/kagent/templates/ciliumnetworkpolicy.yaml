@@ -41,6 +41,9 @@ spec:
         - matchLabels:
             app.kubernetes.io/managed-by: kagent
             app.kubernetes.io/name: oda-shopper
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: amex-agent
       toPorts:
         - ports:
             - port: '8080'
@@ -259,3 +262,71 @@ spec:
     - toFQDNs:
       - matchName: oda.com
       - matchName: registry.npmjs.org
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: amex-agent
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: kagent
+      app.kubernetes.io/name: amex-agent
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '8083'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: amex
+            app.kubernetes.io/name: amex-backend
+      toPorts:
+        - ports:
+            - port: '8000'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
+
+    - toFQDNs:
+        - matchName: api.mistral.ai
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
