@@ -95,6 +95,7 @@ alloy:
               "amex",
               "argocd",
               "authentik",
+              "bakseter-no",
               "cert-manager",
               "cloudflared",
               "cnpg-primary-pvc-labeler",
