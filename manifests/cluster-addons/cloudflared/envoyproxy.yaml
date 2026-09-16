@@ -12,7 +12,7 @@ spec:
         type: ClusterIP
       envoyDeployment:
         name: cloudflared-gateway
-        replicas: 2
+        replicas: 3
         pod:
           affinity:
             podAntiAffinity:
