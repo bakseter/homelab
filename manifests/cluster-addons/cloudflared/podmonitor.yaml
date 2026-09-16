@@ -1,0 +1,83 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: cloudflared-gateway
+  namespace: envoy-gateway-system
+  labels:
+    release: kube-prometheus-stack
+spec:
+  namespaceSelector:
+    matchNames:
+      - envoy-gateway-system
+  selector:
+    matchLabels:
+      gateway.envoyproxy.io/owning-gateway-name: cloudflared
+      gateway.envoyproxy.io/owning-gateway-namespace: cloudflared
+      app.kubernetes.io/component: proxy
+  podMetricsEndpoints:
+    - port: metrics
+      path: /stats/prometheus
+      interval: 30s
+      scrapeTimeout: 10s
+
+      # target labels: which Gateway this proxy belongs to
+      relabelings:
+        - sourceLabels:
+            [
+              __meta_kubernetes_pod_label_gateway_envoyproxy_io_owning_gateway_name,
+            ]
+          targetLabel: gateway
+        - sourceLabels:
+            [
+              __meta_kubernetes_pod_label_gateway_envoyproxy_io_owning_gateway_namespace,
+            ]
+          targetLabel: gateway_namespace
+
+      metricRelabelings:
+        # protocol / feature noise (always zero or irrelevant here)
+        - sourceLabels: [__name__]
+          action: drop
+          regex: envoy_(cluster_)?http[12]_.*
+        - sourceLabels: [__name__]
+          action: drop
+          regex: envoy_cluster_.*(0rtt|0_rtt|http3).*
+        - sourceLabels: [__name__]
+          action: drop
+          regex: envoy_cluster_lb_(subsets_.*|zone_.*|recalculate_zone_structures)
+        - sourceLabels: [__name__]
+          action: drop
+          regex: envoy_cluster_(assignment|client_ssl|ssl)_.*
+        - sourceLabels: [__name__]
+          action: drop
+          regex: envoy_cluster_upstream_(flow_control|internal_redirect)_.*
+
+        # duplicates of envoy_cluster_upstream_rq*
+        - sourceLabels: [__name__]
+          action: drop
+          regex: envoy_cluster_(external|internal)_upstream_.*
+
+        # histograms nobody queries (keeps _sum/_count)
+        - sourceLabels: [__name__]
+          action: drop
+          regex: envoy_cluster_upstream_cx_(length_ms|connect_ms)_bucket|envoy_cluster_upstream_rq_per_cx_bucket|envoy_cluster_update_duration_bucket
+
+        # config/version bookkeeping and internals
+        - sourceLabels: [__name__]
+          action: drop
+          regex: envoy_.*_(update|reload)_(duration|time).*|envoy_.*_version
+        - sourceLabels: [__name__]
+          action: drop
+          regex: envoy_(listener_worker|listener_admin|http_passthrough|http_user_agent|overload|runtime|dns_cares|filesystem)_.*
+
+        # health-check, stats and admin listeners
+        - sourceLabels: [envoy_http_conn_manager_prefix]
+          action: drop
+          regex: eg-ready-http|eg-stats-http|admin
+        - sourceLabels: [envoy_listener_address]
+          action: drop
+          regex: 0\.0\.0\.0_1900[13]
+
+        # optional: trim latency buckets above 10s (6 fewer series per histogram)
+        - sourceLabels: [__name__, le]
+          action: drop
+          regex: envoy_(cluster_upstream_rq_time|http_downstream_rq_time)_bucket;(30000|60000|300000|600000|1800000|3600000)
