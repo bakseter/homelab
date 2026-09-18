@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-diff-preview/render: 'never' # TODO: has way to many weird generated resources, fix this by adding ignore
 spec:
   destination:
     namespace: monitoring
