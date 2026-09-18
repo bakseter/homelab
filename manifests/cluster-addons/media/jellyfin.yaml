@@ -3,6 +3,10 @@ kind: Application
 metadata:
   name: jellyfin
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-diff-preview/render: 'never' # TODO: rendering fail because of Kustomize + Helm, fix this
 spec:
   destination:
     namespace: media
