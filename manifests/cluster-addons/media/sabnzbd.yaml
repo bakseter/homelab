@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: sabnzbd
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     namespace: media
