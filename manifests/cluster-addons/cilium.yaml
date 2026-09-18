@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: cilium
   namespace: argocd
+  annotations:
+    argocd-diff-preview/render: 'never' # TODO: rendering fail because of ServiceMonitor CRD, fix this
 spec:
   destination:
     namespace: kube-system
