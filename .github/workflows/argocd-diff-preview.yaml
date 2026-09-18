@@ -1,0 +1,47 @@
+name: Argo CD Diff Preview
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - 'manifests/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      REPOSITORY: ${{ github.repository }}
+      EVENT_NUMBER: ${{ github.event.number }}
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: 'pull-request'
+
+      - name: Checkout master
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: 'master'
+          path: 'master'
+
+      - name: Generate diff
+        run: |
+          docker run \
+            --network=host \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v "$(pwd)/main:/base-branch" \
+            -v "$(pwd)/pull-request:/target-branch" \
+            -v "$(pwd)/output:/output" \
+            -e "TARGET_BRANCH=refs/pull/$EVENT_NUMBER/merge" \
+            -e "REPO=$REPOSITORY" \
+            dagandersen/argocd-diff-preview:v0.2.14@sha256:2cadb16274ba6834446573cbf514cec87caeec80a19690987fc1ac8338e27631
+
+      - name: Post diff as comment
+        run: |
+          gh pr comment "$EVENT_NUMBER" --repo "$REPOSITORY" --body-file output/diff.md --edit-last || \
+          gh pr comment "$EVENT_NUMBER" --repo "$REPOSITORY" --body-file output/diff.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
