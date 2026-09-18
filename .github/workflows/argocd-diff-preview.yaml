@@ -35,6 +35,7 @@ jobs:
             -v "$(pwd)/master:/base-branch" \
             -v "$(pwd)/pull-request:/target-branch" \
             -v "$(pwd)/output:/output" \
+            -e "BASE_BRANCH=master" \
             -e "TARGET_BRANCH=refs/pull/$EVENT_NUMBER/merge" \
             -e "REPO=$REPOSITORY" \
             dagandersen/argocd-diff-preview:v0.2.14@sha256:2cadb16274ba6834446573cbf514cec87caeec80a19690987fc1ac8338e27631
