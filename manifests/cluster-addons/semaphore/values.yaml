@@ -1,6 +1,9 @@
 semaphore:
   general:
+    host: semaphore.int.bakseter.net
     useRemoteRunner: true
+    nonAdminCanCreateProject: true
+    passwordLoginDisable: true
 
   # runner:
   #   existingSecret:
