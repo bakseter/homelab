@@ -1,0 +1,10 @@
+semaphore:
+  database:
+    type: postgres
+
+    host: semaphore-database.semaphore.svc.cluster.local
+    port: 5432
+
+    usernameFromSecret: true
+    passwordKey: password
+    existingSecret: semaphore-database-app

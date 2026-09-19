@@ -1,0 +1,7 @@
+apiVersion: v2
+name: semaphore-umbrella
+version: 0.1.0
+dependencies:
+  - name: semaphore
+    version: 16.2.2
+    repository: oci://ghcr.io/semaphoreui/charts
