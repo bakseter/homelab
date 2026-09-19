@@ -8,7 +8,7 @@ semaphore:
   database:
     type: postgres
 
-    host: semaphore-database.semaphore.svc.cluster.local
+    host: semaphore-database-rw.semaphore.svc.cluster.local
     port: 5432
 
     usernameFromSecret: true
