@@ -37,7 +37,7 @@ semaphore:
     providers:
       authentik:
         display_name: Authentik
-        provider_url: https://authentik.bakseter.no/application/o/argocd/
+        provider_url: https://authentik.bakseter.no/application/o/semaphore/
         client_id: semaphore
         client_secret_file: /var/run/secrets/authentik-oidc-secret
         redirect_url: https://semaphore.int.bakseter.net/api/auth/oidc/authentik/redirect/
