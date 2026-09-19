@@ -17,4 +17,3 @@ resources:
   - envoyproxy.yaml
   - gateway.yaml
   - clienttrafficpolicy.yaml
-  - instrumentation.yaml
