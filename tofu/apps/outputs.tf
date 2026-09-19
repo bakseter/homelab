@@ -22,3 +22,8 @@ output "authentik_forgejo_client_secret" {
   value     = authentik_provider_oauth2.forgejo.client_secret
   sensitive = true
 }
+
+output "authentik_semaphore_client_secret" {
+  value     = authentik_provider_oauth2.semaphore.client_secret
+  sensitive = true
+}
