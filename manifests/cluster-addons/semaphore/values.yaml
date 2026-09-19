@@ -57,3 +57,7 @@ semaphore:
     - name: authentik-oidc-secret
       mountPath: /var/run/secrets
       readOnly: true
+
+  extraEnvVariables:
+    - name: SEMAPHORE_WEB_ROOT
+      value: '/'
