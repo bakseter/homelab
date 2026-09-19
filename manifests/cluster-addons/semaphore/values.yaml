@@ -8,6 +8,7 @@ semaphore:
   database:
     type: postgres
 
+    name: app
     host: semaphore-database-rw.semaphore.svc.cluster.local
     port: 5432
 
