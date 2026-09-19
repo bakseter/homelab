@@ -5,6 +5,7 @@
   "minimumReleaseAge": "3 days",
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
+  "ignorePaths": ["tofu/core/helm.tf"],
   "kubernetes": {
     "managerFilePatterns": ["/^manifests/cluster-addons/.+\\.yaml$/"]
   },
