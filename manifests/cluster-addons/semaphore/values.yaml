@@ -1,4 +1,10 @@
 semaphore:
+  general:
+    useRemoteRunner: true
+
+  # runner:
+  #   existingSecret:
+
   database:
     type: postgres
 
