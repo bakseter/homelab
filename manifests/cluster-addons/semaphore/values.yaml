@@ -59,5 +59,4 @@ semaphore:
       readOnly: true
 
   extraEnvVariables:
-    - name: SEMAPHORE_WEB_ROOT
-      value: '/'
+    SEMAPHORE_WEB_ROOT: '/'
