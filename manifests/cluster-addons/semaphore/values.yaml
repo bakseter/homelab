@@ -35,8 +35,8 @@ semaphore:
     enable: true
 
     providers:
-      keycloak:
-        display_name: authentik
+      authentik:
+        display_name: Authentik
         provider_url: https://authentik.bakseter.no/application/o/argocd/
         redirect_url: https://semaphore.int.bakseter.net/api/auth/oidc/authentik/redirect
         client_id: semaphore
