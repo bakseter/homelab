@@ -378,7 +378,7 @@ resource "authentik_provider_oauth2" "semaphore" {
     {
       matching_mode     = "strict"
       redirect_uri_type = "authorization"
-      url               = "https://semaphore.int.bakseter.net/api/auth/oidc/authentik/redirect"
+      url               = "https://semaphore.int.bakseter.net/api/auth/oidc/authentik/redirect/"
     }
   ]
 }
