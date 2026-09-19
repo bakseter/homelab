@@ -15,7 +15,7 @@ semaphore:
     passwordKey: password
     existingSecret: semaphore-database-app
 
-  podSecurityContext:
+  securityContext:
     runAsNonRoot: true
     runAsUser: 65534
     runAsGroup: 65534
@@ -23,7 +23,7 @@ semaphore:
     secompProfile:
       type: RuntimeDefault
 
-  securityContext:
+  podSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
       drop:
