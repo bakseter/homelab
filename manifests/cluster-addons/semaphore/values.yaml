@@ -30,3 +30,30 @@ semaphore:
       drop:
         - ALL
     readOnlyRootFilesystem: true
+
+  oidc:
+    enable: true
+
+    providers:
+      keycloak:
+        display_name: Authentik
+        provider_url: https://authentik.bakseter.no/application/o/argocd/
+        redirect_url: https://semaphore.example.com/api/auth/oidc/keycloak/redirect
+        client_id: semaphore
+        client_secret_file: /var/run/secrets/authentik-oidc-secret
+        username_claim: preferred_username
+        name_claim: preferred_username
+        email_claim: email
+
+  extraVolumes:
+    - name: authentik-oidc-secret
+      secret:
+        secretName: authentik-oidc-secret
+        items:
+          - key: secret
+            path: authentik-oidc-secret
+
+  extraVolumeMounts:
+    - name: authentik-oidc-secret
+      mountPath: /var/run/secrets
+      readOnly: true
