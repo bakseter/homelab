@@ -1,5 +1,0 @@
-opentelemetry-operator:
-  manager:
-    autoInstrumentation:
-      go:
-        enabled: true
