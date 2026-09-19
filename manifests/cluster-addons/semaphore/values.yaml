@@ -38,12 +38,12 @@ semaphore:
       authentik:
         display_name: Authentik
         provider_url: https://authentik.bakseter.no/application/o/argocd/
-        redirect_url: https://semaphore.int.bakseter.net/api/auth/oidc/authentik/redirect
         client_id: semaphore
         client_secret_file: /var/run/secrets/authentik-oidc-secret
+        redirect_url: https://semaphore.int.bakseter.net/api/auth/oidc/authentik/redirect/
+        scopes: ['openid', 'profile', 'email']
         username_claim: preferred_username
         name_claim: preferred_username
-        email_claim: email
 
   extraVolumes:
     - name: authentik-oidc-secret
