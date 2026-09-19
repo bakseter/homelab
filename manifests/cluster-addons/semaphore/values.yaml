@@ -36,9 +36,9 @@ semaphore:
 
     providers:
       keycloak:
-        display_name: Authentik
+        display_name: authentik
         provider_url: https://authentik.bakseter.no/application/o/argocd/
-        redirect_url: https://semaphore.example.com/api/auth/oidc/keycloak/redirect
+        redirect_url: https://semaphore.int.bakseter.net/api/auth/oidc/authentik/redirect
         client_id: semaphore
         client_secret_file: /var/run/secrets/authentik-oidc-secret
         username_claim: preferred_username
