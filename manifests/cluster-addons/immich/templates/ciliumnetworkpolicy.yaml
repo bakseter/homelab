@@ -27,6 +27,17 @@ spec:
             - port: '2283'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '8081'
+              protocol: TCP
+            - port: '8082'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
