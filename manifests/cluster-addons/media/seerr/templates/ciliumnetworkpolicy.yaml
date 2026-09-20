@@ -71,6 +71,7 @@ spec:
     - toFQDNs:
         - matchName: 'api.themoviedb.org'
         - matchName: 'api.github.com'
+        - matchName: 'api.radarr.video'
         - matchName: 'gravatar.com'
         - matchPattern: '*.algolia.net'
       toPorts:
