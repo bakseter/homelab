@@ -71,3 +71,11 @@ spec:
       icmps:
         - fields:
             - type: '8'
+
+    - toFQDNs:
+        - matchName: 'cdn.jsdelivr.net' # block rules
+        - matchName: 'jsdelivr.map.fastly.net' # block rules
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
