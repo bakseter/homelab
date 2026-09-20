@@ -45,6 +45,7 @@ kube-prometheus-stack:
             values:
               - amex
               - authentik
+              - cnpg-system
               - envoy-gateway-system
 
       probeNamespaceSelector:

@@ -22,6 +22,14 @@ cloudnative-pg:
     limits:
       memory: 512Mi
 
+  monitoring:
+    podMonitorEnabled: true
+    podMonitorAdditionalLabels:
+      release: kube-prometheus-stack
+
+    grafanaDashboard:
+      create: true
+
 barman-cloud:
   fullnameOverride: barman-cloud
 
