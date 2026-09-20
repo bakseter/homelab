@@ -123,3 +123,8 @@ immich:
                   secretKeyRef:
                     name: immich-database-app
                     key: dbname
+
+    serviceMonitor:
+      main:
+        labels:
+          release: kube-prometheus-stack
