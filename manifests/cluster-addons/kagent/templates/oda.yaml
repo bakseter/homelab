@@ -123,11 +123,11 @@ metadata:
   name: oda-shopper
   namespace: kagent
 spec:
+  description: Helps with ordering from Oda.
   type: Declarative
-
   declarative:
     modelConfig: zai-glm-5-2
-    stream: true
+    stream: false
 
     tools:
       - type: McpServer
