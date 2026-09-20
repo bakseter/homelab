@@ -1,5 +1,8 @@
 loki:
   loki:
+    analytics:
+      reporting_enabled: false
+
     revisionHistoryLimit: 5
     image:
       registry: docker.io
