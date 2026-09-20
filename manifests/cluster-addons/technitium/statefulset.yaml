@@ -33,6 +33,8 @@ spec:
               containerPort: 53
               protocol: TCP
           env:
+            - name: DNS_SERVER_LOG_FOLDER_PATH
+              value: '/var/log/technitium/dns'
             - name: DNS_SERVER_LOG_MAX_LOG_FILE_DAYS
               value: '1'
             - name: DNS_SERVER_BLOCK_LIST_URLS
