@@ -122,3 +122,10 @@ spec:
         - ports:
             - port: '6443'
               protocol: TCP
+
+    - toFQDNs:
+        - matchName: 'raw.githubusercontent.com' # dashboards
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
