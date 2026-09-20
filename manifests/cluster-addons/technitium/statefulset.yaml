@@ -33,10 +33,6 @@ spec:
               containerPort: 53
               protocol: TCP
           env:
-            - name: DNS_SERVER_LOG_FOLDER_PATH
-              value: '/var/log/technitium/dns'
-            - name: DNS_SERVER_LOG_MAX_LOG_FILE_DAYS
-              value: '1'
             - name: DNS_SERVER_BLOCK_LIST_URLS
               value: 'https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro-onlydomains.txt'
             - name: DNS_SERVER_FORWARDERS
@@ -65,24 +61,8 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/dns
-            - name: logs
-              mountPath: /var/log/technitium/dns
             - name: tmp
               mountPath: /tmp
-        - name: log-collector
-          image: busybox:stable@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
-          command:
-            ['/bin/sh', '-c', 'tail -n+1 -F /var/log/technitium/dns/*.log']
-          volumeMounts:
-            - name: logs
-              mountPath: /var/log/technitium/dns
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-              add: [NET_BIND_SERVICE]
-            readOnlyRootFilesystem: true
       securityContext:
         fsGroup: 65534
         runAsGroup: 65534
@@ -91,8 +71,6 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       volumes:
-        - name: logs
-          emptyDir: {}
         - name: tmp
           emptyDir: {}
   volumeClaimTemplates:
