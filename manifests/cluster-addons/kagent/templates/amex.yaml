@@ -20,7 +20,7 @@ spec:
   description: Answers questions about credit card spending and who owes what.
   type: Declarative
   declarative:
-    modelConfig: zai-glm-5-2
+    modelConfig: zai-glm-5-3
     stream: false
 
     tools:

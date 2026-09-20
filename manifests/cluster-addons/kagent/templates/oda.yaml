@@ -126,7 +126,7 @@ spec:
   description: Helps with ordering from Oda.
   type: Declarative
   declarative:
-    modelConfig: zai-glm-5-2
+    modelConfig: zai-glm-5-3
     stream: false
 
     tools:
