@@ -4,6 +4,9 @@ immich:
       library:
         existingClaim: immich-library
 
+    metrics:
+      enabled: true
+
   machine-learning:
     enabled: true
 

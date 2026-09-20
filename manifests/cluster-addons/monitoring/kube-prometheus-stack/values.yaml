@@ -34,6 +34,7 @@ kube-prometheus-stack:
               - cloudflared
               - cnpg-system
               - external-dns
+              - immich
               - kube-system # cilium hubble
               - longhorn-system
               - monitoring
