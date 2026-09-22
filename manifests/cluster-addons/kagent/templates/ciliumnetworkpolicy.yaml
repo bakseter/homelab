@@ -39,10 +39,13 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/managed-by: kagent
-            app.kubernetes.io/name: oda-shopper
+            app.kubernetes.io/name: oda-agent
         - matchLabels:
             app.kubernetes.io/managed-by: kagent
             app.kubernetes.io/name: amex-agent
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: homelab-agent
       toPorts:
         - ports:
             - port: '8080'
@@ -160,13 +163,13 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: oda-shopper
+  name: oda-agent
   namespace: kagent
 spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/managed-by: kagent
-      app.kubernetes.io/name: oda-shopper
+      app.kubernetes.io/name: oda-agent
 
   ingress:
     - fromEndpoints:
@@ -238,7 +241,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/managed-by: kagent
-            app.kubernetes.io/name: oda-shopper
+            app.kubernetes.io/name: oda-agent
         - matchLabels:
             app.kubernetes.io/name: kagent
             app.kubernetes.io/component: controller
@@ -314,6 +317,65 @@ spec:
       toPorts:
         - ports:
             - port: '8000'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
+
+    - toFQDNs:
+        - matchName: api.mistral.ai
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: homelab-agent
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: kagent
+      app.kubernetes.io/name: homelab-agent
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '8083'
               protocol: TCP
 
     - toEndpoints:
