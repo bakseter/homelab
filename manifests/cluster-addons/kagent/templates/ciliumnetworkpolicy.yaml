@@ -100,10 +100,6 @@ spec:
     matchLabels:
       app.kubernetes.io/instance: kagent-database
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
   ingress:
     - fromEndpoints:
         - matchLabels:
@@ -114,7 +110,24 @@ spec:
             - port: '5432'
               protocol: TCP
 
-  egress: []
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cnpg-system
+            app.kubernetes.io/name: cloudnative-pg
+      toPorts:
+        - ports:
+            - port: '5432'
+              protocol: TCP
+            - port: '8000'
+              protocol: TCP
+
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
