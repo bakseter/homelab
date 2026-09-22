@@ -20,26 +20,26 @@ kagent:
     agentImage:
       registry: ghcr.io
 
+    volumes:
+      - name: postgres
+        secret:
+          name: kagent-database-app
+          items:
+            - key: uri
+              path: uri
+              mode: 0644
+
+    volumeMounts:
+      - name: postgres
+        mountPath: /var/run/secrets/kagent-database
+        readOnly: true
+
   database:
     postgres:
       urlFile: /var/run/secrets/kagent-database/uri
       vectorEnabled: true
       bundled:
         enabled: false
-
-  volumes:
-    - name: postgres
-      secret:
-        name: kagent-database-app
-        items:
-          - key: uri
-            path: uri
-            mode: 0644
-
-  volumeMounts:
-    - name: postgres
-      mountPath: /var/run/secrets/kagent-database
-      readOnly: true
 
   ui:
     httpRoute:
