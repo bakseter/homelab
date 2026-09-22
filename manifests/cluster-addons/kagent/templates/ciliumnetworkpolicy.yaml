@@ -402,6 +402,7 @@ spec:
 
     - toFQDNs:
         - matchName: api.mistral.ai
+        - matchName: api.githubcopilot.com
       toPorts:
         - ports:
             - port: '443'
