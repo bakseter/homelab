@@ -83,6 +83,9 @@ spec:
         - ports:
             - port: '6443'
               protocol: TCP
+
+    - toFQDNs:
+      - matchName: 'api.githubcopilot.com'
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -258,8 +261,8 @@ spec:
               - matchPattern: '*'
 
     - toFQDNs:
-      - matchName: oda.com
-      - matchName: registry.npmjs.org
+      - matchName: 'oda.com'
+      - matchName: 'registry.npmjs.org'
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
