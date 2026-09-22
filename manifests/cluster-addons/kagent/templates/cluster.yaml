@@ -1,0 +1,37 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: kagent-database
+  namespace: kagent
+spec:
+  instances: 1
+  inheritedMetadata:
+    labels:
+      recurring-job.longhorn.io/source: enabled
+      recurring-job-group.longhorn.io/fstrim: enabled
+  affinity:
+    nodeSelector:
+      node.longhorn.io/create-default-disk: 'config'
+  storage:
+    size: 5Gi
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: postgresql-minimal-trixie
+    major: 18
+  postgresql:
+    extensions:
+      - name: pgvector 
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: kagent-app
+  namespace: kagent
+spec:
+  name: app
+  owner: app
+  cluster:
+    name: kagent-database
+  extensions:
+    - name: vector
