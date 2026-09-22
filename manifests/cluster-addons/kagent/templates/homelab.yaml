@@ -27,7 +27,7 @@ spec:
 apiVersion: kagent.dev/v1alpha2
 kind: RemoteMCPServer
 metadata:
-  name: github
+  name: github-mcp
   namespace: kagent
 spec:
   description: Read-only access to the homelab git repo.
@@ -49,7 +49,7 @@ spec:
 apiVersion: kagent.dev/v1alpha2
 kind: Agent
 metadata:
-  name: homelab
+  name: homelab-agent
   namespace: kagent
 spec:
   description: For discussion of homelab architecture and hardware decisions.
@@ -65,7 +65,7 @@ spec:
     tools:
       - type: McpServer
         mcpServer:
-          name: github
+          name: github-mcp
           kind: RemoteMCPServer
           toolNames:
             - get_file_contents
