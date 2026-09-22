@@ -30,8 +30,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: kagent
-            app.kubernetes.io/component: database
+            app.kubernetes.io/instance: kagent-database
       toPorts:
         - ports:
             - port: '5432'
@@ -93,8 +92,7 @@ metadata:
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: kagent
-      app.kubernetes.io/component: database
+      app.kubernetes.io/instance: kagent-database
 
   enableDefaultDeny:
     ingress: true
