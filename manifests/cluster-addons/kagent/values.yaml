@@ -23,7 +23,7 @@ kagent:
     volumes:
       - name: postgres
         secret:
-          name: kagent-database-app
+          secretName: kagent-database-app
           items:
             - key: uri
               path: uri
