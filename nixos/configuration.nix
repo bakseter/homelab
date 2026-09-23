@@ -137,10 +137,13 @@
     #
     # EVERY VALUE IS SINGLE-QUOTED, and it has to be. systemd tolerates bare
     # spaces in an EnvironmentFile value; bash does not -- `VAR=a b c` runs
-    # `b c` as a command. TF_ENCRYPTION is a one-line HCL block full of spaces,
-    # so without the quotes `. tofu.env` fails with "pbkdf2: command not found".
-    # Both parsers strip the outer single quotes. This breaks if any value ever
-    # contains a single quote; base64 and hex tokens never do.
+    # `b c` as a command. Both parsers strip the outer single quotes. This
+    # breaks if a value ever contains a single quote; base64 and hex never do.
+    #
+    # TF_ENCRYPTION carries ONE HCL block, nothing more. HCL wants a newline
+    # after every block definition, and neither parser here carries newlines
+    # inside a value -- so the method/state/plan blocks live in each root's
+    # backend.tf instead, and OpenTofu merges the two.
     #
     # One file covers both tofu roots: OpenTofu silently ignores TF_VAR_*
     # env vars for variables a root doesn't declare, so `core` is unbothered
@@ -151,7 +154,7 @@
       content = ''
         AWS_ACCESS_KEY_ID='${config.sops.placeholder."hetzner/access-key"}'
         AWS_SECRET_ACCESS_KEY='${config.sops.placeholder."hetzner/secret-key"}'
-        TF_ENCRYPTION='key_provider "pbkdf2" "main" { passphrase = "${config.sops.placeholder."tofu/passphrase"}" } method "aes_gcm" "main" { keys = key_provider.pbkdf2.main } state { method = method.aes_gcm.main } plan { method = method.aes_gcm.main }'
+        TF_ENCRYPTION='key_provider "pbkdf2" "main" { passphrase = "${config.sops.placeholder."tofu/passphrase"}" }'
 
         # tofu/core
         TF_VAR_proxmox_username='${config.sops.placeholder."core/proxmox-username"}'

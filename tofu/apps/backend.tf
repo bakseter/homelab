@@ -20,4 +20,16 @@ terraform {
     skip_requesting_account_id  = true
     skip_metadata_api_check     = true
   }
+
+  encryption {
+    method "aes_gcm" "main" {
+      keys = key_provider.pbkdf2.main
+    }
+    state {
+      method = method.aes_gcm.main
+    }
+    plan {
+      method = method.aes_gcm.main
+    }
+  }
 }
