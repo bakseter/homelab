@@ -199,7 +199,7 @@
       environment = {
         # Verify these names against `semaphore runner setup` for your image
         # tag -- SEMAPHORE_RUNNER_* naming has shifted across 2.1x releases.
-        SEMAPHORE_RUNNER_API_URL = "https://semaphore.CHANGEME.example/api";
+        SEMAPHORE_RUNNER_API_URL = "https://semaphore.int.bakseter.net/api";
         SEMAPHORE_RUNNER_CONFIG_FILE = "/var/lib/semaphore/runner.config";
         TF_IN_AUTOMATION = "1";
         TF_INPUT = "0";

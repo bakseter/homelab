@@ -4,8 +4,9 @@ semaphore:
     nonAdminCanCreateProject: true
     passwordLoginDisable: true
 
-  # runner:
-  #   existingSecret:
+  runner:
+    tokenKey: token
+    existingSecret: semaphore-runner-secret
 
   database:
     type: postgres

@@ -3,7 +3,7 @@ terraform {
 
   backend "s3" {
     bucket = "bakseter-homelab-tofu-state"
-    key    = "core/terraform.tfstate"
+    key    = "apps/terraform.tfstate"
     region = "hel1"
 
     endpoints = {
