@@ -1,0 +1,10 @@
+keys:
+  - &archpad_andreas age1ywhan7ptlz50jcd0kvq43r4cgr7tr7lkl344ees2d24whqquxfsq9lauqu
+  - &infra_ops age1ff8hnyatd768022scu98tr5un44dnl75rkys0gvcv40j2n0h2vascqwgsd
+
+creation_rules:
+  - path_regex: secrets/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *archpad_andreas
+          - *infra_ops
