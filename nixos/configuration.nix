@@ -1,4 +1,3 @@
-
 { config, pkgs, ... }:
 
 {
@@ -129,37 +128,49 @@
       "apps/authentik-token" = { };
 
       "semaphore/registration-token" = { };
+
+      # The exception: mounted into the container, which runs as its own uid
+      # and isn't in infra-secrets.
+      "ssh/mikrotik-key" = {
+        mode = "0444";
+        group = "infra-secrets";
+      };
     };
 
-    # One rendered env file, shared by the runner (EnvironmentFile) and you
-    # (the alias above). Credentials reach tasks through the process
-    # environment, so they never enter Semaphore's database.
+    # One rendered env file, read two ways: systemd hands it to the container
+    # as an EnvironmentFile, and the `tofu-env` alias sources it into your
+    # shell. Credentials reach tasks through the process environment, so they
+    # never enter Semaphore's database.
+    #
+    # EVERY VALUE IS SINGLE-QUOTED, and it has to be. systemd tolerates bare
+    # spaces in an EnvironmentFile value; bash does not -- `VAR=a b c` runs
+    # `b c` as a command. TF_ENCRYPTION is a one-line HCL block full of spaces,
+    # so without the quotes `. tofu.env` fails with "pbkdf2: command not found".
+    # Both parsers strip the outer single quotes. This breaks if any value ever
+    # contains a single quote; base64 and hex tokens never do.
     #
     # One file covers both tofu roots: OpenTofu silently ignores TF_VAR_*
     # env vars for variables a root doesn't declare, so `core` is unbothered
     # by the apps variables and vice versa.
-    #
-    # HCL ignores whitespace, which is why TF_ENCRYPTION fits on one line --
-    # systemd EnvironmentFile has no multi-line syntax.
     templates."tofu.env" = {
       mode = "0440";
       group = "infra-secrets";
       content = ''
-        AWS_ACCESS_KEY_ID=${config.sops.placeholder."hetzner/access-key"}
-        AWS_SECRET_ACCESS_KEY=${config.sops.placeholder."hetzner/secret-key"}
-        TF_ENCRYPTION=key_provider "pbkdf2" "main" { passphrase = "${config.sops.placeholder."tofu/passphrase"}" } method "aes_gcm" "main" { keys = key_provider.pbkdf2.main } state { method = method.aes_gcm.main } plan { method = method.aes_gcm.main }
+        AWS_ACCESS_KEY_ID='${config.sops.placeholder."hetzner/access-key"}'
+        AWS_SECRET_ACCESS_KEY='${config.sops.placeholder."hetzner/secret-key"}'
+        TF_ENCRYPTION='key_provider "pbkdf2" "main" { passphrase = "${config.sops.placeholder."tofu/passphrase"}" } method "aes_gcm" "main" { keys = key_provider.pbkdf2.main } state { method = method.aes_gcm.main } plan { method = method.aes_gcm.main }'
 
         # tofu/core
-        TF_VAR_proxmox_username=${config.sops.placeholder."core/proxmox-username"}
-        TF_VAR_proxmox_password=${config.sops.placeholder."core/proxmox-password"}
+        TF_VAR_proxmox_username='${config.sops.placeholder."core/proxmox-username"}'
+        TF_VAR_proxmox_password='${config.sops.placeholder."core/proxmox-password"}'
 
         # tofu/apps
-        TF_VAR_tailscale_oauth_client_id=${config.sops.placeholder."apps/tailscale-oauth-client-id"}
-        TF_VAR_tailscale_oauth_client_secret=${config.sops.placeholder."apps/tailscale-oauth-client-secret"}
-        TF_VAR_cloudflare_api_token=${config.sops.placeholder."apps/cloudflare-api-token"}
-        TF_VAR_cloudflare_account_id=${config.sops.placeholder."apps/cloudflare-account-id"}
-        TF_VAR_authentik_url=${config.sops.placeholder."apps/authentik-url"}
-        TF_VAR_authentik_token=${config.sops.placeholder."apps/authentik-token"}
+        TF_VAR_tailscale_oauth_client_id='${config.sops.placeholder."apps/tailscale-oauth-client-id"}'
+        TF_VAR_tailscale_oauth_client_secret='${config.sops.placeholder."apps/tailscale-oauth-client-secret"}'
+        TF_VAR_cloudflare_api_token='${config.sops.placeholder."apps/cloudflare-api-token"}'
+        TF_VAR_cloudflare_account_id='${config.sops.placeholder."apps/cloudflare-account-id"}'
+        TF_VAR_authentik_url='${config.sops.placeholder."apps/authentik-url"}'
+        TF_VAR_authentik_token='${config.sops.placeholder."apps/authentik-token"}'
       '';
     };
 
@@ -168,7 +179,7 @@
     templates."semaphore.env" = {
       mode = "0400";
       content = ''
-        SEMAPHORE_RUNNER_REGISTRATION_TOKEN=${config.sops.placeholder."semaphore/registration-token"}
+        SEMAPHORE_RUNNER_REGISTRATION_TOKEN='${config.sops.placeholder."semaphore/registration-token"}'
       '';
     };
   };
