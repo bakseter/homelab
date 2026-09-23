@@ -31,13 +31,22 @@
     };
   };
 
+  # systemd-resolved is what makes accept-dns safe. Without it, Tailscale
+  # rewrites /etc/resolv.conf wholesale and every lookup goes to MagicDNS --
+  # which is presumably why --accept-dns=false was set in the first place.
+  # With resolved, Tailscale registers 100.100.100.100 as a *routing-only*
+  # resolver for its own domains and leaves everything else on your LAN
+  # resolver. That's the split you want on a box that is also the subnet
+  # router for four VLANs.
+  services.resolved.enable = true;
+
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "both";
     extraSetFlags = [
       "--advertise-exit-node"
       "--advertise-routes=192.168.10.0/24,192.168.20.0/24,192.168.30.0/24,192.168.70.0/24"
-      "--accept-dns=false"
+      "--accept-dns=true"
       "--relay-server-port=40000"
     ];
   };
