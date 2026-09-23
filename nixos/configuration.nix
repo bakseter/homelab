@@ -1,3 +1,4 @@
+
 { config, pkgs, ... }:
 
 {
@@ -107,11 +108,27 @@
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     age.generateKey = false;
 
-    secrets."semaphore/registration-token".mode = "0400";
+    # Every key referenced by a template below must be declared here --
+    # sops.placeholder only resolves for declared secrets. Defaults (0400,
+    # root) are fine: only root renders the templates. The consequence is that
+    # each value lands on disk twice, once at /run/secrets/<name> and once
+    # inside the rendered env file. sops-nix has no way around that.
+    secrets = {
+      "hetzner/access-key" = { };
+      "hetzner/secret-key" = { };
+      "tofu/passphrase" = { };
 
-    secrets."ssh/mikrotik-key" = {
-      mode = "0444"; # read inside the container, which runs as its own uid
-      group = "infra-secrets";
+      "core/proxmox-username" = { };
+      "core/proxmox-password" = { };
+
+      "apps/tailscale-oauth-client-id" = { };
+      "apps/tailscale-oauth-client-secret" = { };
+      "apps/cloudflare-api-token" = { };
+      "apps/cloudflare-account-id" = { };
+      "apps/authentik-url" = { };
+      "apps/authentik-token" = { };
+
+      "semaphore/registration-token" = { };
     };
 
     # One rendered env file, shared by the runner (EnvironmentFile) and you
@@ -156,6 +173,13 @@
     };
   };
 
+  # Semaphore isn't in nixpkgs, so the runner comes from upstream's image.
+  # oci-containers is the declarative-container layer: the unit below is a
+  # normal systemd service, generated from this, and nothing is stored outside
+  # git except the runner's own auth token.
+  #
+  # backend defaults to podman (no daemon, NixOS default). Set it to "docker"
+  # if you'd rather -- the container config is identical either way.
   virtualisation.oci-containers = {
     backend = "podman";
     containers.semaphore-runner = {
