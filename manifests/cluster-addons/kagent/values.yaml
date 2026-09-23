@@ -1,4 +1,8 @@
 kagent:
+  global:
+    watchNamespaces:
+      - kagent
+
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -10,11 +14,6 @@ kagent:
     runAsNonRoot: true
     seccompProfile:
       type: RuntimeDefault
-
-  providers:
-    default: openAI
-    openAI:
-      model: mistral-medium-3-5
 
   controller:
     agentImage:
@@ -42,6 +41,8 @@ kagent:
         enabled: false
 
   ui:
+    externalUrl: kagent.bakseter.net
+
     httpRoute:
       enabled: true
 
@@ -63,6 +64,7 @@ kagent:
   otel:
     tracing:
       enabled: true
+      captureSensitiveContent: true
       exporter:
         otlp:
           endpoint: http://alloy.monitoring.svc.cluster.local:4317
