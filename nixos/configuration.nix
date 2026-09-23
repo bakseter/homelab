@@ -57,6 +57,11 @@
 
   programs.ssh.startAgent = true;
 
+  programs.git = {
+    enable = true;
+    config.safe.directory = [ "/home/ops/homelab" ];
+  };
+
   services.openssh = {
     enable = true;
     settings = {
