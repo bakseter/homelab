@@ -199,7 +199,7 @@
   virtualisation.oci-containers = {
     backend = "podman";
     containers.semaphore-runner = {
-      image = "semaphoreui/runner:v2.19.12";
+      image = "semaphoreui/runner:v2.19.14";
 
       # Host networking: the runner has to reach the VLANs, the Talos API and
       # your cluster ingress. This is the whole reason it lives on this box.
