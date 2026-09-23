@@ -57,17 +57,20 @@
 
   programs.ssh.startAgent = true;
 
-  programs.git = {
-    enable = true;
-    config.safe.directory = [ "/home/ops/homelab" ];
-  };
-
   services.openssh = {
     enable = true;
     settings = {
       PasswordAuthentication = false;
       PermitRootLogin = "no";
     };
+  };
+
+  # Nix evaluates the flake with libgit2, which refuses a repo owned by
+  # someone other than the calling user. nixos-rebuild runs as root, the repo
+  # lives in ops's home, so root needs to be told it's fine.
+  programs.git = {
+    enable = true;
+    config.safe.directory = [ "/home/ops/homelab" ];
   };
 
   environment.systemPackages = with pkgs; [
@@ -77,7 +80,6 @@
     curl
     ethtool
     fastfetch
-    git
     htop
     hubble
     jq
@@ -105,8 +107,10 @@
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     age.generateKey = false;
 
+    secrets."semaphore/registration-token".mode = "0400";
+
     secrets."ssh/mikrotik-key" = {
-      mode = "0440";
+      mode = "0444"; # read inside the container, which runs as its own uid
       group = "infra-secrets";
     };
 
@@ -141,45 +145,63 @@
         TF_VAR_authentik_token=${config.sops.placeholder."apps/authentik-token"}
       '';
     };
-  };
 
-  users.groups.semaphore-runner = { };
-  users.users.semaphore-runner = {
-    isSystemUser = true;
-    group = "semaphore-runner";
-    extraGroups = [ "infra-secrets" ];
-  };
-
-  systemd.services.semaphore-runner = {
-    description = "Semaphore UI remote runner";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network-online.target" "tailscaled.service" ];
-    wants = [ "network-online.target" ];
-
-    # Tasks are child processes, so they inherit this. Reusing the system
-    # package list means there's one place to add a tool, not two.
-    path = config.environment.systemPackages;
-
-    environment = {
-      HOME = "/var/lib/semaphore-runner";
-      TF_IN_AUTOMATION = "1";
-      TF_INPUT = "0";
-    };
-
-    serviceConfig = {
-      User = "semaphore-runner";
-      Group = "semaphore-runner";
-      StateDirectory = "semaphore-runner";
-      WorkingDirectory = "/var/lib/semaphore-runner";
-      EnvironmentFile = config.sops.templates."tofu.env".path;
-      ExecStart =
-        "${pkgs.semaphore}/bin/semaphore runner start"
-        + " --config /var/lib/semaphore-runner/config.json";
-      Restart = "always";
-      RestartSec = "10s";
-      ProtectHome = true;
+    # Separate from tofu.env because that one is also sourced into your shell
+    # by the `tofu-env` alias, and Semaphore's token has no business there.
+    templates."semaphore.env" = {
+      mode = "0400";
+      content = ''
+        SEMAPHORE_RUNNER_REGISTRATION_TOKEN=${config.sops.placeholder."semaphore/registration-token"}
+      '';
     };
   };
+
+  virtualisation.oci-containers = {
+    backend = "podman";
+    containers.semaphore-runner = {
+      image = "semaphoreui/runner:v2.19.12";
+
+      # Host networking: the runner has to reach the VLANs, the Talos API and
+      # your cluster ingress. This is the whole reason it lives on this box.
+      extraOptions = [ "--network=host" ];
+
+      environment = {
+        # Verify these names against `semaphore runner setup` for your image
+        # tag -- SEMAPHORE_RUNNER_* naming has shifted across 2.1x releases.
+        SEMAPHORE_RUNNER_API_URL = "https://semaphore.CHANGEME.example/api";
+        SEMAPHORE_RUNNER_CONFIG_FILE = "/var/lib/semaphore/runner.config";
+        TF_IN_AUTOMATION = "1";
+        TF_INPUT = "0";
+
+        # Nix toolchain first, image's own tooling behind it. Only meaningful
+        # with the /nix/store mount below; drop this line if you skip it.
+        PATH = "${pkgs.lib.makeBinPath config.environment.systemPackages}"
+          + ":/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
+      };
+
+      environmentFiles = [
+        config.sops.templates."tofu.env".path
+        config.sops.templates."semaphore.env".path
+      ];
+
+      volumes = [
+        "/var/lib/semaphore-runner:/var/lib/semaphore"
+        "${config.sops.secrets."ssh/mikrotik-key".path}:/run/keys/mikrotik:ro"
+
+        # OPTIONAL, but this is what buys back what the container costs you.
+        # The image ships its own tofu and ansible, and has no librouteros for
+        # the community.routeros API modules. Mounting the store and putting a
+        # nix-built toolchain first on PATH restores both, still flake-pinned.
+        # Drop this pair of lines if your MikroTik playbooks only use the
+        # SSH-based modules and you're happy with the image's tofu version.
+        "/nix/store:/nix/store:ro"
+      ];
+    };
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /var/lib/semaphore-runner 0700 root root -"
+  ];
 
   system.stateVersion = "25.11"; # do not change
 }
