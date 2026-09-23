@@ -128,13 +128,6 @@
       "apps/authentik-token" = { };
 
       "semaphore/registration-token" = { };
-
-      # The exception: mounted into the container, which runs as its own uid
-      # and isn't in infra-secrets.
-      "ssh/mikrotik-key" = {
-        mode = "0444";
-        group = "infra-secrets";
-      };
     };
 
     # One rendered env file, read two ways: systemd hands it to the container
@@ -221,7 +214,6 @@
 
       volumes = [
         "/var/lib/semaphore-runner:/var/lib/semaphore"
-        "${config.sops.secrets."ssh/mikrotik-key".path}:/run/keys/mikrotik:ro"
 
         # OPTIONAL, but this is what buys back what the container costs you.
         # The image ships its own tofu and ansible, and has no librouteros for
