@@ -69,6 +69,7 @@ spec:
 
     - toFQDNs:
         - matchName: 'sentry.servarr.com'
+        - matchName: 'radarr.sevarr.com'
         - matchName: 'api.radarr.video'
         - matchName: 'image.tmdb.org'
         - matchName: 'api.nzbgeek.info'
