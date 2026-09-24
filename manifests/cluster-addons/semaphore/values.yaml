@@ -1,8 +1,11 @@
 semaphore:
   general:
     useRemoteRunner: true
-    nonAdminCanCreateProject: true
-    passwordLoginDisable: true
+    #nonAdminCanCreateProject: true
+    #passwordLoginDisable: true
+
+  admin:
+    create: true
 
   image:
     repository: semaphoreui/semaphore
