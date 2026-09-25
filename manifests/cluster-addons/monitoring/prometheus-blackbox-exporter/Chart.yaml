@@ -3,5 +3,5 @@ name: prometheus-blackbox-exporter-umbrella
 version: 0.1.0
 dependencies:
   - name: prometheus-blackbox-exporter
-    version: 11.18.0
+    version: 11.19.1
     repository: oci://ghcr.io/prometheus-community/charts
