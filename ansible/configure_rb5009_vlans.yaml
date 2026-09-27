@@ -27,11 +27,11 @@
     # -------------------------
     # Bridge ports
     # -------------------------
-    - name: Set ether2 as trunk to SG108E
+    - name: Set sfp-sfpplus1 as trunk to SG108E
       community.routeros.api_find_and_modify:
         path: interface bridge port
         find:
-          interface: ether2
+          interface: sfp-sfpplus1
         values:
           pvid: '1'
           frame-types: admit-all
@@ -155,14 +155,14 @@
         values:
           bridge: bridge
           tagged: 'bridge'
-          untagged: 'ether2,ether3,ether4,ether5,ether6'
+          untagged: 'sfp-sfpplus1,ether3,ether4,ether5,ether6'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 88) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
     - name: Add bridge VLAN 88 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=88 tagged=bridge untagged=ether2,ether3,ether4,ether5,ether6'
+        cmd: 'add bridge=bridge vlan-ids=88 tagged=bridge untagged=sfp-sfpplus1,ether3,ether4,ether5,ether6'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 88) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
@@ -173,14 +173,14 @@
           vlan-ids: '10'
         values:
           bridge: bridge
-          tagged: 'bridge,ether2'
+          tagged: 'bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 10) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
     - name: Add bridge VLAN 10 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=10 tagged=bridge,ether2'
+        cmd: 'add bridge=bridge vlan-ids=10 tagged=bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 10) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
@@ -191,14 +191,14 @@
           vlan-ids: '20'
         values:
           bridge: bridge
-          tagged: 'bridge,ether2'
+          tagged: 'bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 20) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
     - name: Add bridge VLAN 20 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=20 tagged=bridge,ether2'
+        cmd: 'add bridge=bridge vlan-ids=20 tagged=bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 20) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
@@ -209,14 +209,14 @@
           vlan-ids: '30'
         values:
           bridge: bridge
-          tagged: 'bridge,ether2'
+          tagged: 'bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 30) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
     - name: Add bridge VLAN 30 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=30 tagged=bridge,ether2'
+        cmd: 'add bridge=bridge vlan-ids=30 tagged=bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 30) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
@@ -227,14 +227,14 @@
           vlan-ids: '40'
         values:
           bridge: bridge
-          tagged: 'bridge,ether2'
+          tagged: 'bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 40) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
     - name: Add bridge VLAN 40 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=40 tagged=bridge,ether2'
+        cmd: 'add bridge=bridge vlan-ids=40 tagged=bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 40) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
@@ -245,7 +245,7 @@
           vlan-ids: '50'
         values:
           bridge: bridge
-          tagged: 'bridge,ether2'
+          tagged: 'bridge,sfp-sfpplus1'
           untagged: 'ether4,ether5,ether6'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 50) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
@@ -253,7 +253,7 @@
     - name: Add bridge VLAN 50 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=50 tagged=bridge,ether2 untagged=ether4,ether5,ether6'
+        cmd: 'add bridge=bridge vlan-ids=50 tagged=bridge,sfp-sfpplus1 untagged=ether4,ether5,ether6'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 50) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
@@ -264,14 +264,14 @@
           vlan-ids: '60'
         values:
           bridge: bridge
-          tagged: 'bridge,ether2'
+          tagged: 'bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 60) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
     - name: Add bridge VLAN 60 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=60 tagged=bridge,ether2'
+        cmd: 'add bridge=bridge vlan-ids=60 tagged=bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 60) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
@@ -282,14 +282,14 @@
           vlan-ids: '70'
         values:
           bridge: bridge
-          tagged: 'bridge,ether2'
+          tagged: 'bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 70) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
 
     - name: Add bridge VLAN 70 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=70 tagged=bridge,ether2'
+        cmd: 'add bridge=bridge vlan-ids=70 tagged=bridge,sfp-sfpplus1'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 70) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
@@ -300,7 +300,7 @@
           vlan-ids: '80'
         values:
           bridge: bridge
-          tagged: 'bridge,ether2'
+          tagged: 'bridge,sfp-sfpplus1'
           untagged: 'ether3'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 80) | selectattr('dynamic', 'equalto', false) | list | length > 0
       ignore_errors: true
@@ -308,7 +308,7 @@
     - name: Add bridge VLAN 80 if absent
       community.routeros.api:
         path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=80 tagged=bridge,ether2 untagged=ether3'
+        cmd: 'add bridge=bridge vlan-ids=80 tagged=bridge,sfp-sfpplus1 untagged=ether3'
       when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 80) | selectattr('dynamic', 'equalto', false) | list | length == 0
       ignore_errors: true
 
