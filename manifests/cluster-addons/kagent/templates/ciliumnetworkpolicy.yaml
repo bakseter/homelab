@@ -88,7 +88,8 @@ spec:
               protocol: TCP
 
     - toFQDNs:
-      - matchName: 'api.githubcopilot.com'
+        - matchName: 'api.githubcopilot.com'
+        - matchName: 'allemannsdata.com'
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
