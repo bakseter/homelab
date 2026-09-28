@@ -46,6 +46,9 @@ spec:
         - matchLabels:
             app.kubernetes.io/managed-by: kagent
             app.kubernetes.io/name: homelab-agent
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: legal-agent
       toPorts:
         - ports:
             - port: '8080'
