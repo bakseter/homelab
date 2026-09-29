@@ -1,3 +1,16 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: HTTPRouteFilter
+metadata:
+  name: forbidden
+  namespace: authentik
+spec:
+  directResponse:
+    statusCode: 403
+    contentType: text/plain
+    body:
+      type: Inline
+      inline: Forbidden
+---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -19,13 +32,11 @@ spec:
             type: PathPrefix
             value: /if/admin/
       filters:
-        - type: DirectResponse
-          directResponse:
-            statusCode: 403
-            body:
-              type: Inline
-              inline:
-                value: 'Forbidden'
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.envoyproxy.io
+            kind: HTTPRouteFilter
+            name: forbidden
 
     - matches:
         - path:
