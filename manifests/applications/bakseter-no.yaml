@@ -31,6 +31,9 @@ spec:
 
     - group: 'gateway.networking.k8s.io'
       kind: HTTPRoute
+
+    - group: 'gateway.envoyproxy.io'
+      kind: BackendTrafficPolicy
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
