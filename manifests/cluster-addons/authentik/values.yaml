@@ -153,55 +153,15 @@ authentik:
       - name: AUTHENTIK_POSTGRESQL__READ_REPLICAS__1__DISABLE_SERVER_SIDE_CURSORS
         value: 'true'
 
-      # gunicorn tuning
+      # Gunicorn tuning
       - name: AUTHENTIK_WEB__WORKERS
         value: '4'
       - name: AUTHENTIK_WEB__THREADS
         value: '4'
 
-      # otel
-      - name: OTEL_SERVICE_NAME
-        value: 'authentik-server'
-
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://alloy.monitoring.svc.cluster.local:4318'
-
-      - name: OTEL_EXPORTER_OTLP_PROTOCOL
-        value: 'http/protobuf'
-
-      - name: OTEL_TRACES_EXPORTER
-        value: 'otlp'
-
-      - name: OTEL_METRICS_EXPORTER
-        value: 'none'
-
-      - name: OTEL_LOGS_EXPORTER
-        value: 'none'
-
-      - name: OTEL_PROPAGATORS
-        value: 'tracecontext,baggage'
-
-      - name: OTEL_TRACES_SAMPLER
-        value: 'parentbased_traceidratio'
-
-      - name: OTEL_TRACES_SAMPLER_ARG
-        value: '1'
-
-      - name: OTEL_PYTHON_DJANGO_EXCLUDED_URLS
-        value: '/-/health/live,/-/health/ready,/-/metrics'
-
-      - name: OTEL_NODE_NAME
-        valueFrom:
-          fieldRef:
-            fieldPath: spec.nodeName
-
-      - name: OTEL_POD_NAME
-        valueFrom:
-          fieldRef:
-            fieldPath: metadata.name
-
-      - name: OTEL_RESOURCE_ATTRIBUTES
-        value: 'k8s.container.name=server,k8s.deployment.name=authentik-server,k8s.namespace.name=authentik,k8s.node.name=$(OTEL_NODE_NAME),k8s.pod.name=$(OTEL_POD_NAME),service.namespace=authentik,service.version=2026.5.4'
+      # Disable embedded outpost
+      - name: AUTHENTIK_OUTPOSTS__DISABLE_EMBEDDED_OUTPOST
+        env: 'true'
 
   worker:
     image:
