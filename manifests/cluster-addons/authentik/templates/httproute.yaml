@@ -1,16 +1,3 @@
-apiVersion: gateway.envoyproxy.io/v1alpha1
-kind: HTTPRouteFilter
-metadata:
-  name: forbidden
-  namespace: authentik
-spec:
-  directResponse:
-    statusCode: 403
-    contentType: text/plain
-    body:
-      type: Inline
-      inline: Forbidden
----
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -25,45 +12,6 @@ spec:
 
   hostnames:
     - authentik.bakseter.no
-
-  rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /if/admin/
-      filters:
-        - type: ExtensionRef
-          extensionRef:
-            group: gateway.envoyproxy.io
-            kind: HTTPRouteFilter
-            name: forbidden
-
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-
-      backendRefs:
-        - group: ''
-          kind: Service
-          name: authentik-server
-          port: 80
-          weight: 1
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: authentik-server-tailscale
-  namespace: authentik
-spec:
-  parentRefs:
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: tailscale-int
-      namespace: tailscale
-
-  hostnames:
-    - authentik.int.bakseter.net
 
   rules:
     - matches:
