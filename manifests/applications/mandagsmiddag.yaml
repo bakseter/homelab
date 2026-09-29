@@ -83,6 +83,9 @@ spec:
     - group: 'gateway.envoyproxy.io'
       kind: SecurityPolicy
 
+    - group: 'gateway.envoyproxy.io'
+      kind: BackendTrafficPolicy
+
     - group: 'bitnami.com'
       kind: SealedSecret
 ---
