@@ -177,7 +177,7 @@ resource "cloudflare_dns_record" "bakseter-no-email-txt" {
 resource "cloudflare_ruleset" "mandagsmiddag-geoip-block" {
   zone_id     = cloudflare_zone.domain["mandagsmiddag.no"].id
   name        = "GeoIP Allow List Rule"
-  description = "Block all traffic outside of Norway"
+  description = "Rules for mandagsmiddag.no"
   kind        = "zone"
   phase       = "http_request_firewall_custom"
 
@@ -194,17 +194,23 @@ resource "cloudflare_ruleset" "mandagsmiddag-geoip-block" {
 resource "cloudflare_ruleset" "bakseter-no-geoip-challenge" {
   zone_id     = cloudflare_zone.domain["bakseter.no"].id
   name        = "GeoIP Allow List Rule"
-  description = "Serve managed challenge for all traffic outside of EU"
+  description = "Rules for bakseter.no"
   kind        = "zone"
   phase       = "http_request_firewall_custom"
 
   rules = [
     {
+      action      = "block"
+      description = "Block non-Norway for Authentik"
+      expression  = "http.host == \"authentik.bakseter.no\" and not ip.geoip.country in {\"NO\"}"
+      enabled     = true
+    },
+    {
       action      = "managed_challenge"
-      description = "Block non-EU"
+      description = "Serve managed challenge non-EU"
       expression  = "not ip.geoip.continent in {\"EU\"} and not starts_with(http.request.uri, \"/cdn-cgi/challenge-platform/\")"
       enabled     = true
-    }
+    },
   ]
 }
 
