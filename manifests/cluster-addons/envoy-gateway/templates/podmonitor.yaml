@@ -17,7 +17,7 @@ spec:
   podMetricsEndpoints:
     - port: metrics
       path: /stats/prometheus
-      interval: 30s
+      interval: 60s
       scrapeTimeout: 10s
 
       # target labels: which Gateway this proxy belongs to
