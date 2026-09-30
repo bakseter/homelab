@@ -1,0 +1,71 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: homelab-copier
+  namespace: forgejo
+  labels:
+    app.kubernetes.io/name: homelab-copier
+spec:
+  schedule: 0 3 * * *
+  timeZone: Europe/Oslo
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    backoffLimit: 1
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: homelab-copier
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - image: busybox:stable
+              name: homelab-copier
+              command:
+                - /bin/sh
+                - -c
+              args:
+                - |
+                  set -e
+                  git config core.sshCommand 'ssh -i /var/run/secrets/homelab-copier/ssh-key'
+                  git clone https://github.org/bakseter/homelab /tmp/homelab
+                  cd /tmp/homelab
+                  git remote add origin forgejo git@forgejo-ssh.forgejo.svc.cluster.local
+                  git push forgejo master
+              resources:
+                limits:
+                  memory: 128Mi
+                requests:
+                  memory: 16Mi
+                  cpu: 50m
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+                - name: ssh
+                  mountPath: /var/run/secrets/homelab-copier
+                  readOnly: true
+          securityPolicy:
+            runAsUser: 65534
+            runAsGroup: 65534
+            fsGroup: 65534
+            seccompProfile:
+              type: RuntimeDefault
+          volumes:
+            - name: tmp
+              emtpyDir: {}
+            - name: ssh-key
+              secret:
+                secretName: forgejo-homelab-copier-ssh-key
+                items:
+                  - key: ssh-key
+                    path: ssh-key
+                    mode: 0644
