@@ -50,7 +50,7 @@ spec:
               volumeMounts:
                 - name: tmp
                   mountPath: /tmp
-                - name: ssh
+                - name: ssh-key
                   mountPath: /var/run/secrets/homelab-copier
                   readOnly: true
           securityContext:
