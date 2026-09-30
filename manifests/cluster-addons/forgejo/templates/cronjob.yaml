@@ -30,10 +30,10 @@ spec:
               args:
                 - |
                   set -e
-                  git clone https://github.org/bakseter/homelab /tmp/homelab
+                  git config --global core.sshCommand 'ssh -i /var/run/secrets/homelab-copier/ssh-key'
+                  git clone git@github.org:bakseter/homelab /tmp/homelab
                   cd /tmp/homelab
-                  git config core.sshCommand 'ssh -i /var/run/secrets/homelab-copier/ssh-key'
-                  git remote add origin forgejo git@forgejo-ssh.forgejo.svc.cluster.local
+                  git remote add origin forgejo git@forgejo-ssh.forgejo.svc.cluster.local:bakseter/homelab
                   git push forgejo master
               resources:
                 limits:
