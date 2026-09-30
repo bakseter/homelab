@@ -53,7 +53,7 @@ spec:
                 - name: ssh
                   mountPath: /var/run/secrets/homelab-copier
                   readOnly: true
-          securityPolicy:
+          securityContext:
             runAsUser: 65534
             runAsGroup: 65534
             fsGroup: 65534
