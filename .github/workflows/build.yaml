@@ -26,6 +26,8 @@ jobs:
       matrix:
         image:
           - data.forgejo.org/forgejo/runner:13
+          - beets:2.14.1
+          - mcp-tools:1
 
     steps:
       - name: Checkout repository
