@@ -16,6 +16,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: forgejo-runner
             app.kubernetes.io/name: runner
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: argocd
+            app.kubernetes.io/name: argocd-repo-server
       toPorts:
         - ports:
             - port: '3000'
