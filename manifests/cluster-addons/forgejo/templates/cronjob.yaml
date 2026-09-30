@@ -22,7 +22,7 @@ spec:
         spec:
           restartPolicy: Never
           containers:
-            - image: alpine/git:2.45.0@sha256:832b1cd1a271509f3d5272a1a62d4cb2ab1a53426ebde1f6c2cb7349f907dc6f
+            - image: ghcr.io/bakseter/homelab/alpine/git-cacerts:3.24@sha256:8c829ebb8735a714c66658ca606868201f0e00088a70e15382c48581f92d04d9
               name: homelab-copier
               command:
                 - /bin/sh
@@ -31,7 +31,7 @@ spec:
                 - |
                   set -e
                   git config --global core.sshCommand 'ssh -i /var/run/secrets/homelab-copier/ssh-key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
-                  git clone git@github.com:bakseter/homelab /tmp/homelab
+                  git clone https://github.com/bakseter/homelab /tmp/homelab
                   cd /tmp/homelab
                   git remote add forgejo git@forgejo-ssh.forgejo.svc.cluster.local:bakseter/homelab
                   git push forgejo master
