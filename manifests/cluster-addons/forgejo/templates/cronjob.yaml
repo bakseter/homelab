@@ -67,6 +67,6 @@ spec:
               secret:
                 secretName: forgejo-homelab-copier-ssh-key
                 items:
-                  - key: ssh-key
+                  - key: homelab-copier
                     path: ssh-key
                     mode: 0644
