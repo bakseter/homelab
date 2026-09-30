@@ -61,7 +61,7 @@ spec:
               type: RuntimeDefault
           volumes:
             - name: tmp
-              emtpyDir: {}
+              emptyDir: {}
             - name: ssh-key
               secret:
                 secretName: forgejo-homelab-copier-ssh-key
