@@ -13,8 +13,8 @@ spec:
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 3
   jobTemplate:
-    backoffLimit: 1
     spec:
+      backoffLimit: 1
       template:
         metadata:
           labels:
