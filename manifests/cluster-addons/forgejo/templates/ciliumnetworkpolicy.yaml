@@ -58,8 +58,8 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: forgejo
-  namespace: homelab-copier
+  name: homelab-copier
+  namespace: forgejo
 spec:
   endpointSelector:
     matchLabels:
