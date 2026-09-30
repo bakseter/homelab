@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: homelab-copier
 spec:
-  schedule: 0 3 * * *
+  schedule: '*/30 * * * *' # every 30 minutes
   timeZone: Europe/Oslo
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 600
