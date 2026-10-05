@@ -184,7 +184,7 @@
     templates."semaphore.env" = {
       mode = "0400";
       content = ''
-        SEMAPHORE_RUNNER_REGISTRATION_TOKEN='${config.sops.placeholder."semaphore/registration-token"}'
+        SEMAPHORE_RUNNER_TOKEN='${config.sops.placeholder."semaphore/registration-token"}'
       '';
     };
   };
