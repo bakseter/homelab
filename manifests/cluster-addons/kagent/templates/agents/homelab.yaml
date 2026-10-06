@@ -117,6 +117,14 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            app.kubernetes.io/name: fetch-mcp
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: monitoring
             app.kubernetes.io/name: alloy
       toPorts:
