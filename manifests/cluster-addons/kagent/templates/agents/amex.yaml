@@ -7,7 +7,7 @@ spec:
   description: Answers questions about credit card spending and who owes what.
   type: Declarative
   declarative:
-    modelConfig: zai-glm-5-3
+    modelConfig: mistral-large-4
     stream: true
     tools:
       - type: McpServer
