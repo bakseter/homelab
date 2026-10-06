@@ -48,7 +48,7 @@ spec:
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
-        drop: 
+        drop:
           - ALL
       readOnlyRootFilesystem: true
     resources:
@@ -141,5 +141,5 @@ spec:
               - matchPattern: '*'
 
     - toFQDNs:
-      - matchName: 'oda.com'
-      - matchName: 'registry.npmjs.org'
+        - matchName: 'oda.com'
+        - matchName: 'registry.npmjs.org'

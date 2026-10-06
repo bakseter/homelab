@@ -21,7 +21,7 @@ spec:
     major: 18
   postgresql:
     extensions:
-      - name: pgvector 
+      - name: pgvector
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
