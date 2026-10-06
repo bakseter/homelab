@@ -1,0 +1,12 @@
+apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: amex-mcp
+  namespace: kagent
+spec:
+  description: Amex statement data
+  protocol: STREAMABLE_HTTP
+  url: http://amex-backend.amex.svc.cluster.local:8000/mcp
+  timeout: 30s
+  sseReadTimeout: 5m0s
+  terminateOnClose: true

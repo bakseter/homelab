@@ -1,0 +1,120 @@
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: fetch-mcp
+  namespace: kagent
+spec:
+  transportType: stdio
+  stdioTransport: {}
+  timeout: 60s
+
+  deployment:
+    image: ghcr.io/bakseter/mcp-server-fetch:2026.8.18 
+    port: 3000
+    replicas: 1
+    cmd: /app/.venv/bin/mcp-server-fetch
+    args: []
+
+    env:
+      HOME: /tmp
+      PYTHONDONTWRITEBYTECODE: '1'
+
+    volumes:
+      - name: tmp
+        emtpyDir:
+          sizeLimit: 64Mi
+
+    volumeMounts:
+      - name: tmp
+        mountPath: /tmp
+
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+      runAsGroup: 65534
+      fsGroup: 65534
+      seccompProfile:
+        type: RuntimeDefault
+
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: 
+          - ALL
+      readOnlyRootFilesystem: true
+
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        memory: 512Mi
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: fetch-mcp
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: fetch-mcp
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: homelab-agent
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toFQDNs:
+        # Documentation
+        - matchName: 'argo-cd.readthedocs.io'
+        - matchName: 'cert-manager.io'
+        - matchName: 'cloudnative-pg.io'
+        - matchName: 'developers.cloudflare.com'
+        - matchName: 'docs.ansible.com'
+        - matchName: 'docs.cilium.io'
+        - matchName: 'docs.goauthentik.io'
+        - matchName: 'docs.immich.app'
+        - matchName: 'docs.mistral.ai'
+        - matchName: 'docs.siderolabs.com'
+        - matchName: 'forgejo.org'
+        - matchName: 'gateway.envoyproxy.io'
+        - matchName: 'goharbor.io'
+        - matchName: 'grafana.com'
+        - matchName: 'help.mikrotik.com'
+        - matchName: 'kagent.io'
+        - matchName: 'kubernetes.io'
+        - matchName: 'prometheus.io'
+        - matchName: 'pve.proxmox.com'
+        - matchName: 'tailscale.com'
+        - matchName: 'velero.io'
+        # Hardware
+        - matchName: 'proshop.no'
+        - matchName: 'kjell.com'
+        - matchName: 'komplett.no'
+        - matchName: 'mikrotik.com'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP

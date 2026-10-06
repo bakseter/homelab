@@ -1,17 +1,4 @@
 apiVersion: kagent.dev/v1alpha2
-kind: RemoteMCPServer
-metadata:
-  name: amex-mcp
-  namespace: kagent
-spec:
-  description: Amex statement data
-  protocol: STREAMABLE_HTTP
-  url: http://amex-backend.amex.svc.cluster.local:8000/mcp
-  timeout: 30s
-  sseReadTimeout: 5m0s
-  terminateOnClose: true
----
-apiVersion: kagent.dev/v1alpha2
 kind: Agent
 metadata:
   name: amex-agent
@@ -21,8 +8,7 @@ spec:
   type: Declarative
   declarative:
     modelConfig: zai-glm-5-3
-    stream: false
-
+    stream: true
     tools:
       - type: McpServer
         mcpServer:
@@ -63,7 +49,7 @@ spec:
           cpu: 100m
           memory: 128Mi
         limits:
-          memory: 1Gi
+          memory: 512Mi
 
       securityContext:
         allowPrivilegeEscalation: false
@@ -100,3 +86,71 @@ spec:
     metadata:
       name: amex-agent-prompt
       namespace: kagent
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: amex-agent
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: kagent
+      app.kubernetes.io/name: amex-agent
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '8083'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: amex
+            app.kubernetes.io/name: amex-backend
+      toPorts:
+        - ports:
+            - port: '8000'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
+
+    - toFQDNs:
+        - matchName: api.mistral.ai
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP

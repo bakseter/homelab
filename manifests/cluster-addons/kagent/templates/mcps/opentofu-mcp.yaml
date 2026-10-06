@@ -1,0 +1,11 @@
+apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: opentofu-mcp
+  namespace: kagent
+spec:
+  description: For accessing the OpenTofu Registry.
+  protocol: STREAMABLE_HTTP
+  url: https://mcp.opentofu.org
+  timeout: 30s
+  terminateOnClose: false
