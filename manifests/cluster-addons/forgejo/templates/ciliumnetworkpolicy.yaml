@@ -19,6 +19,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: argocd
             app.kubernetes.io/name: argocd-repo-server
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+            app.kubernetes.io/name: git-mcp
       toPorts:
         - ports:
             - port: '3000'
