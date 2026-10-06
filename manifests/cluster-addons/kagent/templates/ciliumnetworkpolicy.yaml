@@ -60,6 +60,10 @@ spec:
             app.kubernetes.io/name: oda-mcp
         - matchLabels:
             app.kubernetes.io/name: fetch-mcp
+        - matchLabels:
+            app.kubernetes.io/name: git-mcp
+        - matchLabels:
+            app.kubernetes.io/name: fs-mcp
       toPorts:
         - ports:
             - port: '3000'

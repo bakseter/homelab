@@ -1,0 +1,80 @@
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: fs-mcp
+  namespace: kagent
+spec:
+  transportType: stdio
+  deployment:
+    replicas: 1
+    image: ghcr.io/bakseter/homelab/mcp-tools:1@sha256:c8389d6e163378a2d704ca6853f4854927437250c1a917025de7112a185cb75d
+    cmd: mcp-server-filesystem
+    args:
+      - /workspace
+    env:
+      HOME: /home/node
+    volumes:
+      - name: workspace
+        persistentVolumeClaim:
+          claimName: git-mcp-fs-mcp-workspace
+      - name: tmp
+        emptyDir:
+          sizeLimit: 128Mi
+      - name: home
+        emptyDir:
+          sizeLimit: 128Mi
+    volumeMounts:
+      - name: workspace
+        mountPath: /workspace
+      - name: tmp
+        mountPath: /tmp
+      - name: home
+        mountPath: /home/node
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 512Mi
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+      runAsGroup: 65534
+      fsGroup: 65534
+      seccompProfile:
+        type: RuntimeDefault
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: fs-mcp
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: fs-mcp
+
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: homelab
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
+  egress: []
