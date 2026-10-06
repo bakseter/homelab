@@ -21,7 +21,7 @@ spec:
 
     volumes:
       - name: tmp
-        emtpyDir:
+        emptyDir:
           sizeLimit: 64Mi
 
     volumeMounts:
