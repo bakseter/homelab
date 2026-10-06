@@ -17,15 +17,18 @@ spec:
           kind: RemoteMCPServer
           toolNames:
             - get_file_contents
-            - search_code
             - list_commits
             - search_repositories
+            - get_latest_release
+            - list_releases
 
       - type: McpServer
         mcpServer:
           apiGroup: kagent.dev
           name: fetch-mcp
           kind: MCPServer
+          toolNames:
+            - fetch
 
       - type: McpServer
         mcpServer:
