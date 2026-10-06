@@ -110,9 +110,9 @@ spec:
         - matchName: 'tailscale.com'
         - matchName: 'velero.io'
         # Hardware
-        - matchName: 'proshop.no'
-        - matchName: 'kjell.com'
-        - matchName: 'komplett.no'
+        - matchPattern: '*.proshop.no'
+        - matchPattern: '*.kjell.com'
+        - matchPattern: '*.komplett.no'
         - matchName: 'mikrotik.com'
       toPorts:
         - ports:

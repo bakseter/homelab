@@ -7,7 +7,7 @@ spec:
   description: For discussion of homelab architecture and hardware decisions.
   type: Declarative
   declarative:
-    modelConfig: zai-glm-5-3
+    modelConfig: mistral-large-4
     stream: true
     tools:
       - type: McpServer
