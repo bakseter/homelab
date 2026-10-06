@@ -79,8 +79,6 @@ kagent:
           timeout: 15
           insecure: true
 
-  kmcp:
-    enabled: false
   kagent-tools:
     enabled: false
   grafana-mcp:
