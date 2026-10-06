@@ -9,7 +9,7 @@ spec:
   timeout: 60s
 
   deployment:
-    image: ghcr.io/bakseter/mcp-server-fetch:2026.8.18 
+    image: ghcr.io/bakseter/homelab/mcp-server-fetch:2026.8.18@sha256:4c03439af10452579dddf2ba4748410b0a36915708642ed809af91b965de2c4a
     port: 3000
     replicas: 1
     cmd: /app/.venv/bin/mcp-server-fetch
