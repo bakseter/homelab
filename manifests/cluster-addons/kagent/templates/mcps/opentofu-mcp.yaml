@@ -6,6 +6,6 @@ metadata:
 spec:
   description: For accessing the OpenTofu Registry.
   protocol: STREAMABLE_HTTP
-  url: https://mcp.opentofu.org
+  url: https://mcp.opentofu.org/mcp
   timeout: 30s
   terminateOnClose: false
