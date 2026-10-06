@@ -71,7 +71,7 @@ spec:
             app.kubernetes.io/component: controller
         - matchLabels:
             app.kubernetes.io/managed-by: kagent
-            app.kubernetes.io/name: homelab
+            app.kubernetes.io/name: homelab-agent
       toPorts:
         - ports:
             - port: '3000'
