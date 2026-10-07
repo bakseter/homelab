@@ -13,6 +13,7 @@ data "talos_client_configuration" "talosconfig" {
 data "talos_machine_configuration" "machineconfig_controlplane" {
   for_each = local.virtual_controlplane_nodes
 
+  talos_version    = local.talos_version
   cluster_name     = local.cluster_name
   cluster_endpoint = "https://${each.value.ip}:6443"
   machine_type     = each.value.type

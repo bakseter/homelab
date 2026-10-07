@@ -34,34 +34,6 @@ resource "talos_image_factory_schematic" "initial-talos" {
   )
 }
 
-data "talos_image_factory_extensions_versions" "talos" {
-  talos_version = local.talos_version
-
-  filters = {
-    names = [
-      # TODO: don't install for AMD hosts
-      "siderolabs/i915",
-      "siderolabs/intel-ucode",
-      #
-      "siderolabs/iscsi-tools",
-      "siderolabs/qemu-guest-agent",
-      "siderolabs/util-linux-tools",
-    ]
-  }
-}
-
-resource "talos_image_factory_schematic" "talos" {
-  schematic = yamlencode(
-    {
-      customization = {
-        systemExtensions = {
-          officialExtensions = data.talos_image_factory_extensions_versions.talos.extensions_info.*.name
-        }
-      }
-    }
-  )
-}
-
 resource "proxmox_download_file" "talos-nocloud-image" {
   for_each = local.nodes
 
