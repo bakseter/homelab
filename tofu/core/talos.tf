@@ -37,8 +37,8 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
         node_ip                 = each.value.ip
         node_type               = each.value.type
         virtual_ip_controlplane = local.virtual_ip_controlplane
-        talos_schematic_id      = talos_image_factory_schematic.talos.id
-        talos_version           = local.talos_version
+        // talos_schematic_id      = talos_image_factory_schematic.talos.id
+        talos_version = local.talos_version
       }
     ),
     templatefile(
@@ -83,10 +83,9 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
     try(each.value.longhorn.enabled, false) ? templatefile(
       "${path.module}/manifests/longhorn-patches.yaml.tmpl",
       {
-        extension_image_refs = data.talos_image_factory_extensions_versions.talos.extensions_info.*.ref
-        mount_path           = try(each.value.longhorn.mountPath, "")
-        disk_path            = try(each.value.longhorn.diskPath, "")
-        volume_uuid          = try(each.value.longhorn.volume.uuid, "")
+        mount_path  = try(each.value.longhorn.mountPath, "")
+        disk_path   = try(each.value.longhorn.diskPath, "")
+        volume_uuid = try(each.value.longhorn.volume.uuid, "")
       },
     ) : "",
     try(each.value.igpu.enabled, false) ? file(
