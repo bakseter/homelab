@@ -36,7 +36,7 @@ nodes:
         memory: 6
         disk: 50
         ip: 192.168.30.121
-        build:
+        agent:
           enabled: true
 
   m720q:

@@ -1,0 +1,8 @@
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  node-role.bakseter.net/agent: 'true'
+# Not registered after creation, so must be manually applied.
+# Kept here for reproducability.
+taints:
+  node-role.bakseter.net/agent: 'true:NoSchedule'
