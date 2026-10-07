@@ -60,29 +60,24 @@ spec:
     deployment:
       replicas: 1
       imageRegistry: ghcr.io
-
       resources:
         requests:
           cpu: 100m
           memory: 128Mi
         limits:
           memory: 512Mi
-
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:
           drop:
             - ALL
         readOnlyRootFilesystem: true
-
       volumes:
         - name: tmp
           emptyDir: {}
-
       volumeMounts:
         - name: tmp
           mountPath: /tmp
-
       podSecurityContext:
         runAsNonRoot: true
         runAsUser: 65534
@@ -90,6 +85,13 @@ spec:
         fsGroup: 65534
         seccompProfile:
           type: RuntimeDefault
+      tolerations:
+        - key: node-role.bakseter.net/agent
+          operator: Equal
+          value: 'true'
+          effect: NoSchedule
+      nodeSelector:
+        node-role.bakseter.net/agent: 'true'
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

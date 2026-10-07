@@ -5,29 +5,26 @@ metadata:
   namespace: kagent
 spec:
   transportType: stdio
-  stdioTransport: {}
-  timeout: 60s
-
   deployment:
-    image: ghcr.io/bakseter/homelab/mcp-server-fetch:2026.8.18@sha256:4c03439af10452579dddf2ba4748410b0a36915708642ed809af91b965de2c4a
-    port: 3000
     replicas: 1
+    image: ghcr.io/bakseter/homelab/mcp-server-fetch:2026.8.18@sha256:4c03439af10452579dddf2ba4748410b0a36915708642ed809af91b965de2c4a
     cmd: /app/.venv/bin/mcp-server-fetch
-    args: []
-
     env:
       HOME: /tmp
       PYTHONDONTWRITEBYTECODE: '1'
-
     volumes:
       - name: tmp
         emptyDir:
           sizeLimit: 64Mi
-
     volumeMounts:
       - name: tmp
         mountPath: /tmp
-
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 512Mi
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 65534
@@ -35,20 +32,19 @@ spec:
       fsGroup: 65534
       seccompProfile:
         type: RuntimeDefault
-
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
           - ALL
       readOnlyRootFilesystem: true
-
-    resources:
-      requests:
-        cpu: 50m
-        memory: 128Mi
-      limits:
-        memory: 512Mi
+    tolerations:
+      - key: node-role.bakseter.net/agent
+        operator: Equal
+        value: 'true'
+        effect: NoSchedule
+    nodeSelector:
+      node-role.bakseter.net/agent: 'true'
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
