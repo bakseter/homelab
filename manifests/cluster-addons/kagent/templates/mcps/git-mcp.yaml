@@ -63,13 +63,13 @@ spec:
         drop:
           - ALL
       readOnlyRootFilesystem: true
-    tolerations:
-      - key: node-role.bakseter.net/agent
-        operator: Equal
-        value: 'true'
-        effect: NoSchedule
-    nodeSelector:
-      node-role.bakseter.net/agent: 'true'
+#   tolerations:
+#     - key: node-role.bakseter.net/agent
+#       operator: Equal
+#       value: 'true'
+#       effect: NoSchedule
+#   nodeSelector:
+#     node-role.bakseter.net/agent: 'true'
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
