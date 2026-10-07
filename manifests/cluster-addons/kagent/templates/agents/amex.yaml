@@ -73,6 +73,15 @@ spec:
         fsGroup: 65534
         seccompProfile:
           type: RuntimeDefault
+
+      tolerations:
+        - key: node-role.bakseter.net/agent
+          operator: Equal
+          value: 'true'
+          effect: NoSchedule
+
+      nodeSelector:
+        node-role.bakseter.net/agent: 'true'
 ---
 apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
