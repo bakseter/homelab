@@ -36,3 +36,4 @@ spec:
   provider: OpenAI
   openAI:
     baseUrl: https://api.mistral.ai/v1
+    reasoningEffort: none
