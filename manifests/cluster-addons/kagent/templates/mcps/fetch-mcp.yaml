@@ -103,7 +103,7 @@ spec:
         - matchName: 'goharbor.io'
         - matchName: 'grafana.com'
         - matchName: 'help.mikrotik.com'
-        - matchName: 'kagent.io'
+        - matchName: 'kagent.dev'
         - matchName: 'kubernetes.io'
         - matchName: 'prometheus.io'
         - matchName: 'pve.proxmox.com'
