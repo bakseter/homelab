@@ -3,5 +3,5 @@ name: immich-umbrella
 version: 0.1.0
 dependencies:
   - name: immich
-    version: 0.13.3
+    version: 0.13.4
     repository: oci://ghcr.io/immich-app/immich-charts
