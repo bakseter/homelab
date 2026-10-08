@@ -7,8 +7,9 @@ labels:
       app.kubernetes.io/name: audiobookshelf
 
 resources:
-  - deployment.yaml
-  - service.yaml
-  - persistentvolumeclaim.yaml
   - ciliumnetworkpolicy.yaml
+  - deployment.yaml
   - httproute.yaml
+  - loadbalancer.yaml
+  - persistentvolumeclaim.yaml
+  - service.yaml

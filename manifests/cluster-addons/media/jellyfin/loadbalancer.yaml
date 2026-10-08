@@ -4,8 +4,6 @@ metadata:
   name: jellyfin-lan
   namespace: media
   labels:
-    app.kubernetes.io/instance: jellyfin
-    app.kubernetes.io/name: jellyfin
     l2-announce: 'true'
 spec:
   type: LoadBalancer
