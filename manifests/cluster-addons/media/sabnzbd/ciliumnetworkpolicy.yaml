@@ -8,9 +8,22 @@ spec:
     matchLabels:
       app.kubernetes.io/name: sabnzbd
 
-  # TODO: harden
   ingress:
-    - toPorts:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway-system
+            app.kubernetes.io/name: envoy
+            gateway.envoyproxy.io/owning-gateway-name: tailscale-home
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus-blackbox-exporter
+        - matchLabels:
+            app.kubernetes.io/name: radarr
+        - matchLabels:
+            app.kubernetes.io/name: sonarr
+        - matchLabels:
+            app.kubernetes.io/name: lidarr
+      toPorts:
         - ports:
             - port: '8080'
               protocol: TCP
@@ -28,6 +41,9 @@ spec:
             dns:
               - matchPattern: '*'
 
-    # TODO: restrict
-    - toEntities:
-        - world
+    - toFQDNs:
+        - matchName: 'news.eweka.nl'
+      toPorts:
+        - ports:
+            - port: '563'
+              protocol: TCP
