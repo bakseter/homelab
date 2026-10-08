@@ -117,7 +117,7 @@ spec:
         - matchName: 'authentik.bakseter.no'
         - matchName: 'bakseter.no'
         - matchPattern: '*.bakseter.no'
-        - matcHname: 'mandagsmiddag.no'
+        - matchName: 'mandagsmiddag.no'
       toPorts:
         - ports:
             - port: '443'
