@@ -1,7 +1,7 @@
 argocd-image-updater:
   image:
     repository: quay.io/argoprojlabs/argocd-image-updater
-    tag: v1.3.0@sha256:cb009167015c6212ea21de55dd5734cf123d8b8e95f40ac09b1f1aa1839fad5b
+    tag: v1.3.1@sha256:a578e328e8cbc51badecddea26594247e6d808908d7da8ba127eeb5ac3725f7e
 
   config:
     registries:
