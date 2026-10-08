@@ -65,11 +65,6 @@ spec:
             - port: '8686'
               protocol: TCP
 
-    - toPorts:
-        - ports:
-            - port: '6969'
-              protocol: TCP
-
     - toFQDNs:
         - matchName: 'prowlarr.servarr.com'
         - matchName: 'indexers.prowlarr.com'
