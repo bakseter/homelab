@@ -106,10 +106,18 @@ spec:
         - matchName: 'tailscale.com'
         - matchName: 'velero.io'
         # Hardware
+        - matchName: 'proshop.no'
         - matchPattern: '*.proshop.no'
+        - matchName: 'kjell.com'
         - matchPattern: '*.kjell.com'
+        - matchName: 'komplett.no'
         - matchPattern: '*.komplett.no'
         - matchName: 'mikrotik.com'
+        # Public-facing services
+        - matchName: 'authentik.bakseter.no'
+        - matchName: 'bakseter.no'
+        - matchPattern: '*.bakseter.no'
+        - matcHname: 'mandagsmiddag.no'
       toPorts:
         - ports:
             - port: '443'
