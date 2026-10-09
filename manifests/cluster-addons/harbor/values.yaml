@@ -32,7 +32,7 @@ harbor:
     registry:
       image:
         repository: docker.io/goharbor/registry-photon
-        tag: v2.15.2@sha256:c4ebef61ceb50a3d8bc21d149bc280422db20a1e69df317b64b74098c3615855
+        tag: v2.15.3@sha256:6633841aea3a268f8c43c4083291023e3ffe481eb23aee7ee5b4162de0d034f0
 
     controller:
       image:
