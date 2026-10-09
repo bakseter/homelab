@@ -1,11 +1,23 @@
 #!/bin/bash
+
 set -euo pipefail
 
 LOG=/var/log/proxmox-auto-upgrade.log
 exec >>"$LOG" 2>&1
 echo "=== $(date -u '+%Y-%m-%d %H:%M:%S UTC') run on $(hostname) ==="
 
-if [ -f /var/run/reboot-required ]; then
+reboot_needed() {
+  if [ -f /var/run/reboot-required ]; then
+    return 0
+  fi
+
+  local running latest
+  running=$(uname -r)
+  latest=$(ls -t /boot/vmlinuz-* 2>/dev/null | head -1 | sed 's#/boot/vmlinuz-##')
+  [ -n "$latest" ] && [ "$running" != "$latest" ]
+}
+
+if reboot_needed; then
   echo "Reboot already pending, rebooting now."
   /sbin/reboot
   exit 0
@@ -15,7 +27,7 @@ apt-get update
 apt-get dist-upgrade -y
 apt-get autoremove -y
 
-if [ -f /var/run/reboot-required ]; then
+if reboot_needed; then
   echo "Reboot required, rebooting."
   /sbin/reboot
 else
