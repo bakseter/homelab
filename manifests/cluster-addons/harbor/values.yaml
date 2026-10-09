@@ -69,7 +69,7 @@ harbor:
     enabled: true
     image:
       repository: docker.io/goharbor/trivy-adapter-photon
-      tag: v2.15.2@sha256:215c07b71c37fc7fc16e02d9185d936dcb8884a80e810817c2cd058bbd7c4e98
+      tag: v2.15.3@sha256:12352dc823281ccb3e9ee3af4039f7b6c4eb7a575a0cd5ceae7f1e18af88d53f
 
     ignoreUnfixed: true
     severity: 'MEDIUM,HIGH,CRITICAL'
