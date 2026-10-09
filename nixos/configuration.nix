@@ -135,14 +135,11 @@
       "apps/cloudflare-account-id" = { };
       "apps/authentik-url" = { };
       "apps/authentik-token" = { };
-
-      "semaphore/registration-token" = { };
     };
 
     # One rendered env file, read two ways: systemd hands it to the container
     # as an EnvironmentFile, and the `tofu-env` alias sources it into your
-    # shell. Credentials reach tasks through the process environment, so they
-    # never enter Semaphore's database.
+    # shell. Credentials reach tasks through the process environment.
     #
     # EVERY VALUE IS SINGLE-QUOTED, and it has to be. systemd tolerates bare
     # spaces in an EnvironmentFile value; bash does not -- `VAR=a b c` runs
@@ -178,69 +175,7 @@
         TF_VAR_authentik_token='${config.sops.placeholder."apps/authentik-token"}'
       '';
     };
-
-    # Separate from tofu.env because that one is also sourced into your shell
-    # by the `tofu-env` alias, and Semaphore's token has no business there.
-    templates."semaphore.env" = {
-      mode = "0400";
-      content = ''
-        SEMAPHORE_RUNNER_TOKEN='${config.sops.placeholder."semaphore/registration-token"}'
-      '';
-    };
   };
-
-  # Semaphore isn't in nixpkgs, so the runner comes from upstream's image.
-  # oci-containers is the declarative-container layer: the unit below is a
-  # normal systemd service, generated from this, and nothing is stored outside
-  # git except the runner's own auth token.
-  #
-  # backend defaults to podman (no daemon, NixOS default). Set it to "docker"
-  # if you'd rather -- the container config is identical either way.
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers.semaphore-runner = {
-      image = "semaphoreui/runner:v2.19.14";
-
-      # Host networking: the runner has to reach the VLANs, the Talos API and
-      # your cluster ingress. This is the whole reason it lives on this box.
-      extraOptions = [ "--network=host" ];
-
-      environment = {
-        # Verify these names against `semaphore runner setup` for your image
-        # tag -- SEMAPHORE_RUNNER_* naming has shifted across 2.1x releases.
-        SEMAPHORE_WEB_ROOT = "https://semaphore.int.bakseter.net";
-        SEMAPHORE_RUNNER_CONFIG_FILE = "/var/lib/semaphore/runner.config";
-        TF_IN_AUTOMATION = "1";
-        TF_INPUT = "0";
-
-        # Nix toolchain first, image's own tooling behind it. Only meaningful
-        # with the /nix/store mount below; drop this line if you skip it.
-        PATH = "${pkgs.lib.makeBinPath config.environment.systemPackages}"
-          + ":/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
-      };
-
-      environmentFiles = [
-        config.sops.templates."tofu.env".path
-        config.sops.templates."semaphore.env".path
-      ];
-
-      volumes = [
-        "/var/lib/semaphore-runner:/var/lib/semaphore"
-
-        # OPTIONAL, but this is what buys back what the container costs you.
-        # The image ships its own tofu and ansible, and has no librouteros for
-        # the community.routeros API modules. Mounting the store and putting a
-        # nix-built toolchain first on PATH restores both, still flake-pinned.
-        # Drop this pair of lines if your MikroTik playbooks only use the
-        # SSH-based modules and you're happy with the image's tofu version.
-        "/nix/store:/nix/store:ro"
-      ];
-    };
-  };
-
-  systemd.tmpfiles.rules = [
-    "d /var/lib/semaphore-runner 0700 root root -"
-  ];
 
   system.stateVersion = "25.11"; # do not change
 }
