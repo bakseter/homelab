@@ -8,7 +8,7 @@ podSecurityContext:
   seccompProfile:
     type: RuntimeDefault
 
-replicas: 0
+replicas: 1
 
 securityContext:
   allowPrivilegeEscalation: false
