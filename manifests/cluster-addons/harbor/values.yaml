@@ -37,7 +37,7 @@ harbor:
     controller:
       image:
         repository: docker.io/goharbor/harbor-registryctl
-        tag: v2.15.2@sha256:223d5cb49d5dbf0ba4ae022e7dd9775fa459904112dc12084d3aaa36c1408362
+        tag: v2.15.3@sha256:59067e35534790a600ac625c8c9b96a52db27a08431c5ca822c46a1ea1ca8556
 
   updateStrategy:
     type: Recreate
