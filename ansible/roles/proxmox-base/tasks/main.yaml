@@ -24,6 +24,11 @@
       search lan
       nameserver 1.1.1.1
 
+- name: Set timezone to UTC
+  ansible.builtin.timezone:
+    name: UTC
+  notify: restart cron
+
 - name: Disable enterprise repository
   ansible.builtin.lineinfile:
     path: /etc/apt/sources.list.d/pve-enterprise.sources

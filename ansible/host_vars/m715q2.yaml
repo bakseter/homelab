@@ -1,2 +1,3 @@
+nic: enp2s0
 host_ip: 192.168.10.21
 host_ip_cluster: 192.168.20.21

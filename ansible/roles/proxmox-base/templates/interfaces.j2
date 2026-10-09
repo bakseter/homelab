@@ -1,12 +1,12 @@
 auto lo
 iface lo inet loopback
 
-iface enp2s0 inet manual
+iface {{ nic }} inet manual
 
 # VLAN-aware bridge
 auto vmbr0
 iface vmbr0 inet manual
-    bridge-ports enp2s0
+    bridge-ports {{ nic }}
     bridge-stp off
     bridge-fd 0
     bridge-vlan-aware yes
