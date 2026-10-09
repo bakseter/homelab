@@ -111,3 +111,20 @@
 - name: Setup Intel iGPU
   include_tasks: intel_igpu.yaml
   when: intel_igpu_enabled is defined
+
+- name: Install proxmox auto-upgrade script
+  template:
+    src: proxmox-auto-upgrade.sh.j2
+    dest: /usr/local/sbin/proxmox-auto-upgrade.sh
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Schedule weekly staggered auto-upgrade
+  cron:
+    name: proxmox-auto-upgrade
+    user: root
+    weekday: sun
+    minute: '{{ ((proxmox_hosts | map(attribute="short") | list).index(inventory_hostname) * 30) % 60 }}'
+    hour: '{{ 1 + ((proxmox_hosts | map(attribute="short") | list).index(inventory_hostname) * 30) // 60 }}'
+    job: /usr/local/sbin/proxmox-auto-upgrade.sh
