@@ -2,7 +2,7 @@ harbor:
   core:
     image:
       repository: docker.io/goharbor/harbor-core
-      tag: v2.15.2@sha256:d7b780d23721a000f0fb8e181add6675eafa336de5d033b77fd7da0c171ff7f7
+      tag: v2.15.3@sha256:2c9c9dd098258b768ecc8089482bbc7dacda80d75e6a5cfc07a06270c12ca90d
 
   portal:
     image:
