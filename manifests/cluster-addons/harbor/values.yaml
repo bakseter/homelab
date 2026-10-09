@@ -12,7 +12,7 @@ harbor:
   jobservice:
     image:
       repository: docker.io/goharbor/harbor-jobservice
-      tag: v2.15.2@sha256:f71a4452a095bcd2a8f0683648a3ae28415432df87ccfb00ec7625f3e340a598
+      tag: v2.15.3@sha256:32a09e77b2b0b20a24f6d2daefb66ad30b6efdf19b686127287e20a9c95fb8d1
 
   redis:
     internal:
