@@ -6,7 +6,7 @@ metadata:
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/instance: cnpg
+      app.kubernetes.io/instance: cloudnative-pg
       app.kubernetes.io/name: cloudnative-pg
 
   ingress:
