@@ -11,9 +11,6 @@ spec:
           - kube-system
           - cert-manager # TODO: make netpol and remove
 
-  ingress: []
-  egress: []
-
   enableDefaultDeny:
     ingress: true
     egress: true
