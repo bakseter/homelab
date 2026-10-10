@@ -2,11 +2,11 @@ intel-device-plugins-operator:
   manager:
     image:
       hub: intel
-      tag: 0.35.0@sha256:d7eeac081bd17e58d8d4d542f3cb33d67cc1bdab314b09ad591e8eacb51dd5ec
+      tag: 0.37.1@sha256:1e60686c2170c8316cc0fdc3f0f2058384d4a94064d2f8508eac605a013e05d9 # intel/intel-deviceplugin-operator
 
 intel-device-plugins-gpu:
   name: gpudeviceplugin
 
-# image:
-#   hub: intel
-#   tag:
+  image:
+    hub: intel
+    tag: 0.37.1@sha256:004641b2547d58f1eadce58473fa160ad71377de1eb588cf1f82832387bf3e33 # intel/intel-gpu-plugin
