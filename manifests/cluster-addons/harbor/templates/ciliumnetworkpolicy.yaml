@@ -95,6 +95,7 @@ spec:
         - matchName: 'auth.docker.io'
         - matchName: 'registry-1.docker.io'
         - matchName: 'ghcr.io'
+        - matchName: 'pkg-containers.githubusercontent.com'
       toPorts:
         - ports:
            - port: '443'
