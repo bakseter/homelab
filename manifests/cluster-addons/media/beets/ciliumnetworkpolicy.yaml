@@ -12,12 +12,6 @@ spec:
           - beets
           - beets-debug
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
-
   egress:
     - toEndpoints:
         - matchLabels:

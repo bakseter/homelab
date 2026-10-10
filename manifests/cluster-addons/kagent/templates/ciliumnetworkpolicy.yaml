@@ -9,12 +9,6 @@ spec:
       app.kubernetes.io/name: kagent
       app.kubernetes.io/component: controller
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
-
   egress:
     - toEndpoints:
         - matchLabels:

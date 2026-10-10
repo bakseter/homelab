@@ -95,10 +95,6 @@ spec:
       app.kubernetes.io/instance: immich
       app.kubernetes.io/name: valkey
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
   ingress:
     - fromEndpoints:
         - matchLabels:
@@ -108,8 +104,6 @@ spec:
         - ports:
             - port: '6379'
               protocol: TCP
-
-  egress: []
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

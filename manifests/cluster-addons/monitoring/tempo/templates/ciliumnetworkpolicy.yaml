@@ -9,12 +9,6 @@ spec:
       app.kubernetes.io/instance: tempo
       app.kubernetes.io/name: create-s3-buckets
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
-
   egress:
     - toEndpoints:
         - matchLabels:

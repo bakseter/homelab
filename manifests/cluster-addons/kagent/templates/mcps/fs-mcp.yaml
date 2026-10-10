@@ -67,10 +67,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: fs-mcp
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
   ingress:
     - fromEndpoints:
         - matchLabels:
@@ -83,5 +79,3 @@ spec:
         - ports:
             - port: '3000'
               protocol: TCP
-
-  egress: []

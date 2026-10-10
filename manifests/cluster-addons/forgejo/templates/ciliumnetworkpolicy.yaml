@@ -68,12 +68,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: homelab-copier
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
-
   egress:
     - toEndpoints:
         - matchLabels:

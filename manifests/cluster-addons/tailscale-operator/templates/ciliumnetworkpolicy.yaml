@@ -8,12 +8,6 @@ spec:
     matchLabels:
       app: operator
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
-
   egress:
     - toEndpoints:
         - matchLabels:

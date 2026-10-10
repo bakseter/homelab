@@ -6,10 +6,6 @@ metadata:
 spec:
   endpointSelector: {}
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
   ingress:
     - fromEndpoints:
         - matchLabels:
@@ -26,5 +22,3 @@ spec:
         - ports:
             - port: '5000'
               protocol: TCP
-
-  egress: []

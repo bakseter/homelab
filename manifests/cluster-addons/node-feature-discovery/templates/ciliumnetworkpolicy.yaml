@@ -9,12 +9,6 @@ spec:
       app.kubernetes.io/name: node-feature-discovery
       role: gc
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
-
   egress:
     - toEntities:
         - kube-apiserver
@@ -34,12 +28,6 @@ spec:
       app.kubernetes.io/name: node-feature-discovery
       role: worker
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
-
   egress:
     - toEntities:
         - kube-apiserver
@@ -58,12 +46,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: node-feature-discovery
       role: master
-
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
 
   egress:
     - toEntities:

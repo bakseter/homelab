@@ -9,12 +9,6 @@ spec:
       app.kubernetes.io/instance: loki
       app.kubernetes.io/name: create-s3-buckets
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
-
   egress:
     - toEndpoints:
         - matchLabels:
@@ -235,12 +229,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: loki
       app.kubernetes.io/component: canary
-
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
 
   egress:
     - toEndpoints:
@@ -665,10 +653,6 @@ spec:
       app.kubernetes.io/name: loki
       app.kubernetes.io/component: query-scheduler
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
   ingress:
     - fromEndpoints:
         - matchLabels:
@@ -681,8 +665,6 @@ spec:
         - ports:
             - port: '9095'
               protocol: TCP
-
-  egress: []
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

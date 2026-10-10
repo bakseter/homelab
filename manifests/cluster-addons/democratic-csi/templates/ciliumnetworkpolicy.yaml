@@ -46,12 +46,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: snapshot-controller
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
-
   egress:
     - toEndpoints:
         - matchLabels:

@@ -8,10 +8,6 @@ spec:
     matchLabels:
       app: longhorn-ui
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
   ingress:
     - fromEndpoints:
         - matchLabels:
@@ -25,8 +21,6 @@ spec:
         - ports:
             - port: '8000'
               protocol: TCP
-
-  egress: []
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

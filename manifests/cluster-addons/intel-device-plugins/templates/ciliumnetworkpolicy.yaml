@@ -8,10 +8,6 @@ spec:
     matchLabels:
       control-plane: controller-manager
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
   ingress:
     - fromEntities:
         - remote-node
