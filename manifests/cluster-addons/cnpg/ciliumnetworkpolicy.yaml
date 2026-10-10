@@ -1,7 +1,7 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: cnpg
+  name: cloudnative-pg
   namespace: cnpg-system
 spec:
   endpointSelector:
@@ -17,6 +17,13 @@ spec:
       toPorts:
         - ports:
             - port: '8080'
+              protocol: TCP
+
+    - fromEntities:
+        - remote-node
+      toPorts:
+        - ports:
+            - port: '9443'
               protocol: TCP
 
   egress:
