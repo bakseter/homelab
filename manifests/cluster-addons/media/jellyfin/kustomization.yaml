@@ -27,3 +27,11 @@ patches:
       - op: add
         path: /metadata/labels/recurring-job-group.longhorn.io~1hetzner-backup
         value: 'enabled'
+
+  - target:
+      kind: Deployment
+      name: jellyfin
+    patch: |-
+      - op: add
+        path: /spec/template/spec/hostname
+        value: 'Homeflix'
