@@ -277,6 +277,19 @@ spec:
               protocol: TCP
             - port: '8080'
               protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
