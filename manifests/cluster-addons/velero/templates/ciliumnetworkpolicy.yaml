@@ -95,3 +95,21 @@ spec:
         - ports:
             - port: '443'
               protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: velero-upgrade-crds
+  namespace: velero
+spec:
+  endpointSelector:
+    matchLabels:
+      batch.kubernetes.io/job-name: velero-upgrade-crds
+
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
