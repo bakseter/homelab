@@ -53,6 +53,8 @@ spec:
         - matchName: 'www.omdbapi.com'
         - matchName: 'image.tmdb.org'
         #
+        - matchName: 'm.media-amazon.com'
+        #
         - matchName: 'plugins.neptuneplayer.com'
       toPorts:
         - ports:
