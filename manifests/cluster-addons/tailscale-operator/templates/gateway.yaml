@@ -31,7 +31,7 @@ spec:
       port: 22
       allowedRoutes:
         kinds:
-        - kind: TCPRoute
+          - kind: TCPRoute
         namespaces:
           from: Selector
           selector:

@@ -123,3 +123,20 @@ spec:
         - ports:
             - port: '443'
               protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: share-manager
+  namespace: longhorn-system
+spec:
+  endpointSelector:
+    longhorn.io/component: share-manager
+
+  ingress:
+    - fromEntities:
+        - remote-node
+      toPorts:
+        - ports:
+            - port: '2049'
+              protocol: TCP
