@@ -107,19 +107,16 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: harbor
             app.kubernetes.io/component: core
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: trivy
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: jobservice
       toPorts:
         - ports:
             - port: '6379'
               protocol: TCP
-
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: harbor
-            app.kubernetes.io/component: trivy
-      toPorts:
-        - ports:
-           - port: '6379'
-             protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -152,6 +149,15 @@ spec:
       toPorts:
         - ports:
            - port: '8080'
+             protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: redis
+      toPorts:
+        - ports:
+           - port: '6379'
              protocol: TCP
 
     - toEndpoints:
