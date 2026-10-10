@@ -122,6 +122,9 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: harbor
             app.kubernetes.io/component: jobservice
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: registry
       toPorts:
         - ports:
             - port: '6379'
@@ -290,6 +293,15 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: redis
+      toPorts:
+        - ports:
+           - port: '6379'
+             protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
