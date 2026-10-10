@@ -76,6 +76,15 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: jobservice
+      toPorts:
+        - ports:
+           - port: '8080'
+             protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
             app.kubernetes.io/instance: harbor-database
       toPorts:
         - ports:
@@ -127,6 +136,16 @@ spec:
     matchLabels:
       app.kubernetes.io/name: harbor
       app.kubernetes.io/component: jobservice
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: core
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
 
   egress:
     - toEndpoints:
