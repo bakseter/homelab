@@ -225,8 +225,6 @@ resource "authentik_application" "five31" {
   name              = "5/3/1 Program"
   slug              = "five31"
   protocol_provider = authentik_provider_oauth2.five31.id
-
-  meta_launch_url = "https://five31.bakseter.net"
 }
 
 resource "authentik_group" "five31-users" {
@@ -281,8 +279,7 @@ resource "authentik_application" "mandagsmiddag" {
   slug              = "mandagsmiddag"
   protocol_provider = authentik_provider_oauth2.mandagsmiddag.id
 
-  meta_launch_url = "https://mandagsmiddag.no"
-  meta_icon       = "https://mandagsmiddag.no/icon.png"
+  meta_icon = "https://mandagsmiddag.no/icon.png"
 }
 
 /*
@@ -335,7 +332,7 @@ resource "authentik_application" "forgejo" {
   slug              = "forgejo"
   protocol_provider = authentik_provider_oauth2.forgejo.id
 
-  meta_launch_url = "https://git.int.bakseter.net"
+  meta_icon = "https://commons.wikimedia.org/wiki/File:Forgejo_logo.svg"
 }
 
 resource "authentik_group" "forgejo-admins" {
@@ -348,59 +345,6 @@ resource "authentik_group" "forgejo-admins" {
 resource "authentik_policy_binding" "forgejo-access" {
   target = authentik_application.forgejo.uuid
   group  = authentik_group.forgejo-admins.id
-  order  = 0
-}
-
-
-#### semaphore
-
-resource "authentik_provider_oauth2" "semaphore" {
-  name      = "semaphore"
-  client_id = "semaphore"
-
-  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
-  invalidation_flow  = data.authentik_flow.default-provider-invalidation-flow.id
-
-  sub_mode = "user_username"
-
-  signing_key       = data.authentik_certificate_key_pair.default.id
-  property_mappings = data.authentik_property_mapping_provider_scope.scopes.ids
-
-  access_token_validity  = "hours=1"
-  refresh_token_validity = "days=30"
-
-  grant_types = [
-    "authorization_code",
-    "refresh_token",
-  ]
-
-  allowed_redirect_uris = [
-    {
-      matching_mode     = "strict"
-      redirect_uri_type = "authorization"
-      url               = "https://semaphore.int.bakseter.net/api/auth/oidc/authentik/redirect/"
-    }
-  ]
-}
-
-resource "authentik_application" "semaphore" {
-  name              = "semaphore"
-  slug              = "semaphore"
-  protocol_provider = authentik_provider_oauth2.semaphore.id
-
-  meta_launch_url = "https://semaphore.int.bakseter.net"
-}
-
-resource "authentik_group" "semaphore-admins" {
-  name = "semaphore-admins"
-  users = [
-    data.authentik_user.a.id,
-  ]
-}
-
-resource "authentik_policy_binding" "semaphore-access" {
-  target = authentik_application.semaphore.uuid
-  group  = authentik_group.semaphore-admins.id
   order  = 0
 }
 
