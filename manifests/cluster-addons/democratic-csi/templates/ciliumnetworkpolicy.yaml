@@ -7,13 +7,7 @@ spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: democratic-csi
-      app.kubernetes.io/component: controller
-
-  enableDefaultDeny:
-    ingress: true
-    egress: true
-
-  ingress: []
+      app.kubernetes.io/component: controller-linux
 
   egress:
     - toEndpoints:
