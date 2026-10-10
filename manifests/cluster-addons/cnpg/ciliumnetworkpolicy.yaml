@@ -9,9 +9,15 @@ spec:
       app.kubernetes.io/instance: cnpg
       app.kubernetes.io/name: cloudnative-pg
 
-  enableDefaultDeny:
-    ingress: true
-    egress: true
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
 
   egress:
     - toEntities:
