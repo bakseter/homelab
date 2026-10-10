@@ -9,18 +9,6 @@ spec:
       app.kubernetes.io/name: harbor
       app.kubernetes.io/component: core
 
-  ingress:
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: cnpg-system
-            app.kubernetes.io/name: cloudnative-pg
-      toPorts:
-        - ports:
-            - port: '5432'
-              protocol: TCP
-            - port: '8000'
-              protocol: TCP
-
   egress:
     - toEndpoints:
         - matchLabels:
@@ -34,13 +22,31 @@ spec:
             dns:
               - matchPattern: '*'
 
-    - toFQDNs:
-        - matchName: 'registry-1.docker.io'
-        - matchName: 'ghcr.io'
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: redis
       toPorts:
         - ports:
-           - port: '443'
+           - port: '6379'
              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: registry
+      toPorts:
+        - ports:
+           - port: '5000'
+             protocol: TCP
+
+#   - toFQDNs:
+#       - matchName: 'registry-1.docker.io'
+#       - matchName: 'ghcr.io'
+#     toPorts:
+#       - ports:
+#          - port: '443'
+#            protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
