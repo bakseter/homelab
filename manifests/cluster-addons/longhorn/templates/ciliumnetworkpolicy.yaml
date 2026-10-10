@@ -91,3 +91,19 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-kube-apiserver
+  namespace: longhorn-system
+spec:
+  endpointSelector: {}
+
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
