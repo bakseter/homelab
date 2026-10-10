@@ -58,7 +58,7 @@ metadata:
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/instance: vaultwarden
+      app.kubernetes.io/instance: vaultwarden-database
 
   ingress:
     - fromEndpoints:
