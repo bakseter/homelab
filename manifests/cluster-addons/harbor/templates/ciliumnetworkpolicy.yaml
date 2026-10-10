@@ -94,6 +94,7 @@ spec:
     - toFQDNs:
         - matchName: 'auth.docker.io'
         - matchName: 'registry-1.docker.io'
+        - matchName: 'production.cloudfront.docker.com'
         - matchName: 'ghcr.io'
         - matchName: 'pkg-containers.githubusercontent.com'
       toPorts:
