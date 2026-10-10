@@ -96,6 +96,15 @@ spec:
         - ports:
             - port: '6379'
               protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: trivy
+      toPorts:
+        - ports:
+           - port: '6379'
+             protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -154,6 +163,15 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: redis
+      toPorts:
+        - ports:
+           - port: '6379'
+             protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -174,6 +192,27 @@ spec:
       toPorts:
         - ports:
             - port: '8080'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: harbor-registry
+  namespace: harbor
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: harbor
+      app.kubernetes.io/component: registry
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: core
+      toPorts:
+        - ports:
+            - port: '5000'
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
