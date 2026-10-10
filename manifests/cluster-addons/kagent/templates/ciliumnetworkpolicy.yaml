@@ -9,6 +9,16 @@ spec:
       app.kubernetes.io/name: kagent
       app.kubernetes.io/component: controller
 
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: ui
+      toPorts:
+        - ports:
+            - port: '8083'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
@@ -182,4 +192,23 @@ spec:
       toPorts:
         - ports:
             - port: '8083'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kmcp-controller-manager
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kmcp
+      control-plane: controller-manager
+
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
               protocol: TCP
