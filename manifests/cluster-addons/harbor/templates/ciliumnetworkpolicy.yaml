@@ -91,13 +91,13 @@ spec:
            - port: '5432'
              protocol: TCP
 
-#   - toFQDNs:
-#       - matchName: 'registry-1.docker.io'
-#       - matchName: 'ghcr.io'
-#     toPorts:
-#       - ports:
-#          - port: '443'
-#            protocol: TCP
+    - toFQDNs:
+        - matchName: 'registry-1.docker.io'
+        - matchName: 'ghcr.io'
+      toPorts:
+        - ports:
+           - port: '443'
+             protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
