@@ -1,6 +1,6 @@
 image:
   repository: docker.io/jellyfin/jellyfin
-  tag: 10.11.11@sha256:aefb67e6a7ff1debdd154a78a7bbb780fd0c873d8639210a7f6a2016ad2b35db
+  tag: 12.2@sha256:357724bf0ae27a672c7cbaa899db2d9abeb13dbd8657ccce750258a4c059d037
 
 resources:
   limits:
@@ -51,5 +51,7 @@ volumeMounts:
 
 jellyfin:
   env:
+    - name: JELLYFIN_CACHE_DIR
+      value: /cache
     - name: JELLYFIN_LOG_DIR
       value: /log
