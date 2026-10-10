@@ -26,6 +26,18 @@
     {
       "matchPackageNames": ["/prometheus/", "/kube-state-metrics/"],
       "groupName": "kube-prometheus-stack"
+    },
+    {
+      "matchPackageNames": ["/harbor/"],
+      "groupName": "harbor"
+    },
+    {
+      "matchPackageNames": ["/vaultwarden/"],
+      "groupName": "vaultwarden"
+    },
+    {
+      "matchPackageNames": ["/immich/"],
+      "groupName": "immich"
     }
   ]
 }
