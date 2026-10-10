@@ -107,3 +107,19 @@ spec:
         - ports:
             - port: '6443'
               protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-backup
+  namespace: longhorn-system
+spec:
+  endpointSelector: {}
+
+  egress:
+    - toFQDNs:
+        - matchName: 'hel1.your-objectstorage.com'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
