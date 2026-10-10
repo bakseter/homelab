@@ -135,3 +135,21 @@ spec:
         - ports:
             - port: '2049'
               protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: longhorn-manager
+  namespace: longhorn-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app: longhorn-manager
+
+  egress:
+    - toFQDNs:
+        - matchName: 'longhorn-upgrade-responder.rancher.io'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
