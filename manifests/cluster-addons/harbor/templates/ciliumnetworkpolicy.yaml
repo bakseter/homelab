@@ -51,6 +51,14 @@ spec:
            - port: '5000'
              protocol: TCP
 
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: harbor-database
+      toPorts:
+        - ports:
+           - port: '5432'
+             protocol: TCP
+
 #   - toFQDNs:
 #       - matchName: 'registry-1.docker.io'
 #       - matchName: 'ghcr.io'
