@@ -92,6 +92,7 @@ spec:
              protocol: TCP
 
     - toFQDNs:
+        - matchName: 'auth.docker.io'
         - matchName: 'registry-1.docker.io'
         - matchName: 'ghcr.io'
       toPorts:
