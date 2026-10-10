@@ -34,4 +34,4 @@ patches:
     patch: |-
       - op: add
         path: /spec/template/spec/hostname
-        value: 'Homeflix'
+        value: 'homeflix'
