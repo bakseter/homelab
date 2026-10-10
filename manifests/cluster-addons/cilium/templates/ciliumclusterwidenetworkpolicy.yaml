@@ -1,0 +1,16 @@
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  endpointSelector:
+    matchExpressions:
+      - key: io.kubernetes.pod.namespace
+        operator: NotIn
+        values:
+          - kube-system
+          - cert-manager # TODO: make netpol and remove
+
+  enableDefaultDeny:
+    ingress: true
+    egress: true
