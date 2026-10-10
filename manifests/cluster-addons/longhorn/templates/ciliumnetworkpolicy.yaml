@@ -131,7 +131,8 @@ metadata:
   namespace: longhorn-system
 spec:
   endpointSelector:
-    longhorn.io/component: share-manager
+    matchLabels:
+      longhorn.io/component: share-manager
 
   ingress:
     - fromEntities:
