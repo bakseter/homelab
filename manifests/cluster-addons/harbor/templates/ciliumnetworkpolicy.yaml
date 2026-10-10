@@ -45,6 +45,15 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: trivy
+      toPorts:
+        - ports:
+           - port: '8000'
+             protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: harbor
             app.kubernetes.io/component: registry
       toPorts:
         - ports:
@@ -86,6 +95,85 @@ spec:
       toPorts:
         - ports:
             - port: '6379'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: harbor-jobservice
+  namespace: harbor
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: harbor
+      app.kubernetes.io/component: jobservice
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: harbor-trivy
+  namespace: harbor
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: harbor
+      app.kubernetes.io/component: trivy
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: core
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: harbor-portal
+  namespace: harbor
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: harbor
+      app.kubernetes.io/component: portal
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: harbor
+            app.kubernetes.io/component: core
+      toPorts:
+        - ports:
+            - port: '8080'
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
