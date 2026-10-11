@@ -179,7 +179,7 @@
 
   system.autoUpgrade = {
     enable = true;
-    flake = "/home/ops/homelab/flake.nix";
+    flake = "/home/ops/homelab";
     flags = [
       "--print-build-logs"
     ];
