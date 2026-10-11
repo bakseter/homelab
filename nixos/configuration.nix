@@ -177,5 +177,15 @@
     };
   };
 
+  system.autoUpgrade = {
+    enable = true;
+    flake = "/home/ops/homelab/flake.nix";
+    flags = [
+      "--print-build-logs"
+    ];
+    dates = "02:00";
+    randomizedDelaySec = "45min";
+  };
+
   system.stateVersion = "25.11"; # do not change
 }
