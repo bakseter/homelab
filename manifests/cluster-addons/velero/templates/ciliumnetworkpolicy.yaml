@@ -113,3 +113,22 @@ spec:
         - ports:
             - port: '6443'
               protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: velero-data-upload
+  namespace: velero
+spec:
+  endpointSelector:
+    matchExpressions:
+      - key: velero.io/data-upload
+        operator: Exists
+
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
