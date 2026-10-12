@@ -2,23 +2,23 @@ harbor:
   core:
     image:
       repository: docker.io/goharbor/harbor-core
-      tag: v2.15.3@sha256:2c9c9dd098258b768ecc8089482bbc7dacda80d75e6a5cfc07a06270c12ca90d
+      tag: v2.15.4@sha256:7d2ba5304a729887cdec7cb222a82b500278423de230ae5150c386a6c332b112
 
   portal:
     image:
       repository: docker.io/goharbor/harbor-portal
-      tag: v2.15.3@sha256:30278a07321521a409946bfcbdec63f8c43d69892a2155a5e8d1ab7f10d206a1
+      tag: v2.15.4@sha256:01edf478505b21dba23a83c095f6ecac0c1e705690093edbab41e9a4d6754a75
 
   jobservice:
     image:
       repository: docker.io/goharbor/harbor-jobservice
-      tag: v2.15.3@sha256:32a09e77b2b0b20a24f6d2daefb66ad30b6efdf19b686127287e20a9c95fb8d1
+      tag: v2.15.4@sha256:f143578ef30e2be5c48873298257ed0fca31545025958c534e536a06765d2b82
 
   redis:
     internal:
       image:
         repository: docker.io/goharbor/valkey-photon
-        tag: v2.15.3@sha256:3a9b396bb1aa7a517a09b6e29d72f4f3fcd82dbb4ed09474f28062b63a79bc71
+        tag: v2.15.4@sha256:bb022e8f236f56f53cee7bb1f609595e497da67d829048e0af2284f97e6eb54f
 
   database:
     type: external
@@ -32,12 +32,12 @@ harbor:
     registry:
       image:
         repository: docker.io/goharbor/registry-photon
-        tag: v2.15.3@sha256:6633841aea3a268f8c43c4083291023e3ffe481eb23aee7ee5b4162de0d034f0
+        tag: v2.15.4@sha256:dc0cb388a6445c69c8a0c406679290d2991c9698833d9e6e86a23bdfaf2f83c3
 
     controller:
       image:
         repository: docker.io/goharbor/harbor-registryctl
-        tag: v2.15.3@sha256:59067e35534790a600ac625c8c9b96a52db27a08431c5ca822c46a1ea1ca8556
+        tag: v2.15.4@sha256:30bd1ace4e3bb390d75b84673f98ddb4a69fcc6d116932ea764391df01943fb7
 
   updateStrategy:
     type: Recreate
@@ -69,7 +69,7 @@ harbor:
     enabled: true
     image:
       repository: docker.io/goharbor/trivy-adapter-photon
-      tag: v2.15.3@sha256:12352dc823281ccb3e9ee3af4039f7b6c4eb7a575a0cd5ceae7f1e18af88d53f
+      tag: v2.15.4@sha256:813ca81b4a4ea0f44f5fa81cca2645eeb58d4b1f6c66b428df9d506174bb71d9
 
     ignoreUnfixed: true
     severity: 'MEDIUM,HIGH,CRITICAL'
