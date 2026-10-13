@@ -21,3 +21,27 @@ spec:
     - {}
   egress:
     - {}
+---
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: allow-cilium-l2-announcement-gossip
+spec:
+  nodeSelector:
+    matchLabels: {}
+
+  ingress:
+    - fromEntities:
+        - cluster
+      toPorts:
+        - ports:
+            - port: '37278'
+              protocol: ANY
+
+  egress:
+    - toEntities:
+        - cluster
+      toPorts:
+        - ports:
+            - port: '37278'
+              protocol: ANY
