@@ -2,7 +2,7 @@ tailscale-operator:
   operatorConfig:
     image:
       repository: docker.io/tailscale/k8s-operator
-      digest: sha256:eaef921470ada74a84ca8bbbf4a6a89452ed2581d51a0551758507aca8dc2a01 # v1.102.2
+      digest: sha256:3c8958c42fb3c46068e8553e11b944f2133b4671d4f36c86adc11f206746bf34 # v1.102.4
 
     podSecurityContext:
       seccompProfile:
