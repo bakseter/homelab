@@ -21,7 +21,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: beets
-              image: ghcr.io/bakseter/homelab/beets:2.14.1@sha256:981aaa54f54907f4882d2f791c65504a16643e55e60a3db02675bc59dd1ee86b
+              image: ghcr.io/bakseter/homelab/beets:2.14.1@sha256:c0fa7c6f002824f1ff94580a1a4fc70466b8c17cf652e48f2ecc99005feb522a
               command: ['/bin/sh', '-c']
               args:
                 - |
