@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: homelab-copier
 spec:
-  schedule: '*/30 * * * *' # every 30 minutes
+  schedule: '*/15 * * * *' # every 30 minutes
   timeZone: Europe/Oslo
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 600
@@ -31,16 +31,19 @@ spec:
                 - |
                   set -e
                   git config --global core.sshCommand 'ssh -i /var/run/secrets/homelab-copier/ssh-key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
-                  git clone https://github.com/bakseter/homelab /tmp/homelab
-                  cd /tmp/homelab
-                  git remote add forgejo git@forgejo-ssh.forgejo.svc.cluster.local:bakseter/homelab
-                  git push forgejo master
+
+                  for repo in amex bakseter-no five31 homelab; do
+                    git clone "https://github.com/bakseter/$repo" "/tmp/$repo"
+                    cd "/tmp/$repo"
+                    git remote add forgejo "git@forgejo-ssh.forgejo.svc.cluster.local:bakseter/$repo"
+                    git push forgejo master
+                  done
               env:
                 - name: HOME
                   value: /tmp
               resources:
                 limits:
-                  memory: 128Mi
+                  memory: 64Mi
                 requests:
                   memory: 16Mi
                   cpu: 50m
