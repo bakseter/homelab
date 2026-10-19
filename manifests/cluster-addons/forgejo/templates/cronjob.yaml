@@ -32,7 +32,7 @@ spec:
                   set -e
                   git config --global core.sshCommand 'ssh -i /var/run/secrets/homelab-copier/ssh-key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 
-                  for repo in amex bakseter-no five31 homelab; do
+                  for repo in amex bakseter.no five31 homelab; do
                     rm -rf "/tmp/$repo"
                     git clone "https://github.com/bakseter/$repo" "/tmp/$repo"
                     cd "/tmp/$repo"
