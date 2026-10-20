@@ -7,7 +7,7 @@ RUN uv venv /app/.venv && \
     uv pip install --python /app/.venv/bin/python "mcp-server-fetch==${FETCH_VERSION}"
 
 
-FROM python:3.14-slim-trixie
+FROM python:3.15-slim-trixie
 
 COPY --from=build /app/.venv /app/.venv
 
