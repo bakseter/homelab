@@ -38,7 +38,7 @@ jobs:
             -e "BASE_BRANCH=master" \
             -e "TARGET_BRANCH=refs/pull/$EVENT_NUMBER/merge" \
             -e "REPO=$REPOSITORY" \
-            dagandersen/argocd-diff-preview:v0.2.14@sha256:2cadb16274ba6834446573cbf514cec87caeec80a19690987fc1ac8338e27631 \
+            docker.io/dagandersen/argocd-diff-preview:v0.2.17@sha256:ea90848df29337b50d5058330210b38e39232360b78d9c60951fc92e454c6941 \
             --diff-ignore 'checksum/.+'
 
       - name: Post diff as comment
