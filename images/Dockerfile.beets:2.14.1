@@ -1,7 +1,7 @@
-FROM python:3.14-slim@sha256:00ebdcac87ebf7fd62576d8bbe8f8f1e94198befcc4e38c4db9671e61e0dfcfe
+FROM python:3.14-slim-trixie@sha256:fbecd461fc72d21b2143c6eaba25143738079154a6d0ea3da3aec724f50eed4a
  
 RUN pip install --no-cache-dir \
-      "beets[fetchart]==2.14.0" \
+      "beets[fetchart]==2.14.1" \
       pillow && \
     rm -rf /root/.cache
  

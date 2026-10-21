@@ -14,6 +14,7 @@ spec:
     env:
       HOME: /data
       NPM_CONFIG_CACHE: /data/.npm
+      NODE_OPTIONS: '--use-openssl-ca SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt'
     volumeMounts:
       - name: auth
         mountPath: /data
