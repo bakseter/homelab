@@ -18,7 +18,7 @@
           ./nixos/configuration.nix
           {
             nixpkgs.overlays = [
-              (_: _: { inherit (nixpkgs-unstable.legacyPackages.${system}) talosctl; })
+              (_: _: { inherit (nixpkgs-unstable.legacyPackages.${system}) tailscale talosctl; })
             ];
 
             nix.channel.enable = false;
