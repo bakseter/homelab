@@ -57,6 +57,8 @@ spec:
         - ports:
             - port: '8080'
               protocol: TCP
+            - port: '8083'
+              protocol: TCP
 
     # MCP servers
     - toEndpoints:
