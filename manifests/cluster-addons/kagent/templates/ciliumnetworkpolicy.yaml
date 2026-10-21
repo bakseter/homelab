@@ -14,6 +14,18 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: kagent
             app.kubernetes.io/component: ui
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: oda-agent
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: amex-agent
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: homelab-agent
+        - matchLabels:
+            app.kubernetes.io/managed-by: kagent
+            app.kubernetes.io/name: legal-agent
       toPorts:
         - ports:
             - port: '8083'
@@ -56,8 +68,6 @@ spec:
       toPorts:
         - ports:
             - port: '8080'
-              protocol: TCP
-            - port: '8083'
               protocol: TCP
 
     # MCP servers
