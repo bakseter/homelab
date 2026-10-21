@@ -25,7 +25,6 @@ jobs:
       fail-fast: false
       matrix:
         image:
-          - data.forgejo.org/forgejo/runner:13
           - beets:2.14.1
           - mcp-tools:1
           - alpine/git-cacerts:3.24
