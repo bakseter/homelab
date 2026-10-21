@@ -7,7 +7,7 @@ spec:
   transportType: stdio
   deployment:
     replicas: 1
-    image: ghcr.io/bakseter/homelab/mcp-tools:1@sha256:9edb7a3c7c7f8996525f18afcf0a8c7915b4df1e11fb278cd513fe59c199f170
+    image: ghcr.io/bakseter/homelab/mcp-tools:1@sha256:70ecb2193ff8134d488edfbe6927c23417f3ae5356ed371337a9c1a0d0b315dd
     cmd: mcp-server-filesystem
     args:
       - /workspace
