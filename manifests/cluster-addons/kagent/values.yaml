@@ -85,6 +85,10 @@ kagent:
     rbac:
       create: false
 
+    tools:
+      prometheus:
+        url: http://prometheus-operated.monitoring.svc.cluster.local:9090
+
     tolerations:
       - key: node-role.bakseter.net/agent
         operator: Equal
