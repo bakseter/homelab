@@ -49,7 +49,7 @@ argo-cd:
   redis:
     image:
       repository: ecr-public.aws.com/docker/library/redis
-      tag: 8.10.2-alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0
+      tag: 8.10.2-alpine@sha256:615b4cedaff0c1437a1548acae4222572df8c021eeb7382d64cb8b5e3a13ac7a
 
   controller:
     replicas: 1
