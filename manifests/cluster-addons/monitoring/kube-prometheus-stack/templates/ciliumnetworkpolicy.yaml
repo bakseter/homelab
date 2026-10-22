@@ -15,6 +15,9 @@ spec:
             app.kubernetes.io/name: envoy
             gateway.envoyproxy.io/owning-gateway-name: tailscale-int
         - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+            app.kubernetes.io/name: kagent-tools
+        - matchLabels:
             app.kubernetes.io/name: prometheus-blackbox-exporter
         - matchLabels:
             app: grafana
