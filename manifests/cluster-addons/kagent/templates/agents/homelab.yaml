@@ -52,6 +52,38 @@ spec:
           name: opentofu-mcp
           kind: RemoteMCPServer
 
+      - type: McpServer
+        mcpServer:
+          name: kagent-tool-server
+          kind: RemoteMCPServer
+          toolNames:
+            # Kubernetes — read-only
+            - k8s_get_resources
+            - k8s_get_resource_yaml
+            - k8s_describe_resource
+            - k8s_get_events
+            - k8s_get_pod_logs
+            - k8s_get_available_api_resources
+            - k8s_get_cluster_configuration
+            # Cilium — visibility only, no mutations
+            - cilium_validate_cilium_network_policies
+            - cilium_get_endpoints_list
+            - cilium_get_endpoint_details
+            - cilium_list_identities
+            - cilium_get_identity_details
+            - cilium_list_envoy_config
+            - cilium_show_ip_cache_information
+            - cilium_show_dns_names
+            - cilium_show_features_status
+            - cilium_status_and_version
+            # Prometheus — queries only
+            - prometheus_query_tool
+            - prometheus_query_range_tool
+            - prometheus_targets_tool
+            - prometheus_label_names_tool
+            # Utility
+            - datetime_get_current_time
+
     systemMessageFrom:
       type: Secret
       name: homelab-agent-prompt

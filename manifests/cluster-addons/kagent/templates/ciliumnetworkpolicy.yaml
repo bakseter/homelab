@@ -51,6 +51,15 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            app.kubernetes.io/name: kagent-tools
+      toPorts:
+        - ports:
+            - port: '8084'
+              protocol: TCP
+
+    # Agents
+    - toEndpoints:
+        - matchLabels:
             app.kubernetes.io/managed-by: kagent
             app.kubernetes.io/name: oda-agent
         - matchLabels:
@@ -217,4 +226,24 @@ spec:
       toPorts:
         - ports:
             - port: '6443'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kagent-tools
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kagent-tools
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '8084'
               protocol: TCP

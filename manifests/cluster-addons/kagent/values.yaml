@@ -82,6 +82,9 @@ kagent:
   kagent-tools:
     enabled: true
 
+    rbac:
+      create: false
+
     tolerations:
       - key: node-role.bakseter.net/agent
         operator: Equal
