@@ -112,30 +112,7 @@ kagent:
         type: RuntimeDefault
 
   grafana-mcp:
-    enabled: true
-
-    tolerations:
-      - key: node-role.bakseter.net/agent
-        operator: Equal
-        value: 'true'
-        effect: NoSchedule
-    nodeSelector:
-      node-role.bakseter.net/agent: 'true'
-
-    securityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-      readOnlyRootFilesystem: true
-    podSecurityContext:
-      runAsNonRoot: true
-      runAsUser: 65534
-      runAsGroup: 65534
-      fsGroup: 65534
-      seccompProfile:
-        type: RuntimeDefault
-
+    enabled: false
   querydoc:
     enabled: false
 
