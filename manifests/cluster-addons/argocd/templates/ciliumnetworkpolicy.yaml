@@ -213,6 +213,7 @@ spec:
         - matchName: cloudnative-pg.github.io
         - matchName: code.forgejo.org
         - matchName: codeberg.org
+        - matchName: cr.agentgateway.dev
         - matchName: democratic-csi.github.io
         - matchName: github.com
         - matchName: helm.goharbor.io
