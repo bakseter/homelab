@@ -1,4 +1,8 @@
 agentgateway:
+  rbac:
+    gatewayNamespaces:
+      - agentgateway-system
+
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -15,3 +19,15 @@ agentgateway:
     agentgateway:
       name: agentgateway-config
       namespace: agentgateway-system
+
+  istio:
+    enabled: false
+
+  monitoring:
+    enabled: true
+
+    serviceMonitor:
+      enabled: true
+
+      extraLabels:
+        release: kube-prometheus-stack
