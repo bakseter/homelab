@@ -12,6 +12,6 @@ agentgateway:
       type: RuntimeDefault
 
   gatewayClassParametersRefs:
-    group: agentgateway.dev
-    kind: AgentgatewayParameters
-    name: agentgateway-config
+    agentgateway:
+      name: agentgateway-config
+      namespace: agentgateway-system
