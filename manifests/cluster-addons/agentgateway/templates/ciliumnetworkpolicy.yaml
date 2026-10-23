@@ -9,6 +9,16 @@ spec:
       app.kubernetes.io/name: agentgateway
       agentgateway: agentgateway
 
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: agentgateway-proxy
+            gateway.networking.k8s.io/gateway-name: agentgateway-proxy
+      toPorts:
+        - ports:
+            - port: '9978'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
@@ -58,4 +68,13 @@ spec:
       toPorts:
         - ports:
             - port: '6443'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: agentgateway
+            agentgateway: agentgateway
+      toPorts:
+        - ports:
+            - port: '9978'
               protocol: TCP
