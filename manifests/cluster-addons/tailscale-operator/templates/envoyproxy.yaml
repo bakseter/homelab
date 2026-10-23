@@ -65,7 +65,7 @@ spec:
                     namespace: monitoring
                     port: 4317
                 resourceAttributes:
-                  'service.name': tailscale-home-gateway
+                  'service.name': tailscale-int-gateway
                   'k8s.cluster.name': homelab
 
     tracing:
