@@ -179,6 +179,19 @@ spec:
             - port: '10443'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - rules:
+            http:
+              - path: '/stats/prometheus'
+                method: 'GET'
+          ports:
+            - port: '19001'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
@@ -254,6 +267,19 @@ spec:
             - port: '10443'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - rules:
+            http:
+              - path: '/stats/prometheus'
+                method: 'GET'
+          ports:
+            - port: '19001'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
@@ -320,6 +346,19 @@ spec:
       toPorts:
         - ports:
             - port: '10443'
+              protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - rules:
+            http:
+              - path: '/stats/prometheus'
+                method: 'GET'
+          ports:
+            - port: '19001'
               protocol: TCP
 
   egress:
