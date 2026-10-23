@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: cloudflared-gateway
+  name: gateways
   namespace: envoy-gateway-system
   labels:
     release: kube-prometheus-stack
@@ -11,8 +11,7 @@ spec:
       - envoy-gateway-system
   selector:
     matchLabels:
-      gateway.envoyproxy.io/owning-gateway-name: cloudflared
-      gateway.envoyproxy.io/owning-gateway-namespace: cloudflared
+      app.kubernetes.io/managed-by: envoy-gateway
       app.kubernetes.io/component: proxy
   podMetricsEndpoints:
     - port: metrics
