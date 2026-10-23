@@ -33,3 +33,7 @@ node-feature-discovery:
     securityContext:
       seccompProfile:
         type: RuntimeDefault
+    config:
+      core:
+        featureSources: ['all', '-system']
+        labelSources: ['all', '-system']
