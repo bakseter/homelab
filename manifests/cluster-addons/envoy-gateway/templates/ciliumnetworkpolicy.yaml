@@ -356,3 +356,33 @@ spec:
     # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
         - world
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: envoy-gateway-certgen
+  namespace: envoy-gateway-system
+spec:
+  endpointSelector:
+    matchLabels:
+      batch.kubernetes.io/job-name: envoy-gateway-certgen
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
