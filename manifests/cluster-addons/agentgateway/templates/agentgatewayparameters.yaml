@@ -11,3 +11,74 @@ spec:
           securityContext:
             seccompProfile:
               type: RuntimeDefault
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: agentgateway-data
+          containers:
+            - name: agentgateway
+              volumeMounts:
+                - name: data
+                  mountPath: /data
+  modelCatalog:
+    sources:
+      - configMap:
+          name: model-costs
+          key: catalog.json
+  rawConfig:
+    config:
+      database:
+        url: 'sqlite:////data/data.db?mode=rwc'
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: agentgateway-data
+  namespace: agentgateway-system
+  labels:
+    recurring-job-group.longhorn.io/hetzner-backup: enabled
+    recurring-job.longhorn.io/source: enabled
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  storageClassName: longhorn
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: model-costs
+  namespace: agentgateway-system
+data:
+  catalog.json: |
+    {
+      "providers": {
+        "mistral": {
+          "models": {
+            "mistral-large-4": {
+              "rates": {
+                "input": "1.36",
+                "output": "4.18",
+                "cacheRead": "0.14"
+              }
+            },
+            "zai-glm-5-3": {
+              "rates": {
+                "input": "1.4",
+                "output": "4.4",
+                "cacheRead": "0.14"
+              }
+            },
+            "zai-glm-5-3-flash": {
+              "rates": {
+                "input": "0.15",
+                "output": "0.5",
+                "cacheRead": "0.03"
+              }
+            }
+          }
+        }
+      }
+    }
