@@ -1,7 +1,7 @@
 apiVersion: agentgateway.dev/v1alpha1
 kind: AgentgatewayParameters
 metadata:
-  name: default
+  name: agentgateway-config
   namespace: agentgateway-system
 spec:
   deployment:
