@@ -10,3 +10,8 @@ agentgateway:
     runAsNonRoot: true
     seccompProfile:
       type: RuntimeDefault
+
+  gatewayClassParametersRefs:
+    group: agentgateway.dev
+    kind: AgentgatewayParameters
+    name: agentgateway-config

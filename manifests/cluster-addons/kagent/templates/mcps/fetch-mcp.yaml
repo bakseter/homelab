@@ -84,6 +84,7 @@ spec:
 
     - toFQDNs:
         # Documentation
+        - matchName: 'agentgateway.dev'
         - matchName: 'argo-cd.readthedocs.io'
         - matchName: 'cert-manager.io'
         - matchName: 'cloudnative-pg.io'
