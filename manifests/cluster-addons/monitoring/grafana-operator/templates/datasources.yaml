@@ -53,6 +53,7 @@ spec:
     isDefault: true
     jsonData:
       httpMethod: POST
+      timeInterval: 60s
       exemplarTraceIdDestinations:
         - name: trace_id
           datasourceUid: tempo
