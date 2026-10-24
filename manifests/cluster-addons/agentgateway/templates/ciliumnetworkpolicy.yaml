@@ -58,6 +58,9 @@ spec:
             gateway.envoyproxy.io/owning-gateway-name: tailscale-int
       toPorts:
         - ports:
+            - port: '80'
+              protocol: TCP
+        - ports:
             - port: '15000'
               protocol: TCP
 
