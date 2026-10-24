@@ -6,8 +6,7 @@ metadata:
 spec:
   ai:
     provider:
-      openai:
-        host: api.mistral.ai
+      host: api.mistral.ai
   policies:
     auth:
       secretRef:
