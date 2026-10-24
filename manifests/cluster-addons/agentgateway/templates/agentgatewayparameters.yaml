@@ -25,8 +25,8 @@ spec:
               type: RuntimeDefault
           volumes:
             - name: data
-              persistentVolumeClaim:
-                claimName: agentgateway-data
+              emptyDir:
+                maxSize: 100Mi
           containers:
             - name: agentgateway
               volumeMounts:
