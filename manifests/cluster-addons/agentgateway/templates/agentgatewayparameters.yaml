@@ -4,6 +4,13 @@ metadata:
   name: agentgateway-config
   namespace: agentgateway-system
 spec:
+  service:
+    type: ClusterIP
+  ports:
+    - name: ui
+      port: 15000
+      protocol: TCP
+      targetPort: 15000
   deployment:
     spec:
       template:
