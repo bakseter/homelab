@@ -1,0 +1,14 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: mistral
+  namespace: agentgateway-system
+spec:
+  ai:
+    provider:
+      openai:
+        host: api.mistral.ai
+  policies:
+    auth:
+      secretRef:
+        name: mistral-secret
