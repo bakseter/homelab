@@ -7,7 +7,7 @@ spec:
   model: zai-glm-5-3
   provider: OpenAI
   openAI:
-    baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/mistral/v1
+    baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1
   # NOTE: Not actually used.
   # See https://github.com/kagent-dev/kagent/pull/2739
   apiKeySecret: openai-dummy-key
@@ -22,7 +22,7 @@ spec:
   model: zai-glm-5-3-flash
   provider: OpenAI
   openAI:
-    baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/mistral/v1
+    baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1
   # NOTE: Not actually used.
   # See https://github.com/kagent-dev/kagent/pull/2739
   apiKeySecret: openai-dummy-key
@@ -37,7 +37,7 @@ spec:
   model: mistral-large-4
   provider: OpenAI
   openAI:
-    baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/mistral/v1
+    baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1
   # NOTE: Not actually used.
   # See https://github.com/kagent-dev/kagent/pull/2739
   apiKeySecret: openai-dummy-key
