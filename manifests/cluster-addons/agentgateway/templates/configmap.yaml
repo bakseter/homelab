@@ -8,14 +8,14 @@ metadata:
 data:
   bakseter: |
     {
-      "keyHash": "sha256:3e94f1e7f507344d7f7fe41ba563c68e69a7a31fc3df6bdcc107d1580550b709",
+      "keyHash": "sha256:3df30f78c39deb0beca46a16d81f3da3fab62f80206ea63c958020053e649e58",
       "metadata": {
         "user_id": "bakseter"
       }
     }
   kagent: |
     {
-      "keyHash": "sha256:f5eb671f0295bc97a5f69f65931c2dad2b87923156477e99a2cf75cae0a3d757",
+      "keyHash": "sha256:ffe7e093479e0417754ad69507b7466c80d39941ff7df97249535a363d20c2e6",
       "metadata": {
         "user_id": "kagent"
       }
