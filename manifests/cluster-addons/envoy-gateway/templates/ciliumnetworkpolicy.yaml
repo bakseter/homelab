@@ -226,6 +226,15 @@ spec:
               values:
                 - envoy-gateway-system
 
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
+
     # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
         - world
@@ -311,6 +320,15 @@ spec:
               values:
                 - envoy-gateway-system
 
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
+
     # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
         - world
@@ -391,6 +409,15 @@ spec:
               operator: NotIn
               values:
                 - envoy-gateway-system
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
 
     # TODO: Should be only 'authentik.bakseter.no', but that doesn't work for some reason.
     - toEntities:
