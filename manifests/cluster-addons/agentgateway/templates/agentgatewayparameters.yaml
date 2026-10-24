@@ -14,6 +14,7 @@ spec:
           targetPort: 15000
   deployment:
     spec:
+      replicas: 2
       template:
         spec:
           securityContext:
@@ -23,15 +24,8 @@ spec:
             fsGroup: 65534
             seccompProfile:
               type: RuntimeDefault
-          volumes:
-            - name: data
-              persistentVolumeClaim:
-                claimName: agentgateway-data
           containers:
             - name: agentgateway
-              volumeMounts:
-                - name: data
-                  mountPath: /data
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -47,22 +41,6 @@ spec:
     config:
       database:
         url: 'sqlite:////data/data.db?mode=rwc'
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: agentgateway-data
-  namespace: agentgateway-system
-  labels:
-    recurring-job-group.longhorn.io/hetzner-backup: enabled
-    recurring-job.longhorn.io/source: enabled
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Mi
-  storageClassName: longhorn
 ---
 apiVersion: v1
 kind: ConfigMap
