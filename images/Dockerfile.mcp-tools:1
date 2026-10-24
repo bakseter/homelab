@@ -1,4 +1,4 @@
-FROM node:24.22.1-trixie-slim@sha256:eb37f58646a901dc7727cf448cae36daaefaba79de33b5058dab79aa4c04aefb
+FROM node:24.22.1-trixie-slim@sha256:43b9ba1142b8dcf33fa8f922ca1be85714adc444e0586c7cf7726daaeabc1bea
 
 RUN npm install -g \
       @modelcontextprotocol/server-filesystem@2026.7.10 \
