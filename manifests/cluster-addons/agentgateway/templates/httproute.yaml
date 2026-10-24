@@ -16,7 +16,7 @@ spec:
   rules:
     - matches:
         - path:
-            type: PathPrefix
+            type: Exact
             value: /
       filters:
         - type: RequestRedirect
@@ -25,6 +25,11 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /ui
             statusCode: 302
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /ui
       backendRefs:
         - group: ''
           kind: Service
