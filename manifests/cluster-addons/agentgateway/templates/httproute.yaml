@@ -16,15 +16,13 @@ spec:
   rules:
     - matches:
         - path:
-            type: Exact
+            type: PathPrefix
             value: /
-      filters:
-        - type: RequestRedirect
-          requestRedirect:
-            path:
-              type: ReplaceFullPath
-              replaceFullPath: /ui
-            statusCode: 302
+      backendRefs:
+        - group: ''
+          kind: Service
+          name: agentgateway-proxy
+          port: 80
 
     - matches:
         - path:
