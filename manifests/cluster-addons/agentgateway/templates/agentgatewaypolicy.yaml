@@ -1,0 +1,28 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: otel
+  namespace: agentgateway-system
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: agentgateway-proxy
+  frontend:
+    accessLog:
+      otlp:
+        backendRef:
+          name: alloy
+          namespace: monitoring
+          port: 4317
+        protocol: GRPC
+    tracing:
+      backendRef:
+        name: alloy
+        namespace: monitoring
+        port: 4317
+      protocol: GRPC
+      attributes:
+        add:
+          - name: k8s.cluster.name
+            expression: '"homelab"'
