@@ -8,10 +8,8 @@ spec:
   provider: OpenAI
   openAI:
     baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1
-  # NOTE: Not actually used.
-  # See https://github.com/kagent-dev/kagent/pull/2739
-  apiKeySecret: openai-dummy-key
-  apiKeySecretKey: OPENAI_API_KEY
+  apiKeySecret: agentgateway-virtual-key
+  apiKeySecretKey: VIRTUAL_KEY
 ---
 apiVersion: kagent.dev/v1alpha2
 kind: ModelConfig
@@ -23,10 +21,8 @@ spec:
   provider: OpenAI
   openAI:
     baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1
-  # NOTE: Not actually used.
-  # See https://github.com/kagent-dev/kagent/pull/2739
-  apiKeySecret: openai-dummy-key
-  apiKeySecretKey: OPENAI_API_KEY
+  apiKeySecret: agentgateway-virtual-key
+  apiKeySecretKey: VIRTUAL_KEY
 ---
 apiVersion: kagent.dev/v1alpha2
 kind: ModelConfig
@@ -38,7 +34,5 @@ spec:
   provider: OpenAI
   openAI:
     baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1
-  # NOTE: Not actually used.
-  # See https://github.com/kagent-dev/kagent/pull/2739
-  apiKeySecret: openai-dummy-key
-  apiKeySecretKey: OPENAI_API_KEY
+  apiKeySecret: agentgateway-virtual-key
+  apiKeySecretKey: VIRTUAL_KEY
