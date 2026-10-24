@@ -16,7 +16,7 @@ alloy:
   image:
     registry: docker.io
     repository: grafana/alloy
-    digest: sha256:84b76d56c5943025515438fd45cbb5995386a0260d072c9b671dfd7f539f9c01 # v1.16.3
+    digest: sha256:89a5a320168387336b9ac3c850609c3ba7757eadd4ae5f1d819deb35e9854b18 # v1.21.2
 
   global:
     podSecurityContext:
@@ -92,6 +92,7 @@ alloy:
 
           namespaces {
             names = [
+              "agentgateway-system",
               "amex",
               "argocd",
               "authentik",
