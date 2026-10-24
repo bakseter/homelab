@@ -152,6 +152,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            k8s:io.kubernetes.pod.namespace: agentgateway-system
             app.kubernetes.io/name: agentgateway-proxy
             gateway.networking.k8s.io/gateway-name: agentgateway-proxy
       toPorts:
