@@ -18,6 +18,13 @@ spec:
         - path:
             type: PathPrefix
             value: /
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /ui
+            statusCode: 302
       backendRefs:
         - group: ''
           kind: Service
@@ -34,12 +41,18 @@ spec:
     - name: agentgateway-proxy
       namespace: agentgateway-system
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /mistral
-    backendRefs:
-    - group: agentgateway.dev
-      kind: AgentgatewayBackend
-      name: mistral
-      namespace: agentgateway-system
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mistral
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - group: agentgateway.dev
+          kind: AgentgatewayBackend
+          name: mistral
+          namespace: agentgateway-system
