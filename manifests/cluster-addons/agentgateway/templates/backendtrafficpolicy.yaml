@@ -1,0 +1,15 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: agentgateway-proxy-streaming
+  namespace: agentgateway-system
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: agentgateway-proxy
+  timeout:
+    http:
+      maxStreamDuration: 0s
+      requestTimeout: 0s
+      streamIdleTimeout: 3600s
