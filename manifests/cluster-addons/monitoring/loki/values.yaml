@@ -7,7 +7,7 @@ loki:
     image:
       registry: docker.io
       repository: grafana/loki
-      digest: sha256:191d4fdfb7264f16989f0a57f320872620a5a7c2ceeec6229212c4190ec49b86 # 3.7.2
+      digest: sha256:0db216b630ae1f348a1584c67f3cead8b4c1fc839169a39501db664744158e28 # 3.7.9
 
     schemaConfig:
       configs:
@@ -137,7 +137,7 @@ loki:
     image:
       registry: docker.io
       repository: nginxinc/nginx-unprivileged
-      digest: sha256:8122337ed6c475bb486bc9340da453d4599f225e6b920ff0d92ca2267486b9b5 # 1.31-alpine
+      digest: sha256:b5047b9b76845eac124358373c6852377c52e4b05834a47647e955dd91cb8f1e # 1.31-alpine
 
   bloomPlanner:
     replicas: 0
