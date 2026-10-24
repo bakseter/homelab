@@ -8,6 +8,7 @@ spec:
     provider:
       openai: {}
       host: api.mistral.ai
+      port: 443
   policies:
     auth:
       secretRef:
