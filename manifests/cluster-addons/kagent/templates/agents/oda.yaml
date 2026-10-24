@@ -161,9 +161,11 @@ spec:
             - port: '4317'
               protocol: TCP
 
-    - toFQDNs:
-        - matchName: api.mistral.ai
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: agentgateway-proxy
+            gateway.networking.k8s.io/gateway-name: agentgateway-proxy
       toPorts:
         - ports:
-            - port: '443'
+            - port: '80'
               protocol: TCP

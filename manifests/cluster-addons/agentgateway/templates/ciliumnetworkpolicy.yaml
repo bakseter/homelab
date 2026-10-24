@@ -61,6 +61,14 @@ spec:
             - port: '15000'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+      toPorts:
+        - ports:
+            - port: '80'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
