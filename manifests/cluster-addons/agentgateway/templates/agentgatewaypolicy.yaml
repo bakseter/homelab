@@ -34,6 +34,7 @@ spec:
         namespace: monitoring
         port: 4317
       protocol: GRPC
+      randomSampling: 'true'
       attributes:
         add:
           - name: k8s.cluster.name
