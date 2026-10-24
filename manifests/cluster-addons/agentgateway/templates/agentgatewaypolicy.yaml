@@ -26,3 +26,19 @@ spec:
         add:
           - name: k8s.cluster.name
             expression: '"homelab"'
+---
+kind: AgentgatewayPolicy
+metadata:
+  name: api-key-auth
+  namespace: agentgateway-system
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: agentgateway-proxy
+  traffic:
+    apiKeyAuthentication:
+      mode: Strict
+      configMapSelector:
+        matchLabels:
+          agentgateway.dev/apikey: 'true'

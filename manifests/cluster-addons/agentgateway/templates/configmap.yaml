@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: llm-api-keys
+  namespace: agentgateway-system
+  labels:
+    agentgateway.dev/apikey: 'true'
+data:
+  bakseter: |
+    {
+      "keyHash": "sha256:3e94f1e7f507344d7f7fe41ba563c68e69a7a31fc3df6bdcc107d1580550b709",
+      "metadata": {
+        "user_id": "bakseter"
+      }
+    }
+  kagent: |
+    {
+      "keyHash": "sha256:f5eb671f0295bc97a5f69f65931c2dad2b87923156477e99a2cf75cae0a3d757",
+      "metadata": {
+        "user_id": "kagent"
+      }
+    }
