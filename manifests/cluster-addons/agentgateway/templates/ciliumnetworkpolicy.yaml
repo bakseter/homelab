@@ -104,5 +104,5 @@ spec:
         - matchName: 'api.mistral.ai'
       toPorts:
         - ports:
-            - port: '6443'
+            - port: '443'
               protocol: TCP
