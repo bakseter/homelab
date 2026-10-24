@@ -82,13 +82,6 @@ spec:
             dns:
               - matchPattern: '*'
 
-    - toEntities:
-        - kube-apiserver
-      toPorts:
-        - ports:
-            - port: '6443'
-              protocol: TCP
-
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: agentgateway
@@ -96,4 +89,20 @@ spec:
       toPorts:
         - ports:
             - port: '9978'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
+
+    - toFQDNs:
+        - matchName: 'api.mistral.ai'
+      toPorts:
+        - ports:
+            - port: '6443'
               protocol: TCP
