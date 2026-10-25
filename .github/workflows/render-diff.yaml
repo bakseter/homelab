@@ -1,0 +1,58 @@
+name: Rendered manifest diff
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - 'manifests/**'
+      - '.github/workflows/render-diff.yaml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  render-diff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Generate rendered diff
+        run: |
+          scripts/render-diff.py \
+            --base-ref "origin/$BASE_REF" \
+            --out rendered-diff-full.md \
+            --comment-out rendered-diff-comment.md
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+
+      - name: Add job summary
+        if: always()
+        run: |
+          if [ -f rendered-diff-full.md ]; then
+            cat rendered-diff-full.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Post diff as comment
+        if: always()
+        run: |
+          if [ ! -s rendered-diff-comment.md ]; then
+            {
+              echo "## Rendered manifest diff"
+              echo ""
+              echo "⚠️ Could not generate the rendered diff — check the [workflow logs](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})."
+            } > rendered-diff-comment.md
+          fi
+          gh pr comment "$NUMBER" --repo "$REPO" --body-file rendered-diff-comment.md --edit-last || \
+            gh pr comment "$NUMBER" --repo "$REPO" --body-file rendered-diff-comment.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NUMBER: ${{ github.event.number }}
+          REPO: ${{ github.repository }}
