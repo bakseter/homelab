@@ -16,7 +16,7 @@ spec:
             app.kubernetes.io/name: envoy
       toPorts:
         - ports:
-            - port: '80'
+            - port: '8080'
               protocol: TCP
 
   egress:
