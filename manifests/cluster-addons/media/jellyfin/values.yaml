@@ -10,6 +10,9 @@ persistence:
   config:
     enabled: true
     size: 5Gi
+    labels:
+      recurring-job-group.longhorn.io/hetzner-backup: enabled
+      recurring-job.longhorn.io/source: enabled
   media:
     enabled: true
     existingClaim: shared-media
@@ -19,6 +22,18 @@ persistence:
 
 deploymentStrategy:
   type: Recreate
+
+httpRoute:
+  enabled: true
+
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: tailscale-home
+      namespace: tailscale
+
+  hostnames:
+    - jellyfin.bakseter.net
 
 podSecurityContext:
   runAsNonRoot: true
