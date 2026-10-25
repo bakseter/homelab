@@ -1,0 +1,7 @@
+apiVersion: v2
+name: open-webui-umbrella
+version: 0.1.0
+dependencies:
+  - name: open-webui
+    version: 17.0.0
+    repository: https://helm.openwebui.com

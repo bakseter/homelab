@@ -1,0 +1,19 @@
+open-webui:
+  route:
+    enabled: true
+    hostnames:
+      - ai.bakseter.net
+
+  persistence:
+    enabled: true
+    size: 1Gi
+    labels:
+      recurring-job-group.longhorn.io/hetzner-backup: enabled
+      recurring-job.longhorn.io/source: enabled
+
+  ollama:
+    enabled: false
+  pipelines:
+    enabled: false
+  websocket:
+    enabled: false
