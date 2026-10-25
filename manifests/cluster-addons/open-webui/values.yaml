@@ -21,7 +21,7 @@ open-webui:
   volumes:
     - name: tmp
       emptyDir:
-        maxSize: 128Mi
+        sizeLimit: 128Mi
 
   volumeMounts:
     container:
