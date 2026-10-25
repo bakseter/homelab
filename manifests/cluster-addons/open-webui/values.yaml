@@ -32,6 +32,11 @@ open-webui:
     enabled: true
     hostnames:
       - ai.bakseter.net
+    parentRefs:
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        name: tailscale-home
+        namespace: tailscale
 
   persistence:
     enabled: true
