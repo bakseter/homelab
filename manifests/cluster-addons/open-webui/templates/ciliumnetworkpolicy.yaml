@@ -37,7 +37,7 @@ spec:
             k8s:io.kubernetes.pod.namespace: agentgateway-system
             gateway.networking.k8s.io/gateway-name: agentgateway-proxy
             app.kubernetes.io/name: agentgateway-proxy
-          toPorts:
-            - ports:
-                - port: '80'
-                  protocol: TCP
+      toPorts:
+         - ports:
+             - port: '80'
+               protocol: TCP
