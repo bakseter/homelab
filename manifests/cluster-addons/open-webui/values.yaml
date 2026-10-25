@@ -48,6 +48,12 @@ open-webui:
     - name: HOME
       value: /tmp
 
+    - name: WEBUI_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: open-webui-secret
+          key: WEBUI_SECRET_KEY
+
   copyAppData:
     command:
       [
