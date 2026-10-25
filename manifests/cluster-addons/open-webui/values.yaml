@@ -40,18 +40,13 @@ open-webui:
       recurring-job-group.longhorn.io/hetzner-backup: enabled
       recurring-job.longhorn.io/source: enabled
 
+  openaiBaseApiUrl: 'http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1'
+  openaiApiKeyExistingSecret: agentgateway-virtual-key
+  openaiApiKeyExistingSecretKey: VIRTUAL_KEY
+
   extraEnvVars:
     - name: HOME
       value: /tmp
-
-    - name: OPENAI_API_BASE_URL
-      value: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1
-
-    - name: OPENAI_API_KEY
-      valueFrom:
-        secretKeyRef:
-          name: agentgateway-virtual-key
-          key: VIRTUAL_KEY
 
   ollama:
     enabled: false
