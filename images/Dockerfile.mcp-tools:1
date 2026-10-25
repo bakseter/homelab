@@ -4,7 +4,7 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y git
 
 RUN npm install -g \
-      @modelcontextprotocol/server-filesystem@2.1 \
+      @modelcontextprotocol/server-filesystem@2.0.1 \
       @cyanheads/git-mcp-server@2.15.3 \
  && npm cache clean --force
 
