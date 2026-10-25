@@ -82,9 +82,6 @@ loki:
     pattern_ingester:
       enabled: true
 
-  minio:
-    enabled: false
-
   lokiCanary:
     enabled: false
   test:
