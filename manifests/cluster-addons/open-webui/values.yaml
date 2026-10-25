@@ -48,6 +48,14 @@ open-webui:
     - name: HOME
       value: /tmp
 
+  copyAppData:
+    command:
+      [
+        'sh',
+        '-c',
+        'cp -R -n /app/backend/data/. /tmp/app-data/ 2>/dev/null; exit 0',
+      ]
+
   ollama:
     enabled: false
   pipelines:
