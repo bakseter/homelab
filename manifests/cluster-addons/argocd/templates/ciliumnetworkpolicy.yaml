@@ -215,10 +215,11 @@ spec:
         - matchName: codeberg.org
         - matchName: cr.agentgateway.dev
         - matchName: democratic-csi.github.io
-        - matchName: github.com
-        - matchName: helm.goharbor.io
-        - matchName: helm.cilium.io
         - matchName: ghcr.io
+        - matchName: github.com
+        - matchName: helm.cilium.io
+        - matchName: helm.goharbor.io
+        - matchName: helm.openwebui.com
         - matchName: intel.github.io
         - matchName: kubernetes-sigs.github.io
         - matchName: open-telemetry.github.io
