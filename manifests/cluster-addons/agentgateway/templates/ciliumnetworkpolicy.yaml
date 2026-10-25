@@ -67,6 +67,9 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: kagent
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: open-webui
+            app.kubernetes.io/name: open-webui
       toPorts:
         - ports:
             - port: '80'
