@@ -20,3 +20,10 @@ data:
         "user_id": "kagent"
       }
     }
+  open-webui: |
+    {
+      "keyHash": "sha256:1edfeee1d3309bbed093c3a9276c73887ee9f475844b624f89d1e7b36c471d05",
+      "metadata": {
+        "user_id": "open-webui"
+      }
+    }

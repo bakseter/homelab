@@ -18,6 +18,16 @@ open-webui:
     seccompProfile:
       type: RuntimeDefault
 
+  volumes:
+    - name: tmp
+      emptyDir:
+        maxSize: 128Mi
+
+  volumeMounts:
+    container:
+      - name: tmp
+        mountPath: /tmp
+
   route:
     enabled: true
     hostnames:
@@ -29,6 +39,19 @@ open-webui:
     labels:
       recurring-job-group.longhorn.io/hetzner-backup: enabled
       recurring-job.longhorn.io/source: enabled
+
+  extraEnvVars:
+    - name: HOME
+      value: /tmp
+
+    - name: OPENAI_API_BASE_URL
+      value: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1
+
+    - name: OPENAI_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: agentgateway-virtual-key
+          key: VIRTUAL_KEY
 
   ollama:
     enabled: false
