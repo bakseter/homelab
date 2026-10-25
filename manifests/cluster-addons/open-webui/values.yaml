@@ -1,5 +1,5 @@
 open-webui:
-  securityContext:
+  containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
       drop:
