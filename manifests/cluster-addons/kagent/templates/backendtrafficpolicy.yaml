@@ -1,7 +1,7 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: BackendTrafficPolicy
 metadata:
-  name: kagent-streaming
+  name: kagent
   namespace: kagent
 spec:
   targetRefs:
@@ -10,6 +10,6 @@ spec:
       name: kagent-ui
   timeout:
     http:
-      requestTimeout: 0s # disabled timeout
+      requestTimeout: 3600s
       streamIdleTimeout: 3600s
-      maxStreamDuration: 0s # let streams run indefinitely
+      maxStreamDuration: 3600s

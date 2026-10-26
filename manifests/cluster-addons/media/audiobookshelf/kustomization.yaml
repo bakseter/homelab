@@ -7,6 +7,7 @@ labels:
       app.kubernetes.io/name: audiobookshelf
 
 resources:
+  - backendtrafficpolicy.yaml
   - ciliumnetworkpolicy.yaml
   - deployment.yaml
   - httproute.yaml
