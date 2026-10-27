@@ -7,7 +7,7 @@ spec:
   transportType: stdio
   deployment:
     replicas: 1
-    image: ghcr.io/bakseter/homelab/mcp-tools:1@sha256:d29ba8dd5ee562309f52464976487cf3cf499c1bbba23797e96c7d45e8012bcd
+    image: ghcr.io/bakseter/homelab/mcp-tools:1@sha256:1671d85bf92bf4d6ba44dd8b794ab02157504fa5ea4ff11f87b34954f6017f57
     cmd: git-mcp-server
     env:
       HOME: /home/node
