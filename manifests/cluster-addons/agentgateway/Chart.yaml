@@ -3,7 +3,7 @@ name: kagent-umbrella
 version: 0.1.0
 dependencies:
   - name: agentgateway
-    version: 1.6.0
+    version: v1.7.0
     repository: oci://cr.agentgateway.dev/charts
   - name: agentgateway-crds
     version: 1.6.0
