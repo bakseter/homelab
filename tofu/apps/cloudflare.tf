@@ -214,7 +214,7 @@ resource "cloudflare_ruleset" "bakseter-no-geoip-challenge" {
     {
       action      = "managed_challenge"
       description = "Serve managed challenge non-Norway"
-      expression  = "not ip.geoip.continent in {\"NO\"} and not starts_with(http.request.uri, \"/cdn-cgi/challenge-platform/\")"
+      expression  = "not ip.geoip.country in {\"NO\"} and not starts_with(http.request.uri, \"/cdn-cgi/challenge-platform/\")"
       enabled     = true
     },
   ]
