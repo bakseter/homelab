@@ -201,6 +201,12 @@ resource "cloudflare_ruleset" "bakseter-no-geoip-challenge" {
   rules = [
     {
       action      = "block"
+      description = "Block non-EU for bakseter.no/cv*"
+      expression  = "http.host == \"bakseter.no\" and starts_with(http.request.uri, \"/cv\") and not ip.geoip.continent in {\"EU\"}"
+      enabled     = true
+    },
+    {
+      action      = "block"
       description = "Block non-Norway for Authentik"
       expression  = "http.host == \"authentik.bakseter.no\" and not ip.geoip.country in {\"NO\"}"
       enabled     = true
