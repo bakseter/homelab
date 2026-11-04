@@ -164,6 +164,6 @@ WiFi access point, connected to router via ethernet.
 
 Extra Wi-Fi access point, connected to router via fiber.
 
-## TP-Link SG108E
+## CRS310-8G+2S+IN
 
-Managed Gigabit switch, connected to router via ethernet.
+Managed 2.5Gbe switch, connected to router via fiber.
