@@ -1,0 +1,210 @@
+---
+- name: MikroTik CRS310-8G+2S+IN - L2 switch VLAN config
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars_files:
+    - group_vars/all/rb5009.yaml # shared source of truth: vlans
+    - group_vars/all/crs310.yaml
+  module_defaults:
+    group/community.routeros.api:
+      hostname: '{{ crs310_host }}'
+      username: '{{ crs310_username }}'
+      password: '{{ crs310_password }}'
+      tls: false
+
+  tasks:
+    # ---------------- Identity ----------------
+    - name: Set system identity
+      community.routeros.api_find_and_modify:
+        path: system identity
+        find: {}
+        values:
+          name: crs310
+
+    # ---------------- Bridge base ----------------
+    # vlan-filtering is deliberately NOT enabled here - it is enabled LAST,
+    # after ports / bridge-vlans / mgmt IP exist, otherwise you lock yourself out.
+    - name: Ensure bridge exists (vlan-filtering still off)
+      community.routeros.api_find_and_modify:
+        path: interface bridge
+        find:
+          name: bridge
+        values:
+          protocol-mode: rstp
+          pvid: '1' # CPU port PVID (mgmt goes via vlan10, tagged to bridge)
+          ingress-filtering: 'yes'
+
+    # ---------------- Bridge ports ----------------
+    - name: Configure bridge ports
+      community.routeros.api_find_and_modify:
+        path: interface bridge port
+        find:
+          interface: '{{ port.interface }}'
+        values:
+          pvid: '{{ port.pvid }}'
+          frame-types: '{{ port.frame_types }}'
+          ingress-filtering: 'yes'
+          comment: '{{ port.comment }}'
+      loop: '{{ crs310_ports }}'
+      loop_control:
+        loop_var: port
+        label: '{{ port.interface }} ({{ port.comment }})'
+
+    # ---------------- Bridge VLAN table ----------------
+    - name: Gather existing bridge VLAN entries
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: print
+      register: _bv_raw
+
+    - name: Normalize bridge VLAN list
+      ansible.builtin.set_fact:
+        _bv: '{{ _bv_raw.msg if (_bv_raw.msg is iterable and _bv_raw.msg is not string) else [] }}'
+
+    # task-level vars: computed ONCE per loop item, used by both tasks below
+    # (keeps cmd/values templates on a single line -> no newline poisoning)
+    - name: Update existing bridge VLAN entries
+      community.routeros.api_find_and_modify:
+        path: interface bridge vlan
+        find:
+          vlan-ids: '{{ vlan.id | string }}'
+        values:
+          bridge: bridge
+          tagged: '{{ tagged_list | join(",") }}'
+          untagged: '{{ untagged_list | join(",") }}' # empty string clears the list via API attribute - safe here
+      vars:
+        tagged_list: "{{ (['bridge'] if vlan.id == crs310_mgmt_vlan else []) + ((crs310_ports | selectattr('tagged', 'defined') | selectattr('tagged', 'contains', vlan.id) | map(attribute='interface') | list) + (crs310_ports | selectattr('tagged', 'defined') | selectattr('tagged', 'contains', vlan.id | string) | map(attribute='interface') | list)) | unique }}"
+        untagged_list: "{{ crs310_ports | selectattr('pvid', 'in', [vlan.id, vlan.id | string]) | map(attribute='interface') | list }}"
+      loop: '{{ vlans }}'
+      loop_control:
+        loop_var: vlan
+        label: 'vlan {{ vlan.id }}'
+      when: _bv | selectattr('vlan-ids', 'in', [vlan.id, vlan.id | string]) | list | length > 0
+
+    - name: Add missing bridge VLAN entries
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: "add bridge=bridge vlan-ids={{ vlan.id }} tagged={{ tagged_list | join(',') }}{{ ' untagged=' ~ (untagged_list | join(',')) if untagged_list | length > 0 else '' }}"
+      vars:
+        tagged_list: "{{ (['bridge'] if vlan.id == crs310_mgmt_vlan else []) + ((crs310_ports | selectattr('tagged', 'defined') | selectattr('tagged', 'contains', vlan.id) | map(attribute='interface') | list) + (crs310_ports | selectattr('tagged', 'defined') | selectattr('tagged', 'contains', vlan.id | string) | map(attribute='interface') | list)) | unique }}"
+        untagged_list: "{{ crs310_ports | selectattr('pvid', 'in', [vlan.id, vlan.id | string]) | map(attribute='interface') | list }}"
+      loop: '{{ vlans }}'
+      loop_control:
+        loop_var: vlan
+        label: 'vlan {{ vlan.id }}'
+      when: _bv | selectattr('vlan-ids', 'in', [vlan.id, vlan.id | string]) | list | length == 0
+
+    # ---------------- Management (VLAN 10) ----------------
+    - name: Gather existing VLAN interfaces
+      community.routeros.api:
+        path: interface vlan
+        cmd: print
+      register: _vlan_raw
+    - name: Normalize VLAN interfaces
+      ansible.builtin.set_fact:
+        _vlan_ifaces: '{{ _vlan_raw.msg if (_vlan_raw.msg is iterable and _vlan_raw.msg is not string) else [] }}'
+
+    - name: Add management VLAN interface if absent
+      community.routeros.api:
+        path: interface vlan
+        cmd: 'add name=vlan{{ crs310_mgmt_vlan }} vlan-id={{ crs310_mgmt_vlan }} interface=bridge comment=management'
+      when: _vlan_ifaces | selectattr('name', 'equalto', 'vlan' ~ crs310_mgmt_vlan) | list | length == 0
+
+    - name: Update management VLAN interface if present
+      community.routeros.api_find_and_modify:
+        path: interface vlan
+        find:
+          name: 'vlan{{ crs310_mgmt_vlan }}'
+        values:
+          vlan-id: '{{ crs310_mgmt_vlan }}'
+          interface: bridge
+          comment: management
+      when: _vlan_ifaces | selectattr('name', 'equalto', 'vlan' ~ crs310_mgmt_vlan) | list | length > 0
+
+    - name: Gather existing IP addresses
+      community.routeros.api:
+        path: ip address
+        cmd: print
+      register: _ip_raw
+    - name: Normalize IP addresses
+      ansible.builtin.set_fact:
+        _ips: '{{ _ip_raw.msg if (_ip_raw.msg is iterable and _ip_raw.msg is not string) else [] }}'
+
+    - name: Add management IP if absent
+      community.routeros.api:
+        path: ip address
+        cmd: 'add address={{ crs310_mgmt_address }} interface=vlan{{ crs310_mgmt_vlan }} comment=management'
+      when: _ips | selectattr('interface', 'equalto', 'vlan' ~ crs310_mgmt_vlan) | list | length == 0
+
+    - name: Update management IP if present
+      community.routeros.api_find_and_modify:
+        path: ip address
+        find:
+          interface: 'vlan{{ crs310_mgmt_vlan }}'
+        values:
+          address: '{{ crs310_mgmt_address }}'
+          comment: management
+      when: _ips | selectattr('interface', 'equalto', 'vlan' ~ crs310_mgmt_vlan) | list | length > 0
+
+    # ---------------- DNS / default route (optional but handy) ----------------
+    - name: Set DNS to management gateway
+      community.routeros.api:
+        path: ip dns
+        cmd: 'set servers={{ crs310_mgmt_gateway }} allow-remote-requests=no'
+
+    - name: Gather routes
+      community.routeros.api:
+        path: ip route
+        cmd: print
+      register: _route_raw
+    - name: Normalize routes
+      ansible.builtin.set_fact:
+        _routes: '{{ _route_raw.msg if (_route_raw.msg is iterable and _route_raw.msg is not string) else [] }}'
+    - name: Add default route via management gateway
+      community.routeros.api:
+        path: ip route
+        cmd: 'add dst-address=0.0.0.0/0 gateway={{ crs310_mgmt_gateway }} comment=default-via-mgmt'
+      when: _routes | selectattr('dst-address', 'equalto', '0.0.0.0/0') | list | length == 0
+
+    # ---------------- Hardening ----------------
+    - name: Disable insecure IP services (keep winbox + api)
+      community.routeros.api:
+        path: ip service
+        cmd: 'disable {{ item }}'
+      loop: [telnet, ftp, www]
+      ignore_errors: true
+
+    # ---------------- LAST: enable VLAN filtering ----------------
+    - name: Enable bridge VLAN filtering (must run last)
+      community.routeros.api_find_and_modify:
+        path: interface bridge
+        find:
+          name: bridge
+        values:
+          vlan-filtering: 'yes'
+      ignore_errors: true
+
+  post_tasks:
+    - name: Verify configuration
+      block:
+        - name: Show bridge
+          community.routeros.api: { path: interface bridge, cmd: print }
+          register: r_bridge
+        - ansible.builtin.debug: { var: r_bridge }
+        - name: Show bridge ports
+          community.routeros.api: { path: interface bridge port, cmd: print }
+          register: r_ports
+        - ansible.builtin.debug: { var: r_ports }
+        - name: Show bridge VLANs
+          community.routeros.api: { path: interface bridge vlan, cmd: print }
+          register: r_bvlans
+        - ansible.builtin.debug: { var: r_bvlans }
+        - name: Show VLAN interfaces
+          community.routeros.api: { path: interface vlan, cmd: print }
+          register: r_vlans
+        - ansible.builtin.debug: { var: r_vlans }
+        - name: Show IP addresses
+          community.routeros.api: { path: ip address, cmd: print }
+          register: r_ips
+        - ansible.builtin.debug: { var: r_ips }

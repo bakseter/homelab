@@ -1,0 +1,74 @@
+crs310_host: 192.168.10.10
+crs310_username: admin
+crs310_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  33666464393866373031663231363838383839643066613261366332316336353430626531323230
+  6561333631613164333134663431386365343961666131300a356563646238616437383465353665
+  66333662376135613339396366633137643161313163633565663030363561376461313935316233
+  6434666462383536360a333238636634613234633861316262656162633036383239653662366235
+  3864
+
+crs310_mgmt_vlan: 10
+crs310_mgmt_address: 192.168.10.10/24
+crs310_mgmt_gateway: 192.168.10.1
+
+crs310_ports:
+  - interface: ether1
+    comment: proxmox-m715q
+    pvid: 1
+    tagged: [10, 20, 30]
+    frame_types: admit-only-vlan-tagged
+
+  - interface: ether2
+    comment: proxmox-m715q2
+    pvid: 1
+    tagged: [10, 20, 30]
+    frame_types: admit-only-vlan-tagged
+
+  - interface: ether3
+    comment: proxmox-m720q
+    pvid: 1
+    tagged: [10, 20, 30]
+    frame_types: admit-only-vlan-tagged
+
+  - interface: ether4
+    comment: proxmox-m920q
+    pvid: 1
+    tagged: [10, 20, 30]
+    frame_types: admit-only-vlan-tagged
+
+  - interface: ether5
+    comment: proxmox-m70qg3
+    pvid: 1
+    tagged: [10, 20, 30]
+    frame_types: admit-only-vlan-tagged
+
+  - interface: ether6
+    comment: infra-node
+    pvid: 60
+    tagged: []
+    frame_types: admit-only-untagged-and-priority-tagged
+
+  - interface: ether7
+    comment: nas
+    pvid: 70
+    tagged: []
+    frame_types: admit-only-untagged-and-priority-tagged
+
+  - interface: ether8
+    comment: desktop-switch-trunk
+    pvid: 1
+    tagged: [40, 50]
+    frame_types: admit-only-vlan-tagged
+
+  - interface: sfp-sfpplus1
+    comment: trunk-to-rb5009
+    pvid: 1
+    tagged: [10, 20, 30, 40, 50, 60, 70, 80]
+    frame_types: admit-only-vlan-tagged
+
+  - interface: sfp-sfpplus2
+    comment: free-unused
+    pvid: 1
+    tagged: []
+    frame_types: admit-only-vlan-tagged
