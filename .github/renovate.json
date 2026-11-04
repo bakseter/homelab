@@ -24,10 +24,6 @@
       "groupName": "sealed-secrets"
     },
     {
-      "matchPackageNames": ["/prometheus/", "/kube-state-metrics/"],
-      "groupName": "kube-prometheus-stack"
-    },
-    {
       "matchPackageNames": ["/harbor/"],
       "groupName": "harbor"
     },
@@ -38,6 +34,20 @@
     {
       "matchPackageNames": ["/immich/"],
       "groupName": "immich"
+    },
+    {
+      "description": "Automerge digest bumps (rebuilds of pinned tags, low risk)",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["digest"],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true,
+      "ignoreTests": true
+    },
+    {
+      "description": "Never automerge majors",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
     }
   ]
 }
