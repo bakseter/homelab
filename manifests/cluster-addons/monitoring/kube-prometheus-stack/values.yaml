@@ -34,6 +34,7 @@ kube-prometheus-stack:
               - cloudflared
               - kube-system # cilium hubble
               - immich
+              - iperf3
               - longhorn-system
               - mandagsmiddag
               - monitoring

@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: iperf3
+  namespace: iperf3
+spec:
+  template:
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      volumes:
+        - name: results
+          emptyDir: {}
+        - name: exporter
+          configMap:
+            name: iperf3-exporter
+      containers:
+        - name: iperf3
+          image: networkstatic/iperf3:latest@sha256:d8767f2888155902ec72760f9ba8dd6fb16ff73256a8e02572c109aecc23269b
+          env:
+            - name: MY_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          volumeMounts:
+            - name: results
+              mountPath: /results
+          command: ['/bin/sh', '-c']
+          args:
+            - |
+              iperf3 -s -p 5201 --logfile /tmp/iperf-server.log &
+              sleep $(( $(hostname | cksum | cut -d' ' -f1) % 45 ))
+              while true; do
+                for PEER in $(getent hosts iperf3-headless.iperf3.svc.cluster.local | awk '{print $1}' | grep -vFx "$MY_IP"); do
+                  echo "===== $(date -Ins)  ${MY_IP} -> ${PEER} ====="
+                  ok=0
+                  for attempt in 1 2; do
+                    # write to dotfile, mv atomically so the exporter never reads a partial file
+                    if iperf3 -c "$PEER" -p 5201 -t 10 -J > "/results/.tmp-${PEER}" 2>/tmp/err.txt; then
+                      mv "/results/.tmp-${PEER}" "/results/result-${PEER}.json"
+                      ok=1
+                      BPS=$(sed -n 's/.*"bits_per_second": *\([0-9.]*\).*/\1/p' "/results/result-${PEER}.json" | tail -1)
+                      awk -v b="$BPS" -v s="$MY_IP" -v d="$PEER" 'BEGIN{
+                        if      (b >= 1e9) printf "RESULT %s -> %s  %.2f Gbit/s\n", s, d, b/1e9;
+                        else if (b >= 1e6) printf "RESULT %s -> %s  %.1f Mbit/s\n", s, d, b/1e6;
+                        else               printf "RESULT %s -> %s  %.0f bit/s\n", s, d, b }'
+                      break
+                    fi
+                    [ "$attempt" -eq 1 ] && sleep 5   # server busy? retry once
+                  done
+                  [ "$ok" -eq 0 ] && echo "RESULT ${MY_IP} -> ${PEER}  FAILED : $(sed -n 's/.*\"error\"[^\"]*\"[^\"]*\"[[:space:]]*:[[:space:]]*\"\([^\"]*\)\".*/\1/p' /results/.tmp-${PEER} 2>/dev/null | head -1)$(head -c 150 /tmp/err.txt)"
+                  sleep $(( 2 + $(hostname | cksum | cut -d' ' -f1) % 5 ))
+                done
+                sleep 300
+              done
+          ports:
+            - name: iperf
+              containerPort: 5201
+              hostPort: 5201
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+        - name: exporter
+          image: python:3.14-alpine@sha256:eb2c62658b8d51bff0acc408504b76521d02030de56a8a3c1e830083e89b89d2
+          command: ['python3', '/app/exporter.py']
+          env:
+            - name: MY_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          volumeMounts:
+            - name: results
+              mountPath: /results
+              readOnly: true
+            - name: exporter
+              mountPath: /app
+          ports:
+            - name: metrics
+              containerPort: 8080
+              hostPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 128Mi

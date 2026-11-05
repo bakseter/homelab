@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: iperf3
+  namespace: iperf3
+  labels:
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: iperf3
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s
