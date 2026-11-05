@@ -28,29 +28,25 @@ spec:
           command: ['/bin/sh', '-c']
           args:
             - |
-              iperf3 -s -p 5201 --logfile /tmp/iperf-server.log &
+              # server: discard its own log noise
+              iperf3 -s -p 5201 >/dev/null 2>&1 &
               sleep $(( $(hostname | cksum | cut -d' ' -f1) % 45 ))
+
               while true; do
                 for PEER in $(getent hosts iperf3-headless.iperf3.svc.cluster.local | awk '{print $1}' | grep -vFx "$MY_IP"); do
-                  echo "===== $(date -Ins)  ${MY_IP} -> ${PEER} ====="
-                  ok=0
                   for attempt in 1 2; do
-                    # write to dotfile, mv atomically so the exporter never reads a partial file
-                    if iperf3 -c "$PEER" -p 5201 -t 10 -J > "/results/.tmp-${PEER}" 2>/tmp/err.txt; then
+                    # write to dotfile + atomic mv, so the exporter never reads a partial file
+                    if iperf3 -c "$PEER" -p 5201 -t 10 -J > "/results/.tmp-${PEER}" 2>/dev/null; then
                       mv "/results/.tmp-${PEER}" "/results/result-${PEER}.json"
-                      ok=1
-                      BPS=$(sed -n 's/.*"bits_per_second": *\([0-9.]*\).*/\1/p' "/results/result-${PEER}.json" | tail -1)
-                      awk -v b="$BPS" -v s="$MY_IP" -v d="$PEER" 'BEGIN{
-                        if      (b >= 1e9) printf "RESULT %s -> %s  %.2f Gbit/s\n", s, d, b/1e9;
-                        else if (b >= 1e6) printf "RESULT %s -> %s  %.1f Mbit/s\n", s, d, b/1e6;
-                        else               printf "RESULT %s -> %s  %.0f bit/s\n", s, d, b }'
                       break
                     fi
-                    [ "$attempt" -eq 1 ] && sleep 5   # server busy? retry once
+                    [ "$attempt" -eq 1 ] && sleep 5   # "server is busy" -> retry once
                   done
-                  [ "$ok" -eq 0 ] && echo "RESULT ${MY_IP} -> ${PEER}  FAILED : $(sed -n 's/.*\"error\"[^\"]*\"[^\"]*\"[[:space:]]*:[[:space:]]*\"\([^\"]*\)\".*/\1/p' /results/.tmp-${PEER} 2>/dev/null | head -1)$(head -c 150 /tmp/err.txt)"
+
+                  # on double-failure: no new file, old one ages out -> caught by age_seconds alert
                   sleep $(( 2 + $(hostname | cksum | cut -d' ' -f1) % 5 ))
                 done
+
                 sleep 300
               done
           ports:
