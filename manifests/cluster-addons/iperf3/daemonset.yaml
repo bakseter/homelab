@@ -56,10 +56,10 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 50m
-              memory: 64Mi
+              cpu: 10m
+              memory: 32Mi
             limits:
-              memory: 256Mi
+              memory: 64Mi
         - name: exporter
           image: python:3.14-alpine@sha256:eb2c62658b8d51bff0acc408504b76521d02030de56a8a3c1e830083e89b89d2
           command: ['python3', '/app/exporter.py']
@@ -82,6 +82,6 @@ spec:
           resources:
             requests:
               cpu: 10m
-              memory: 32Mi
+              memory: 32mi
             limits:
-              memory: 128Mi
+              memory: 64Mi
