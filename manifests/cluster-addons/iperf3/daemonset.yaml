@@ -14,6 +14,11 @@ spec:
         - name: exporter
           configMap:
             name: iperf3-exporter
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.bakseter.net/agent
+          operator: Equal
+          value: 'true'
       containers:
         - name: iperf3
           image: networkstatic/iperf3:latest@sha256:d8767f2888155902ec72760f9ba8dd6fb16ff73256a8e02572c109aecc23269b
