@@ -8,8 +8,8 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: iperf3
+      app.kubernetes.io/name: iperf3
   endpoints:
     - port: metrics
-      path: /metrics
-      interval: 30s
+      path: /
+      interval: 60s
