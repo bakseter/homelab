@@ -5,6 +5,7 @@ metadata:
   namespace: kagent
 spec:
   instances: 1
+  enablePDB: false
   inheritedMetadata:
     labels:
       recurring-job.longhorn.io/source: enabled

@@ -7,5 +7,6 @@ metadata:
     bakseter.net/backup-primary: 'true'
 spec:
   instances: 1
+  enablePDB: false
   storage:
     size: 1Gi
