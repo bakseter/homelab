@@ -27,16 +27,16 @@ authentik:
       tag: 2026.8.5
       digest: sha256:602227a86455d6772e3d16b7d852713c4f864f40df5df894abd1285bb53979a5
 
-    replicas: 2
+    replicas: 1
 
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app.kubernetes.io/instance: authentik
-                app.kubernetes.io/component: server
-            topologyKey: bakseter.net/physical-node
+    #   affinity:
+    #     podAntiAffinity:
+    #       requiredDuringSchedulingIgnoredDuringExecution:
+    #         - labelSelector:
+    #             matchLabels:
+    #               app.kubernetes.io/instance: authentik
+    #               app.kubernetes.io/component: server
+    #           topologyKey: bakseter.net/physical-node
 
     containerSecurityContext:
       allowPrivilegeEscalation: false
