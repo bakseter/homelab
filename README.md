@@ -32,6 +32,7 @@ _(list might not be 100% up to date)_
 - **OpenTofu** for infrastructure management
 - **Proxmox VE** for virtualization platform
 - **Talos Linux** as Kubernetes node OS
+- **TrueNAS** as NAS OS
 
 ### Core Kubernetes services
 
@@ -40,19 +41,18 @@ _(list might not be 100% up to date)_
 - **Sealed Secrets** for secret management
 - **Longhorn** for block storage
 - **RustFS** for S3 storage
-- **democratic-csi** and **TrueNAS** for NFS storage
+- **democratic-csi** for NFS storage
 - **Velero** for backups
-- **Loki**, **Grafana Operator**, **Tempo**, **Prometheus**, **Alertmanager** and **Pushover** for monitoring
+- **Loki**, **Grafana Operator**, **Tempo**, **Prometheus** and **Alertmanager** for monitoring
 - **Authentik** as authentication provider
 - **cloudflared** for public access
 - **Tailscale Operator** for private access
 - **Envoy Gateway** with **Gateway API** for routing from Cloudflare/Tailscale to workloads
 - **cert-manager** for certificates
 - **Technitium** and **external-dns** for private DNS with Tailscale
-- **Cloudnative-PG** for PostgreSQL
-- **Forgejo** for private git and private CI/CD
+- **CloudNativePG** for PostgreSQL
+- **Forgejo** for private git
 - **Harbor** and **Trivy** for image pull-trough cache and scanning
-- **`registry:3`** for private container registry
 
 ### Third-party services
 
@@ -68,7 +68,6 @@ _(list might not be 100% up to date)_
 - **Jellyfin**, **Seerr**, **Radarr**, **Sonarr**, **Lidarr**, **Prowlarr** and **sabnzbd** for media management
 - **Audiobookshelf** for podcasts
 - **Vaultwarden** for password management
-- **Homepage** for landing page
 - **Cryptpad** for office suite
 
 ### Hobby projects
