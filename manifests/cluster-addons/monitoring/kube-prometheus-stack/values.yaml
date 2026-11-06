@@ -12,8 +12,8 @@ kube-prometheus-stack:
       image:
         registry: quay.io
         repository: prometheus/prometheus
-        tag: v3.15.1-distroless
-        sha: 50c707e96da5ade383cb1707790576480485e93de06aa60ad8802cb5f744bd0a
+        tag: v3.16.0-distroless
+        sha: 9764044e09eb2c9e1abdb12d0f0188d4efb7384b0262d3c080f0fc59045c89ba
 
       externalUrl: https://prometheus.int.bakseter.net
 
