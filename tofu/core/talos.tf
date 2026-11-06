@@ -103,9 +103,6 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
         talos_version = local.talos_version
       }
     ),
-    file(
-      "${path.module}/manifests/registry3-patches.yaml",
-    ),
     try(each.value.agent.enabled, false) ? file(
       "${path.module}/manifests/agent-patches.yaml",
     ) : "",

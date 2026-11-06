@@ -1,9 +1,0 @@
-# TODO: don't do this.
-#
-# kubcetl -n registry get svc registry -o jsonpath='{.spec.clusterIP}' ; echo
-#
-apiVersion: v1alpha1
-kind: RegistryMirrorConfig
-name: registry.registry.svc.cluster.local:5000
-endpoints:
-  - url: http://10.106.38.200:5000
