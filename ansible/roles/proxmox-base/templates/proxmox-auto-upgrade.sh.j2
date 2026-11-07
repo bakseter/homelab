@@ -7,29 +7,29 @@ exec >>"$LOG" 2>&1
 echo "=== $(date -u '+%Y-%m-%d %H:%M:%S UTC') run on $(hostname) ==="
 
 reboot_needed() {
-  if [ -f /var/run/reboot-required ]; then
-    return 0
-  fi
+    if [ -f /var/run/reboot-required ]; then
+        return 0
+    fi
 
-  local running latest
-  running=$(uname -r)
-  latest=$(ls -t /boot/vmlinuz-* 2>/dev/null | head -1 | sed 's#/boot/vmlinuz-##')
-  [ -n "$latest" ] && [ "$running" != "$latest" ]
+    local running latest
+    running=$(uname -r)
+    latest=$(ls -t /boot/vmlinuz-* 2>/dev/null | head -1 | sed 's#/boot/vmlinuz-##')
+    [ -n "$latest" ] && [ "$running" != "$latest" ]
 }
 
 if reboot_needed; then
-  echo "Reboot already pending, rebooting now."
-  /sbin/reboot
-  exit 0
+    echo "Reboot already pending, rebooting now."
+    /sbin/reboot
+    exit 0
 fi
 
 apt-get update
-apt-get dist-upgrade -y
+apt-get full-upgrade -y
 apt-get autoremove -y
 
 if reboot_needed; then
-  echo "Reboot required, rebooting."
-  /sbin/reboot
+    echo "Reboot required, rebooting."
+    /sbin/reboot
 else
-  echo "No reboot required."
+    echo "No reboot required."
 fi
