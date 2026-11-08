@@ -45,6 +45,14 @@
       "ignoreTests": true
     },
     {
+      "description": "Automerge some packages",
+      "matchPackageNames": ["/amazon\/aws-cli/"],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true,
+      "ignoreTests": true
+    },
+    {
       "description": "Never automerge majors",
       "matchUpdateTypes": ["major"],
       "automerge": false
