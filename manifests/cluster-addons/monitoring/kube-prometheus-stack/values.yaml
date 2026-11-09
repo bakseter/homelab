@@ -28,6 +28,7 @@ kube-prometheus-stack:
           - key: kubernetes.io/metadata.name
             operator: In
             values:
+              - agentgateway-system
               - argocd
               - authentik
               - cert-manager
@@ -44,6 +45,7 @@ kube-prometheus-stack:
           - key: kubernetes.io/metadata.name
             operator: In
             values:
+              - agentgateway-system
               - amex
               - authentik
               - cnpg-system
