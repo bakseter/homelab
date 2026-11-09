@@ -1,0 +1,64 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: mistral-reasoning-normalizer
+  namespace: argocd
+spec:
+  description: mistral-reasoning-normalizer application
+  destinations:
+    - namespace: mistral-reasoning-normalizer
+      name: admin@homelab
+  sourceRepos:
+    - https://github.com/bakseter/mistral-reasoning-normalizer.git
+  namespaceResourceWhitelist:
+    - group: 'apps'
+      kind: Deployment
+
+    - group: 'apps'
+      kind: ReplicaSet
+
+    - group: ''
+      kind: Pod
+
+    - group: ''
+      kind: Service
+
+    - group: 'cilium.io'
+      kind: CiliumNetworkPolicy
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mistral-reasoning-normalizer
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: mistral-reasoning-normalizer
+    name: admin@homelab
+  project: mistral-reasoning-normalizer
+  source:
+    path: manifests
+    repoURL: https://github.com/bakseter/mistral-reasoning-normalizer.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+---
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: mistral-reasoning-normalizer
+  namespace: argocd
+spec:
+  applicationRefs:
+    - namePattern: mistral-reasoning-normalizer
+      images:
+        - alias: mistral-reasoning-normalizer
+          imageName: ghcr.io/bakseter/mistral-reasoning-normalizer:latest
+          commonUpdateSettings:
+            updateStrategy: digest
