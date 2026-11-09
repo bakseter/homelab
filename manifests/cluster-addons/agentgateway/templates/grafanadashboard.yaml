@@ -23,4 +23,3 @@ spec:
   configMapRef:
     name: agentgateway-dashboard
     key: agentgateway.json
-

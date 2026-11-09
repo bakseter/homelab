@@ -19,6 +19,19 @@ spec:
             - port: '9978'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '9092'
+              protocol: TCP
+          rules:
+            http:
+              - method: GET
+                path: /metrics
+
   egress:
     - toEndpoints:
         - matchLabels:
@@ -75,6 +88,19 @@ spec:
             - port: '80'
               protocol: TCP
 
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '15020'
+              protocol: TCP
+          rules:
+            http:
+              - method: GET
+                path: /metrics
+
   egress:
     - toEndpoints:
         - matchLabels:
@@ -112,11 +138,4 @@ spec:
       toPorts:
         - ports:
             - port: '8080'
-              protocol: TCP
-
-    - toFQDNs:
-        - matchName: 'api.mistral.ai'
-      toPorts:
-        - ports:
-            - port: '443'
               protocol: TCP

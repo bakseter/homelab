@@ -45,7 +45,6 @@ spec:
             http:
               - method: GET
                 path: /metrics
-
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
