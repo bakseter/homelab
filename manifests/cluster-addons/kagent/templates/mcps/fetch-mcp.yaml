@@ -7,7 +7,7 @@ spec:
   transportType: stdio
   deployment:
     replicas: 1
-    image: ghcr.io/bakseter/homelab/mcp-server-fetch:2026.8.18@sha256:6a6ec2d06b4e9f3faa4dbae1f04686eda0bd52a4b3d7720cdd42c91fafbf0e17
+    image: ghcr.io/bakseter/homelab/mcp-server-fetch:2026.8.18@sha256:639a9509cebd1a95a25e9f6ccd646bc1b020867cffbd3a5330786dc6f4224526
     cmd: /app/.venv/bin/mcp-server-fetch
     env:
       HOME: /tmp
