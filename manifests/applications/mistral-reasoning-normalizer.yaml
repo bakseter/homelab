@@ -6,7 +6,7 @@ metadata:
 spec:
   description: mistral-reasoning-normalizer application
   destinations:
-    - namespace: mistral-reasoning-normalizer
+    - namespace: agentgateway-system
       name: admin@homelab
   sourceRepos:
     - https://github.com/bakseter/mistral-reasoning-normalizer.git
