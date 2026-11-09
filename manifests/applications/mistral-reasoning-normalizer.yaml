@@ -35,7 +35,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: mistral-reasoning-normalizer
+    namespace: agentgateway-system
     name: admin@homelab
   project: mistral-reasoning-normalizer
   source:
