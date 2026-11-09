@@ -10,6 +10,7 @@ spec:
       name: agentgateway-proxy
       sectionName: http
   provider: Mistral
+  baseURL: http://mistral-reasoning-normalizer.agentgateway-system.svc.cluster.local:8080/v1
   policies:
     auth:
       secretRef:
@@ -27,6 +28,7 @@ spec:
       name: agentgateway-proxy
       sectionName: http
   provider: Mistral
+  baseURL: http://mistral-reasoning-normalizer.agentgateway-system.svc.cluster.local:8080/v1
   policies:
     auth:
       secretRef:
@@ -44,6 +46,7 @@ spec:
       name: agentgateway-proxy
       sectionName: http
   provider: Mistral
+  baseURL: http://mistral-reasoning-normalizer.agentgateway-system.svc.cluster.local:8080/v1
   policies:
     auth:
       secretRef:
