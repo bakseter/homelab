@@ -106,6 +106,14 @@ spec:
             - port: '4317'
               protocol: TCP
 
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: mistral-reasoning-normalizer
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
+
     - toFQDNs:
         - matchName: 'api.mistral.ai'
       toPorts:
