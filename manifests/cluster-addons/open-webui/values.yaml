@@ -1,7 +1,7 @@
 open-webui:
   image:
     repository: ghcr.io/open-webui/open-webui
-    tag: v0.13.2-slim@sha256:ea9fee9b0d83a4d73f5ddb7e23ccf42bc3514aaebc7382247af1287871397140
+    tag: v0.13.3-slim@sha256:8faf917243afee55e042b10ddc08ed6ae6fa9c62522c7e14d81e7cf2922325ae
 
   containerSecurityContext:
     allowPrivilegeEscalation: false
