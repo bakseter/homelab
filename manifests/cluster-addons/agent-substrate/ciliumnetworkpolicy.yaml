@@ -65,6 +65,15 @@ spec:
             - port: '5432'
               protocol: TCP
 
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: rustfs
+            app.kubernetes.io/name: rustfs
+      toPorts:
+        - ports:
+            - port: '9000'
+              protocol: TCP
+
     # TODO: harden
     - toEntities:
         - world
