@@ -179,6 +179,16 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '8083'
+              protocol: TCP
 ---
 # Extension of existing vanilla netpol
 # TODO: move everything here

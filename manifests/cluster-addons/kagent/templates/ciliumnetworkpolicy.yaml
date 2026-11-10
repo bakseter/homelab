@@ -17,6 +17,9 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: kagent
             app.kubernetes.io/component: controller
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ate-system
+            app: atenet-egress
       toPorts:
         - ports:
             - port: '8083'
