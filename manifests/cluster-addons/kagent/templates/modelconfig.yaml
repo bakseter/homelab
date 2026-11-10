@@ -5,7 +5,7 @@ metadata:
   namespace: kagent
 spec:
   model: zai-glm-5-3
-  provider: OpenAI
+  provider: Mistral
   mistral:
     baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1
   apiKeySecret: agentgateway-virtual-key
@@ -18,7 +18,7 @@ metadata:
   namespace: kagent
 spec:
   model: zai-glm-5-3-flash
-  provider: OpenAI
+  provider: Mistral
   mistral:
     baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1
   apiKeySecret: agentgateway-virtual-key
@@ -31,7 +31,7 @@ metadata:
   namespace: kagent
 spec:
   model: mistral-large-4
-  provider: OpenAI
+  provider: Mistral
   mistral:
     baseUrl: http://agentgateway-proxy.agentgateway-system.svc.cluster.local/v1
   apiKeySecret: agentgateway-virtual-key
