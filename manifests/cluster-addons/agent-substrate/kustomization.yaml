@@ -23,6 +23,7 @@ helmCharts:
     namespace: podcertificate-controller-system
 
 resources:
+  - ciliumnetworkpolicy.yaml
   - configmap.yaml
   - namespace.yaml
   - sealedsecret.yaml

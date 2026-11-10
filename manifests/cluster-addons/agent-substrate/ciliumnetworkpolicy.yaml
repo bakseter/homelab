@@ -1,0 +1,17 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: podcertificate-controller
+  namespace: podcertificate-controller-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app: podcertificate-controller
+
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
