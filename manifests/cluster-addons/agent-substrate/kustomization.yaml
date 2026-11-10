@@ -105,6 +105,7 @@ patches:
         value:
           seccompProfile:
             type: RuntimeDefault
+          runAsNonRoot: true
 
   - target:
       kind: Deployment
