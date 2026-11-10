@@ -63,13 +63,9 @@ spec:
             - port: '5432'
               protocol: TCP
 
-    - toEndpoints:
-        - matchLabels:
-            app: atelet
-      toPorts:
-        - ports:
-            - port: '21998'
-              protocol: TCP
+    # TODO: harden
+    - toEntities:
+        - world
 
     - toEntities:
         - kube-apiserver
