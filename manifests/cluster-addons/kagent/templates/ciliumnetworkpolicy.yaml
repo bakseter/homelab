@@ -225,6 +225,15 @@ spec:
             dns:
               - matchPattern: '*'
 
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ate-system
+            app: atenet-egress
+      toPorts:
+        - ports:
+            - port: '8443'
+              protocol: TCP
+
     - toCIDR:
         - 169.254.169.254/32
       toPorts:

@@ -150,6 +150,28 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
+  name: atenet-egress
+  namespace: ate-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app: atenet-egress
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+            ate.dev/worker-pool: kagent-default
+      toPorts:
+        - ports:
+            - port: '8443'
+              protocol: TCP
+---
+# Extension of existing vanilla netpol
+# TODO: move everything here
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
   name: k8s-credential-provider
   namespace: ate-system
 spec:
