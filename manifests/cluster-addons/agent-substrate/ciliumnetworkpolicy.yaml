@@ -173,6 +173,14 @@ spec:
   egress:
     - toEndpoints:
         - matchLabels:
+            app: ate-api-server
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: kube-system
             k8s-app: kube-dns
       toPorts:
@@ -188,4 +196,11 @@ spec:
       toPorts:
         - ports:
             - port: '6443'
+              protocol: TCP
+
+    - toFQDNs:
+        - storage.googleapis.com
+      toPorts:
+        - ports:
+            - port: '443'
               protocol: TCP
