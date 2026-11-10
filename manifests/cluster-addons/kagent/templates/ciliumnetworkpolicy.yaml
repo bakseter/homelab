@@ -146,3 +146,21 @@ spec:
         - ports:
             - port: '6443'
               protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: worker-pool
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      ate.dev/worker-pool: kagent-default
+
+  egress:
+    - toCIDR:
+        - 169.254.169.254
+      toPorts:
+        - ports:
+            - port: '80'
+              protocol: TCP
