@@ -254,6 +254,15 @@ spec:
         - ports:
             - port: '443'
               protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+            ate.dev/worker-pool: kagent-default
+      toPorts:
+        - ports:
+            - port: '8443'
+              protocol: TCP
 ---
 # Extension of existing vanilla netpol
 # TODO: move everything here
