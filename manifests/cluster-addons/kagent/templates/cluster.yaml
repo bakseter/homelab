@@ -40,5 +40,9 @@ spec:
   owner: kagent
   cluster:
     name: kagent-database
+  schemas:
+    - name: extensions
+      owner: kagent
   extensions:
     - name: vector
+      schema: extensions
