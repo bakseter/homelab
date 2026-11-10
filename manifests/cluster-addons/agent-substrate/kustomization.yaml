@@ -25,6 +25,7 @@ helmCharts:
 resources:
   - ciliumnetworkpolicy.yaml
   - configmap.yaml
+  - job.yaml
   - namespace.yaml
   - sealedsecret.yaml
   - secret.yaml
