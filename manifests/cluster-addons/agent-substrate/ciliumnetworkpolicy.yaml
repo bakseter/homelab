@@ -63,6 +63,13 @@ spec:
             - port: '5432'
               protocol: TCP
 
+    - toEndpoints:
+        - matchLabels:
+            app: atelet
+        - ports:
+            - port: '21998'
+              protocol: TCP
+
     - toEntities:
         - kube-apiserver
       toPorts:
@@ -169,6 +176,14 @@ spec:
   endpointSelector:
     matchLabels:
       app: atelet
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: ate-api-server
+        - ports:
+            - port: '21998'
+              protocol: TCP
 
   egress:
     - toEndpoints:
