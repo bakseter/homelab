@@ -38,6 +38,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ate-system
             app: ate-api-server
       toPorts:
         - ports:
