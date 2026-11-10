@@ -36,6 +36,14 @@ spec:
             - port: '5432'
               protocol: TCP
 
+    - toEndpoints:
+        - matchLabels:
+            app: ate-api-server
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
+
     - toEntities:
         - kube-apiserver
       toPorts:

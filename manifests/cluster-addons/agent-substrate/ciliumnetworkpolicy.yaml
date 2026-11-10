@@ -28,6 +28,17 @@ spec:
     matchLabels:
       app: ate-api-server
 
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
+
   egress:
     - toEndpoints:
         - matchLabels:
