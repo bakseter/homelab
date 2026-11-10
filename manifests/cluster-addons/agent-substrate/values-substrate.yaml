@@ -28,8 +28,8 @@ postgres:
   readWriteRole: kagent
   schema: substrate
   ownerConnectionStringSecretRef:
-    name: substrate-postgres-app
+    name: substrate-database-app
     key: uri
   readWriteConnectionStringSecretRef:
-    name: substrate-postgres-app
+    name: substrate-database-app
     key: uri
