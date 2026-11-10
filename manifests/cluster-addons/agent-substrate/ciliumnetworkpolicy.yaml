@@ -199,7 +199,7 @@ spec:
               protocol: TCP
 
     - toFQDNs:
-        - storage.googleapis.com
+        - matchName: 'storage.googleapis.com'
       toPorts:
         - ports:
             - port: '443'
