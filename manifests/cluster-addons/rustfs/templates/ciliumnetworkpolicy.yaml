@@ -53,6 +53,10 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: ate-system
             app: atelet
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ate-system
+            app.kubernetes.io/instance: ate
+            app.kubernetes.io/name: create-s3-buckets
       toPorts:
         - ports:
             - port: '9000'
