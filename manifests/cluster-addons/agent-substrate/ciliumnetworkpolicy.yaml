@@ -214,6 +214,43 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
+  name: atenet-router
+  namespace: ate-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app: atenet-router
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '8443'
+              protocol: TCP
+
+
+# egress:
+#   - toEndpoints:
+#       - matchLabels:
+#           k8s:io.kubernetes.pod.namespace: kube-system
+#           k8s-app: kube-dns
+#     toPorts:
+#       - ports:
+#           - port: '53'
+#             protocol: ANY
+#         rules:
+#           dns:
+#             - matchPattern: '*'
+---
+# Extension of existing vanilla netpol
+# TODO: move everything here
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
   name: k8s-credential-provider
   namespace: ate-system
 spec:

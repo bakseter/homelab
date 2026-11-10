@@ -67,6 +67,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: ate-system
             app: ate-idp-server
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ate-system
+            app: atenet-router
       toPorts:
         - ports:
             - port: '8443'
