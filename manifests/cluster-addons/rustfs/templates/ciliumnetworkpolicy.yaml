@@ -50,6 +50,9 @@ spec:
             k8s:io.kubernetes.pod.namespace: monitoring
             app.kubernetes.io/instance: tempo
             app.kubernetes.io/name: tempo
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ate-system
+            app: atelet
       toPorts:
         - ports:
             - port: '9000'

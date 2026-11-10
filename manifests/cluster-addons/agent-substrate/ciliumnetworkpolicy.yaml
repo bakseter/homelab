@@ -208,6 +208,15 @@ spec:
             dns:
               - matchPattern: '*'
 
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: rustfs
+            app.kubernetes.io/name: rustfs
+      toPorts:
+        - ports:
+            - port: '9000'
+              protocol: TCP
+
     - toEntities:
         - kube-apiserver
       toPorts:
