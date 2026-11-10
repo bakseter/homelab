@@ -1,0 +1,14 @@
+apiVersion: api.kagent.dev/v1alpha3
+kind: Harness
+metadata:
+  name: kagent
+  namespace: kagent
+spec:
+  kagent: {}
+  substrate:
+    snapshotPolicy:
+      location: s3://ate-snapshots/kagent/
+    workerPoolRef:
+      name: kagent-default
+  workload:
+    image: ghcr.io/kagent-dev/kagent/golang-adk:1.0.0@sha256:f62e9f2820d3325ca147a5d39802dc3e9c914bee97b3e021bd38f6f5df10e3bf
