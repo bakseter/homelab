@@ -2,6 +2,7 @@ kagent:
   controller:
     substrateClientCertificate:
       enabled: true
+
   substrateWorkerPool:
     create: true
     workerImage: 'ghcr.io/kagent-dev/substrate/ateworker-gvisor:v1.0.0'
