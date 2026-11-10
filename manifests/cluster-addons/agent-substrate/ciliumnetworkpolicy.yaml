@@ -68,6 +68,14 @@ spec:
         - world
 
     - toEntities:
+        - matchLabels:
+            app: atelet
+      toPorts:
+        - ports:
+            - port: '21998'
+              protocol: TCP
+
+    - toEntities:
         - kube-apiserver
       toPorts:
         - ports:
