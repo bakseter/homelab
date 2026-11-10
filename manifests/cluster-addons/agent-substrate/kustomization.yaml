@@ -25,3 +25,91 @@ helmCharts:
 resources:
   - configmap.yaml
   - namespace.yaml
+
+patches:
+  - target:
+      kind: Deployment
+      name: ate-api-server
+    patch: |-
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          seccompProfile:
+            type: RuntimeDefault
+
+  - target:
+      kind: Deployment
+      name: ate-controller
+    patch: |-
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          seccompProfile:
+            type: RuntimeDefault
+
+  - target:
+      kind: Deployment
+      name: ate-idp-server
+    patch: |-
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          seccompProfile:
+            type: RuntimeDefault
+
+  - target:
+      kind: Deployment
+      name: atenet-egress
+    patch: |-
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          seccompProfile:
+            type: RuntimeDefault
+
+      - op: add
+        path: /spec/template/spec/containers/0/securityContext
+        value:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+
+  - target:
+      kind: Deployment
+      name: atenet-router
+    patch: |-
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          seccompProfile:
+            type: RuntimeDefault
+          runAsNonRoot: true
+
+      - op: add
+        path: /spec/template/spec/containers/0/securityContext
+        value:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+
+  - target:
+      kind: Deployment
+      name: k8s-credential-provider
+    patch: |-
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          seccompProfile:
+            type: RuntimeDefault
+
+  - target:
+      kind: Deployment
+      name: podcertificate-controller
+    patch: |-
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          seccompProfile:
+            type: RuntimeDefault
