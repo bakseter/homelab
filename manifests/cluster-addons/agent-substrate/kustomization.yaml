@@ -27,6 +27,7 @@ resources:
   - configmap.yaml
   - namespace.yaml
   - sealedsecret.yaml
+  - secret.yaml
 
 patches:
   - target:
