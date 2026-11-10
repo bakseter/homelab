@@ -4,6 +4,10 @@ kagent:
       grpcReflection: true
 
     database:
+      owner:
+        role: kagent
+      readWrite:
+        role: kagent
       vectorEnabled: true
       skipMigrations: false
 
@@ -30,7 +34,7 @@ kagent:
   database:
     postgres:
       ownerConnectionStringSecretRef:
-        name: kagent-database-superuser
+        name: kagent-database-app
         key: uri
 
       readWriteConnectionStringSecretRef:
