@@ -224,7 +224,7 @@ kube-prometheus-stack:
     image:
       registry: quay.io
       repository: prometheus-operator/prometheus-operator
-      tag: v0.95.1@sha256:9c2490af910d58ec2abd77642d340e30bd5e2de5c80fd19ab4b49e28dc7bbb83
+      tag: v0.95.2@sha256:7986c2afa118c9dea07d01c5e1a29555824582e92f6ee8607591d1a7178acf29
 
     prometheusConfigReloader:
       image:
