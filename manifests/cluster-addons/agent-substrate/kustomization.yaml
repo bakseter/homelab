@@ -4,7 +4,7 @@ kind: Kustomization
 helmCharts:
   - name: substrate
     repo: oci://ghcr.io/kagent-dev/substrate/helm
-    version: 1.0.0
+    version: 1.0.1
     releaseName: substrate
     namespace: ate-system
     valuesFile: values-substrate.yaml
