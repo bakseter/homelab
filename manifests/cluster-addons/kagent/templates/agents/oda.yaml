@@ -8,7 +8,6 @@ spec:
   modelConfig:
     name: mistral-large-4
   systemPromptFrom:
-    type: Secret
     name: oda-shopper-prompt
     key: system-message
   tools:
