@@ -118,3 +118,25 @@ patches:
         value:
           seccompProfile:
             type: RuntimeDefault
+
+  - target:
+      kind: DaemonSet
+      name: atelet
+    patch: |-
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          node-role.bakseter.net: agent
+
+      - op: add
+        path: /spec/template/spec/nodeSelector
+        value:
+          node-role.bakseter.net/agent: 'true'
+
+      - op: add
+        path: /spec/template/spec/tolerations/2
+        value:
+          key: node-role.bakseter.net/agent
+          operator: Equal
+          value: 'true'
+          effect: NoSchedule
