@@ -25,6 +25,10 @@ spec:
       - name: pgvector
     pg_hba:
      - hostssl all all all scram-sha-256
+  bootstrap:
+    initdb:
+      database: kagent
+      owner: kagent
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database

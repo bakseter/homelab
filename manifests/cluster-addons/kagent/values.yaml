@@ -21,6 +21,9 @@ kagent:
       - name: postgres-ca
         secret:
           secretName: kagent-database-ca
+          items:
+            - key: ca.crt
+              path: ca.crt
 
     volumeMounts:
       - name: postgres-ca
