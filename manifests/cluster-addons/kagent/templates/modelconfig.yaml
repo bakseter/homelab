@@ -1,4 +1,4 @@
-apiVersion: kagent.dev/v1alpha2
+apiVersion: kagent.dev/v1alpha3
 kind: ModelConfig
 metadata:
   name: zai-glm-5-3
@@ -11,7 +11,7 @@ spec:
   apiKeySecret: agentgateway-virtual-key
   apiKeySecretKey: VIRTUAL_KEY
 ---
-apiVersion: kagent.dev/v1alpha2
+apiVersion: kagent.dev/v1alpha3
 kind: ModelConfig
 metadata:
   name: zai-glm-5-3-flash
@@ -24,7 +24,7 @@ spec:
   apiKeySecret: agentgateway-virtual-key
   apiKeySecretKey: VIRTUAL_KEY
 ---
-apiVersion: kagent.dev/v1alpha2
+apiVersion: kagent.dev/v1alpha3
 kind: ModelConfig
 metadata:
   name: mistral-large-4
