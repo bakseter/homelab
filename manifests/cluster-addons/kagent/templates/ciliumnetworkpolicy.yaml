@@ -159,7 +159,7 @@ spec:
 
   egress:
     - toCIDR:
-        - 169.254.169.254
+        - 169.254.169.254/32
       toPorts:
         - ports:
             - port: '80'
