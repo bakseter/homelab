@@ -75,6 +75,15 @@ spec:
             - port: '8443'
               protocol: TCP
 
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '8083'
+              protocol: TCP
+
     - toEntities:
         - kube-apiserver
       toPorts:
