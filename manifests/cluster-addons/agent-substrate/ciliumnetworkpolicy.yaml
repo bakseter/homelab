@@ -67,7 +67,7 @@ spec:
     - toEntities:
         - world
 
-    - toEntities:
+    - toEndpoints:
         - matchLabels:
             app: atelet
       toPorts:
