@@ -124,11 +124,6 @@ patches:
       name: atelet
     patch: |-
       - op: add
-        path: /spec/template/spec/securityContext
-        value:
-          node-role.bakseter.net: agent
-
-      - op: add
         path: /spec/template/spec/nodeSelector
         value:
           node-role.bakseter.net/agent: 'true'
