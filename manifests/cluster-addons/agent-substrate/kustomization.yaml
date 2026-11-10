@@ -68,6 +68,7 @@ patches:
         value:
           seccompProfile:
             type: RuntimeDefault
+          runAsNonRoot: true
 
       - op: add
         path: /spec/template/spec/containers/0/securityContext
