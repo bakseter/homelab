@@ -36,6 +36,8 @@ spec:
             app.kubernetes.io/component: controller
         - matchLabels:
             app: ate-controller
+        - matchLabels:
+            app: atenet-egress
       toPorts:
         - ports:
             - port: '443'
@@ -179,6 +181,14 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            app: ate-api-server
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
