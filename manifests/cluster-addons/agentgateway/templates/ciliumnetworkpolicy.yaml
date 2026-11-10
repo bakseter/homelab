@@ -81,6 +81,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: open-webui
             app.kubernetes.io/name: open-webui
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ate-system
+            app: atenet-egress
       toPorts:
         - ports:
             - port: '80'
