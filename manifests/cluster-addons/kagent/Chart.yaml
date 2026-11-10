@@ -3,8 +3,11 @@ name: kagent-umbrella
 version: 0.1.0
 dependencies:
   - name: kagent-crds
-    version: 0.10.6
+    version: 1.0.0
     repository: oci://ghcr.io/kagent-dev/kagent/helm
+  - name: substrate-crds
+    version: 1.0.0
+    repository: oci://ghcr.io/kagent-dev/substrate/helm
   - name: kagent
-    version: 0.10.6
+    version: 1.0.0
     repository: oci://ghcr.io/kagent-dev/kagent/helm
