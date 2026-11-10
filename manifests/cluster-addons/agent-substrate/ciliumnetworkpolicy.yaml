@@ -226,6 +226,7 @@ spec:
 
     - toFQDNs:
         - matchName: 'storage.googleapis.com'
+        - matchName: 'ghcr.io'
       toPorts:
         - ports:
             - port: '443'
