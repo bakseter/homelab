@@ -305,6 +305,13 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
+
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
 ---
 # Extension of existing vanilla netpol
 # TODO: move everything here
