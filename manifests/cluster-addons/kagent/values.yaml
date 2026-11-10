@@ -29,17 +29,13 @@ kagent:
 
   database:
     postgres:
-      owner:
-        existingSecret:
-          name: kagent-database-superuser
-          keys:
-            ownerConnectionString: uri
+      ownerConnectionStringSecretRef:
+        name: kagent-database-superuser
+        key: uri
 
-      readWrite:
-        existingSecret:
-          name: kagent-database-app
-          keys:
-            readWriteConnectionString: uri
+      readWriteConnectionStringSecretRef:
+        name: kagent-database-app
+        key: uri
 
   ui:
     externalUrl: kagent.bakseter.net
