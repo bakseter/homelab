@@ -166,6 +166,19 @@ spec:
         - ports:
             - port: '8443'
               protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
 ---
 # Extension of existing vanilla netpol
 # TODO: move everything here
