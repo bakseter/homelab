@@ -25,10 +25,16 @@ spec:
       - name: pgvector
     pg_hba:
      - hostssl all all all scram-sha-256
-  bootstrap:
-    initdb:
-      database: kagent
-      owner: kagent
-      postInitSQL:
-        - CREATE SCHEMA IF NOT EXISTS extensions AUTHORIZATION kagent
-        - CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA extensions
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: kagent
+  namespace: kagent
+spec:
+  name: kagent
+  owner: kagent
+  cluster:
+    name: kagent-database
+  extensions:
+    - name: vector
