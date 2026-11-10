@@ -17,8 +17,6 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: kagent
             app.kubernetes.io/component: controller
-        - matchLabels:
-            ate.dev/worker-pool: kagent-default
       toPorts:
         - ports:
             - port: '8083'
@@ -234,15 +232,6 @@ spec:
       toPorts:
         - ports:
             - port: '8443'
-              protocol: TCP
-
-    - toEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: kagent
-            app.kubernetes.io/component: controller
-      toPorts:
-        - ports:
-            - port: '8083'
               protocol: TCP
 
     - toCIDR:
