@@ -25,7 +25,7 @@ kagent:
 
   substrateWorkerPool:
     create: true
-    workerImage: 'ghcr.io/kagent-dev/substrate/ateworker-gvisor:v1.0.0'
+    workerImage: 'ghcr.io/kagent-dev/substrate/ateworker-gvisor:v1.0.1'
 
   database:
     postgres:
