@@ -158,6 +158,18 @@ spec:
       ate.dev/worker-pool: kagent-default
 
   egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
     - toCIDR:
         - 169.254.169.254/32
       toPorts:
