@@ -4,21 +4,21 @@ kind: Kustomization
 helmCharts:
   - name: substrate
     repo: oci://ghcr.io/kagent-dev/substrate/helm
-    version: 1.0.0
+    version: 1.0.1
     releaseName: substrate
     namespace: ate-system
     valuesFile: values-substrate.yaml
 
   - name: substrate-atelet
     repo: oci://ghcr.io/kagent-dev/substrate/helm
-    version: 1.0.0
+    version: 1.0.1
     releaseName: substrate-atelet
     namespace: ate-system
     valuesFile: values-substrate-atelet.yaml
 
   - name: substrate-podcert
     repo: oci://ghcr.io/kagent-dev/substrate/helm
-    version: 1.0.0
+    version: 1.0.1
     releaseName: substrate-podcert
     namespace: podcertificate-controller-system
 
