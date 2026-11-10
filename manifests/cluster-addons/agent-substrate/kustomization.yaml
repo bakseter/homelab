@@ -18,7 +18,7 @@ helmCharts:
 
   - name: substrate-podcert
     repo: oci://ghcr.io/kagent-dev/substrate/helm
-    version: 1.0.0
+    version: 1.0.1
     releaseName: substrate-podcert
     namespace: podcertificate-controller-system
 
