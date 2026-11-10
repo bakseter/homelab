@@ -65,3 +65,9 @@ kagent:
 
       hostnames:
         - kagent.bakseter.net
+
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
