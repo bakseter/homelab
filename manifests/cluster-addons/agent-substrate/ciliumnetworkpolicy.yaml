@@ -73,6 +73,29 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
+  name: ate-idp-server
+  namespace: ate-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app: ate-idp-server
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '8443'
+              protocol: TCP
+---
+# Extension of existing vanilla netpol
+# TODO: move everything here
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
   name: ate-controller
   namespace: ate-system
 spec:

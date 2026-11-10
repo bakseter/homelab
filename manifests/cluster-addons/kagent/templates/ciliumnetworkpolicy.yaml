@@ -45,6 +45,15 @@ spec:
             - port: '443'
               protocol: TCP
 
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ate-system
+            app: ate-idp-server
+      toPorts:
+        - ports:
+            - port: '8443'
+              protocol: TCP
+
     - toEntities:
         - kube-apiserver
       toPorts:
