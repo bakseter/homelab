@@ -10,14 +10,14 @@ helmCharts:
     valuesFile: values-substrate.yaml
 
   - name: substrate-atelet
-    repo: oci://ghcr.io/kagent-dev/substrate-atelet/helm
+    repo: oci://ghcr.io/kagent-dev/substrate/helm
     version: 1.0.0
     releaseName: substrate-atelet
     namespace: ate-system
     valuesFile: values-substrate-atelet.yaml
 
   - name: substrate-podcert
-    repo: oci://ghcr.io/kagent-dev/substrate-atelet/helm
+    repo: oci://ghcr.io/kagent-dev/substrate/helm
     version: 1.0.0
     releaseName: substrate-podcert
     namespace: podcertificate-controller-system
