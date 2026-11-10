@@ -28,6 +28,14 @@ spec:
             dns:
               - matchPattern: '*'
 
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: kagent-database
+      toPorts:
+        - ports:
+            - port: '5432'
+              protocol: TCP
+
     - toEntities:
         - kube-apiserver
       toPorts:
