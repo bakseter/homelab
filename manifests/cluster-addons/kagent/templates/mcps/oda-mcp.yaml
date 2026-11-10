@@ -111,7 +111,9 @@ data:
         chmod 600 "$D/$b"
       fi
     done
-    exec npx -y mcp-remote@0.16.5 https://oda.com/mcp
+    exec npx -y supergateway@4.2.2 \
+      --stdio "npx -y mcp-remote@0.16.5 https://oda.com/mcp" \
+      --outputTransport streamableHttp --port 3000 --streamableHttpPath /mcp
 ---
 apiVersion: v1
 kind: Service
