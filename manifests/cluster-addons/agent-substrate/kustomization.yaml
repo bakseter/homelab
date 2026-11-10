@@ -11,7 +11,7 @@ helmCharts:
 
   - name: substrate-atelet
     repo: oci://ghcr.io/kagent-dev/substrate/helm
-    version: 1.0.0
+    version: 1.0.1
     releaseName: substrate-atelet
     namespace: ate-system
     valuesFile: values-substrate-atelet.yaml
