@@ -102,6 +102,9 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: kagent
             app.kubernetes.io/component: controller
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ate-system
+            app: ate-api-server
       toPorts:
         - ports:
             - port: '5432'

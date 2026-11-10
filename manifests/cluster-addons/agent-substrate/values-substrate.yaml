@@ -22,3 +22,14 @@ credentialProvider:
 
 rustfs:
   enabled: false
+
+postgres:
+  ownerRole: kagent
+  readWriteRole: kagent
+  schema: substrate
+  ownerConnectionStringSecretRef:
+    name: substrate-postgres-app
+    key: uri
+  readWriteConnectionStringSecretRef:
+    name: substrate-postgres-app
+    key: uri
