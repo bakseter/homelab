@@ -23,4 +23,5 @@ helmCharts:
     namespace: podcertificate-controller-system
 
 resources:
-  - ate-api-authentication.yaml
+  - configmap.yaml
+  - namespace.yaml
