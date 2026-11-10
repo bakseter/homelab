@@ -20,7 +20,8 @@ spec:
       selfHeal: true
     managedNamespaceMetadata:
       labels:
-        pod-security.kubernetes.io/enforce: restricted
+        pod-security.kubernetes.io/warn: restricted
+        pod-security.kubernetes.io/enforce: privileged
         ate.dev/api-access: 'true'
     syncOptions:
       - CreateNamespace=true
