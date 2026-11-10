@@ -38,7 +38,7 @@ kagent:
         key: uri
 
   ui:
-    externalUrl: kagent.bakseter.net
+    externalUrl: https://kagent.bakseter.net
     httpRoute:
       enabled: true
 
