@@ -6,3 +6,8 @@ labels:
 # Kept here for reproducability.
 taints:
   node-role.bakseter.net/agent: 'true:NoSchedule'
+---
+apiVersion: v1alpha1
+kind: SysctlConfig
+params:
+  user.max_user_namespaces: '11255' # needed for gVisor

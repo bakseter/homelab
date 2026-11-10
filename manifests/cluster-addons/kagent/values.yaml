@@ -33,6 +33,14 @@ kagent:
   substrateWorkerPool:
     create: true
     workerImage: 'ghcr.io/kagent-dev/substrate/ateworker-gvisor:v1.0.1'
+    template:
+      nodeSelector:
+        node-role.bakseter.net/agent: 'true'
+      tolerations:
+        - key: node-role.bakseter.net/agent
+          operator: Equal
+          value: 'true'
+          effect: NoSchedule
 
   database:
     postgres:
