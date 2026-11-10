@@ -54,7 +54,7 @@ spec:
       app: ate-controller
 
   egress:
-    - toEndpoints:
+    - toEntities:
         - kube-apiserver
       toPorts:
         - ports:
