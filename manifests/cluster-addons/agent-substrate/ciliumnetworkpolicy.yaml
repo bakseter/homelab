@@ -203,6 +203,14 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            app: k8s-credential-provider
+      toPorts:
+        - ports:
+            - port: '50051'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: kagent
             app.kubernetes.io/name: kagent
             app.kubernetes.io/component: controller
@@ -275,6 +283,15 @@ spec:
   endpointSelector:
     matchLabels:
       app: k8s-credential-provider
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: atenet-egress
+      toPorts:
+        - ports:
+            - port: '50051'
+              protocol: TCP
 
   egress:
     - toEndpoints:
