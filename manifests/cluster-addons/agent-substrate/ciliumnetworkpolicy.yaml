@@ -66,6 +66,7 @@ spec:
     - toEndpoints:
         - matchLabels:
             app: atelet
+      toPorts:
         - ports:
             - port: '21998'
               protocol: TCP
@@ -181,6 +182,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app: ate-api-server
+      toPorts:
         - ports:
             - port: '21998'
               protocol: TCP
