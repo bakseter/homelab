@@ -10,4 +10,15 @@ taints:
 apiVersion: v1alpha1
 kind: SysctlConfig
 params:
-  user.max_user_namespaces: '11255' # needed for gVisor
+  # Needed for gVisor
+  user.max_user_namespaces: '11255'
+
+  # > Each sandbox gets its own network namespace.
+  # > Proxy ARP/NDP lets sandbox traffic route through the worker pod,
+  # > and a larger neighbor table keeps many sandboxes per node from overflowing it.
+  # https://www.siderolabs.com/blog/run-agent-substrate-on-your-own-hardware-with-omni
+  net.ipv4.conf.all.proxy_arp: '1'
+  net.ipv6.conf.all.proxy_ndp: '1'
+  net.ipv4.neigh.default.gc_thresh1: '4096'
+  net.ipv4.neigh.default.gc_thresh2: '16384'
+  net.ipv4.neigh.default.gc_thresh3: '32768'
