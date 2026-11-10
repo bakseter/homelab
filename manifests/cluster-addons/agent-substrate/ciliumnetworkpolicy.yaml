@@ -249,7 +249,7 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: ate-api-server
+            app: ate-api-server
       toPorts:
         - ports:
             - port: '443'
