@@ -33,3 +33,22 @@ postgres:
   readWriteConnectionStringSecretRef:
     name: substrate-database-app
     key: uri
+
+objectStorePlugin:
+  extraEnv:
+    - name: AWS_REGION
+      value: us-east-1
+    - name: AWS_ENDPOINT_URL
+      value: http://rustfs-svc.rustfs.svc.cluster.local:9000
+    - name: AWS_S3_USE_PATH_STYLE
+      value: 'true'
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: kagent-rustfs-credentials
+          key: AWS_ACCESS_KEY_ID
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: kagent-rustfs-credentials
+          key: AWS_SECRET_ACCESS_KEY
