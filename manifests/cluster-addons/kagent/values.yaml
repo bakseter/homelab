@@ -1,11 +1,45 @@
 kagent:
+  config:
+    server:
+      grpcReflection: true
+
+    database:
+      vectorEnabled: true
+      skipMigrations: false
+
   controller:
+    replicas: 3
+
     substrateClientCertificate:
       enabled: true
+
+    volumes:
+      - name: postgres-ca
+        secret:
+          secretName: kagent-database-ca
+
+    volumeMounts:
+      - name: postgres-ca
+        mountPath: /run/postgres-ca
+        readOnly: true
 
   substrateWorkerPool:
     create: true
     workerImage: 'ghcr.io/kagent-dev/substrate/ateworker-gvisor:v1.0.0'
+
+  database:
+    postgres:
+      owner:
+        existingSecret:
+          name: kagent-database-superuser
+          keys:
+            ownerConnectionString: uri
+
+      readWrite:
+        existingSecret:
+          name: kagent-database-app
+          keys:
+            readWriteConnectionString: uri
 
   ui:
     externalUrl: kagent.bakseter.net
