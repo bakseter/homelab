@@ -84,6 +84,14 @@ spec:
             - port: '8083'
               protocol: TCP
 
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: oda-mcp
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
     - toEntities:
         - kube-apiserver
       toPorts:

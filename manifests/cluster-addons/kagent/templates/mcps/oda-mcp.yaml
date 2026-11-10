@@ -134,3 +134,40 @@ spec:
   description: Oda shopping tools
   url: http://oda-mcp.kagent.svc.cluster.local:3000/mcp
   protocol: STREAMABLE_HTTP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: oda-mcp
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: oda-mcp
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+    - toFQDNs:
+        - matchName: 'oda.com'
+        - matchName: 'registry.npmjs.org'
