@@ -38,6 +38,8 @@ spec:
             app: ate-controller
         - matchLabels:
             app: atenet-egress
+        - matchLabels:
+            app: atenet-router
       toPorts:
         - ports:
             - port: '443'
@@ -244,6 +246,14 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: ate-api-server
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
 ---
 # Extension of existing vanilla netpol
 # TODO: move everything here
