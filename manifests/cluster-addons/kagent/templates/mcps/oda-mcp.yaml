@@ -1,9 +1,3 @@
-# The Oda MCP bridge, from scratch: token volume, start script, workload,
-# Service and network policy. All in the kagent namespace.
-#
-# NOT in this file: the `oda-mcp-bootstrap` Secret holding the OAuth files
-# from your one-time login. Create it as a SealedSecret (see the steps in
-# the chat) BEFORE applying this, or the pod will stay in ContainerCreating.
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -93,7 +87,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: bridge
-          image: ghcr.io/bakseter/mcp-remote-supergateway:latest
+          image: ghcr.io/bakseter/homelab/mcp-remote-supergateway:latest@sha256:d2146346e56adf3fd4e9dbab1d7a08799388a52d247fcaed7a88e6584150e953
           command: ['/bin/sh', '/scripts/bootstrap.sh']
           ports:
             - name: mcp
