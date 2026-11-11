@@ -25,10 +25,11 @@ jobs:
       fail-fast: false
       matrix:
         image:
-          - beets:2.14.1
-          - mcp-tools:1
-          - alpine/git-cacerts:3.24
-          - mcp-server-fetch:2026.8.18
+          - beets
+          - mcp-tools
+          - alpine-git-cacerts
+          - mcp-server-fetch
+          - mcp-remote-supergateway
 
     steps:
       - name: Checkout repository
@@ -44,18 +45,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
 
-      - name: Get Dockerfile path and image name
-        id: get-env
-        run: |
-          echo "dockerfile=$(echo $MATRIX_IMAGE | sed -e 's/\//+/g')" >> "$GITHUB_OUTPUT"
-          echo "image-name-with-tag=$IMAGE_NAME_PREFIX/$MATRIX_IMAGE" >> "$GITHUB_OUTPUT"
-        env:
-          MATRIX_IMAGE: ${{ matrix.image }}
-
-      - name: Build image with cache and push to registry
+      - name: Build image and push to registry
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
-          file: 'images/Dockerfile.${{ steps.get-env.outputs.dockerfile }}'
-          context: 'images'
+          file: 'images/${{ matrix.image }}/Dockerfile'
           push: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }}
-          tags: ${{ steps.get-env.outputs.image-name-with-tag }}
+          tags: '${{ env.IMAGE_NAME_PREFIX }}/${{ matrix.image }}'

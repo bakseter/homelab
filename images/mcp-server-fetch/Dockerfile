@@ -1,6 +1,6 @@
 FROM ghcr.io/astral-sh/uv:python3.14-trixie-slim@sha256:e80c05a310400cfc90af00b5b7271ef9ad24816e3265e1162af8a678e1aad099 AS build
 
-ARG FETCH_VERSION=2026.10.19
+ARG FETCH_VERSION=2026.11.11
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
 RUN uv venv /app/.venv && \

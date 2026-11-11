@@ -1,0 +1,10 @@
+{
+  "name": "mcp-remote-supergateway",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Streamable HTTP bridge in front of mcp-remote",
+  "dependencies": {
+    "mcp-remote": "0.16.6",
+    "supergateway": "4.2.2"
+  }
+}
