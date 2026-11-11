@@ -1,0 +1,37 @@
+apiVersion: api.kagent.dev/v1alpha3
+kind: Agent
+metadata:
+  name: my-first-agent
+  namespace: kagent
+spec:
+  harnessRef:
+    name: my-first-harness
+  template:
+    ref:
+      name: my-first-template
+---
+apiVersion: api.kagent.dev/v1alpha3
+kind: AgentTemplate
+metadata:
+  name: my-first-template
+  namespace: kagent
+spec:
+  description: My first kagent agent
+  modelConfig:
+    name: mistral-large-4
+  systemPrompt: You are a concise, helpful assistant.
+---
+apiVersion: api.kagent.dev/v1alpha3
+kind: Harness
+metadata:
+  name: my-first-harness
+  namespace: kagent
+spec:
+  kagent: {}
+  substrate:
+    snapshotPolicy:
+      location: s3://ate-snapshots/kagent/
+    workerPoolRef:
+      name: kagent-default
+  workload:
+    image: ghcr.io/kagent-dev/kagent/golang-adk@sha256:f62e9f2820d3325ca147a5d39802dc3e9c914bee97b3e021bd38f6f5df10e3bf
