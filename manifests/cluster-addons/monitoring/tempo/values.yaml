@@ -1,12 +1,12 @@
 tempo:
-  extraEnvFrom:
-    - secretRef:
-        name: rustfs-s3-credentials
-
   tempo:
     registry: docker.io
     repository: grafana/tempo
     # tag: ""
+
+    extraEnvFrom:
+      - secretRef:
+          name: rustfs-s3-credentials
 
     reportingEnabled: false
 
@@ -15,7 +15,6 @@ tempo:
     storage:
       trace:
         backend: s3
-
         s3:
           bucket: tempo
           endpoint: rustfs-svc.rustfs.svc.cluster.local:9000
