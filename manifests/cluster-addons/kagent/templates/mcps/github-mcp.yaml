@@ -4,6 +4,6 @@ metadata:
   name: github-mcp
   namespace: kagent
 spec:
-  description: GitHub (read-only), served through the MCP gateway
+  description: GitHub (read-only)
   url: http://mcp-gateway.agentgateway-system.svc.cluster.local:8102/mcp
   protocol: STREAMABLE_HTTP

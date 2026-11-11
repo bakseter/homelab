@@ -1,3 +1,13 @@
+apiVersion: api.kagent.dev/v1alpha3
+kind: RemoteMCPServer
+metadata:
+  name: oda-mcp
+  namespace: kagent
+spec:
+  description: Oda grocery shopping tools
+  url: http://mcp-gateway.agentgateway-system.svc.cluster.local:8101/mcp
+  protocol: STREAMABLE_HTTP
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
