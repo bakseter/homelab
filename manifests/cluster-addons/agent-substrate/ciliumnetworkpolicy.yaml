@@ -228,6 +228,16 @@ spec:
         - ports:
             - port: '80'
               protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: agentgateway-system
+            app.kubernetes.io/name: mcp-gateway
+            gateway.networking.k8s.io/gateway-name: mcp-gateway
+      toPorts:
+        - ports:
+            - port: '8101'
+              protocol: TCP
 ---
 # Extension of existing vanilla netpol
 # TODO: move everything here

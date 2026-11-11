@@ -157,13 +157,26 @@ spec:
 
   ingress:
     - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: monitoring
-            app.kubernetes.io/name: prometheus
-        - matchLabels:
             k8s:io.kubernetes.pod.namespace: kagent
             app.kubernetes.io/name: kagent
             app.kubernetes.io/component: controller
+      toPorts:
+        - ports:
+            - port: '15020'
+              protocol: TCP
+
+    - fromEndpoints:
+            k8s:io.kubernetes.pod.namespace: ate-system
+            app: atenet-egress
+      toPorts:
+        - ports:
+            - port: '8101'
+              protocol: TCP
+
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
       toPorts:
         - ports:
             - port: '15020'
