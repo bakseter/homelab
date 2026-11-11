@@ -22,6 +22,8 @@ rustfs:
 
   secret:
     existingSecret: rustfs-credentials
+    existingSecretAccessKeyKey: access_key
+    existingSecretSecretKeyKey: secret_key
 
   storageclass:
     name: longhorn
