@@ -1,0 +1,14 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: oda-mcp
+  namespace: agentgateway-system
+spec:
+  mcp:
+    targets:
+      - name: oda
+        static:
+          host: oda-mcp.kagent.svc.cluster.local
+          port: 3000
+          path: /mcp
+          protocol: StreamableHTTP

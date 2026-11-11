@@ -6,14 +6,29 @@ metadata:
 spec:
   gatewayClassName: agentgateway
   listeners:
-    - protocol: HTTP
+    - name: http
+      protocol: HTTP
       port: 80
-      name: http
       allowedRoutes:
         namespaces:
-          from: All
+          from: Same
         kinds:
           - group: gateway.networking.k8s.io
             kind: HTTPRoute
           - group: agentgateway.dev
             kind: AgentgatewayModel
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: mcp-gateway
+  namespace: agentgateway-system
+spec:
+  gatewayClassName: agentgateway
+  listeners:
+    - name: oda
+      protocol: HTTP
+      port: 8101
+      allowedRoutes:
+        namespaces:
+          from: Same
