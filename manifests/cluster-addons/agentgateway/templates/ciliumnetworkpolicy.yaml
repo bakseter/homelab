@@ -163,7 +163,7 @@ spec:
             app.kubernetes.io/component: controller
       toPorts:
         - ports:
-            - port: '15020'
+            - port: '8101'
               protocol: TCP
 
     - fromEndpoints:
