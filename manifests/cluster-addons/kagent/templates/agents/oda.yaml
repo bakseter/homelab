@@ -18,7 +18,7 @@ spec:
   modelConfig:
     name: mistral-large-4
   systemPromptFrom:
-    name: oda-shopper-prompt
+    name: oda-agent-prompt
     key: system-message
   tools:
     - mcp:
