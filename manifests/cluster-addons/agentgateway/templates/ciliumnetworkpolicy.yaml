@@ -14,6 +14,9 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: agentgateway-proxy
             gateway.networking.k8s.io/gateway-name: agentgateway-proxy
+        - matchLabels:
+            app.kubernetes.io/name: mcp-gateway
+            gateway.networking.k8s.io/gateway-name: mcp-gateway
       toPorts:
         - ports:
             - port: '9978'
@@ -140,3 +143,69 @@ spec:
         - ports:
             - port: '8080'
               protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: mcp-gateway
+  namespace: agentgateway-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: mcp-gateway
+      gateway.networking.k8s.io/gateway-name: mcp-gateway
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '15020'
+              protocol: TCP
+          rules:
+            http:
+              - method: GET
+                path: /metrics
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
+
+
+    - toEndpoints:
+       - matchLabels:
+          app.kubernetes.io/name: agentgateway
+          agentgateway: agentgateway
+      toPorts:
+        - ports:
+            - port: '9978'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
+
+    - toEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: kagent
+          app.kubernetes.io/name: oda-mcp
+      toPorts:
+      - ports:
+          - port: '3000'
+            protocol: TCP
