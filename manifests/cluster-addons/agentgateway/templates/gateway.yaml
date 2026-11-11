@@ -32,3 +32,9 @@ spec:
       allowedRoutes:
         namespaces:
           from: Same
+    - name: github
+      protocol: HTTP
+      port: 8102
+      allowedRoutes:
+        namespaces:
+          from: Same

@@ -172,7 +172,9 @@ spec:
             app: atenet-egress
       toPorts:
         - ports:
-            - port: '8101'
+            - port: '8101' # oda-mcp
+              protocol: TCP
+            - port: '8102' # github-mcp
               protocol: TCP
 
     - fromEndpoints:
@@ -226,4 +228,11 @@ spec:
       toPorts:
         - ports:
             - port: '3000'
+              protocol: TCP
+
+    - toFQDNs:
+        - matchName: 'api.githubcopilot.com'
+      toPorts:
+        - ports:
+            - port: '443'
               protocol: TCP

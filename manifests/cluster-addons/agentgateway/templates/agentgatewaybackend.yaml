@@ -12,3 +12,23 @@ spec:
           port: 3000
           path: /mcp
           protocol: StreamableHTTP
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: github-mcp
+  namespace: agentgateway-system
+spec:
+  mcp:
+    targets:
+      - name: github
+        static:
+          host: api.githubcopilot.com
+          port: 443
+          path: /mcp/readonly
+  policies:
+    auth:
+      secretRef:
+        name: github-mcp-pat
+    tls:
+      sni: api.githubcopilot.com

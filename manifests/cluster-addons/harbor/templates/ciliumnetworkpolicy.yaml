@@ -42,8 +42,8 @@ spec:
             app.kubernetes.io/component: redis
       toPorts:
         - ports:
-           - port: '6379'
-             protocol: TCP
+            - port: '6379'
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
@@ -51,8 +51,8 @@ spec:
             app.kubernetes.io/component: trivy
       toPorts:
         - ports:
-           - port: '8080'
-             protocol: TCP
+            - port: '8080'
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
@@ -60,10 +60,10 @@ spec:
             app.kubernetes.io/component: registry
       toPorts:
         - ports:
-           - port: '5000'
-             protocol: TCP
-           - port: '8080'
-             protocol: TCP
+            - port: '5000'
+              protocol: TCP
+            - port: '8080'
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
@@ -71,8 +71,8 @@ spec:
             app.kubernetes.io/component: portal
       toPorts:
         - ports:
-           - port: '8080'
-             protocol: TCP
+            - port: '8080'
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
@@ -80,16 +80,16 @@ spec:
             app.kubernetes.io/component: jobservice
       toPorts:
         - ports:
-           - port: '8080'
-             protocol: TCP
+            - port: '8080'
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: harbor-database
       toPorts:
         - ports:
-           - port: '5432'
-             protocol: TCP
+            - port: '5432'
+              protocol: TCP
 
     - toFQDNs:
         - matchName: 'auth.docker.io'
@@ -99,8 +99,8 @@ spec:
         - matchName: 'pkg-containers.githubusercontent.com'
       toPorts:
         - ports:
-           - port: '443'
-             protocol: TCP
+            - port: '443'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -172,8 +172,8 @@ spec:
             app.kubernetes.io/component: core
       toPorts:
         - ports:
-           - port: '8080'
-             protocol: TCP
+            - port: '8080'
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
@@ -181,16 +181,16 @@ spec:
             app.kubernetes.io/component: redis
       toPorts:
         - ports:
-           - port: '6379'
-             protocol: TCP
+            - port: '6379'
+              protocol: TCP
 
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: harbor-database
       toPorts:
         - ports:
-           - port: '5432'
-             protocol: TCP
+            - port: '5432'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -232,8 +232,8 @@ spec:
             app.kubernetes.io/component: redis
       toPorts:
         - ports:
-           - port: '6379'
-             protocol: TCP
+            - port: '6379'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -302,8 +302,8 @@ spec:
             app.kubernetes.io/component: redis
       toPorts:
         - ports:
-           - port: '6379'
-             protocol: TCP
+            - port: '6379'
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

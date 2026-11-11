@@ -1,0 +1,9 @@
+apiVersion: api.kagent.dev/v1alpha3
+kind: RemoteMCPServer
+metadata:
+  name: github-mcp
+  namespace: kagent
+spec:
+  description: GitHub (read-only), served through the MCP gateway
+  url: http://mcp-gateway.agentgateway-system.svc.cluster.local:8102/mcp
+  protocol: STREAMABLE_HTTP

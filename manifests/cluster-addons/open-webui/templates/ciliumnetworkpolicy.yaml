@@ -38,6 +38,6 @@ spec:
             gateway.networking.k8s.io/gateway-name: agentgateway-proxy
             app.kubernetes.io/name: agentgateway-proxy
       toPorts:
-         - ports:
-             - port: '80'
-               protocol: TCP
+        - ports:
+            - port: '80'
+              protocol: TCP
