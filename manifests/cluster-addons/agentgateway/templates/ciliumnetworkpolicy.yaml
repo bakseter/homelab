@@ -160,6 +160,10 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: monitoring
             app.kubernetes.io/name: prometheus
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+            app.kubernetes.io/name: kagent
+            app.kubernetes.io/component: controller
       toPorts:
         - ports:
             - port: '15020'
@@ -182,11 +186,10 @@ spec:
             dns:
               - matchPattern: '*'
 
-
     - toEndpoints:
-       - matchLabels:
-          app.kubernetes.io/name: agentgateway
-          agentgateway: agentgateway
+        - matchLabels:
+            app.kubernetes.io/name: agentgateway
+            agentgateway: agentgateway
       toPorts:
         - ports:
             - port: '9978'
@@ -202,10 +205,10 @@ spec:
               protocol: TCP
 
     - toEndpoints:
-      - matchLabels:
-          k8s:io.kubernetes.pod.namespace: kagent
-          app.kubernetes.io/name: oda-mcp
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kagent
+            app.kubernetes.io/name: oda-mcp
       toPorts:
-      - ports:
-          - port: '3000'
-            protocol: TCP
+        - ports:
+            - port: '3000'
+              protocol: TCP
