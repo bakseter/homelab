@@ -1,0 +1,195 @@
+# The Oda MCP bridge, from scratch: token volume, start script, workload,
+# Service and network policy. All in the kagent namespace.
+#
+# NOT in this file: the `oda-mcp-bootstrap` Secret holding the OAuth files
+# from your one-time login. Create it as a SealedSecret (see the steps in
+# the chat) BEFORE applying this, or the pod will stay in ContainerCreating.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: oda-mcp-auth
+  namespace: kagent
+spec:
+  accessModes: ['ReadWriteOnce']
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oda-mcp-bootstrap-script
+  namespace: kagent
+data:
+  bootstrap.sh: |
+    #!/bin/sh
+    set -eu
+
+    # Seed the OAuth client registration and tokens on first start only.
+    # After that the PVC copy is authoritative, because mcp-remote rewrites
+    # the token file whenever it refreshes.
+    D="$HOME/.mcp-auth/$MCP_AUTH_SUBDIR"
+    mkdir -p "$D"
+    for f in /bootstrap/*; do
+      [ -e "$f" ] || continue
+      b=$(basename "$f")
+      if [ ! -e "$D/$b" ]; then
+        cp "$f" "$D/$b"
+        chmod 600 "$D/$b"
+      fi
+    done
+
+    # Stateful mode keeps one mcp-remote child per MCP session instead of
+    # starting one (and repeating OAuth discovery) for every request.
+    exec supergateway \
+      --stdio "mcp-remote https://oda.com/mcp" \
+      --outputTransport streamableHttp \
+      --stateful \
+      --sessionTimeout 600000 \
+      --port 3000 \
+      --streamableHttpPath /mcp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oda-mcp
+  namespace: kagent
+  labels:
+    app.kubernetes.io/name: oda-mcp
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate # RWO token volume, and only one writer of the token file
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: oda-mcp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: oda-mcp
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: bridge
+          image: ghcr.io/bakseter/mcp-remote-supergateway:latest
+          command: ['/bin/sh', '/scripts/bootstrap.sh']
+          ports:
+            - name: mcp
+              containerPort: 3000
+          env:
+            - name: HOME
+              value: /data
+            # Must equal the folder name mcp-remote created under
+            # ~/.mcp-auth/ on the machine where you logged in.
+            - name: MCP_AUTH_SUBDIR
+              value: mcp-remote-v1
+          readinessProbe:
+            tcpSocket:
+              port: mcp
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: mcp
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: auth
+              mountPath: /data
+            - name: bootstrap
+              mountPath: /bootstrap
+              readOnly: true
+            - name: scripts
+              mountPath: /scripts
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: auth
+          persistentVolumeClaim:
+            claimName: oda-mcp-auth
+        - name: bootstrap
+          secret:
+            secretName: oda-mcp-bootstrap
+            defaultMode: 0400
+        - name: scripts
+          configMap:
+            name: oda-mcp-bootstrap-script
+            defaultMode: 0555
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oda-mcp
+  namespace: kagent
+  labels:
+    app.kubernetes.io/name: oda-mcp
+spec:
+  selector:
+    app.kubernetes.io/name: oda-mcp
+  ports:
+    - name: mcp
+      port: 3000
+      targetPort: mcp
+      appProtocol: http
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: oda-mcp
+  namespace: kagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: oda-mcp
+
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: agentgateway-system
+            app.kubernetes.io/name: agentgateway-proxy
+            gateway.networking.k8s.io/gateway-name: agentgateway-proxy
+      toPorts:
+        - ports:
+            - port: '3000'
+              protocol: TCP
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchName: 'oda.com'
+
+    - toFQDNs:
+        - matchName: 'oda.com'
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
