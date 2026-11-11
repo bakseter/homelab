@@ -25,12 +25,12 @@ spec:
           env:
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
-                secretRef:
+                secretKeyRef:
                   name: rustfs-s3-credentials
                   key: AWS_ACCESS_KEY_ID
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
-                secretRef:
+                secretKeyRef:
                   name: rustfs-s3-credentials
                   key: AWS_SECRET_ACCESS_KEY
             - name: AWS_DEFAULT_REGION
