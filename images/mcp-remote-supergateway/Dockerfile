@@ -6,7 +6,6 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 ENV PATH=/app/node_modules/.bin:$PATH \
-    HOME=/data \
     NODE_ENV=production
 
 USER 65534:65534
