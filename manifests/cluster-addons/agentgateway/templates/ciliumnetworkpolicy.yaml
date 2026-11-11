@@ -157,6 +157,7 @@ spec:
 
   ingress:
     - fromEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: kagent
             app.kubernetes.io/name: kagent
             app.kubernetes.io/component: controller
@@ -166,6 +167,7 @@ spec:
               protocol: TCP
 
     - fromEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: ate-system
             app: atenet-egress
       toPorts:
