@@ -22,7 +22,7 @@ spec:
         spec:
           restartPolicy: Never
           containers:
-            - image: ghcr.io/bakseter/homelab/alpine/git-cacerts:3.24@sha256:f65efc99b838c28623d7e46f80d707c3c20692b28fb96746d08012fa8fe0cd1b
+            - image: ghcr.io/bakseter/homelab/alpine/git-cacerts:3.24@sha256:e7ace692cb8f8f18e276787d6608695c369b4e9b8977663ea520c17ca3851760
               name: homelab-copier
               command:
                 - /bin/sh
