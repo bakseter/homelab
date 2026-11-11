@@ -1,4 +1,9 @@
 loki:
+  global:
+    extraEnvFrom:
+      - secretRef:
+          name: rustfs-s3-credentials
+
   loki:
     analytics:
       reporting_enabled: false
@@ -24,8 +29,8 @@ loki:
         endpoint: http://rustfs-svc.rustfs.svc.cluster.local:9000
         bucketnames: loki-chunks
         s3forcepathstyle: true
-        access_key_id: rustfs
-        secret_access_key: rustfs
+        access_key_id: ${AWS_ACCESS_KEY_ID}
+        secret_access_key: ${AWS_SECRET_ACCESS_KEY}
         insecure: true
 
     storage:
@@ -37,8 +42,8 @@ loki:
       s3:
         endpoint: http://rustfs-svc.rustfs.svc.cluster.local:9000
         region: us-east-1
-        secretAccessKey: rustfs
-        accessKeyId: rustfs
+        accessKeyId: ${AWS_ACCESS_KEY_ID}
+        secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
         signatureVersion: v4
         s3ForcePathStyle: true
         insecure: true

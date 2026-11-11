@@ -1,4 +1,8 @@
 tempo:
+  extraEnvFrom:
+    - secretRef:
+        name: rustfs-s3-credentials
+
   tempo:
     registry: docker.io
     repository: grafana/tempo
@@ -15,8 +19,8 @@ tempo:
         s3:
           bucket: tempo
           endpoint: rustfs-svc.rustfs.svc.cluster.local:9000
-          access_key: rustfs
-          secret_key: rustfs
+          access_key: ${AWS_ACCESS_KEY_ID}
+          secret_key: ${AWS_SECRET_ACCESS_KEY}
           insecure: true
 
     metricsGenerator:

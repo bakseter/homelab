@@ -21,9 +21,7 @@ rustfs:
       log_level: warn
 
   secret:
-    rustfs:
-      access_key: rustfs
-      secret_key: rustfs
+    existingSecret: rustfs-credentials
 
   storageclass:
     name: longhorn

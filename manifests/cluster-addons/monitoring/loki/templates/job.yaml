@@ -23,9 +23,15 @@ spec:
           image: amazon/aws-cli:2.39.6@sha256:eccdb3ec77e159d43ca6a750a70738c546883138be7f094498294a1477ec7e42
           env:
             - name: AWS_ACCESS_KEY_ID
-              value: 'rustfs'
+              valueFrom:
+                secretRef:
+                  name: rustfs-s3-credentials
+                  key: AWS_ACCESS_KEY_ID
             - name: AWS_SECRET_ACCESS_KEY
-              value: 'rustfs'
+              valueFrom:
+                secretRef:
+                  name: rustfs-s3-credentials
+                  key: AWS_SECRET_ACCESS_KEY
             - name: AWS_DEFAULT_REGION
               value: 'us-east-1'
           command:
