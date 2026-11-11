@@ -56,7 +56,6 @@ spec:
     metadata:
       name: oda-mcp-bootstrap
       namespace: kagent
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -68,7 +67,7 @@ metadata:
 spec:
   replicas: 1
   strategy:
-    type: Recreate # RWO token volume, and only one writer of the token file
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: oda-mcp
