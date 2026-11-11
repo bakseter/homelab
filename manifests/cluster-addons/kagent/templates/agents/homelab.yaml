@@ -53,10 +53,10 @@ spec:
           # Utility
           - datetime_get_current_time
 
-    - mcp:
-        server:
-          kind: RemoteMCPServer
-          name: opentofu-mcp
+#   - mcp:
+#       server:
+#         kind: RemoteMCPServer
+#         name: opentofu-mcp
 ---
 apiVersion: api.kagent.dev/v1alpha3
 kind: Agent
