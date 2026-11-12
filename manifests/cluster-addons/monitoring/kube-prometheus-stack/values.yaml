@@ -33,13 +33,13 @@ kube-prometheus-stack:
               - authentik
               - cert-manager
               - cloudflared
-              - kube-system # cilium hubble
               - immich
               - iperf3
+              - kube-system # cilium hubble
               - longhorn-system
               - mandagsmiddag
               - monitoring
-              - tuppr
+              - system-upgrade
 
       podMonitorNamespaceSelector:
         matchExpressions:
