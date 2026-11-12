@@ -50,8 +50,11 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
     file(
       "${path.module}/manifests/harbor-patches.yaml",
     ),
-    file(
-      "${path.module}/manifests/tuppr-patches.yaml",
+    templatefile(
+      "${path.module}/manifests/tuppr-patches.yaml.tmpl",
+      {
+        talos_schematic_id = each.value.talosSchematicID
+      }
     ),
     /*
     templatefile(

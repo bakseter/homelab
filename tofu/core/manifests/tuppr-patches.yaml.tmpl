@@ -1,0 +1,12 @@
+apiVersion: v1alpha1
+kind: KubeTalosAPIAccessConfig
+allowedRoles:
+  - os:admin
+allowedKubernetesNamespaces:
+  - system-upgrade
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  tuppr.home-operations.com/factory-url: factory.talos.dev/nocloud-installer
+  tuppr.home-operations.com/schematic: ${talos_schematic_id}

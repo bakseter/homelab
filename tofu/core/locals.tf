@@ -18,6 +18,6 @@ locals {
   virtual_worker_nodes       = { for name, node in local.virtual_nodes : name => node if node.type == "worker" }
 
   main_virtual_controlplane_node = one(
-    [for name, node in local.virtual_controlplane_nodes : node.ip if name == "m720q-controlplane-1"]
+    [for _, node in local.virtual_controlplane_nodes : node.ip if try(node.isMainControlplane, false)]
   )
 }
