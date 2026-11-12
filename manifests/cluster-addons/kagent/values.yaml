@@ -71,3 +71,11 @@ kagent:
             - path:
                 type: PathPrefix
                 value: /
+
+  kagent-tools:
+    rbac:
+      create: false
+
+    tools:
+      prometheus:
+        url: http://prometheus-operated.monitoring.svc.cluster.local:9090

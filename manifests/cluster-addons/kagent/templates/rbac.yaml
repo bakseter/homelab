@@ -1,0 +1,83 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kagent-tools-view
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view
+subjects:
+  - kind: ServiceAccount
+    name: kagent-tools
+    namespace: kagent
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kagent-tools-pod-logs
+rules:
+  - apiGroups: ['']
+    resources: ['pods/log']
+    verbs: ['get']
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kagent-tools-pod-logs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kagent-tools-pod-logs
+subjects:
+  - kind: ServiceAccount
+    name: kagent-tools
+    namespace: kagent
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kagent-tools-cr-reader
+rules:
+  - apiGroups: ['agentgateway.dev']
+    resources: ['*']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['api.kagent.dev']
+    resources: ['*']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['argoproj.io']
+    resources: ['*']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['cilium.io']
+    resources: ['*']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['gateway.envoyproxy.io']
+    resources: ['*']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['longhorn.io']
+    resources: ['*']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['monitoring.coreos.com']
+    resources: ['*']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['postgresql.cnpg.io']
+    resources: ['*']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['tailscale.com']
+    resources: ['*']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['velero.io']
+    resources: ['*']
+    verbs: ['get', 'list', 'watch']
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kagent-tools-cr-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kagent-tools-cr-reader
+subjects:
+  - kind: ServiceAccount
+    name: kagent-tools
+    namespace: kagent
