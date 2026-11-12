@@ -39,6 +39,7 @@ kube-prometheus-stack:
               - longhorn-system
               - mandagsmiddag
               - monitoring
+              - tuppr
 
       podMonitorNamespaceSelector:
         matchExpressions:
