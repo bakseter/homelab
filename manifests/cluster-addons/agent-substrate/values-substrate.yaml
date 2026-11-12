@@ -45,10 +45,10 @@ objectStorePlugin:
     - name: AWS_ACCESS_KEY_ID
       valueFrom:
         secretKeyRef:
-          name: kagent-rustfs-credentials
+          name: rustfs-credentials
           key: AWS_ACCESS_KEY_ID
     - name: AWS_SECRET_ACCESS_KEY
       valueFrom:
         secretKeyRef:
-          name: kagent-rustfs-credentials
+          name: rustfs-credentials
           key: AWS_SECRET_ACCESS_KEY
