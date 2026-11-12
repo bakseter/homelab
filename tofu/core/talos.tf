@@ -54,6 +54,7 @@ resource "talos_machine_configuration_apply" "controlplane_config_apply" {
       "${path.module}/manifests/tuppr-patches.yaml.tmpl",
       {
         talos_schematic_id = each.value.talosSchematicID
+        node_type          = each.value.type
       }
     ),
     /*
@@ -114,6 +115,13 @@ resource "talos_machine_configuration_apply" "worker_config_apply" {
     ) : "",
     file(
       "${path.module}/manifests/harbor-patches.yaml",
+    ),
+    templatefile(
+      "${path.module}/manifests/tuppr-patches.yaml.tmpl",
+      {
+        talos_schematic_id = each.value.talosSchematicID
+        node_type          = each.value.type
+      }
     ),
     /*
     templatefile(
