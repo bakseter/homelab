@@ -8,7 +8,7 @@ spec:
     version: v1.14.6
 
   healthChecks:
-    - apiVersion: volumes.longhorn.io/v1beta2
+    - apiVersion: longhorn.io/v1beta2
       kind: Volume
       namespace: longhorn-system
       expr: status.robustness in ['healthy', 'unknown']
