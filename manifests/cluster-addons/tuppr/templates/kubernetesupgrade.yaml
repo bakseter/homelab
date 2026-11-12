@@ -6,3 +6,9 @@ spec:
   kubernetes:
     # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
     version: v1.37.2
+
+  maintenance:
+    windows:
+      - duration: 2h0m0s
+        start: '0 1 * * 1-6'
+        timezone: UTC

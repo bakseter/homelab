@@ -17,3 +17,9 @@ spec:
       kind: Volume
       namespace: longhorn-system
       expr: status.robustness in ['healthy', 'unknown']
+
+  maintenance:
+    windows:
+      - duration: 2h0m0s
+        start: '0 1 * * 1-6'
+        timezone: UTC
