@@ -1,7 +1,10 @@
 locals {
-  cluster_name            = "homelab"
-  initial_talos_version   = "v1.12.1"
-  talos_version           = "v1.14.2"
+  cluster_name          = "homelab"
+  initial_talos_version = "v1.12.1"
+  # Talos upgrades are managed via tuppr.
+  # This sets the version for OpenTofu resources.
+  # renovate: datasource=docker depName=ghcr.io/siderolabs/talos
+  talos_version           = "v1.14.6"
   virtual_ip_controlplane = "192.168.30.190"
 
   config = yamldecode(file("${path.module}/manifests/config.yaml"))
