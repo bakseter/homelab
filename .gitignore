@@ -1,3 +1,5 @@
 result/*
 **/__pycache__
 **/node_modules
+manifests/cluster-addons/**/Chart.lock
+manifests/cluster-addons/**/charts
