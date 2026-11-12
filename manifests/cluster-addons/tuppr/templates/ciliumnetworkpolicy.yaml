@@ -35,5 +35,17 @@ spec:
         - ports:
             - port: '6443'
               protocol: TCP
+
+    - toEntities:
+        - host
+      toPorts:
+        - ports:
             - port: '50000'
+              protocol: TCP
+
+    - toFQDNs:
+        - matchName: 'factory.talos.dev'
+      toPorts:
+        - ports:
+            - port: '443'
               protocol: TCP
