@@ -7,4 +7,4 @@ objectStore:
   endpoint: http://rustfs-svc.rustfs.svc.cluster.local:9000
   region: us-east-1
   pathStyle: true
-  credentialsSecret: kagent-rustfs-credentials
+  credentialsSecret: rustfs-credentials
