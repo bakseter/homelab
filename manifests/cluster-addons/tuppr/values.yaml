@@ -1,0 +1,21 @@
+tuppr:
+  monitoring:
+    serviceMonitor:
+      enabled: true
+      interval: 60s
+      labels:
+        release: kube-prometheus-stack
+
+    prometheusRule:
+      enabled: true
+      labels:
+        release: kube-prometheus-stack
+
+    dashboards:
+      enabled: true
+      grafanaOperator:
+        enabled: true
+        allowCrossNamespaceImport: true
+        folder: 'homelab'
+        matchLabels:
+          dashboards: grafana

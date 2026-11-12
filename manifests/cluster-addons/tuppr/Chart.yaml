@@ -1,0 +1,7 @@
+apiVersion: v2
+name: tuppr-umbrella
+version: 0.1.0
+dependencies:
+  - name: tuppr
+    version: 0.5.13
+    repository: oci://ghcr.io/home-operations/charts
