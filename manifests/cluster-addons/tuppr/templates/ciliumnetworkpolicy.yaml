@@ -27,7 +27,7 @@ spec:
           rules:
             http:
               - method: GET
-                path: /
+                path: /metrics
 
   egress:
     - toEndpoints:
