@@ -53,6 +53,7 @@ spec:
 
     - toEntities:
         - host
+        - remote-node
       toPorts:
         - ports:
             - port: '50000'
@@ -88,6 +89,7 @@ spec:
 
     - toEntities:
         - host
+        - remote-node
       toPorts:
         - ports:
             - port: '50000'
