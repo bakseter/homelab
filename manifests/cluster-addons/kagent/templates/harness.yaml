@@ -11,4 +11,4 @@ spec:
     workerPoolRef:
       name: kagent-default
   workload:
-    image: ghcr.io/kagent-dev/kagent/golang-adk:1.0.0@sha256:f62e9f2820d3325ca147a5d39802dc3e9c914bee97b3e021bd38f6f5df10e3bf
+    image: ghcr.io/kagent-dev/kagent/golang-adk:1.0.1@sha256:d3b1151d39c529a6f921a58a995ff699963012001d2e5075f69bf613abebc24d
