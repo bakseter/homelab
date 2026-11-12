@@ -1,4 +1,8 @@
 tuppr:
+  notifications:
+    enabled: true
+    secretName: tuppr-notifications
+
   monitoring:
     serviceMonitor:
       enabled: true
