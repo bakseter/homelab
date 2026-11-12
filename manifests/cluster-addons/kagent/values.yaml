@@ -12,7 +12,7 @@ kagent:
       skipMigrations: false
 
   controller:
-    replicas: 3
+    replicas: 2
 
     substrateClientCertificate:
       enabled: true
