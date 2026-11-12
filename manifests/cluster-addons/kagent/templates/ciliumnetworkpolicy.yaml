@@ -224,6 +224,16 @@ spec:
             dns:
               - matchPattern: '*'
 
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: '9090'
+              protocol: TCP
+
+
     - toEntities:
         - kube-apiserver
       toPorts:
