@@ -7,6 +7,11 @@ spec:
     # renovate: datasource=docker depName=ghcr.io/siderolabs/talos
     version: v1.14.6
 
+  policy:
+    drainTimeout: 10m
+    timeout: 20m
+    waitForVolumeDetach: true
+
   healthChecks:
     - apiVersion: longhorn.io/v1beta2
       kind: Volume
