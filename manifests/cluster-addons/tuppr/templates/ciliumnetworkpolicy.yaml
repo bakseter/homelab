@@ -101,3 +101,32 @@ spec:
         - ports:
             - port: '6443'
               protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kubernetes-upgrade
+  namespace: system-upgrade
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kubernetes-upgrade
+      app.kubernetes.io/part-of: tuppr
+
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
+            - port: '50000'
+              protocol: TCP
+
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: '50000'
+              protocol: TCP
