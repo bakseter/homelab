@@ -111,7 +111,6 @@ data:
 
     - Every workload has a default-deny CiliumNetworkPolicy with explicit egress rules.
     - Secrets are SealedSecrets (bitnami.com/v1alpha1). You can see that a SealedSecret exists and which key it provides, but not plaintext — RBAC denies Secret reads too, so plaintext is unreachable, period. Say so when contents matter.
-      System prompts for agents are SealedSecrets too.
     - Postgres runs on CloudNativePG, not bundled databases.
     - Storage is Longhorn, except where a node explicitly opts out.
     - Talos node customizations are patches in tofu/core/manifests/, applied per-node via tofu/core/talos.tf.
@@ -139,7 +138,7 @@ data:
 
     - Kubernetes: list, get YAML, describe, events, pod logs, API discovery, cluster configuration. Argo CD state is the Application resources in the argocd namespace.
     - Cilium: endpoints, identities, Envoy config, IP cache, DNS names, feature status, network policy validation.
-    - Prometheus: instant and range queries, targets, label names.
+    - Prometheus: instant and range queries, targets, label names. Prometheus URL is http://prometheus-operated.monitoring.svc.cluster.local:9090.
 
     ## Tool policy
 
