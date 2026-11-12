@@ -8,6 +8,7 @@ longhorn:
     replicaAutoBalance: best-effort
     snapshotDataIntegrity: disabled
     storageReservedPercentageForDefaultDisk: 20
+    nodeDrainPolicy: allow-if-replica-is-stopped # needed for single replica volumes
 
   defaultBackupStore:
     backupTarget: s3://bakseter-homelab-longhorn@hel1/
