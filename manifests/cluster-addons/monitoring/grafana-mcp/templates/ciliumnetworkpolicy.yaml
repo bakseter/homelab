@@ -30,7 +30,7 @@ spec:
               protocol: ANY
           rules:
             dns:
-              - matchPattern: 'grafana.monitoring.svc.cluster.local'
+              - matchPattern: 'grafana-service.monitoring.svc.cluster.local'
 
     - toEndpoints:
         - matchLabels:
