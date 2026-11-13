@@ -13,6 +13,8 @@ helmCharts:
     repo: oci://ghcr.io/kagent-dev/substrate/helm
     version: 1.0.1
     releaseName: substrate-crds
+    valuesFile: values-substrate-crds.yaml # empty but required
+    includeCRDs: true
 
   - name: substrate-atelet
     repo: oci://ghcr.io/kagent-dev/substrate/helm
