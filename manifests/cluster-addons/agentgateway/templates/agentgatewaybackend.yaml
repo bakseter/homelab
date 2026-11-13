@@ -44,6 +44,6 @@ spec:
       - name: grafana
         static:
           host: grafana-mcp.monitoring.svc.cluster.local
-          port: 3000
+          port: 8000
           path: /mcp
           protocol: StreamableHTTP
