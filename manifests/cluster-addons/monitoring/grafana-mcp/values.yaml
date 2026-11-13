@@ -12,6 +12,7 @@ grafana-mcp:
 
   extraArgs:
     - --transport=streamable-http
+    - --allowed-hosts=grafana-mcp.monitoring.svc.cluster.local
 
   env:
     GRAFANA_USAGE_STATS: 'disabled'
