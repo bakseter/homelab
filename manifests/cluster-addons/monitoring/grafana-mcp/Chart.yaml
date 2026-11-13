@@ -1,0 +1,7 @@
+apiVersion: v2
+name: grafana-mcp-umbrella
+version: 0.1.0
+dependencies:
+  - name: grafana-mcp
+    version: 0.3.1
+    repository: oci://ghcr.io/grafana/helm-charts
