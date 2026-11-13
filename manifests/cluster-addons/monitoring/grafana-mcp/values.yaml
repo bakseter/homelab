@@ -10,5 +10,9 @@ grafana-mcp:
       name: grafana-api-key
       key: api-key
 
+  env:
+    - name: GRAFANA_USAGE_STATS
+      value: 'disabled'
+
   serverAuth:
     token: null # disable auth
