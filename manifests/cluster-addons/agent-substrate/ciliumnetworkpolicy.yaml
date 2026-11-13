@@ -60,6 +60,14 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            app: atelet
+      toPorts:
+        - ports:
+            - port: '21998'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: kagent
             app.kubernetes.io/instance: kagent-database
       toPorts:
@@ -76,16 +84,13 @@ spec:
             - port: '9000'
               protocol: TCP
 
-    # TODO: harden
-    - toEntities:
-        - world
-
     - toEndpoints:
         - matchLabels:
-            app: atelet
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
       toPorts:
         - ports:
-            - port: '21998'
+            - port: '4317'
               protocol: TCP
 
     - toEntities:
@@ -150,6 +155,15 @@ spec:
         - ports:
             - port: '443'
               protocol: ANY
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
 
     - toEntities:
         - kube-apiserver
@@ -368,14 +382,6 @@ spec:
   egress:
     - toEndpoints:
         - matchLabels:
-            app: ate-api-server
-      toPorts:
-        - ports:
-            - port: '443'
-              protocol: TCP
-
-    - toEndpoints:
-        - matchLabels:
             k8s:io.kubernetes.pod.namespace: kube-system
             k8s-app: kube-dns
       toPorts:
@@ -388,11 +394,28 @@ spec:
 
     - toEndpoints:
         - matchLabels:
+            app: ate-api-server
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
             k8s:io.kubernetes.pod.namespace: rustfs
             app.kubernetes.io/name: rustfs
       toPorts:
         - ports:
             - port: '9000'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
               protocol: TCP
 
     - toEntities:
