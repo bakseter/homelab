@@ -2,7 +2,7 @@ grafana-mcp:
   image:
     registry: docker.io
     repository: grafana/mcp-grafana
-    tag: 0.8.2@sha256:5393702e6d5b1b34a558f687a5203b837e018894da0e61922812d1698ea23f16
+    tag: 0.17.2@sha256:d5b51db0c8eaafc6ed3fede5bfcc8d67b2384a40cf3d493086e378855ceba882
 
   grafana:
     url: http://grafana-service.monitoring.svc.cluster.local:3000
