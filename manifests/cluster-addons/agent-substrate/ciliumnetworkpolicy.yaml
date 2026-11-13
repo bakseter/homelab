@@ -263,6 +263,15 @@ spec:
               protocol: TCP
             - port: '8102' # github-mcp
               protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
 ---
 # Extension of existing vanilla netpol
 # TODO: move everything here
@@ -315,6 +324,15 @@ spec:
       toPorts:
         - ports:
             - port: '8443'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: alloy
+      toPorts:
+        - ports:
+            - port: '4317'
               protocol: TCP
 ---
 # Extension of existing vanilla netpol
