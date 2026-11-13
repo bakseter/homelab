@@ -170,6 +170,8 @@ spec:
               protocol: TCP
             - port: '8102' # github-mcp
               protocol: TCP
+            - port: '8103' # grafana-mcp
+              protocol: TCP
 
     - fromEndpoints:
         - matchLabels:

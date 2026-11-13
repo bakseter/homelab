@@ -38,3 +38,9 @@ spec:
       allowedRoutes:
         namespaces:
           from: Same
+    - name: grafana
+      protocol: HTTP
+      port: 8103
+      allowedRoutes:
+        namespaces:
+          from: Same

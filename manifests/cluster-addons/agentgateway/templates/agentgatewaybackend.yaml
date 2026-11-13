@@ -32,3 +32,18 @@ spec:
         name: github-mcp-pat
     tls:
       sni: api.githubcopilot.com
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: grafana-mcp
+  namespace: agentgateway-system
+spec:
+  mcp:
+    targets:
+      - name: grafana
+        static:
+          host: grafana-mcp.monitoring.svc.cluster.local
+          port: 3000
+          path: /mcp
+          protocol: StreamableHTTP

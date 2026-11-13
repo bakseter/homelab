@@ -77,3 +77,25 @@ spec:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
           name: github-mcp
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: grafana-mcp
+  namespace: agentgateway-system
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: mcp-gateway
+      namespace: agentgateway-system
+      sectionName: grafana
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mcp
+      backendRefs:
+        - group: agentgateway.dev
+          kind: AgentgatewayBackend
+          name: grafana-mcp
