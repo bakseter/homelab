@@ -27,7 +27,7 @@ rustfs:
 
   storageclass:
     name: longhorn
-    dataStorageSize: 30Gi
+    dataStorageSize: 50Gi
     logStorageSize: 5Gi
 
   ingress:
