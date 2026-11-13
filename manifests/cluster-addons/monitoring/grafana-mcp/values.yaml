@@ -10,6 +10,9 @@ grafana-mcp:
       name: grafana-api-key
       key: api-key
 
+  extraArgs:
+    - --transport=streamable-http
+
   env:
     GRAFANA_USAGE_STATS: 'disabled'
     GRAFANA_FORWARD_HEADERS: 'Authorization' # workaround for disabling auth
