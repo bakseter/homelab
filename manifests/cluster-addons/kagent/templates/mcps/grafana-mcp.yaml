@@ -1,0 +1,9 @@
+apiVersion: api.kagent.dev/v1alpha3
+kind: RemoteMCPServer
+metadata:
+  name: grafana-mcp
+  namespace: kagent
+spec:
+  description: Grafana
+  url: http://mcp-gateway.agentgateway-system.svc.cluster.local:8103/mcp
+  protocol: STREAMABLE_HTTP
