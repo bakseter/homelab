@@ -8,3 +8,8 @@ objectStore:
   region: us-east-1
   pathStyle: true
   credentialsSecret: rustfs-credentials
+
+otel:
+  endpoint: http://alloy.monitoring.svc.cluster.local:4317
+  traces:
+    samplingRatio: 1.0

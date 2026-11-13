@@ -9,6 +9,11 @@ helmCharts:
     namespace: ate-system
     valuesFile: values-substrate.yaml
 
+  - name: substrate-crds
+    repo: oci://ghcr.io/kagent-dev/substrate/helm
+    version: 1.0.1
+    releaseName: substrate-crds
+
   - name: substrate-atelet
     repo: oci://ghcr.io/kagent-dev/substrate/helm
     version: 1.0.1

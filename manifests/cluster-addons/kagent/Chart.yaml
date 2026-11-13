@@ -5,9 +5,6 @@ dependencies:
   - name: kagent-crds
     version: 1.0.1
     repository: oci://ghcr.io/kagent-dev/kagent/helm
-  - name: substrate-crds
-    version: 1.0.1
-    repository: oci://ghcr.io/kagent-dev/substrate/helm
   - name: kagent
     version: 1.0.1
     repository: oci://ghcr.io/kagent-dev/kagent/helm
