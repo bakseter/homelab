@@ -59,42 +59,39 @@ spec:
           kind: RemoteMCPServer
           name: grafana-mcp
         tools:
-          - query_tempo_metrics
+#         - search_docs
+#         - search_plugin_information
+#         - get_tempo_traceql_docs
+#         - get_doc
+
           - search_dashboards
-          - search_docs
           - search_folders
-          - search_plugin_information
-          - search_tempo_traces
           - get_annotations
           - get_annotation_tags
-          - diff_tempo_traces
-          - analyze_loki_labels
-          - list_loki_label_values
-          - list_prometheus_label_names
-          - list_prometheus_label_values
-          - list_prometheus_metric_metadata
-          - list_prometheus_metric_names
-          - list_tempo_attribute_names
-          - list_tempo_attribute_values
-          - list_loki_label_names
-          - query_loki_logs
           - list_datasources
           - list_dashboard_versions
-          - get_tempo_traceql_docs
-          - get_tempo_trace
-          - query_loki_patterns
           - get_plugin
           - get_panel_image
-          - get_doc
           - get_datasource
           - get_dashboard_summary
           - get_dashboard_property
           - get_dasboard_panel_queries
           - get_dashboard_by_uid
           - get_assertions
+
+          - search_tempo_traces
+          - query_tempo_metrics
+          - diff_tempo_traces
+          - list_tempo_attribute_names
+          - list_tempo_attribute_values
+          - get_tempo_trace
+
+          - analyze_loki_labels
+          - list_loki_label_values
+          - list_loki_label_names
+          - query_loki_logs
+          - query_loki_patterns
           - query_loki_stats
-          - query_prometheus
-          - query_prometheus_histogram
 ---
 apiVersion: api.kagent.dev/v1alpha3
 kind: Agent
