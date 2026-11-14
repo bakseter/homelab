@@ -6,6 +6,7 @@ labels:
       app.kubernetes.io/name: iperf3
 
 resources:
+  - ciliumnetworkpolicy.yaml
   - configmap.yaml
   - daemonset.yaml
   - grafanadashboard.yaml
