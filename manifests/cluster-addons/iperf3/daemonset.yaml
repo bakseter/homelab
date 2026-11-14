@@ -33,7 +33,7 @@ spec:
       containers:
         - name: iperf3
           image: networkstatic/iperf3:latest@sha256:d8767f2888155902ec72760f9ba8dd6fb16ff73256a8e02572c109aecc23269b
-          command: ['/bin/sh', '/run/run.sh']
+          command: ['/bin/sh', '/opt/iperf3/run.sh']
           env:
             - name: MY_IP
               valueFrom:
@@ -49,7 +49,7 @@ spec:
             - name: results
               mountPath: /results
             - name: run
-              mountPath: /run
+              mountPath: /opt/iperf3
           ports:
             - name: iperf
               containerPort: 5201
@@ -121,7 +121,7 @@ spec:
       containers:
         - name: iperf3
           image: networkstatic/iperf3:latest
-          command: ['/bin/sh', '/run/run.sh']
+          command: ['/bin/sh', '/opt/iperf3/run.sh']
           env:
             - name: MY_IP
               valueFrom:
@@ -137,7 +137,7 @@ spec:
             - name: results
               mountPath: /results
             - name: run
-              mountPath: /run
+              mountPath: /opt/iperf3
           ports:
             - name: iperf
               containerPort: 5201
