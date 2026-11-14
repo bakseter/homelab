@@ -51,14 +51,20 @@ data:
   run.sh: |
     #!/bin/sh
 
-    iperf3 -s -p 5201 >/dev/null 2>&1 &
+    iperf3 -s -p 5201 &
+    SERVER_PID=$!
+    sleep 2
+    if ! kill -0 "$SERVER_PID" 2>/dev/null; then
+      echo "iperf3 server exited at startup" >&2
+      exit 1
+    fi
 
     sleep $(( $(hostname | cksum | cut -d' ' -f1) % 45 ))
 
     while true; do
       for PEER in $(getent hosts "iperf3-${MODE}-headless.iperf3.svc.cluster.local" | awk '{print $1}' | grep -vFx "$MY_IP"); do
         for attempt in 1 2; do
-          if iperf3 -c "$PEER" -p 5201 -t 10 -J > "/results/.tmp-${PEER}" 2>/dev/null; then
+          if iperf3 -c "$PEER" -p 5201 -t 10 -J > "/results/.tmp-${PEER}" 2>>/results/errors.log; then
             mv "/results/.tmp-${PEER}" "/results/result-${PEER}.json"
             break
           fi
