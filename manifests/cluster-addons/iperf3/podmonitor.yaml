@@ -3,6 +3,8 @@ kind: PodMonitor
 metadata:
   name: iperf3
   namespace: iperf3
+  labels:
+    release: kube-prometheus-stack
 spec:
   selector:
     matchLabels:
