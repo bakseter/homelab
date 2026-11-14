@@ -48,6 +48,8 @@ spec:
           volumeMounts:
             - name: results
               mountPath: /results
+            - name: run
+              mountPath: /run
           ports:
             - name: iperf
               containerPort: 5201
