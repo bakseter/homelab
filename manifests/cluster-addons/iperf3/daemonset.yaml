@@ -16,20 +16,6 @@ spec:
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
-      volumes:
-        - name: results
-          emptyDir: {}
-        - name: run
-          configMap:
-            name: iperf3-run
-        - name: exporter
-          configMap:
-            name: iperf3-exporter
-      tolerations:
-        - effect: NoSchedule
-          key: node-role.bakseter.net/agent
-          operator: Equal
-          value: 'true'
       containers:
         - name: iperf3
           image: networkstatic/iperf3:latest@sha256:d8767f2888155902ec72760f9ba8dd6fb16ff73256a8e02572c109aecc23269b
@@ -61,6 +47,12 @@ spec:
               memory: 32Mi
             limits:
               memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
         - name: exporter
           image: python:3.14-alpine@sha256:a18b20ad69e74df6cf6d2e1b1a260d7a1ecf5380fd83b310f83ba88c461cf894
           command: ['python3', '/app/exporter.py']
@@ -92,6 +84,33 @@ spec:
               memory: 32Mi
             limits:
               memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: results
+          emptyDir: {}
+        - name: run
+          configMap:
+            name: iperf3-run
+        - name: exporter
+          configMap:
+            name: iperf3-exporter
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.bakseter.net/agent
+          operator: Equal
+          value: 'true'
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -109,15 +128,6 @@ spec:
         app.kubernetes.io/name: iperf3
         app.kubernetes.io/component: iperf3-pod
     spec:
-      volumes:
-        - name: results
-          emptyDir: {}
-        - name: run
-          configMap:
-            name: iperf3-run
-        - name: exporter
-          configMap:
-            name: iperf3-exporter
       containers:
         - name: iperf3
           image: networkstatic/iperf3:latest
@@ -146,6 +156,12 @@ spec:
             requests:
               cpu: 50m
               memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
         - name: exporter
           image: python:3.12-alpine
           command: ['python3', '/app/exporter.py']
@@ -176,3 +192,30 @@ spec:
               memory: 32Mi
             limits:
               memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: results
+          emptyDir: {}
+        - name: run
+          configMap:
+            name: iperf3-run
+        - name: exporter
+          configMap:
+            name: iperf3-exporter
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.bakseter.net/agent
+          operator: Equal
+          value: 'true'
