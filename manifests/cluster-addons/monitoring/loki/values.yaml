@@ -64,7 +64,7 @@ loki:
     limits_config:
       allow_structured_metadata: true
       volume_enabled: true
-      retention_period: 1440h
+      retention_period: 720h # TODO: bump back to 1440h
 
       otlp_config:
         resource_attributes:
