@@ -59,14 +59,14 @@ spec:
           "gridPos": { "h": 4, "w": 5, "x": 5, "y": 1 },
           "fieldConfig": { "defaults": { "unit": "bps", "decimals": 2, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] } }, "overrides": [] },
           "options": { "colorMode": "value", "graphMode": "none", "textMode": "value_and_name", "wideLayout": true },
-          "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "topk(1, iperf3_bandwidth_bps{mode=~\"$mode\"})", "instant": true, "refId": "A" }]
+          "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "topk(1, iperf3_bandwidth_bps{mode=~\"$mode\"})", "instant": true, "legendFormat": "{{src}} ⟶ {{dst}}", "refId": "A" }]
         },
         {
           "id": 3, "type": "stat", "title": "Slowest pair",
           "gridPos": { "h": 4, "w": 5, "x": 10, "y": 1 },
           "fieldConfig": { "defaults": { "unit": "bps", "decimals": 2, "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 2000000000 }] } }, "overrides": [] },
           "options": { "colorMode": "value", "graphMode": "none", "textMode": "value_and_name", "wideLayout": true },
-          "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "bottomk(1, iperf3_bandwidth_bps{mode=~\"$mode\"})", "instant": true, "refId": "A" }]
+          "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "bottomk(1, iperf3_bandwidth_bps{mode=~\"$mode\"})", "instant": true, "legendFormat": "{{src}} ⟶ {{dst}}", "refId": "A" }]
         },
         {
           "id": 4, "type": "stat", "title": "Pairs > 2 Gbit/s (2.5GbE line rate)",
@@ -113,7 +113,7 @@ spec:
             "overrides": []
           },
           "options": { "orientation": "horizontal", "displayMode": "gradient", "showValue": "always", "valueMode": "color", "sorting": "descending", "namePlacement": "auto" },
-          "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum by (src, dst) (iperf3_bandwidth_bps{mode=~\"$mode\"})", "format": "table", "instant": true, "refId": "A" }],
+          "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum by (src, dst) (iperf3_bandwidth_bps{mode=~\"$mode\"})", "format": "heatmap", "instant": true, "legendFormat": "{{src}} ⟶ {{dst}}", "refId": "A" }],
           "transformations": [
             { "id": "organize", "options": { "excludeByName": { "Time": true }, "indexByName": {}, "renameByName": { "src": "src →", "dst": "dst", "Value": "Bandwidth" } } }
           ]
