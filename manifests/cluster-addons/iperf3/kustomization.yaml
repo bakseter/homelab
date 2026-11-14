@@ -9,5 +9,6 @@ labels:
 resources:
   - configmap.yaml
   - daemonset.yaml
+  - grafanadashboard.yaml
   - service.yaml
   - servicemonitor.yaml
