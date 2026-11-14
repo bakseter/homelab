@@ -36,6 +36,8 @@ spec:
               mountPath: /results
             - name: run
               mountPath: /opt/iperf3
+            - name: tmp
+              mountPath: /tmp
           ports:
             - name: iperf
               containerPort: 5201
@@ -106,6 +108,8 @@ spec:
         - name: exporter
           configMap:
             name: iperf3-exporter
+        - name: tmp
+          emptyDir: {}
       tolerations:
         - effect: NoSchedule
           key: node-role.bakseter.net/agent
@@ -148,6 +152,8 @@ spec:
               mountPath: /results
             - name: run
               mountPath: /opt/iperf3
+            - name: tmp
+              mountPath: /tmp
           ports:
             - name: iperf
               containerPort: 5201
@@ -214,6 +220,8 @@ spec:
         - name: exporter
           configMap:
             name: iperf3-exporter
+        - name: tmp
+          emtpyDir: {}
       tolerations:
         - effect: NoSchedule
           key: node-role.bakseter.net/agent
