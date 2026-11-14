@@ -34,7 +34,6 @@ kube-prometheus-stack:
               - cert-manager
               - cloudflared
               - immich
-              - iperf3
               - kagent
               - kube-system # cilium hubble
               - longhorn-system
@@ -52,6 +51,7 @@ kube-prometheus-stack:
               - authentik
               - cnpg-system
               - envoy-gateway-system
+              - iperf3
 
       probeNamespaceSelector:
         matchExpressions:
