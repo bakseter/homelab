@@ -1,8 +1,8 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: velero-data-upload
-  namespace: velero
+  name: iperf3-pod
+  namespace: iperf3
 spec:
   endpointSelector:
     matchLabels:
