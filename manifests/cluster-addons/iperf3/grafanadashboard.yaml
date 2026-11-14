@@ -26,7 +26,7 @@ spec:
       "title": "iperf3 — Network Mesh",
       "uid": "iperf3-mesh",
       "schemaVersion": 39,
-      "version": 3,
+      "version": 9,
       "timezone": "browser",
       "refresh": "30s",
       "time": { "from": "now-1h", "to": "now" },
@@ -61,7 +61,7 @@ spec:
           "fieldConfig": { "defaults": { "unit": "bps", "decimals": 2, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] } }, "overrides": [] },
           "options": { "colorMode": "value", "graphMode": "none", "textMode": "value_and_name", "wideLayout": true },
           "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" },
-            "expr": "topk(1, label_replace(iperf3_bandwidth_bps{mode=\"node\"}, \"dstnode\", \"$1\", \"dst\", \"(.*)\") * on(src) group_left(dstnode) label_replace(sum by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}) * 0 + 1, \"dstnode\", \"$1\", \"node\", \"(.*)\"))",
+            "expr": "topk(1, iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(group by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dstnode\", \"$1\", \"node\", \"(.*)\"), \"dst\", \"$1\", \"src\", \"(.*)\"))",
             "instant": true, "legendFormat": "{{node}} → {{dstnode}}", "refId": "A" }]
         },
         {
@@ -102,7 +102,7 @@ spec:
             "tooltip": { "mode": "multi", "sort": "desc" }
           },
           "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" },
-            "expr": "label_replace(iperf3_bandwidth_bps{mode=\"node\"}, \"dstnode\", \"$1\", \"dst\", \"(.*)\") * on(src) group_left(dstnode) label_replace(sum by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}) * 0 + 1, \"dstnode\", \"$1\", \"node\", \"(.*)\")",
+            "expr": "iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(group by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dstnode\", \"$1\", \"node\", \"(.*)\"), \"dst\", \"$1\", \"src\", \"(.*)\")",
             "legendFormat": "{{node}} → {{dstnode}}", "refId": "A" }]
         },
         {
@@ -116,7 +116,7 @@ spec:
           },
           "options": { "orientation": "horizontal", "displayMode": "gradient", "showValue": "always", "valueMode": "color", "sorting": "descending", "namePlacement": "auto" },
           "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" },
-            "expr": "label_replace(iperf3_bandwidth_bps{mode=\"node\"}, \"dstnode\", \"$1\", \"dst\", \"(.*)\") * on(src) group_left(dstnode) label_replace(sum by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}) * 0 + 1, \"dstnode\", \"$1\", \"node\", \"(.*)\")",
+            "expr": "iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(group by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dstnode\", \"$1\", \"node\", \"(.*)\"), \"dst\", \"$1\", \"src\", \"(.*)\")",
             "instant": true, "legendFormat": "{{node}} → {{dstnode}}", "refId": "A" }]
         },
         {
@@ -155,37 +155,1177 @@ spec:
           "type": "row", "title": "Mesh map & details", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 23 }, "collapsed": false
         },
         {
-          "id": 11, "type": "nodeGraph", "title": "Node mesh map — node mode (edge = measured link)",
-          "gridPos": { "h": 10, "w": 14, "x": 0, "y": 24 },
-          "pluginVersion": "12.3.3",
+          "id": 14,
+          "type": "canvas",
+          "title": "Node mesh — node mode (link = slower direction of each pair)",
+          "gridPos": {
+            "h": 12,
+            "w": 14,
+            "x": 0,
+            "y": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bps",
+              "decimals": 2,
+              "min": 0,
+              "max": 2500000000,
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 900000000
+                  },
+                  {
+                    "color": "green",
+                    "value": 1800000000
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
           "options": {
-            "nodes": { "mainStatUnit": "bps", "secondaryStatUnit": "short" },
-            "edges": { "mainStatUnit": "bps" }
+            "inlineEditing": false,
+            "showAdvancedTypes": true,
+            "panZoom": false,
+            "infinitePan": false,
+            "root": {
+              "background": {
+                "color": {
+                  "fixed": "transparent"
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "transparent"
+                },
+                "width": 0
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "type": "frame",
+              "name": "root",
+              "placement": {
+                "left": 0,
+                "top": 0,
+                "width": 100,
+                "height": 100
+              },
+              "elements": [
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "transparent"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "field": "m920q-worker-1",
+                      "fixed": "#808080"
+                    },
+                    "width": 3
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "ellipse",
+                  "name": "m920q-worker-1",
+                  "placement": {
+                    "left": 392,
+                    "top": 32,
+                    "width": 76,
+                    "height": 76,
+                    "rotation": 0
+                  },
+                  "connections": [
+                    {
+                      "color": {
+                        "field": "m920q-worker-1 <-> m715q-worker-1",
+                        "fixed": "#808080"
+                      },
+                      "size": {
+                        "field": "m920q-worker-1 <-> m715q-worker-1",
+                        "fixed": 2,
+                        "min": 2,
+                        "max": 6
+                      },
+                      "path": "straight",
+                      "direction": "none",
+                      "source": {
+                        "x": 0.931,
+                        "y": -0.365
+                      },
+                      "target": {
+                        "x": -0.931,
+                        "y": 0.365
+                      },
+                      "targetName": "m715q-worker-1"
+                    },
+                    {
+                      "color": {
+                        "field": "m920q-worker-1 <-> m70qg3-worker-1",
+                        "fixed": "#808080"
+                      },
+                      "size": {
+                        "field": "m920q-worker-1 <-> m70qg3-worker-1",
+                        "fixed": 2,
+                        "min": 2,
+                        "max": 6
+                      },
+                      "path": "straight",
+                      "direction": "none",
+                      "source": {
+                        "x": 0.516,
+                        "y": -0.857
+                      },
+                      "target": {
+                        "x": -0.516,
+                        "y": 0.857
+                      },
+                      "targetName": "m70qg3-worker-1"
+                    },
+                    {
+                      "color": {
+                        "field": "m920q-worker-1 <-> m720q-worker-1",
+                        "fixed": "#808080"
+                      },
+                      "size": {
+                        "field": "m920q-worker-1 <-> m720q-worker-1",
+                        "fixed": 2,
+                        "min": 2,
+                        "max": 6
+                      },
+                      "path": "straight",
+                      "direction": "none",
+                      "source": {
+                        "x": -0.516,
+                        "y": -0.857
+                      },
+                      "target": {
+                        "x": 0.516,
+                        "y": 0.857
+                      },
+                      "targetName": "m720q-worker-1"
+                    },
+                    {
+                      "color": {
+                        "field": "m920q-worker-1 <-> m715q2-worker-1",
+                        "fixed": "#808080"
+                      },
+                      "size": {
+                        "field": "m920q-worker-1 <-> m715q2-worker-1",
+                        "fixed": 2,
+                        "min": 2,
+                        "max": 6
+                      },
+                      "path": "straight",
+                      "direction": "none",
+                      "source": {
+                        "x": -0.931,
+                        "y": -0.365
+                      },
+                      "target": {
+                        "x": 0.931,
+                        "y": 0.365
+                      },
+                      "targetName": "m715q2-worker-1"
+                    }
+                  ],
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 12,
+                    "color": {
+                      "field": "m920q-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m920q-worker-1",
+                      "fixed": ""
+                    },
+                    "backgroundColor": {
+                      "fixed": "transparent"
+                    },
+                    "borderColor": {
+                      "field": "m920q-worker-1",
+                      "fixed": "#808080"
+                    },
+                    "width": 3
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "transparent"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "field": "m715q-worker-1",
+                      "fixed": "#808080"
+                    },
+                    "width": 3
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "ellipse",
+                  "name": "m715q-worker-1",
+                  "placement": {
+                    "left": 630,
+                    "top": 125,
+                    "width": 76,
+                    "height": 76,
+                    "rotation": 0
+                  },
+                  "connections": [
+                    {
+                      "color": {
+                        "field": "m715q-worker-1 <-> m70qg3-worker-1",
+                        "fixed": "#808080"
+                      },
+                      "size": {
+                        "field": "m715q-worker-1 <-> m70qg3-worker-1",
+                        "fixed": 2,
+                        "min": 2,
+                        "max": 6
+                      },
+                      "path": "straight",
+                      "direction": "none",
+                      "source": {
+                        "x": -0.516,
+                        "y": -0.857
+                      },
+                      "target": {
+                        "x": 0.516,
+                        "y": 0.857
+                      },
+                      "targetName": "m70qg3-worker-1"
+                    },
+                    {
+                      "color": {
+                        "field": "m715q-worker-1 <-> m720q-worker-1",
+                        "fixed": "#808080"
+                      },
+                      "size": {
+                        "field": "m715q-worker-1 <-> m720q-worker-1",
+                        "fixed": 2,
+                        "min": 2,
+                        "max": 6
+                      },
+                      "path": "straight",
+                      "direction": "none",
+                      "source": {
+                        "x": -0.931,
+                        "y": -0.365
+                      },
+                      "target": {
+                        "x": 0.931,
+                        "y": 0.365
+                      },
+                      "targetName": "m720q-worker-1"
+                    },
+                    {
+                      "color": {
+                        "field": "m715q-worker-1 <-> m715q2-worker-1",
+                        "fixed": "#808080"
+                      },
+                      "size": {
+                        "field": "m715q-worker-1 <-> m715q2-worker-1",
+                        "fixed": 2,
+                        "min": 2,
+                        "max": 6
+                      },
+                      "path": "straight",
+                      "direction": "none",
+                      "source": {
+                        "x": -1.0,
+                        "y": -0.0
+                      },
+                      "target": {
+                        "x": 1.0,
+                        "y": 0.0
+                      },
+                      "targetName": "m715q2-worker-1"
+                    }
+                  ],
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 12,
+                    "color": {
+                      "field": "m715q-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m715q-worker-1",
+                      "fixed": ""
+                    },
+                    "backgroundColor": {
+                      "fixed": "transparent"
+                    },
+                    "borderColor": {
+                      "field": "m715q-worker-1",
+                      "fixed": "#808080"
+                    },
+                    "width": 3
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "transparent"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "field": "m70qg3-worker-1",
+                      "fixed": "#808080"
+                    },
+                    "width": 3
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "ellipse",
+                  "name": "m70qg3-worker-1",
+                  "placement": {
+                    "left": 539,
+                    "top": 276,
+                    "width": 76,
+                    "height": 76,
+                    "rotation": 0
+                  },
+                  "connections": [
+                    {
+                      "color": {
+                        "field": "m70qg3-worker-1 <-> m720q-worker-1",
+                        "fixed": "#808080"
+                      },
+                      "size": {
+                        "field": "m70qg3-worker-1 <-> m720q-worker-1",
+                        "fixed": 2,
+                        "min": 2,
+                        "max": 6
+                      },
+                      "path": "straight",
+                      "direction": "none",
+                      "source": {
+                        "x": -1.0,
+                        "y": -0.0
+                      },
+                      "target": {
+                        "x": 1.0,
+                        "y": 0.0
+                      },
+                      "targetName": "m720q-worker-1"
+                    },
+                    {
+                      "color": {
+                        "field": "m70qg3-worker-1 <-> m715q2-worker-1",
+                        "fixed": "#808080"
+                      },
+                      "size": {
+                        "field": "m70qg3-worker-1 <-> m715q2-worker-1",
+                        "fixed": 2,
+                        "min": 2,
+                        "max": 6
+                      },
+                      "path": "straight",
+                      "direction": "none",
+                      "source": {
+                        "x": -0.931,
+                        "y": 0.365
+                      },
+                      "target": {
+                        "x": 0.931,
+                        "y": -0.365
+                      },
+                      "targetName": "m715q2-worker-1"
+                    }
+                  ],
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 12,
+                    "color": {
+                      "field": "m70qg3-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m70qg3-worker-1",
+                      "fixed": ""
+                    },
+                    "backgroundColor": {
+                      "fixed": "transparent"
+                    },
+                    "borderColor": {
+                      "field": "m70qg3-worker-1",
+                      "fixed": "#808080"
+                    },
+                    "width": 3
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "transparent"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "field": "m720q-worker-1",
+                      "fixed": "#808080"
+                    },
+                    "width": 3
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "ellipse",
+                  "name": "m720q-worker-1",
+                  "placement": {
+                    "left": 245,
+                    "top": 276,
+                    "width": 76,
+                    "height": 76,
+                    "rotation": 0
+                  },
+                  "connections": [
+                    {
+                      "color": {
+                        "field": "m720q-worker-1 <-> m715q2-worker-1",
+                        "fixed": "#808080"
+                      },
+                      "size": {
+                        "field": "m720q-worker-1 <-> m715q2-worker-1",
+                        "fixed": 2,
+                        "min": 2,
+                        "max": 6
+                      },
+                      "path": "straight",
+                      "direction": "none",
+                      "source": {
+                        "x": -0.516,
+                        "y": 0.857
+                      },
+                      "target": {
+                        "x": 0.516,
+                        "y": -0.857
+                      },
+                      "targetName": "m715q2-worker-1"
+                    }
+                  ],
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 12,
+                    "color": {
+                      "field": "m720q-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m720q-worker-1",
+                      "fixed": ""
+                    },
+                    "backgroundColor": {
+                      "fixed": "transparent"
+                    },
+                    "borderColor": {
+                      "field": "m720q-worker-1",
+                      "fixed": "#808080"
+                    },
+                    "width": 3
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "transparent"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "field": "m715q2-worker-1",
+                      "fixed": "#808080"
+                    },
+                    "width": 3
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "ellipse",
+                  "name": "m715q2-worker-1",
+                  "placement": {
+                    "left": 154,
+                    "top": 125,
+                    "width": 76,
+                    "height": 76,
+                    "rotation": 0
+                  },
+                  "connections": [],
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 12,
+                    "color": {
+                      "field": "m715q2-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m715q2-worker-1",
+                      "fixed": ""
+                    },
+                    "backgroundColor": {
+                      "fixed": "transparent"
+                    },
+                    "borderColor": {
+                      "field": "m715q2-worker-1",
+                      "fixed": "#808080"
+                    },
+                    "width": 3
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "transparent"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "label m920q-worker-1",
+                  "placement": {
+                    "left": 366,
+                    "top": 9,
+                    "width": 128,
+                    "height": 20,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 12,
+                    "color": {
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "fixed",
+                      "fixed": "m920q-worker-1"
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "transparent"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "label m715q-worker-1",
+                  "placement": {
+                    "left": 710,
+                    "top": 153,
+                    "width": 128,
+                    "height": 20,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 12,
+                    "color": {
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "fixed",
+                      "fixed": "m715q-worker-1"
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "transparent"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "label m70qg3-worker-1",
+                  "placement": {
+                    "left": 513,
+                    "top": 355,
+                    "width": 128,
+                    "height": 20,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 12,
+                    "color": {
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "fixed",
+                      "fixed": "m70qg3-worker-1"
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "transparent"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "label m720q-worker-1",
+                  "placement": {
+                    "left": 219,
+                    "top": 355,
+                    "width": 128,
+                    "height": 20,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 12,
+                    "color": {
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "fixed",
+                      "fixed": "m720q-worker-1"
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "transparent"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "label m715q2-worker-1",
+                  "placement": {
+                    "left": 22,
+                    "top": 153,
+                    "width": 128,
+                    "height": 20,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 12,
+                    "color": {
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "fixed",
+                      "fixed": "m715q2-worker-1"
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "#181b1f"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "value m920q-worker-1 <-> m715q-worker-1",
+                  "placement": {
+                    "left": 518,
+                    "top": 109,
+                    "width": 62,
+                    "height": 16,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 10,
+                    "color": {
+                      "field": "m920q-worker-1 <-> m715q-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m920q-worker-1 <-> m715q-worker-1",
+                      "fixed": ""
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "#181b1f"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "value m920q-worker-1 <-> m70qg3-worker-1",
+                  "placement": {
+                    "left": 472,
+                    "top": 184,
+                    "width": 62,
+                    "height": 16,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 10,
+                    "color": {
+                      "field": "m920q-worker-1 <-> m70qg3-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m920q-worker-1 <-> m70qg3-worker-1",
+                      "fixed": ""
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "#181b1f"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "value m920q-worker-1 <-> m720q-worker-1",
+                  "placement": {
+                    "left": 326,
+                    "top": 184,
+                    "width": 62,
+                    "height": 16,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 10,
+                    "color": {
+                      "field": "m920q-worker-1 <-> m720q-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m920q-worker-1 <-> m720q-worker-1",
+                      "fixed": ""
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "#181b1f"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "value m920q-worker-1 <-> m715q2-worker-1",
+                  "placement": {
+                    "left": 280,
+                    "top": 109,
+                    "width": 62,
+                    "height": 16,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 10,
+                    "color": {
+                      "field": "m920q-worker-1 <-> m715q2-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m920q-worker-1 <-> m715q2-worker-1",
+                      "fixed": ""
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "#181b1f"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "value m715q-worker-1 <-> m70qg3-worker-1",
+                  "placement": {
+                    "left": 591,
+                    "top": 231,
+                    "width": 62,
+                    "height": 16,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 10,
+                    "color": {
+                      "field": "m715q-worker-1 <-> m70qg3-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m715q-worker-1 <-> m70qg3-worker-1",
+                      "fixed": ""
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "#181b1f"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "value m715q-worker-1 <-> m720q-worker-1",
+                  "placement": {
+                    "left": 444,
+                    "top": 231,
+                    "width": 62,
+                    "height": 16,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 10,
+                    "color": {
+                      "field": "m715q-worker-1 <-> m720q-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m715q-worker-1 <-> m720q-worker-1",
+                      "fixed": ""
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "#181b1f"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "value m715q-worker-1 <-> m715q2-worker-1",
+                  "placement": {
+                    "left": 399,
+                    "top": 155,
+                    "width": 62,
+                    "height": 16,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 10,
+                    "color": {
+                      "field": "m715q-worker-1 <-> m715q2-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m715q-worker-1 <-> m715q2-worker-1",
+                      "fixed": ""
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "#181b1f"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "value m70qg3-worker-1 <-> m720q-worker-1",
+                  "placement": {
+                    "left": 399,
+                    "top": 306,
+                    "width": 62,
+                    "height": 16,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 10,
+                    "color": {
+                      "field": "m70qg3-worker-1 <-> m720q-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m70qg3-worker-1 <-> m720q-worker-1",
+                      "fixed": ""
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "#181b1f"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "value m70qg3-worker-1 <-> m715q2-worker-1",
+                  "placement": {
+                    "left": 354,
+                    "top": 231,
+                    "width": 62,
+                    "height": 16,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 10,
+                    "color": {
+                      "field": "m70qg3-worker-1 <-> m715q2-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m70qg3-worker-1 <-> m715q2-worker-1",
+                      "fixed": ""
+                    }
+                  }
+                },
+                {
+                  "background": {
+                    "color": {
+                      "fixed": "#181b1f"
+                    }
+                  },
+                  "border": {
+                    "color": {
+                      "fixed": "transparent"
+                    },
+                    "width": 0
+                  },
+                  "constraint": {
+                    "horizontal": "left",
+                    "vertical": "top"
+                  },
+                  "type": "text",
+                  "name": "value m720q-worker-1 <-> m715q2-worker-1",
+                  "placement": {
+                    "left": 207,
+                    "top": 231,
+                    "width": 62,
+                    "height": 16,
+                    "rotation": 0
+                  },
+                  "config": {
+                    "align": "center",
+                    "valign": "middle",
+                    "size": 10,
+                    "color": {
+                      "field": "m720q-worker-1 <-> m715q2-worker-1",
+                      "fixed": "text"
+                    },
+                    "text": {
+                      "mode": "field",
+                      "field": "m720q-worker-1 <-> m715q2-worker-1",
+                      "fixed": ""
+                    }
+                  }
+                }
+              ]
+            }
           },
           "targets": [
             {
-              "datasource": { "type": "prometheus", "uid": "${datasource}" },
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
               "expr": "max by (node) (iperf3_bandwidth_bps{mode=\"node\"})",
-              "format": "table", "instant": true, "refId": "A",
-              "transformations": [
-                { "id": "labelsToFields", "options": {} },
-                { "id": "organize", "options": { "excludeByName": { "Time": true }, "renameByName": { "node": "id", "Value": "mainstat" } } }
-              ]
+              "instant": true,
+              "legendFormat": "{{node}}",
+              "refId": "A"
             },
             {
-              "datasource": { "type": "prometheus", "uid": "${datasource}" },
-              "expr": "label_replace(iperf3_bandwidth_bps{mode=\"node\"}, \"dstnode\", \"$1\", \"dst\", \"(.*)\") * on(src) group_left(dstnode) label_replace(sum by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}) * 0 + 1, \"dstnode\", \"$1\", \"node\", \"(.*)\")",
-              "format": "table", "instant": true, "refId": "B",
-              "transformations": [
-                { "id": "labelsToFields", "options": {} },
-                { "id": "organize", "options": { "excludeByName": { "Time": true }, "renameByName": { "node": "source", "dstnode": "target", "Value": "mainstat" } } }
-              ]
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "(max by (node, dstnode) (iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(group by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dstnode\", \"$1\", \"node\", \"(.*)\"), \"dst\", \"$1\", \"src\", \"(.*)\")) < max by (node, dstnode) (label_replace(label_replace(label_replace(max by (node, dstnode) (iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(group by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dstnode\", \"$1\", \"node\", \"(.*)\"), \"dst\", \"$1\", \"src\", \"(.*)\")), \"tmp\", \"$1\", \"node\", \"(.*)\"), \"node\", \"$1\", \"dstnode\", \"(.*)\"), \"dstnode\", \"$1\", \"tmp\", \"(.*)\"))) or max by (node, dstnode) (label_replace(label_replace(label_replace(max by (node, dstnode) (iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(group by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dstnode\", \"$1\", \"node\", \"(.*)\"), \"dst\", \"$1\", \"src\", \"(.*)\")), \"tmp\", \"$1\", \"node\", \"(.*)\"), \"node\", \"$1\", \"dstnode\", \"(.*)\"), \"dstnode\", \"$1\", \"tmp\", \"(.*)\")) or max by (node, dstnode) (iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(group by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dstnode\", \"$1\", \"node\", \"(.*)\"), \"dst\", \"$1\", \"src\", \"(.*)\"))",
+              "instant": true,
+              "legendFormat": "{{node}} <-> {{dstnode}}",
+              "refId": "B"
             }
           ]
         },
         {
           "id": 12, "type": "table", "title": "All pairs (cell color = speed)",
-          "gridPos": { "h": 10, "w": 10, "x": 14, "y": 24 },
+          "gridPos": { "h": 12, "w": 10, "x": 14, "y": 24 },
           "fieldConfig": {
             "defaults": {
               "unit": "bps", "decimals": 2,
@@ -207,7 +1347,7 @@ spec:
         },
         {
           "id": 13, "type": "timeseries", "title": "Result age per pair (staleness — must stay < 600 s)",
-          "gridPos": { "h": 6, "w": 24, "x": 0, "y": 34 },
+          "gridPos": { "h": 6, "w": 24, "x": 0, "y": 36 },
           "fieldConfig": {
             "defaults": { "unit": "s", "custom": { "lineWidth": 2, "fillOpacity": 10, "showPoints": "never" },
               "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 600 }] } },
@@ -217,6 +1357,89 @@ spec:
           "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" },
             "expr": "max by (mode, node, dst) (iperf3_result_age_seconds)",
             "legendFormat": "{{mode}}: {{node}} → {{dst}}", "refId": "A" }]
+        },
+        {
+          "id": 11,
+          "type": "nodeGraph",
+          "title": "Node mesh map — node mode (edge = measured link)",
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 42
+          },
+          "pluginVersion": "12.3.3",
+          "options": {
+            "layoutAlgorithm": "force",
+            "nodes": {
+              "mainStatUnit": "Gb/s"
+            },
+            "edges": {
+              "mainStatUnit": "Gb/s"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "label_replace((max by (id, title) (label_replace(label_replace(iperf3_bandwidth_bps{mode=\"node\"}, \"id\", \"$1\", \"node\", \"(.*)\"), \"title\", \"$1\", \"node\", \"(.*)\"))) / 1e9 >= 1.8, \"color\", \"green\", \"\", \"\") or label_replace((max by (id, title) (label_replace(label_replace(iperf3_bandwidth_bps{mode=\"node\"}, \"id\", \"$1\", \"node\", \"(.*)\"), \"title\", \"$1\", \"node\", \"(.*)\"))) / 1e9 >= 0.9 < 1.8, \"color\", \"orange\", \"\", \"\") or label_replace((max by (id, title) (label_replace(label_replace(iperf3_bandwidth_bps{mode=\"node\"}, \"id\", \"$1\", \"node\", \"(.*)\"), \"title\", \"$1\", \"node\", \"(.*)\"))) / 1e9 < 0.9, \"color\", \"red\", \"\", \"\")",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+              },
+              "expr": "label_replace((max by (id, source, target) (label_join(label_replace(label_replace(iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(group by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dstnode\", \"$1\", \"node\", \"(.*)\"), \"dst\", \"$1\", \"src\", \"(.*)\"), \"source\", \"$1\", \"node\", \"(.*)\"), \"target\", \"$1\", \"dstnode\", \"(.*)\"), \"id\", \"->\", \"source\", \"target\"))) / 1e9 >= 1.8, \"color\", \"green\", \"\", \"\") or label_replace((max by (id, source, target) (label_join(label_replace(label_replace(iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(group by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dstnode\", \"$1\", \"node\", \"(.*)\"), \"dst\", \"$1\", \"src\", \"(.*)\"), \"source\", \"$1\", \"node\", \"(.*)\"), \"target\", \"$1\", \"dstnode\", \"(.*)\"), \"id\", \"->\", \"source\", \"target\"))) / 1e9 >= 0.9 < 1.8, \"color\", \"orange\", \"\", \"\") or label_replace((max by (id, source, target) (label_join(label_replace(label_replace(iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(group by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dstnode\", \"$1\", \"node\", \"(.*)\"), \"dst\", \"$1\", \"src\", \"(.*)\"), \"source\", \"$1\", \"node\", \"(.*)\"), \"target\", \"$1\", \"dstnode\", \"(.*)\"), \"id\", \"->\", \"source\", \"target\"))) / 1e9 < 0.9, \"color\", \"red\", \"\", \"\")",
+              "format": "table",
+              "instant": true,
+              "refId": "B"
+            }
+          ],
+          "transformations": [
+            {
+              "id": "calculateField",
+              "filter": {
+                "id": "byRefId",
+                "options": "A"
+              },
+              "options": {
+                "mode": "reduceRow",
+                "reduce": {
+                  "reducer": "sum"
+                },
+                "alias": "mainstat",
+                "replaceFields": false
+              }
+            },
+            {
+              "id": "calculateField",
+              "filter": {
+                "id": "byRefId",
+                "options": "B"
+              },
+              "options": {
+                "mode": "reduceRow",
+                "reduce": {
+                  "reducer": "sum"
+                },
+                "alias": "mainstat",
+                "replaceFields": false
+              }
+            },
+            {
+              "id": "filterFieldsByName",
+              "options": {
+                "exclude": {
+                  "pattern": "^(Time|Value.*)$"
+                }
+              }
+            }
+          ]
         }
       ]
     }
