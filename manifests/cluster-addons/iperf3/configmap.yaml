@@ -5,10 +5,11 @@ metadata:
   namespace: iperf3
 data:
   exporter.py: |
-    import glob, json, os, time
+    import glob, json, os, sys, time
     from http.server import BaseHTTPRequestHandler, HTTPServer
 
-    RESULTS, MY_IP = "/results", os.environ["MY_IP"]
+    RESULTS, MY_IP, MODE, NODE = "/results", os.environ["MY_IP"], os.environ["MODE"], os.environ["NODE"]
+    L = f'src="{MY_IP}",node="{NODE}",mode="{MODE}"'
 
     class H(BaseHTTPRequestHandler):
         def do_GET(self):
@@ -18,14 +19,16 @@ data:
                      "# TYPE iperf3_result_age_seconds gauge"]
 
             now = time.time()
+
             for f in sorted(glob.glob(RESULTS + "/result-*.json")):
-                dst = os.path.basename(f)[7:-5]   # strip "result-" and ".json"
+                dst = os.path.basename(f)[7:-5]
                 try:
-                    bps = json.load(open(f))["end"]["sum_received"]["bits_per_second"]
-                    lines.append(f'iperf3_bandwidth_bps{{src="{MY_IP}",dst="{dst}"}} {bps}')
-                    lines.append(f'iperf3_result_age_seconds{{src="{MY_IP}",dst="{dst}"}} {now - os.path.getmtime(f):.0f}')
-                except Exception:
-                    pass  # error JSON (no "end") or mid-write; next scrape picks it up
+                    d = json.load(open(f))
+                    bps = d["end"]["sum_received"]["bits_per_second"]
+                    lines.append(f'iperf3_bandwidth_bps{{{L},dst="{dst}"}} {bps}')
+                    lines.append(f'iperf3_result_age_seconds{{{L},dst="{dst}"}} {now - os.path.getmtime(f):.0f}')
+                except Exception as e:
+                    print(f"parse error {f}: {e}", file=sys.stderr, flush=True)
 
             body = ("\n".join(lines) + "\n").encode()
 
@@ -38,3 +41,33 @@ data:
         def log_message(self, *a): pass
 
     HTTPServer(("0.0.0.0", 8080), H).serve_forever()
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: iperf3-run
+  namespace: iperf3
+data:
+  run.sh: |
+    #!/bin/sh
+
+    iperf3 -s -p 5201 >/dev/null 2>&1 &
+
+    sleep $(( $(hostname | cksum | cut -d' ' -f1) % 45 ))
+
+    while true; do
+      for PEER in $(getent hosts "iperf3-${MODE}-headless.iperf3.svc.cluster.local" | awk '{print $1}' | grep -vFx "$MY_IP"); do
+        for attempt in 1 2; do
+          if iperf3 -c "$PEER" -p 5201 -t 10 -J > "/results/.tmp-${PEER}" 2>/dev/null; then
+            mv "/results/.tmp-${PEER}" "/results/result-${PEER}.json"
+            break
+          fi
+
+          [ "$attempt" -eq 1 ] && sleep 5   # server busy -> retry once
+        done
+
+        sleep $(( 2 + $(hostname | cksum | cut -d' ' -f1) % 5 ))
+      done
+
+      sleep 300
+    done

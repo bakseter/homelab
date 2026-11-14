@@ -1,16 +1,27 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: iperf3
+  name: iperf3-node
   namespace: iperf3
 spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: iperf3
+      app.kubernetes.io/component: iperf3-node
   template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: iperf3
+        app.kubernetes.io/component: iperf3-node
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       volumes:
         - name: results
           emptyDir: {}
+        - name: run
+          configMap:
+            name: iperf3-run
         - name: exporter
           configMap:
             name: iperf3-exporter
@@ -22,38 +33,21 @@ spec:
       containers:
         - name: iperf3
           image: networkstatic/iperf3:latest@sha256:d8767f2888155902ec72760f9ba8dd6fb16ff73256a8e02572c109aecc23269b
+          command: ['/bin/sh', '/run/run.sh']
           env:
             - name: MY_IP
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: MODE
+              value: node
+            - name: NODE
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           volumeMounts:
             - name: results
               mountPath: /results
-          command: ['/bin/sh', '-c']
-          args:
-            - |
-              # server: discard its own log noise
-              iperf3 -s -p 5201 >/dev/null 2>&1 &
-              sleep $(( $(hostname | cksum | cut -d' ' -f1) % 45 ))
-
-              while true; do
-                for PEER in $(getent hosts iperf3-headless.iperf3.svc.cluster.local | awk '{print $1}' | grep -vFx "$MY_IP"); do
-                  for attempt in 1 2; do
-                    # write to dotfile + atomic mv, so the exporter never reads a partial file
-                    if iperf3 -c "$PEER" -p 5201 -t 10 -J > "/results/.tmp-${PEER}" 2>/dev/null; then
-                      mv "/results/.tmp-${PEER}" "/results/result-${PEER}.json"
-                      break
-                    fi
-                    [ "$attempt" -eq 1 ] && sleep 5   # "server is busy" -> retry once
-                  done
-
-                  # on double-failure: no new file, old one ages out -> caught by age_seconds alert
-                  sleep $(( 2 + $(hostname | cksum | cut -d' ' -f1) % 5 ))
-                done
-
-                sleep 300
-              done
           ports:
             - name: iperf
               containerPort: 5201
@@ -73,6 +67,12 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: MODE
+              value: node
+            - name: NODE
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           volumeMounts:
             - name: results
               mountPath: /results
@@ -83,6 +83,90 @@ spec:
             - name: metrics
               containerPort: 8080
               hostPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: iperf3-pod
+  namespace: iperf3
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: iperf3
+      app.kubernetes.io/component: iperf3-pod
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: iperf3
+        app.kubernetes.io/component: iperf3-pod
+    spec:
+      volumes:
+        - name: results
+          emptyDir: {}
+        - name: run
+          configMap:
+            name: iperf3-run
+        - name: exporter
+          configMap:
+            name: iperf3-exporter
+      containers:
+        - name: iperf3
+          image: networkstatic/iperf3:latest
+          command: ['/bin/sh', '/run/run.sh']
+          env:
+            - name: MY_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: MODE
+              value: pod
+            - name: NODE
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: results
+              mountPath: /results
+            - name: run
+              mountPath: /run
+          ports:
+            - name: iperf
+              containerPort: 5201
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+        - name: exporter
+          image: python:3.12-alpine
+          command: ['python3', '/app/exporter.py']
+          env:
+            - name: MY_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: MODE
+              value: pod
+            - name: NODE
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: results
+              mountPath: /results
+              readOnly: true
+            - name: exporter
+              mountPath: /app
+          ports:
+            - name: metrics
+              containerPort: 8080
               protocol: TCP
           resources:
             requests:

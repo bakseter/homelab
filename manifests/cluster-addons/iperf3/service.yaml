@@ -1,9 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: iperf3-headless
+  name: iperf3-node-headless
   namespace: iperf3
 spec:
+  selector:
+    app.kubernetes.io/name: iperf3
+    app.kubernetes.io/component: iperf3-node
   clusterIP: None
   ports:
     - port: 5201
@@ -11,10 +14,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: iperf3-metrics
+  name: iperf3-pod-headless
   namespace: iperf3
 spec:
+  selector:
+    app.kubernetes.io/name: iperf3
+    app.kubernetes.io/component: iperf3-pod
+  clusterIP: None
   ports:
-    - name: metrics
-      port: 8080
-      targetPort: 8080
+    - port: 5201
