@@ -26,7 +26,7 @@ spec:
       "title": "iperf3 — Network Mesh",
       "uid": "iperf3-mesh",
       "schemaVersion": 39,
-      "version": 2,
+      "version": 3,
       "timezone": "browser",
       "refresh": "30s",
       "time": { "from": "now-1h", "to": "now" },
@@ -60,14 +60,16 @@ spec:
           "gridPos": { "h": 4, "w": 4, "x": 8, "y": 1 },
           "fieldConfig": { "defaults": { "unit": "bps", "decimals": 2, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] } }, "overrides": [] },
           "options": { "colorMode": "value", "graphMode": "none", "textMode": "value_and_name", "wideLayout": true },
-          "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "topk(1, iperf3_bandwidth_bps{mode=\"node\"})", "instant": true, "legendFormat": "{{node}} → {{dst}}", "refId": "A" }]
+          "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" },
+            "expr": "topk(1, label_replace(iperf3_bandwidth_bps{mode=\"node\"}, \"dstnode\", \"$1\", \"dst\", \"(.*)\") * on(src) group_left(dstnode) label_replace(sum by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}) * 0 + 1, \"dstnode\", \"$1\", \"node\", \"(.*)\"))",
+            "instant": true, "legendFormat": "{{node}} → {{dstnode}}", "refId": "A" }]
         },
         {
           "id": 4, "type": "stat", "title": "Fastest pair (pod)",
           "gridPos": { "h": 4, "w": 4, "x": 12, "y": 1 },
           "fieldConfig": { "defaults": { "unit": "bps", "decimals": 2, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] } }, "overrides": [] },
           "options": { "colorMode": "value", "graphMode": "none", "textMode": "value_and_name", "wideLayout": true },
-          "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "topk(1, iperf3_bandwidth_bps{mode=\"pod\"})", "instant": true, "legendFormat": "{{node}} → {{dst}}", "refId": "A" }]
+          "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "topk(1, iperf3_bandwidth_bps{mode=\"pod\"})", "instant": true, "legendFormat": "{{src}} → {{dst}}", "refId": "A" }]
         },
         {
           "id": 5, "type": "stat", "title": "CNI overhead (pod vs node)",
@@ -100,7 +102,7 @@ spec:
             "tooltip": { "mode": "multi", "sort": "desc" }
           },
           "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" },
-            "expr": "sum by (node, dstnode) (iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(sum by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dst\", \"$1\", \"src\", \"(.*)\"), \"dstnode\", \"$1\", \"node\", \"(.*)\"))",
+            "expr": "label_replace(iperf3_bandwidth_bps{mode=\"node\"}, \"dstnode\", \"$1\", \"dst\", \"(.*)\") * on(src) group_left(dstnode) label_replace(sum by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}) * 0 + 1, \"dstnode\", \"$1\", \"node\", \"(.*)\")",
             "legendFormat": "{{node}} → {{dstnode}}", "refId": "A" }]
         },
         {
@@ -114,7 +116,7 @@ spec:
           },
           "options": { "orientation": "horizontal", "displayMode": "gradient", "showValue": "always", "valueMode": "color", "sorting": "descending", "namePlacement": "auto" },
           "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" },
-            "expr": "sum by (node, dstnode) (iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(sum by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dst\", \"$1\", \"src\", \"(.*)\"), \"dstnode\", \"$1\", \"node\", \"(.*)\"))",
+            "expr": "label_replace(iperf3_bandwidth_bps{mode=\"node\"}, \"dstnode\", \"$1\", \"dst\", \"(.*)\") * on(src) group_left(dstnode) label_replace(sum by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}) * 0 + 1, \"dstnode\", \"$1\", \"node\", \"(.*)\")",
             "instant": true, "legendFormat": "{{node}} → {{dstnode}}", "refId": "A" }]
         },
         {
@@ -133,7 +135,7 @@ spec:
           },
           "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" },
             "expr": "iperf3_bandwidth_bps{mode=\"pod\"}",
-            "legendFormat": "{{node}} → {{dst}}", "refId": "A" }]
+            "legendFormat": "{{src}} → {{dst}}", "refId": "A" }]
         },
         {
           "id": 10, "type": "bargauge", "title": "Current throughput — pod mode",
@@ -147,19 +149,23 @@ spec:
           "options": { "orientation": "horizontal", "displayMode": "gradient", "showValue": "always", "valueMode": "color", "sorting": "descending", "namePlacement": "auto" },
           "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" },
             "expr": "iperf3_bandwidth_bps{mode=\"pod\"}",
-            "instant": true, "legendFormat": "{{node}} → {{dst}}", "refId": "A" }]
+            "instant": true, "legendFormat": "{{src}} → {{dst}}", "refId": "A" }]
         },
         {
           "type": "row", "title": "Mesh map & details", "gridPos": { "h": 1, "w": 24, "x": 0, "y": 23 }, "collapsed": false
         },
         {
-          "id": 11, "type": "nodeGraph", "title": "Node mesh map — node mode (edge = measured link, color = speed)",
+          "id": 11, "type": "nodeGraph", "title": "Node mesh map — node mode (edge = measured link)",
           "gridPos": { "h": 10, "w": 14, "x": 0, "y": 24 },
-          "options": { "nodes": { "mainStatUnit": "bps", "secondaryStatUnit": "short" }, "edges": { "mainStatUnit": "bps" } },
+          "pluginVersion": "12.3.3",
+          "options": {
+            "nodes": { "mainStatUnit": "bps", "secondaryStatUnit": "short" },
+            "edges": { "mainStatUnit": "bps" }
+          },
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "${datasource}" },
-              "expr": "count by (node) (iperf3_bandwidth_bps{mode=\"node\"})",
+              "expr": "max by (node) (iperf3_bandwidth_bps{mode=\"node\"})",
               "format": "table", "instant": true, "refId": "A",
               "transformations": [
                 { "id": "labelsToFields", "options": {} },
@@ -168,7 +174,7 @@ spec:
             },
             {
               "datasource": { "type": "prometheus", "uid": "${datasource}" },
-              "expr": "sum by (node, dstnode) (iperf3_bandwidth_bps{mode=\"node\"} * on(dst) group_left(dstnode) label_replace(label_replace(sum by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}), \"dst\", \"$1\", \"src\", \"(.*)\"), \"dstnode\", \"$1\", \"node\", \"(.*)\"))",
+              "expr": "label_replace(iperf3_bandwidth_bps{mode=\"node\"}, \"dstnode\", \"$1\", \"dst\", \"(.*)\") * on(src) group_left(dstnode) label_replace(sum by (src, node) (iperf3_bandwidth_bps{mode=\"node\"}) * 0 + 1, \"dstnode\", \"$1\", \"node\", \"(.*)\")",
               "format": "table", "instant": true, "refId": "B",
               "transformations": [
                 { "id": "labelsToFields", "options": {} },
@@ -178,18 +184,17 @@ spec:
           ]
         },
         {
-          "id": 12, "type": "table", "title": "All pairs (color = speed)",
+          "id": 12, "type": "table", "title": "All pairs (cell color = speed)",
           "gridPos": { "h": 10, "w": 10, "x": 14, "y": 24 },
           "fieldConfig": {
-            "defaults": { "custom": { "align": "auto", "cellHeight": "sm", "displayMode": "color-background" },
+            "defaults": {
+              "unit": "bps", "decimals": 2,
+              "custom": { "align": "auto", "cellHeight": "sm", "displayMode": "color-background" },
               "thresholds": { "mode": "absolute", "steps": [
                 { "color": "red", "value": null }, { "color": "orange", "value": 900000000 }, { "color": "green", "value": 1800000000 }
-              ] } },
-            "overrides": [
-              { "matcher": { "id": "byName", "options": "Value" }, "properties": [
-                { "id": "unit", "value": "bps" }, { "id": "decimals", "value": 2 }, { "id": "custom.displayMode", "value": "color-background" }
               ] }
-            ]
+            },
+            "overrides": []
           },
           "options": { "showHeader": true, "sortBy": [{ "displayName": "Value", "desc": true }] },
           "targets": [{ "datasource": { "type": "prometheus", "uid": "${datasource}" },
@@ -197,7 +202,7 @@ spec:
             "format": "table", "instant": true, "refId": "A" }],
           "transformations": [
             { "id": "labelsToFields", "options": {} },
-            { "id": "organize", "options": { "excludeByName": { "Time": true }, "renameByName": { "mode": "Mode", "node": "Src node", "dst": "Dst", "Value": "Bandwidth" } } }
+            { "id": "organize", "options": { "excludeByName": { "Time": true }, "renameByName": { "mode": "Mode", "node": "Src node", "dst": "Dst IP", "Value": "Bandwidth" } } }
           ]
         },
         {
