@@ -25,7 +25,7 @@ spec:
             app.kubernetes.io/name: prometheus
       toPorts:
         - ports:
-            - port: '5201'
+            - port: '8080'
               protocol: TCP
 
   egress:
