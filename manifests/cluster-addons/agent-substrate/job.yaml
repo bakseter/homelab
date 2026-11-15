@@ -21,7 +21,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: create-s3-buckets
-          image: amazon/aws-cli:2.40.1@sha256:4ade0fe3e60e0b9e1fb0910f86c6d992baf4e12d3172c25a3c8c11f6c81cee08
+          image: amazon/aws-cli:2.40.2@sha256:acc32af784911165a8e78b63950625d174ba79b800a66a436c974689c87cd755
           env:
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
