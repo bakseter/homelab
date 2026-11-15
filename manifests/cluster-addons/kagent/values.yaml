@@ -29,7 +29,7 @@ kagent:
           protocol: grpc
 
   controller:
-    replicas: 2
+    replicas: 1
 
     substrateClientCertificate:
       enabled: true
