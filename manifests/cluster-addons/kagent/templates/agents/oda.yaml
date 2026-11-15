@@ -32,20 +32,10 @@ spec:
           - get_orders
           - get_order
           - order_tracking
-          - get_delivery_addresses
           - get_delivery_slots
-    - mcp:
-        server:
-          kind: RemoteMCPServer
-          name: oda-mcp
-        requireApproval: true
-        tools:
+          #
           - manipulate_cart
-          - clear_cart
-          - create_product_list
-          - manipulate_product_list
-          - delete_product_list
-          - select_delivery_slot
+          # - clear_cart
 ---
 apiVersion: api.kagent.dev/v1alpha3
 kind: Agent
