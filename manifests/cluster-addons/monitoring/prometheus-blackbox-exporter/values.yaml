@@ -18,3 +18,7 @@ prometheus-blackbox-exporter:
       interval: 60s
       labels:
         release: kube-prometheus-stack
+
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
