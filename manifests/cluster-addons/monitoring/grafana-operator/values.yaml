@@ -2,7 +2,7 @@ grafana-operator:
   image:
     registry: ghcr.io
     repository: grafana/grafana-operator
-    tag: v5.25.0@sha256:bc572995823fcfc32d2e960a47324a87baae8e4c9f821b8564026243e73624f3
+    tag: v5.26.0@sha256:f7051c56e3e0d3581455c2755d3493d0c308e555e1b8604ce77bf6db7ed6c5df
 
   podSecurityContext:
     seccompProfile:
