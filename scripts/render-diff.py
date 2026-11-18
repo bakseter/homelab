@@ -52,7 +52,17 @@ except ImportError:  # pragma: no cover
 
 SCAN_ROOT = "manifests"
 CMD_TIMEOUT = 300  # seconds per helm/kustomize invocation
-DEFAULT_IGNORES = [r"checksum/.+"]  # same noise filter the old workflow used
+# Noise filters applied to both sides before diffing: lines matching any of
+# these regexes are dropped. Besides the checksum filter from the old
+# workflow, this hides the labels Helm/Kubernetes stamp onto every rendered
+# object (chart name+version, app version), which change on every release
+# and would otherwise dominate the diff.
+DEFAULT_IGNORES = [
+    r"checksum/.+",                  # same noise filter the old workflow used
+    r"helm\.sh/chart",               # helm.sh/chart: <name>-<version>
+    r"app\.kubernetes\.io/version",  # app.kubernetes.io/version: "x.y.z"
+    r"^\s*[\"']?chart[\"']?\s*:",   # a plain `chart:` label key (not mid-line values)
+]
 
 
 @dataclass
