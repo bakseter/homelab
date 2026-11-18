@@ -1,5 +1,5 @@
 ---
-- name: Configure MikroTik hAP ax3 as AP
+- name: Configure MikroTik hAP ax3 as AP (rb5009 is the router)
   hosts: localhost
   gather_facts: false
   become: false
@@ -14,6 +14,9 @@
       tls: false
 
   tasks:
+    # NOTE: community.routeros.api 'cmd' does NOT accept RouterOS [find ...] syntax.
+    # Every removal below is: print -> register -> remove by '.id'.
+
     # -------------------------
     # Identity
     # -------------------------
@@ -24,10 +27,9 @@
 
     # -------------------------
     # Bridge ports
-    # ether1 = uplink to rb5009 ether6.
-    # Kept pvid 50 + admit-all so untagged VLAN 50 (mgmt/wifi) keeps working
-    # and tagged VLANs (90 later) can be trunked on the same port.
-    # ether2-5 = access VLAN 50 (one of them goes to the hAP ax S).
+    # ether1 = uplink to rb5009 ether6 (access pvid 50; admit-all so tagged
+    # VLANs, e.g. 90 later, can pass). ether2-5 = access VLAN 50 (ax S hangs
+    # off one of them). wifi1/wifi2 = access VLAN 50.
     # -------------------------
     - name: Set ether1 as uplink (pvid 50, admit-all)
       community.routeros.api_find_and_modify:
@@ -50,26 +52,48 @@
           ingress-filtering: 'yes'
       loop: [ether2, ether3, ether4, ether5]
 
-    - name: Add wifi1 to bridge (pvid 50)
-      community.routeros.api:
+    - name: Set wifi1/wifi2 as bridge ports (pvid 50)
+      community.routeros.api_find_and_modify:
         path: interface bridge port
-        cmd: 'add interface=wifi1 bridge=bridge pvid=50 frame-types=admit-only-untagged-and-priority-tagged ingress-filtering=yes'
-      ignore_errors: true
+        find:
+          interface: '{{ item }}'
+        values:
+          pvid: '50'
+          frame-types: admit-only-untagged-and-priority-tagged
+          ingress-filtering: 'yes'
+      loop: [wifi1, wifi2]
 
-    - name: Add wifi2 to bridge (pvid 50)
+    # -------------------------
+    # WiFi radios - remove stray wifi3 if present
+    # -------------------------
+    - name: Gather wifi interfaces
       community.routeros.api:
-        path: interface bridge port
-        cmd: 'add interface=wifi2 bridge=bridge pvid=50 frame-types=admit-only-untagged-and-priority-tagged ingress-filtering=yes'
+        path: interface wifi
+        cmd: 'print'
+      register: _wifi_raw
+
+    - name: Remove wifi3 if present
+      community.routeros.api:
+        path: interface wifi
+        remove: "{{ item['.id'] }}"
+      loop: "{{ (_wifi_raw.msg if (_wifi_raw.msg is iterable and _wifi_raw.msg is not string) else []) | selectattr('name', 'equalto', 'wifi3') | list }}"
       ignore_errors: true
 
     # -------------------------
-    # Bridge VLAN table - VLAN 50 only for now (VLAN 90 added later)
+    # Bridge VLAN table - VLAN 50 entry (harmless while filtering is off;
+    # required once filtering is enabled for VLAN 90)
     # -------------------------
-    - name: Ensure bridge VLAN 50
+    - name: Gather existing bridge VLANs
+      community.routeros.api:
+        path: interface bridge vlan
+        cmd: 'print'
+      register: _bv_raw
+
+    - name: Add bridge VLAN 50 if absent
       community.routeros.api:
         path: interface bridge vlan
         cmd: 'add bridge=bridge vlan-ids=50 tagged=bridge untagged=ether1,ether2,ether3,ether4,ether5,wifi1,wifi2'
-      ignore_errors: true
+      when: (_bv_raw.msg if (_bv_raw.msg is iterable and _bv_raw.msg is not string) else []) | selectattr('vlan-ids', 'in', [50, '50']) | list | length == 0
 
     # -------------------------
     # WiFi - 2.4GHz + 5GHz APs, main SSID on VLAN 50 (untagged via bridge pvid)
@@ -104,35 +128,45 @@
           security.ft-over-ds: 'no'
           disabled: 'no'
 
-    - name: Remove existing wifi3 if any
+    # -------------------------
+    # Interface list - ensure bridge in LAN
+    # -------------------------
+    - name: Gather interface list members
       community.routeros.api:
-        path: interface wifi
-        cmd: 'remove [find name=wifi3]'
-      ignore_errors: true
+        path: interface list member
+        cmd: 'print'
+      register: _list_raw
 
-    # -------------------------
-    # Interface list
-    # -------------------------
-    - name: Add bridge to LAN list
+    - name: Add bridge to LAN list if absent
       community.routeros.api:
         path: interface list member
         cmd: 'add interface=bridge list=LAN comment=ap'
-      ignore_errors: true
+      when: (_list_raw.msg if (_list_raw.msg is iterable and _list_raw.msg is not string) else []) | selectattr('interface', 'equalto', 'bridge') | selectattr('list', 'equalto', 'LAN') | list | length == 0
 
     # -------------------------
-    # DHCP client on bridge (untagged VLAN 50, served by rb5009)
+    # DHCP client on bridge (untagged VLAN 50, served by rb5009).
+    # Do NOT remove the client on bridge - the API session may ride it.
     # -------------------------
-    - name: Remove existing DHCP clients
+    - name: Gather DHCP clients
       community.routeros.api:
         path: ip dhcp-client
-        cmd: 'remove [find]'
-      ignore_errors: true
+        cmd: 'print'
+      register: _dhcp_raw
 
-    - name: Add DHCP client on bridge
+    - name: Ensure DHCP client on bridge is enabled
+      community.routeros.api_find_and_modify:
+        path: ip dhcp-client
+        find:
+          interface: bridge
+        values:
+          disabled: 'no'
+      when: (_dhcp_raw.msg if (_dhcp_raw.msg is iterable and _dhcp_raw.msg is not string) else []) | selectattr('interface', 'equalto', 'bridge') | list | length > 0
+
+    - name: Add DHCP client on bridge if absent
       community.routeros.api:
         path: ip dhcp-client
         cmd: 'add interface=bridge disabled=no'
-      ignore_errors: true
+      when: (_dhcp_raw.msg if (_dhcp_raw.msg is iterable and _dhcp_raw.msg is not string) else []) | selectattr('interface', 'equalto', 'bridge') | list | length == 0
 
     # -------------------------
     # AP hardening: no DHCP server, no NAT, no default 88.1, no insecure services
@@ -141,19 +175,26 @@
       community.routeros.api:
         path: ip dhcp-server
         cmd: 'print'
-      register: dhcp_servers
+      register: _dhcp_srv_raw
 
     - name: Remove all DHCP servers
       community.routeros.api:
         path: ip dhcp-server
         remove: "{{ item['.id'] }}"
-      loop: '{{ dhcp_servers.msg | list }}'
+      loop: '{{ _dhcp_srv_raw.msg if (_dhcp_srv_raw.msg is iterable and _dhcp_srv_raw.msg is not string) else [] }}'
       ignore_errors: true
+
+    - name: Gather NAT rules
+      community.routeros.api:
+        path: ip firewall nat
+        cmd: 'print'
+      register: _nat_raw
 
     - name: Remove all NAT rules
       community.routeros.api:
         path: ip firewall nat
-        cmd: 'remove [find]'
+        remove: "{{ item['.id'] }}"
+      loop: '{{ _nat_raw.msg if (_nat_raw.msg is iterable and _nat_raw.msg is not string) else [] }}'
       ignore_errors: true
 
     - name: Disable default IP address
@@ -166,38 +207,52 @@
       ignore_errors: true
 
     - name: Disable insecure IP services (keep winbox + api)
-      community.routeros.api:
+      community.routeros.api_find_and_modify:
         path: ip service
-        cmd: 'disable {{ item }}'
+        find:
+          name: '{{ item }}'
+        values:
+          disabled: 'yes'
       loop: [telnet, ftp, www]
       ignore_errors: true
 
     # -------------------------
-    # Enable VLAN filtering LAST
+    # VLAN filtering: OFF for now. Single VLAN (50) in play; tagged frames
+    # for a future VLAN 90 still pass a bridge with filtering disabled.
+    # When VLAN 90 lands, flip this properly: filtering=yes, tagged=bridge,ether1
+    # in the vlan entries, and a vlan50 interface for mgmt.
     # -------------------------
-    - name: Enable bridge VLAN filtering
+    - name: Ensure bridge VLAN filtering is off
       community.routeros.api_find_and_modify:
         path: interface bridge
         find:
           name: bridge
         values:
-          vlan-filtering: 'yes'
-          ingress-filtering: 'yes'
+          vlan-filtering: 'no'
+          ingress-filtering: 'no'
 
   post_tasks:
+    - name: Show bridge
+      community.routeros.api: { path: interface bridge, cmd: print }
+      register: r_bridge
+    - ansible.builtin.debug: { var: r_bridge }
     - name: Show bridge ports
       community.routeros.api: { path: interface bridge port, cmd: print }
-      register: ports
-    - ansible.builtin.debug: { var: ports }
+      register: r_ports
+    - ansible.builtin.debug: { var: r_ports }
     - name: Show bridge VLANs
       community.routeros.api: { path: interface bridge vlan, cmd: print }
-      register: bvlans
-    - ansible.builtin.debug: { var: bvlans }
+      register: r_bvlans
+    - ansible.builtin.debug: { var: r_bvlans }
     - name: Show wifi
       community.routeros.api: { path: interface wifi, cmd: print }
-      register: wifi
-    - ansible.builtin.debug: { var: wifi }
+      register: r_wifi
+    - ansible.builtin.debug: { var: r_wifi }
     - name: Show DHCP clients
       community.routeros.api: { path: ip dhcp-client, cmd: print }
-      register: dhcp
-    - ansible.builtin.debug: { var: dhcp }
+      register: r_dhcp
+    - ansible.builtin.debug: { var: r_dhcp }
+    - name: Show IP services
+      community.routeros.api: { path: ip service, cmd: print }
+      register: r_svc
+    - ansible.builtin.debug: { var: r_svc }
