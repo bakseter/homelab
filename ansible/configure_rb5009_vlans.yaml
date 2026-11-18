@@ -63,6 +63,7 @@
           pvid: '50'
           frame-types: admit-only-untagged-and-priority-tagged
 
+    # Used by HAP ax3
     - name: Set ether6 as access port to VLAN 50
       community.routeros.api_find_and_modify:
         path: interface bridge port
@@ -70,7 +71,7 @@
           interface: ether6
         values:
           pvid: '50'
-          frame-types: admit-only-untagged-and-priority-tagged
+          frame-types: admit-all # allow other VLANs
 
     - name: Set ether7 as access port to VLAN 50
       community.routeros.api_find_and_modify:

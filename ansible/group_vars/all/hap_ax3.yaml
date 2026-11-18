@@ -1,4 +1,4 @@
-hap_ax3_host: 192.168.10.1
+hap_ax3_host: 192.168.50.1
 hap_ax3_username: admin
 hap_ax3_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
