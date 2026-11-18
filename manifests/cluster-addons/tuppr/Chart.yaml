@@ -3,5 +3,5 @@ name: tuppr-umbrella
 version: 0.1.0
 dependencies:
   - name: tuppr
-    version: 0.5.13
+    version: 0.5.14
     repository: oci://ghcr.io/home-operations/charts
