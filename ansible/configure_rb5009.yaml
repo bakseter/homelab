@@ -27,7 +27,7 @@
       community.routeros.api:
         path: ip firewall filter
         remove: "{{ item['.id'] }}"
-      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|proxmox-to-talos|proxmox-to-infra|infra-to-proxmox|infra-to-talos|infra-to-wifi-non-dhcp|infra-to-storage|talos-to-proxmox-prometheus-node-exporter|talos-to-wifi|talos-to-infra|talos-to-storage|all-to-talos-cilium-subnet|all-to-media|media-to-wifi|drop-wifi-to-interal|drop-media-to-internal|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-all-inter-vlan|drop-wifi-router-mgmt') | list }}"
+      loop: "{{ fw_cleanup.msg | selectattr('comment', 'defined') | selectattr('comment', 'search', 'allow-established|proxmox-to-talos|proxmox-to-infra|infra-to-proxmox|infra-to-talos|infra-to-wifi-non-dhcp|infra-to-storage|talos-to-proxmox-prometheus-node-exporter|talos-to-wifi|talos-to-infra|talos-to-storage|all-to-talos-cilium-subnet|all-to-media|wifi-to-iot|media-to-wifi|drop-iot-to-wan|drop-media-to-internal|drop-wifi-to-internal|drop-talos-to-mgmt|drop-cluster-outbound|drop-all-inter-vlan|drop-wifi-router-mgmt|iot-allow-dns-ntp|iot-allow-dns-tcp|iot-drop-router-mgmt') | list }}"
       ignore_errors: true
 
     # -------------------------
@@ -279,6 +279,12 @@
         path: ip firewall filter
         cmd: 'add chain=forward src-address=192.168.0.0/16 dst-address=192.168.80.0/24 action=accept comment=all-to-media'
 
+    # Valetudo web UI
+    - name: Allow WiFi to IoT
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: 'add chain=forward src-address=192.168.50.0/24 dst-address=192.168.90.0/24 action=accept comment=wifi-to-iot'
+
     # For WiiM app
     - name: Allow media to WiFi
       community.routeros.api:
@@ -289,6 +295,11 @@
       community.routeros.api:
         path: ip firewall filter
         cmd: 'add chain=forward src-address=192.168.50.0/24 dst-address=192.168.0.0/16 action=drop comment=drop-wifi-to-internal'
+
+    - name: Drop IoT to WAN
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: 'add chain=forward src-address=192.168.90.0/24 out-interface=ether1 action=drop comment=drop-iot-to-wan'
 
     - name: Drop media to internal VLANs
       community.routeros.api:
@@ -317,6 +328,21 @@
       community.routeros.api:
         path: ip firewall filter
         cmd: 'add chain=input src-address=192.168.50.0/24 dst-port=22,80,8291,8728,8729 protocol=tcp action=drop comment=drop-wifi-router-mgmt'
+
+    - name: Allow IoT DNS and NTP to router
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: 'add chain=input src-address=192.168.90.0/24 dst-port=53,123 protocol=udp action=accept comment=iot-allow-dns-ntp'
+
+    - name: Allow IoT DNS tcp to router
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: 'add chain=input src-address=192.168.90.0/24 dst-port=53 protocol=tcp action=accept comment=iot-allow-dns-tcp'
+
+    - name: Drop IoT to router management ports
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: 'add chain=input src-address=192.168.90.0/24 dst-port=22,80,8291,8728,8729 protocol=tcp action=drop comment=iot-drop-router-mgmt'
 
     # -------------------------
     # NordVPN IKEv2 - Certificate
