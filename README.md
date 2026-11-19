@@ -53,6 +53,7 @@ _(list might not be 100% up to date)_
 - **CloudNativePG** for PostgreSQL
 - **Forgejo** for private git
 - **Harbor** and **Trivy** for image pull-trough cache and scanning
+- **Kagent** and **Agent Subtrate** for running agents
 
 ### Third-party services
 
@@ -61,6 +62,7 @@ _(list might not be 100% up to date)_
 - **Tailscale** for private access platform
 - **Hetzner Cloud** for Longhorn and Velero backups
 - **Pushover** for alerts from monitoring stack
+- **Mistral** for inference
 
 ### Apps
 
