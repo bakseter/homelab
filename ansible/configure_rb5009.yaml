@@ -288,7 +288,7 @@
     - name: Drop Roborock to WAN
       community.routeros.api:
         path: ip firewall filter
-        cmd: 'add chain=forward src-address=192.168.50.150/24 out-interface=ether1 action=drop comment=drop-roborock-to-wan'
+        cmd: 'add chain=forward src-address=192.168.50.107/24 out-interface=ether1 action=drop comment=drop-roborock-to-wan'
 
     - name: Drop WiFi to internal VLANs
       community.routeros.api:

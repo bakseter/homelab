@@ -1,5 +1,5 @@
 ---
-- name: Configure MikroTik hAP ax3 as dumb AP (mirrors hap ax S - proven stable)
+- name: Configure MikroTik hAP ax3 as AP
   hosts: localhost
   gather_facts: false
   become: false
@@ -11,10 +11,6 @@
       username: '{{ hap_ax3_username }}'
       password: '{{ hap_ax3_password }}'
       tls: false
-  # Defconf gives a working dumb AP: all ports + wifi in bridge, bridge in LAN,
-  # DHCP client picks up the pinned VLAN 50 lease. We only set identity, radios,
-  # and hardening. NEVER enable vlan-filtering here. API 'cmd' rejects [find...],
-  # so removals are print -> remove by '.id'. wifi1=5GHz, wifi2=2.4GHz on this unit.
   tasks:
     - name: Set identity
       community.routeros.api: { path: system identity, cmd: 'set name=hap-ax3' }
@@ -47,30 +43,10 @@
           security.ft-over-ds: 'no'
           disabled: 'no'
 
-    # Remove leftovers from the VLAN 90 attempts
-    - name: Gather wifi interfaces
-      community.routeros.api: { path: interface wifi, cmd: 'print' }
-      register: _wifi_raw
-    - name: Remove wifi-iot if present
-      community.routeros.api:
-        path: interface wifi
-        remove: "{{ item['.id'] }}"
-      loop: "{{ (_wifi_raw.msg if (_wifi_raw.msg is iterable and _wifi_raw.msg is not string) else []) | selectattr('name', 'equalto', 'wifi-iot') | list }}"
-      ignore_errors: true
-
-    - name: Gather datapaths
-      community.routeros.api: { path: interface wifi datapath, cmd: 'print' }
-      register: _dp_raw
-    - name: Remove datapath-iot if present
-      community.routeros.api:
-        path: interface wifi datapath
-        remove: "{{ item['.id'] }}"
-      loop: "{{ (_dp_raw.msg if (_dp_raw.msg is iterable and _dp_raw.msg is not string) else []) | selectattr('name', 'equalto', 'datapath-iot') | list }}"
-      ignore_errors: true
-
     - name: Gather DHCP servers
       community.routeros.api: { path: ip dhcp-server, cmd: 'print' }
       register: _srv_raw
+
     - name: Remove all DHCP servers
       community.routeros.api:
         path: ip dhcp-server
@@ -78,15 +54,16 @@
       loop: '{{ _srv_raw.msg if (_srv_raw.msg is iterable and _srv_raw.msg is not string) else [] }}'
       ignore_errors: true
 
-    - name: Gather NAT rules
-      community.routeros.api: { path: ip firewall nat, cmd: 'print' }
-      register: _nat_raw
-    - name: Remove all NAT rules
-      community.routeros.api:
-        path: ip firewall nat
-        remove: "{{ item['.id'] }}"
-      loop: '{{ _nat_raw.msg if (_nat_raw.msg is iterable and _nat_raw.msg is not string) else [] }}'
-      ignore_errors: true
+    #   - name: Gather NAT rules
+    #     community.routeros.api: { path: ip firewall nat, cmd: 'print' }
+    #     register: _nat_raw
+
+    #   - name: Remove all NAT rules
+    #     community.routeros.api:
+    #       path: ip firewall nat
+    #       remove: "{{ item['.id'] }}"
+    #     loop: '{{ _nat_raw.msg if (_nat_raw.msg is iterable and _nat_raw.msg is not string) else [] }}'
+    #     ignore_errors: true
 
     - name: Disable insecure IP services
       community.routeros.api_find_and_modify:
@@ -97,9 +74,9 @@
       ignore_errors: true
 
     # LAST: 88.1 - session rides the 50.x lease, never 88.1
-    - name: Disable default 192.168.88.1 address
-      community.routeros.api_find_and_modify:
-        path: ip address
-        find: { address: 192.168.88.1/24 }
-        values: { disabled: 'yes' }
-      ignore_errors: true
+#   - name: Disable default 192.168.88.1 address
+#     community.routeros.api_find_and_modify:
+#       path: ip address
+#       find: { address: 192.168.88.1/24 }
+#       values: { disabled: 'yes' }
+#     ignore_errors: true
