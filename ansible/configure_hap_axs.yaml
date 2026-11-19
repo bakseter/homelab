@@ -9,9 +9,9 @@
 
   module_defaults:
     group/community.routeros.api:
-      hostname: "{{ hap_axs_host }}"
-      username: "{{ hap_axs_username }}"
-      password: "{{ hap_axs_password }}"
+      hostname: '{{ hap_axs_host }}'
+      username: '{{ hap_axs_username }}'
+      password: '{{ hap_axs_password }}'
       tls: false
 
   tasks:
@@ -21,7 +21,7 @@
     - name: Set identity
       community.routeros.api:
         path: system identity
-        cmd: "set name=hap-ax-s"
+        cmd: 'set name=hap-ax-s'
 
     # -------------------------
     # WiFi - all radios as APs now
@@ -36,13 +36,13 @@
           default-name: wifi1
         values:
           configuration.mode: ap
-          configuration.ssid: "{{ wifi_ssid }}"
+          configuration.ssid: '{{ wifi_ssid }}'
           configuration.country: Norway
           security.authentication-types: wpa2-psk,wpa3-psk
-          security.passphrase: "{{ wifi_password }}"
-          security.ft: "no"
-          security.ft-over-ds: "no"
-          disabled: "no"
+          security.passphrase: '{{ wifi_password }}'
+          security.ft: 'no'
+          security.ft-over-ds: 'no'
+          disabled: 'no'
 
     - name: Set wifi2 5GHz as AP
       community.routeros.api_find_and_modify:
@@ -51,18 +51,18 @@
           default-name: wifi2
         values:
           configuration.mode: ap
-          configuration.ssid: "{{ wifi_ssid }}"
+          configuration.ssid: '{{ wifi_ssid }}'
           configuration.country: Norway
           security.authentication-types: wpa2-psk,wpa3-psk
-          security.passphrase: "{{ wifi_password }}"
-          security.ft: "no"
-          security.ft-over-ds: "no"
-          disabled: "no"
+          security.passphrase: '{{ wifi_password }}'
+          security.ft: 'no'
+          security.ft-over-ds: 'no'
+          disabled: 'no'
 
     - name: Remove existing wifi3 if any
       community.routeros.api:
         path: interface wifi
-        cmd: "remove [find name=wifi3]"
+        cmd: 'remove [find name=wifi3]'
       ignore_errors: true
 
     # -------------------------
@@ -73,25 +73,25 @@
     - name: Remove all existing bridge ports to start clean
       community.routeros.api:
         path: interface bridge port
-        cmd: "remove [find]"
+        cmd: 'remove [find]'
       ignore_errors: true
 
     - name: Add ether1 to bridge (uplink to hAP ax3)
       community.routeros.api:
         path: interface bridge port
-        cmd: "add interface=ether1 bridge=bridge"
+        cmd: 'add interface=ether1 bridge=bridge'
       ignore_errors: true
 
     - name: Add wifi1 to bridge
       community.routeros.api:
         path: interface bridge port
-        cmd: "add interface=wifi1 bridge=bridge"
+        cmd: 'add interface=wifi1 bridge=bridge'
       ignore_errors: true
 
     - name: Add wifi2 to bridge
       community.routeros.api:
         path: interface bridge port
-        cmd: "add interface=wifi2 bridge=bridge"
+        cmd: 'add interface=wifi2 bridge=bridge'
       ignore_errors: true
 
     # -------------------------
@@ -100,7 +100,7 @@
     - name: Add bridge to LAN list
       community.routeros.api:
         path: interface list member
-        cmd: "add interface=bridge list=LAN comment=defconf"
+        cmd: 'add interface=bridge list=LAN comment=defconf'
       ignore_errors: true
 
     # -------------------------
@@ -110,13 +110,13 @@
     - name: Remove existing DHCP clients
       community.routeros.api:
         path: ip dhcp-client
-        cmd: "remove [find]"
+        cmd: 'remove [find]'
       ignore_errors: true
 
     - name: Add DHCP client on bridge
       community.routeros.api:
         path: ip dhcp-client
-        cmd: "add interface=bridge disabled=no"
+        cmd: 'add interface=bridge disabled=no'
       ignore_errors: true
 
     # -------------------------
@@ -125,14 +125,14 @@
     - name: Gather DHCP servers
       community.routeros.api:
         path: ip dhcp-server
-        cmd: "print"
+        cmd: 'print'
       register: dhcp_servers
 
     - name: Disable all DHCP servers
       community.routeros.api:
         path: ip dhcp-server
         remove: "{{ item['.id'] }}"
-      loop: "{{ dhcp_servers.msg | list }}"
+      loop: '{{ dhcp_servers.msg | list }}'
       ignore_errors: true
 
     # -------------------------
@@ -144,14 +144,14 @@
         find:
           address: 192.168.88.1/24
         values:
-          disabled: "yes"
+          disabled: 'yes'
       ignore_errors: true
 
   post_tasks:
     - name: Check wifi interfaces
       community.routeros.api:
         path: interface wifi
-        cmd: "print"
+        cmd: 'print'
       register: wifi
 
     - name: Show wifi
@@ -161,7 +161,7 @@
     - name: Check bridge ports
       community.routeros.api:
         path: interface bridge port
-        cmd: "print"
+        cmd: 'print'
       register: ports
 
     - name: Show bridge ports
@@ -171,7 +171,7 @@
     - name: Check DHCP clients
       community.routeros.api:
         path: ip dhcp-client
-        cmd: "print"
+        cmd: 'print'
       register: dhcp
 
     - name: Show DHCP clients
@@ -181,7 +181,7 @@
     - name: Check interface list members
       community.routeros.api:
         path: interface list member
-        cmd: "print"
+        cmd: 'print'
       register: members
 
     - name: Show members

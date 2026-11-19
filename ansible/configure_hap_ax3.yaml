@@ -1,36 +1,28 @@
 ---
-- name: Configure MikroTik hAP ax3 as AP
+- name: Configure MikroTik hAP ax3 as dumb AP (mirrors hap ax S - proven stable)
   hosts: localhost
   gather_facts: false
   become: false
   vars_files:
     - group_vars/all/hap_ax3.yaml
-
   module_defaults:
     group/community.routeros.api:
       hostname: '{{ hap_ax3_host }}'
       username: '{{ hap_ax3_username }}'
       password: '{{ hap_ax3_password }}'
       tls: false
-
-  # After a factory reset the ax3 is defconf: bridge holds all ports + wifi,
-  # bridge is in LAN, DHCP client on ether1 picks up a VLAN 50 lease from the
-  # rb5009 (ether6, access pvid 50). This playbook deliberately does NOT touch
-  # bridge ports, bridge VLANs, VLAN filtering, the input firewall, or the
-  # DHCP client - none of that is needed for a single-VLAN AP, and all of it
-  # has bitten us before. Remember: the API module's 'cmd' does NOT accept
-  # RouterOS [find ...] syntax, so removals are print -> remove by '.id'.
+  # Defconf gives a working dumb AP: all ports + wifi in bridge, bridge in LAN,
+  # DHCP client picks up the pinned VLAN 50 lease. We only set identity, radios,
+  # and hardening. NEVER enable vlan-filtering here. API 'cmd' rejects [find...],
+  # so removals are print -> remove by '.id'. wifi1=5GHz, wifi2=2.4GHz on this unit.
   tasks:
     - name: Set identity
-      community.routeros.api:
-        path: system identity
-        cmd: 'set name=hap-ax3'
+      community.routeros.api: { path: system identity, cmd: 'set name=hap-ax3' }
 
-    - name: Set wifi1 2.4GHz as AP
+    - name: Set wifi1 5GHz as AP
       community.routeros.api_find_and_modify:
         path: interface wifi
-        find:
-          default-name: wifi1
+        find: { default-name: wifi1 }
         values:
           configuration.mode: ap
           configuration.ssid: '{{ wifi_ssid }}'
@@ -41,11 +33,10 @@
           security.ft-over-ds: 'no'
           disabled: 'no'
 
-    - name: Set wifi2 5GHz as AP
+    - name: Set wifi2 2.4GHz as AP
       community.routeros.api_find_and_modify:
         path: interface wifi
-        find:
-          default-name: wifi2
+        find: { default-name: wifi2 }
         values:
           configuration.mode: ap
           configuration.ssid: '{{ wifi_ssid }}'
@@ -56,98 +47,59 @@
           security.ft-over-ds: 'no'
           disabled: 'no'
 
-    # -------------------------
-    # IoT SSID on wifi1 (2.4GHz), VLAN 90 via datapath.
-    # Bridge VLAN filtering stays OFF on the ax3: tagged 90 frames pass
-    # through regardless, and turning it on is what locked us out before.
-    # -------------------------
-    - name: Gather wifi datapaths
-      community.routeros.api:
-        path: interface wifi datapath
-        cmd: 'print'
-      register: _dp_raw
-
-    - name: Add IoT datapath (vlan-id 90) if absent
-      community.routeros.api:
-        path: interface wifi datapath
-        cmd: 'add name=datapath-iot bridge=bridge vlan-id=90'
-      when: (_dp_raw.msg if (_dp_raw.msg is iterable and _dp_raw.msg is not string) else []) | selectattr('name', 'equalto', 'datapath-iot') | list | length == 0
-
+    # Remove leftovers from the VLAN 90 attempts
     - name: Gather wifi interfaces
-      community.routeros.api:
-        path: interface wifi
-        cmd: 'print'
+      community.routeros.api: { path: interface wifi, cmd: 'print' }
       register: _wifi_raw
-
-    - name: Add virtual IoT AP on wifi1 if absent
+    - name: Remove wifi-iot if present
       community.routeros.api:
         path: interface wifi
-        cmd: 'add name=wifi-iot master-interface=wifi1 configuration.mode=ap configuration.ssid={{ iot_ssid }} configuration.datapath=datapath-iot security.authentication-types=wpa2-psk security.passphrase={{ iot_password }} disabled=no'
-      when: (_wifi_raw.msg if (_wifi_raw.msg is iterable and _wifi_raw.msg is not string) else []) | selectattr('name', 'equalto', 'wifi-iot') | list | length == 0
+        remove: "{{ item['.id'] }}"
+      loop: "{{ (_wifi_raw.msg if (_wifi_raw.msg is iterable and _wifi_raw.msg is not string) else []) | selectattr('name', 'equalto', 'wifi-iot') | list }}"
+      ignore_errors: true
 
-    - name: Add wifi-iot to bridge if absent
+    - name: Gather datapaths
+      community.routeros.api: { path: interface wifi datapath, cmd: 'print' }
+      register: _dp_raw
+    - name: Remove datapath-iot if present
       community.routeros.api:
-        path: interface bridge port
-        cmd: 'add interface=wifi-iot bridge=bridge'
+        path: interface wifi datapath
+        remove: "{{ item['.id'] }}"
+      loop: "{{ (_dp_raw.msg if (_dp_raw.msg is iterable and _dp_raw.msg is not string) else []) | selectattr('name', 'equalto', 'datapath-iot') | list }}"
+      ignore_errors: true
 
-    # No DHCP server on an AP
     - name: Gather DHCP servers
-      community.routeros.api:
-        path: ip dhcp-server
-        cmd: 'print'
-      register: _dhcp_srv_raw
-
+      community.routeros.api: { path: ip dhcp-server, cmd: 'print' }
+      register: _srv_raw
     - name: Remove all DHCP servers
       community.routeros.api:
         path: ip dhcp-server
         remove: "{{ item['.id'] }}"
-      loop: '{{ _dhcp_srv_raw.msg if (_dhcp_srv_raw.msg is iterable and _dhcp_srv_raw.msg is not string) else [] }}'
+      loop: '{{ _srv_raw.msg if (_srv_raw.msg is iterable and _srv_raw.msg is not string) else [] }}'
       ignore_errors: true
 
-    # No NAT on an AP
     - name: Gather NAT rules
+      community.routeros.api: { path: ip firewall nat, cmd: 'print' }
+      register: _nat_raw
+    - name: Remove all NAT rules
       community.routeros.api:
         path: ip firewall nat
-        cmd: 'print'
-      register: _nat_raw
+        remove: "{{ item['.id'] }}"
+      loop: '{{ _nat_raw.msg if (_nat_raw.msg is iterable and _nat_raw.msg is not string) else [] }}'
+      ignore_errors: true
 
-    #   - name: Remove all NAT rules
-    #     community.routeros.api:
-    #       path: ip firewall nat
-    #       remove: "{{ item['.id'] }}"
-    #     loop: '{{ _nat_raw.msg if (_nat_raw.msg is iterable and _nat_raw.msg is not string) else [] }}'
-    #     ignore_errors: true
-
-    # Harden services (named find; 'disable telnet' is invalid over the API)
-    - name: Disable insecure IP services (keep winbox + api + ssh)
+    - name: Disable insecure IP services
       community.routeros.api_find_and_modify:
         path: ip service
-        find:
-          name: '{{ item }}'
-        values:
-          disabled: 'yes'
+        find: { name: '{{ item }}' }
+        values: { disabled: 'yes' }
       loop: [telnet, ftp]
       ignore_errors: true
 
-  #   - name: Disable default 192.168.88.1 address
-  #     community.routeros.api_find_and_modify:
-  #       path: ip address
-  #       find:
-  #         address: 192.168.88.1/24
-  #       values:
-  #         disabled: 'yes'
-  #     ignore_errors: true
-
-  post_tasks:
-    - name: Show wifi
-      community.routeros.api: { path: interface wifi, cmd: print }
-      register: r_wifi
-    - ansible.builtin.debug: { var: r_wifi }
-    - name: Show addresses
-      community.routeros.api: { path: ip address, cmd: print }
-      register: r_addr
-    - ansible.builtin.debug: { var: r_addr }
-    - name: Show DHCP client
-      community.routeros.api: { path: ip dhcp-client, cmd: print }
-      register: r_dhcp
-    - ansible.builtin.debug: { var: r_dhcp }
+    # LAST: 88.1 - session rides the 50.x lease, never 88.1
+    - name: Disable default 192.168.88.1 address
+      community.routeros.api_find_and_modify:
+        path: ip address
+        find: { address: 192.168.88.1/24 }
+        values: { disabled: 'yes' }
+      ignore_errors: true

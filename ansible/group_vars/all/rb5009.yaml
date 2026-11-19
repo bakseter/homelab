@@ -65,15 +65,6 @@ vlans:
     dhcp_pool_end: 192.168.80.200
     vpn: false
 
-  - id: 90
-    name: iot
-    subnet: 192.168.90.0/24
-    gateway: 192.168.90.1
-    dhcp: true
-    dhcp_pool_start: 192.168.90.100
-    dhcp_pool_end: 192.168.90.200
-    vpn: false
-
 rb5009_host: 192.168.10.1
 rb5009_username: admin
 rb5009_password: !vault |

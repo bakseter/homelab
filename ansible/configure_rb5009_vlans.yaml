@@ -71,7 +71,7 @@
           interface: ether6
         values:
           pvid: '50'
-          frame-types: admit-all # allow other VLANs (IoT)
+          frame-types: admit-only-untagged-and-priority-tagged
 
     - name: Set ether7 as access port to VLAN 50
       community.routeros.api_find_and_modify:
@@ -147,25 +147,6 @@
 
     # Macro: for each VLAN, update if a static entry exists, add if not.
     # The vlan-ids field comes back as an integer from RouterOS.
-
-    - name: Update bridge VLAN 88 if present
-      community.routeros.api_find_and_modify:
-        path: interface bridge vlan
-        find:
-          vlan-ids: '88'
-        values:
-          bridge: bridge
-          tagged: 'bridge'
-          untagged: 'sfp-sfpplus1,ether3,ether4,ether5,ether6'
-      when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 88) | selectattr('dynamic', 'equalto', false) | list | length > 0
-      ignore_errors: true
-
-    - name: Add bridge VLAN 88 if absent
-      community.routeros.api:
-        path: interface bridge vlan
-        cmd: 'add bridge=bridge vlan-ids=88 tagged=bridge untagged=sfp-sfpplus1,ether3,ether4,ether5,ether6'
-      when: _bridge_vlans_list | selectattr('vlan-ids', 'equalto', 88) | selectattr('dynamic', 'equalto', false) | list | length == 0
-      ignore_errors: true
 
     - name: Update bridge VLAN 10 if present
       community.routeros.api_find_and_modify:

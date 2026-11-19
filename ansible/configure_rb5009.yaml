@@ -279,27 +279,21 @@
         path: ip firewall filter
         cmd: 'add chain=forward src-address=192.168.0.0/16 dst-address=192.168.80.0/24 action=accept comment=all-to-media'
 
-    # Valetudo web UI
-    - name: Allow WiFi to IoT
-      community.routeros.api:
-        path: ip firewall filter
-        cmd: 'add chain=forward src-address=192.168.50.0/24 dst-address=192.168.90.0/24 action=accept comment=wifi-to-iot'
-
     # For WiiM app
     - name: Allow media to WiFi
       community.routeros.api:
         path: ip firewall filter
         cmd: 'add chain=forward src-address=192.168.80.0/24 dst-address=192.168.50.0/24 action=accept comment=media-to-wifi'
 
+    - name: Drop Roborock to WAN
+      community.routeros.api:
+        path: ip firewall filter
+        cmd: 'add chain=forward src-address=192.168.50.150/24 out-interface=ether1 action=drop comment=drop-roborock-to-wan'
+
     - name: Drop WiFi to internal VLANs
       community.routeros.api:
         path: ip firewall filter
         cmd: 'add chain=forward src-address=192.168.50.0/24 dst-address=192.168.0.0/16 action=drop comment=drop-wifi-to-internal'
-
-    - name: Drop IoT to WAN
-      community.routeros.api:
-        path: ip firewall filter
-        cmd: 'add chain=forward src-address=192.168.90.0/24 out-interface=ether1 action=drop comment=drop-iot-to-wan'
 
     - name: Drop media to internal VLANs
       community.routeros.api:
@@ -328,21 +322,6 @@
       community.routeros.api:
         path: ip firewall filter
         cmd: 'add chain=input src-address=192.168.50.0/24 dst-port=22,80,8291,8728,8729 protocol=tcp action=drop comment=drop-wifi-router-mgmt'
-
-    - name: Allow IoT DNS and NTP to router
-      community.routeros.api:
-        path: ip firewall filter
-        cmd: 'add chain=input src-address=192.168.90.0/24 dst-port=53,123 protocol=udp action=accept comment=iot-allow-dns-ntp'
-
-    - name: Allow IoT DNS tcp to router
-      community.routeros.api:
-        path: ip firewall filter
-        cmd: 'add chain=input src-address=192.168.90.0/24 dst-port=53 protocol=tcp action=accept comment=iot-allow-dns-tcp'
-
-    - name: Drop IoT to router management ports
-      community.routeros.api:
-        path: ip firewall filter
-        cmd: 'add chain=input src-address=192.168.90.0/24 dst-port=22,80,8291,8728,8729 protocol=tcp action=drop comment=iot-drop-router-mgmt'
 
     # -------------------------
     # NordVPN IKEv2 - Certificate
