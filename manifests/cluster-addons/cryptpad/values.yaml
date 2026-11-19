@@ -1,5 +1,5 @@
 cryptpad:
-  replicaCount: 1
+  replicaCount: 0
 
   podSecurityContext:
     fsGroup: 4001 # default
