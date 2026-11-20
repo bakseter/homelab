@@ -25,7 +25,7 @@ authentik:
     image:
       repository: ghcr.io/goauthentik/server
       tag: 2026.8.6
-      digest: sha256:602227a86455d6772e3d16b7d852713c4f864f40df5df894abd1285bb53979a5
+      digest: sha256:da89d8338a3b1889800eb033fd61f8d43f7aa9a1c5a042cb5e03d891b1f0c56c
 
     replicas: 1
 
@@ -167,7 +167,7 @@ authentik:
     image:
       repository: ghcr.io/goauthentik/server
       tag: 2026.8.6
-      digest: sha256:602227a86455d6772e3d16b7d852713c4f864f40df5df894abd1285bb53979a5
+      digest: sha256:da89d8338a3b1889800eb033fd61f8d43f7aa9a1c5a042cb5e03d891b1f0c56c
 
     containerSecurityContext:
       allowPrivilegeEscalation: false
