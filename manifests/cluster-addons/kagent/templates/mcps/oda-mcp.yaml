@@ -203,7 +203,8 @@ spec:
               protocol: ANY
           rules:
             dns:
-              - matchName: 'oda.com'
+            # - matchName: 'oda.com'
+              - matchPattern: '*'
 
     - toFQDNs:
         - matchName: 'oda.com'
