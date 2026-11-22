@@ -62,6 +62,9 @@ cilium:
     enabled: true
     namespace: monitoring
 
+  dnsProxy:
+    dnsRejectResponseCode: nameError
+
   operator:
     dashboards:
       enabled: true
