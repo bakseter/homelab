@@ -75,7 +75,7 @@ metadata:
   labels:
     app.kubernetes.io/name: oda-mcp
 spec:
-  replicas: 1
+  replicas: 0
   strategy:
     type: Recreate
   selector:
