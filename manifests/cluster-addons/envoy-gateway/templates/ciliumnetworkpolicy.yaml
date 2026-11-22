@@ -169,6 +169,9 @@ spec:
             tailscale.com/parent-resource: envoy-gateway
       toPorts:
         - ports:
+           # HTTPS redirect
+            - port: '10080'
+              protocol: TCP
             - port: '10443'
               protocol: TCP
 
@@ -259,13 +262,12 @@ spec:
             tailscale.com/parent-resource: envoy-gateway
       toPorts:
         - ports:
+           # HTTPS redirect
             - port: '10080'
               protocol: TCP
-        - ports:
             - port: '10443'
               protocol: TCP
-        # forgejo ssh
-        - ports:
+            # forgejo ssh
             - port: '10022'
               protocol: TCP
 
@@ -353,9 +355,9 @@ spec:
             tailscale.com/parent-resource: envoy-gateway
       toPorts:
         - ports:
+           # HTTPS redirect
             - port: '10080'
               protocol: TCP
-        - ports:
             - port: '10443'
               protocol: TCP
 

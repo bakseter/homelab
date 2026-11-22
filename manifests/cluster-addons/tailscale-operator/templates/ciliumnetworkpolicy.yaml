@@ -166,6 +166,8 @@ spec:
             gateway.envoyproxy.io/owning-gateway-name: tailscale-sre
       toPorts:
         - ports:
+            - port: '10080'
+              protocol: TCP
             - port: '10443'
               protocol: TCP
 
