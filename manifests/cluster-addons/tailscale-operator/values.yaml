@@ -2,7 +2,7 @@ tailscale-operator:
   operatorConfig:
     image:
       repository: docker.io/tailscale/k8s-operator
-      digest: sha256:9cddfcbe75a7eab2b46d610966d519a28699a5e38235a2cb3aec960487c4aa48 # v1.104.2
+      digest: sha256:51ba104ff02afcc39f93189415c8b2f44fb6037e8592d626bfa52c3c8afc02f6 # v1.104.7
 
     podSecurityContext:
       runAsNonRoot: true
@@ -24,7 +24,7 @@ tailscale-operator:
   proxyConfig:
     image:
       repository: docker.io/tailscale/tailscale
-      digest: sha256:b11583ad2e93e4671128538c88cf11f460444a5d7e449311dd1933a400ab849d # v1.104.2
+      digest: sha256:72c1e19e0aedca96b8533bbb0b4368564410ff20b17e53b804eb6c1f04a31be4 # v1.104.7
 
   apiServerProxyConfig:
     allowImpersonation: true
