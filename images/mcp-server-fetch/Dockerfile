@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:python3.14-trixie-slim@sha256:da0f1f04404173d7d2fa158112e09624d5a80262efa86c89882b68389dfd44eb AS build
+FROM ghcr.io/astral-sh/uv:python3.14-trixie-slim@sha256:b093dbbd7963c765325ecdf866d42915f5327e135569f9dae9c77cac63559bf2 AS build
 
 ARG FETCH_VERSION=2026.11.11
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
