@@ -54,6 +54,6 @@ objectStorePlugin:
           key: AWS_SECRET_ACCESS_KEY
 
 otel:
-  endpoint: http://alloy.monitoring.svc.cluster.local:4317
+  endpoint: http://otel-gateway.otel.svc.cluster.local:4317
   traces:
     samplingRatio: 1.0

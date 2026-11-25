@@ -129,8 +129,8 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: monitoring
-            app.kubernetes.io/name: alloy
+            k8s:io.kubernetes.pod.namespace: otel
+            app.kubernetes.io/name: otel-gateway
       toPorts:
         - ports:
             - port: '4317'
@@ -210,8 +210,8 @@ spec:
 
     - toEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: monitoring
-            app.kubernetes.io/name: alloy
+            k8s:io.kubernetes.pod.namespace: otel
+            app.kubernetes.io/name: otel-gateway
       toPorts:
         - ports:
             - port: '4317'

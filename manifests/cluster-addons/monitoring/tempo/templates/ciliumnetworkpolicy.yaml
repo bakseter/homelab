@@ -53,7 +53,8 @@ spec:
 
     - fromEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: alloy
+            k8s:io.kubernetes.pod.namespace: otel
+            app.kubernetes.io/name: otel-gateway
       toPorts:
         - ports:
             - port: '4317'

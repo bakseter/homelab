@@ -61,8 +61,8 @@ spec:
             - type: OpenTelemetry
               openTelemetry:
                 backendRefs:
-                  - name: alloy
-                    namespace: monitoring
+                  - name: otel-gateway
+                    namespace: otel
                     port: 4317
                 resourceAttributes:
                   'service.name': tailscale-int-gateway
@@ -74,8 +74,8 @@ spec:
         type: OpenTelemetry
         serviceName: tailscale-home-gateway
         backendRefs:
-          - name: alloy
-            namespace: monitoring
+          - name: otel-gateway
+            namespace: otel
             port: 4317
       tags:
         'k8s.cluster.name': homelab
@@ -145,8 +145,8 @@ spec:
             - type: OpenTelemetry
               openTelemetry:
                 backendRefs:
-                  - name: alloy
-                    namespace: monitoring
+                  - name: otel-gateway
+                    namespace: otel
                     port: 4317
                 resourceAttributes:
                   'service.name': tailscale-home-gateway
@@ -158,8 +158,8 @@ spec:
         type: OpenTelemetry
         serviceName: tailscale-home-gateway
         backendRefs:
-          - name: alloy
-            namespace: monitoring
+          - name: otel-gateway
+            namespace: otel
             port: 4317
       tags:
         'k8s.cluster.name': homelab
@@ -229,8 +229,8 @@ spec:
             - type: OpenTelemetry
               openTelemetry:
                 backendRefs:
-                  - name: alloy
-                    namespace: monitoring
+                  - name: otel-gateway
+                    namespace: otel
                     port: 4317
                 resourceAttributes:
                   'service.name': tailscale-sre-gateway
@@ -242,8 +242,8 @@ spec:
         type: OpenTelemetry
         serviceName: tailscale-sre-gateway
         backendRefs:
-          - name: alloy
-            namespace: monitoring
+          - name: otel-gateway
+            namespace: otel
             port: 4317
       tags:
         'k8s.cluster.name': homelab

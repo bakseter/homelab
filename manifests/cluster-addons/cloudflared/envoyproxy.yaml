@@ -56,8 +56,8 @@ spec:
             - type: OpenTelemetry
               openTelemetry:
                 backendRefs:
-                  - name: alloy
-                    namespace: monitoring
+                  - name: otel-gateway
+                    namespace: otel
                     port: 4317
                 resourceAttributes:
                   'service.name': cloudflared-gateway
@@ -69,8 +69,8 @@ spec:
         type: OpenTelemetry
         serviceName: cloudflared-gateway
         backendRefs:
-          - name: alloy
-            namespace: monitoring
+          - name: otel-gateway
+            namespace: otel
             port: 4317
       tags:
         'k8s.cluster.name': homelab
