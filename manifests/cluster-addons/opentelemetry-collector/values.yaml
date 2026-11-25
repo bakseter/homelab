@@ -4,8 +4,10 @@ gateway:
   replicaCount: 2
 
   presets:
-    kubernetesAttributesEnabled: true
-    kubernetesEventEnabled: true
+    kubernetesAttributes:
+      enabled: true
+    kubernetesEvents:
+      enabled: true
 
   affinity:
     podAntiAffinity:
@@ -88,7 +90,8 @@ agent:
     logsCollection:
       enabled: true
       includeCollectorLogs: false
-    kubernetesAttributesEnabled: true
+    kubernetesAttributes:
+      enabled: true
 
   podSecurityContext:
     seccompProfile:
