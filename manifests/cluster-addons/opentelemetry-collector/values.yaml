@@ -1,0 +1,153 @@
+gateway:
+  nameOverride: otel-gateway
+  mode: deployment
+  replicaCount: 2
+
+  presets:
+    kubernetesAttributesEnabled: true
+    kubernetesEventEnabled: true
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - otel-gateway
+          topologyKey: bakseter.net/physical-node
+
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+
+  rbac:
+    create: true
+
+  config:
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+
+    processors:
+      k8sattributes:
+        extract:
+          metadata:
+            - k8s.namespace.name
+            - k8s.pod.name
+            - k8s.pod.uid
+            - k8s.deployment.name
+            - k8s.node.name
+      resource:
+        attributes:
+          - key: cluster
+            value: homelab
+            action: upsert
+          - key: service.name
+            from_attribute: service_name
+            action: insert
+      batch: {}
+
+    exporters:
+      otlphttp/loki:
+        endpoint: http://loki-gateway.monitoring.svc.cluster.local/otlp
+      otlp/tempo:
+        endpoint: tempo.monitoring.svc.cluster.local:4317
+        tls:
+          insecure: true
+
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [k8sattributes, resource, batch]
+          exporters: [otlp/tempo]
+        logs:
+          receivers: [otlp, k8sobject]
+          processors: [k8sattributes, resource, batch]
+          exporters: [otlphttp/loki]
+
+agent:
+  nameOverride: otel-agent
+  mode: daemonset
+
+  presets:
+    logsCollection:
+      enabled: true
+      includeCollectorLogs: false
+    kubernetesAttributesEnabled: true
+
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+
+  extraVolumes:
+    - name: varlogpods
+      hostPath:
+        path: /var/log/pods
+    - name: varlibdockercontainers
+      hostPath:
+        path: /var/lib/docker/containers # omit if containerd-only (longhorn nodes fine)
+
+  extraVolumeMounts:
+    - name: varlogpods
+      mountPath: /var/log/pods
+      readOnly: true
+    - name: varlibdockercontainers
+      mountPath: /var/lib/docker/containers
+      readOnly: true
+
+  config:
+    processors:
+      k8sattributes:
+        extract:
+          metadata:
+            - k8s.namespace.name
+            - k8s.pod.name
+            - k8s.container.name
+            - k8s.node.name
+          labels:
+            - key: logs.bakseter.net/scrape
+              from: pod
+      resource:
+        attributes:
+          - key: cluster
+            value: homelab
+            action: upsert
+      filter/drop_disabled:
+        logs:
+          logs:
+            - 'resource.attributes["logs.bakseter.net/scrape"] == "false"'
+      batch: {}
+
+    exporters:
+      otlphttp/loki:
+        endpoint: http://loki-gateway.monitoring.svc.cluster.local/otlp
+
+    service:
+      pipelines:
+        logs:
+          receivers: [filelog]
+          processors: [k8sattributes, filter/drop_disabled, resource, batch]
+          exporters: [otlphttp/loki]

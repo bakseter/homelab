@@ -1,0 +1,12 @@
+apiVersion: v2
+name: opentelemetry-collector-umbrella
+version: 0.1.0
+dependencies:
+  - name: opentelemetry-collector
+    alias: agent
+    version: 0.183.2
+    repository: oci://ghcr.io/open-telemetry/opentelemetry-helm-charts
+  - name: opentelemetry-collector
+    alias: gateway
+    version: 0.183.2
+    repository: oci://ghcr.io/open-telemetry/opentelemetry-helm-charts
