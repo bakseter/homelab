@@ -15,9 +15,9 @@ spec:
       toPorts:
         - ports:
             - port: '4317'
-              protocl: TCP 
+              protocol: TCP
             - port: '4318'
-              protocl: TCP 
+              protocol: TCP
 
   egress:
     - toEndpoints:
