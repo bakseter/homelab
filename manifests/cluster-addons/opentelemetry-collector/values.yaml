@@ -4,7 +4,7 @@ gateway:
   replicaCount: 2
 
   image:
-    repository: otel/opentelemetry-collector-contrib
+    repository: otel/opentelemetry-collector-k8s
 
   presets:
     kubernetesAttributes:
@@ -80,7 +80,7 @@ gateway:
           processors: [k8sattributes, resource, batch]
           exporters: [otlp/tempo]
         logs:
-          receivers: [otlp, k8sobject]
+          receivers: [otlp, k8sobjects]
           processors: [k8sattributes, resource, batch]
           exporters: [otlphttp/loki]
 
