@@ -1,10 +1,10 @@
 gateway:
-  nameOverride: otel-gateway
+  nameOverride: gateway
   mode: deployment
   replicaCount: 2
 
   image:
-    repository: otel/opentelemetry-collector-k8s
+    repository: otel/opentelemetry-collector-contrib
 
   presets:
     kubernetesAttributes:
@@ -20,7 +20,7 @@ gateway:
               - key: app.kubernetes.io/name
                 operator: In
                 values:
-                  - otel-gateway
+                  - gateway
           topologyKey: bakseter.net/physical-node
 
   podSecurityContext:
@@ -83,7 +83,7 @@ gateway:
           exporters: [otlphttp/loki]
 
 agent:
-  nameOverride: otel-agent
+  nameOverride: agent
   mode: daemonset
 
   image:
