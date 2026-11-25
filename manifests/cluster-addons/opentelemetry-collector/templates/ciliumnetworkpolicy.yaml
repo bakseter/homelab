@@ -38,3 +38,23 @@ spec:
         - ports:
             - port: '6443'
               protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/instance: tempo
+            app.kubernetes.io/name: tempo
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: gateway
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
