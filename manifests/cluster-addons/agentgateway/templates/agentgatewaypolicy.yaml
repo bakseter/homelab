@@ -12,7 +12,7 @@ spec:
     accessLog:
       otlp:
         backendRef:
-          name: otel-gateway
+          name: opentelemetry-collector-gateway
           namespace: otel
           port: 4317
         protocol: GRPC
@@ -30,7 +30,7 @@ spec:
   frontend:
     tracing:
       backendRef:
-        name: otel-gateway
+        name: opentelemetry-collector-gateway
         namespace: otel
         port: 4317
       protocol: GRPC

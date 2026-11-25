@@ -56,7 +56,7 @@ spec:
             - type: OpenTelemetry
               openTelemetry:
                 backendRefs:
-                  - name: otel-gateway
+                  - name: opentelemetry-collector-gateway
                     namespace: otel
                     port: 4317
                 resourceAttributes:
@@ -69,7 +69,7 @@ spec:
         type: OpenTelemetry
         serviceName: cloudflared-gateway
         backendRefs:
-          - name: otel-gateway
+          - name: opentelemetry-collector-gateway
             namespace: otel
             port: 4317
       tags:

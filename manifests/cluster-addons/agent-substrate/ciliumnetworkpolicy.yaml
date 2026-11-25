@@ -87,7 +87,8 @@ spec:
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: otel
-            app.kubernetes.io/name: otel-gateway
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: gateway
       toPorts:
         - ports:
             - port: '4317'
@@ -159,7 +160,8 @@ spec:
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: otel
-            app.kubernetes.io/name: otel-gateway
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: gateway
       toPorts:
         - ports:
             - port: '4317'
@@ -269,7 +271,8 @@ spec:
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: otel
-            app.kubernetes.io/name: otel-gateway
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: gateway
       toPorts:
         - ports:
             - port: '4317'
@@ -331,7 +334,8 @@ spec:
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: otel
-            app.kubernetes.io/name: otel-gateway
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: gateway
       toPorts:
         - ports:
             - port: '4317'
@@ -432,7 +436,8 @@ spec:
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: otel
-            app.kubernetes.io/name: otel-gateway
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: gateway
       toPorts:
         - ports:
             - port: '4317'

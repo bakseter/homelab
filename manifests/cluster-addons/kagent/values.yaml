@@ -13,19 +13,19 @@ kagent:
 
     telemetry:
       traces:
-        endpoint: http://otel-gateway.otel.svc.cluster.local:4317
+        endpoint: http://opentelemetry-collector-gateway.otel.svc.cluster.local:4317
         protocol: grpc
       logs:
-        endpoint: http://otel-gateway.otel.svc.cluster.local:4317
+        endpoint: http://opentelemetry-collector-gateway.otel.svc.cluster.local:4317
         protocol: grpc
 
     runtimeDefaults:
       telemetry:
         traces:
-          endpoint: http://otel-gateway.otel.svc.cluster.local:4317
+          endpoint: http://opentelemetry-collector-gateway.otel.svc.cluster.local:4317
           protocol: grpc
         logs:
-          endpoint: http://otel-gateway.otel.svc.cluster.local:4317
+          endpoint: http://opentelemetry-collector-gateway.otel.svc.cluster.local:4317
           protocol: grpc
 
   controller:

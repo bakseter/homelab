@@ -54,6 +54,6 @@ objectStorePlugin:
           key: AWS_SECRET_ACCESS_KEY
 
 otel:
-  endpoint: http://otel-gateway.otel.svc.cluster.local:4317
+  endpoint: http://opentelemetry-collector-gateway.otel.svc.cluster.local:4317
   traces:
     samplingRatio: 1.0

@@ -61,7 +61,7 @@ spec:
 #           - type: OpenTelemetry
 #             openTelemetry:
 #               backendRefs:
-#                 - name: otel-gateway
+#                 - name: opentelemetry-collector-gateway
 #                   namespace: otel
 #                   port: 4317
 #               resourceAttributes:
@@ -74,7 +74,7 @@ spec:
 #       type: OpenTelemetry
 #       serviceName: tailscale-home-gateway
 #       backendRefs:
-#         - name: otel-gateway
+#         - name: opentelemetry-collector-gateway
 #           namespace: otel
 #           port: 4317
 #     tags:
@@ -145,7 +145,7 @@ spec:
 #           - type: OpenTelemetry
 #             openTelemetry:
 #               backendRefs:
-#                 - name: otel-gateway
+#                 - name: opentelemetry-collector-gateway
 #                   namespace: otel
 #                   port: 4317
 #               resourceAttributes:
@@ -158,7 +158,7 @@ spec:
 #       type: OpenTelemetry
 #       serviceName: tailscale-home-gateway
 #       backendRefs:
-#         - name: otel-gateway
+#         - name: opentelemetry-collector-gateway
 #           namespace: otel
 #           port: 4317
 #     tags:
@@ -229,7 +229,7 @@ spec:
 #           - type: OpenTelemetry
 #             openTelemetry:
 #               backendRefs:
-#                 - name: otel-gateway
+#                 - name: opentelemetry-collector-gateway
 #                   namespace: otel
 #                   port: 4317
 #               resourceAttributes:
@@ -242,7 +242,7 @@ spec:
 #       type: OpenTelemetry
 #       serviceName: tailscale-sre-gateway
 #       backendRefs:
-#         - name: otel-gateway
+#         - name: opentelemetry-collector-gateway
 #           namespace: otel
 #           port: 4317
 #     tags:

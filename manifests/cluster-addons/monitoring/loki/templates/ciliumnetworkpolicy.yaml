@@ -267,7 +267,8 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: otel
-            app.kubernetes.io/name: otel-gateway
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: gateway
       toPorts:
         - ports:
             - port: '8080'
@@ -330,7 +331,8 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: otel
-            app.kubernetes.io/name: otel-gateway
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: gateway
       toPorts:
         - ports:
             - port: '8080'
