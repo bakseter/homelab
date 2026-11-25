@@ -7,7 +7,7 @@ spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/instance: opentelemetry-collector
-      app.kubernetes.io/name: otel-gateway
+      app.kubernetes.io/name: gateway
 
   ingress:
     - fromEntities:
