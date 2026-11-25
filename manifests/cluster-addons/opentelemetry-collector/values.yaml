@@ -110,22 +110,6 @@ agent:
     readOnlyRootFilesystem: true
     runAsNonRoot: true
 
-  extraVolumes:
-    - name: varlogpods
-      hostPath:
-        path: /var/log/pods
-    - name: varlibdockercontainers
-      hostPath:
-        path: /var/lib/docker/containers # omit if containerd-only (longhorn nodes fine)
-
-  extraVolumeMounts:
-    - name: varlogpods
-      mountPath: /var/log/pods
-      readOnly: true
-    - name: varlibdockercontainers
-      mountPath: /var/lib/docker/containers
-      readOnly: true
-
   config:
     processors:
       k8sattributes:
