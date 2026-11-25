@@ -32,9 +32,6 @@ gateway:
     readOnlyRootFilesystem: true
     runAsNonRoot: true
 
-  rbac:
-    create: true
-
   config:
     receivers:
       otlp:
