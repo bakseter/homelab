@@ -61,6 +61,7 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILj87yRsywKKxceR6a42/JTomwQvvQvEcyjIkxillZYw andreas_tkd@hotmail.com" # deskarch
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHr1nJQfTlfcbCyZQK6/hc/3A6lKI+4cE+kshlhqf3tA andreas_tkd@hotmail.com" # archpad
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL7a8yvMl6cN+1a+m0SpYMzi7arLmrx/gGdAZBMcsWm7 archwork"
     ];
   };
 
