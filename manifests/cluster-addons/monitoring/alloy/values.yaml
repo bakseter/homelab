@@ -1,7 +1,7 @@
 alloy:
   controller:
     type: deployment
-    replicas: 2
+    replicas: 0
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
