@@ -4,7 +4,7 @@ gateway:
   replicaCount: 2
 
   image:
-    repository: otel/opentelemetry-collector-k8s
+    repository: otel/opentelemetry-collector-contrib
 
   presets:
     kubernetesAttributes:
