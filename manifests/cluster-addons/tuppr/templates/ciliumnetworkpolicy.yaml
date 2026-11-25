@@ -7,7 +7,7 @@ spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: tuppr
-  
+
   ingress:
     - fromEntities:
         - remote-node

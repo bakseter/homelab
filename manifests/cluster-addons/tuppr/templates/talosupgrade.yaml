@@ -1,8 +1,13 @@
 apiVersion: tuppr.home-operations.com/v1alpha1
 kind: TalosUpgrade
 metadata:
-  name: cluster
+  name: longhorn-nodes
 spec:
+  nodeSelector:
+    matchExpressions:
+      - key: node.longhorn.io/create-default-disk
+        operator: Exists
+
   talos:
     # renovate: datasource=docker depName=ghcr.io/siderolabs/talos
     version: v1.14.7
@@ -11,15 +16,24 @@ spec:
     drainTimeout: 10m0s
     timeout: 20m0s
     waitForVolumeDetach: true
+    force: true
 
   healthChecks:
     - apiVersion: longhorn.io/v1beta2
       kind: Volume
       namespace: longhorn-system
       expr: status.robustness in ['healthy', 'unknown']
+---
+apiVersion: tuppr.home-operations.com/v1alpha1
+kind: TalosUpgrade
+metadata:
+  name: non-longhorn-nodes
+spec:
+  nodeSelector:
+    matchExpressions:
+      - key: node.longhorn.io/create-default-disk
+        operator: DoesNotExist
 
-# maintenance:
-#   windows:
-#     - duration: 2h0m0s
-#       start: '0 1 * * 1-6'
-#       timezone: UTC
+  talos:
+    # renovate: datasource=docker depName=ghcr.io/siderolabs/talos
+    version: v1.14.7
