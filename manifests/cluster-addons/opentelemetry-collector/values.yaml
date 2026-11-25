@@ -11,6 +11,8 @@ gateway:
       enabled: true
     kubernetesEvents:
       enabled: true
+    kubernetesObjects:
+      enabled: true
 
   affinity:
     podAntiAffinity:
