@@ -60,9 +60,6 @@ gateway:
           - key: cluster
             value: homelab
             action: upsert
-          - key: service.name
-            from_attribute: service_name
-            action: insert
       batch: {}
 
     exporters:

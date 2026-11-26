@@ -30,7 +30,7 @@ spec:
               protocol: ANY
           rules:
             dns:
-              - matchName: 'loki-agent.monitoring.svc.cluster.local'
+              - matchName: 'loki-gateway.monitoring.svc.cluster.local'
               - matchName: 'tempo.monitoring.svc.cluster.local'
 
     - toEntities:
@@ -82,7 +82,7 @@ spec:
               protocol: ANY
           rules:
             dns:
-              - matchName: 'loki-agent.monitoring.svc.cluster.local'
+              - matchName: 'loki-gateway.monitoring.svc.cluster.local'
 
     - toEntities:
         - kube-apiserver
@@ -95,7 +95,7 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: monitoring
             app.kubernetes.io/name: loki
-            app.kubernetes.io/component: agent
+            app.kubernetes.io/component: gateway
       toPorts:
         - ports:
             - port: '8080'
