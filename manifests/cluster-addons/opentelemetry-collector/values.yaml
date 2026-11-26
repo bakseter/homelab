@@ -129,8 +129,8 @@ agent:
             action: upsert
       filter/drop_disabled:
         logs:
-          logs:
-            - 'resource.attributes["logs.bakseter.net/scrape"] == "false"'
+          log_record:
+            - 'resource.attributes["logs.bakseter.net/scrape"] != "false"'
       batch: {}
 
     exporters:
