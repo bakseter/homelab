@@ -30,7 +30,8 @@ spec:
               protocol: ANY
           rules:
             dns:
-              - matchPattern: '*'
+              - matchName: 'loki-agent.monitoring.svc.cluster.local'
+              - matchName: 'tempo.monitoring.svc.cluster.local'
 
     - toEntities:
         - kube-apiserver
@@ -54,6 +55,47 @@ spec:
             k8s:io.kubernetes.pod.namespace: monitoring
             app.kubernetes.io/name: loki
             app.kubernetes.io/component: gateway
+      toPorts:
+        - ports:
+            - port: '8080'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: otel-agent
+  namespace: otel
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: opentelemetry-collector
+      app.kubernetes.io/name: agent
+
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchName: 'loki-agent.monitoring.svc.cluster.local'
+
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: monitoring
+            app.kubernetes.io/name: loki
+            app.kubernetes.io/component: agent
       toPorts:
         - ports:
             - port: '8080'
