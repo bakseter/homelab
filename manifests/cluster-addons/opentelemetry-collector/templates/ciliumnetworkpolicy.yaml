@@ -83,13 +83,7 @@ spec:
           rules:
             dns:
               - matchName: 'loki-gateway.monitoring.svc.cluster.local'
-
-    - toEntities:
-        - kube-apiserver
-      toPorts:
-        - ports:
-            - port: '6443'
-              protocol: TCP
+              - matchName: 'opentelemetry-collector-gateway.otel.svc.cluster.local'
 
     - toEndpoints:
         - matchLabels:
@@ -99,4 +93,20 @@ spec:
       toPorts:
         - ports:
             - port: '8080'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: gateway
+      toPorts:
+        - ports:
+            - port: '4318'
+              protocol: TCP
+
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
               protocol: TCP
