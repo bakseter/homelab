@@ -104,6 +104,12 @@ agent:
     kubernetesAttributes:
       enabled: true
 
+  tolerations:
+    - effect: NoSchedule
+      key: node-role.bakseter.net/agent
+      operator: Equal
+      value: 'true'
+
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
