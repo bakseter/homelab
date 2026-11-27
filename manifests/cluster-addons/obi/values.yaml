@@ -1,4 +1,4 @@
-obi:
+opentelemetry-ebpf-instrumentation:
   env:
     OTEL_EXPORTER_OTLP_ENDPOINT: http://opentelemetry-collector-gateway.otel.svc.cluster.local:4318
     OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
