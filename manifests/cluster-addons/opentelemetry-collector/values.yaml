@@ -129,7 +129,7 @@ agent:
       filter/drop_disabled:
         logs:
           log_record:
-            - 'resource.attributes["logs.bakseter.net/scrape"] != "false"'
+            - 'resource.attributes["logs.bakseter.net/scrape"] == "false"'
       batch: {}
 
     exporters:
