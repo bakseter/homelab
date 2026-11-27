@@ -80,15 +80,17 @@ spec:
     jsonData:
       tracesToLogsV2:
         datasourceUid: loki
-        spanStartTimeShift: '-1h'
-        spanEndTimeShift: '1h'
-        filterByTraceID: true
+        spanStartTimeShift: '-5m'
+        spanEndTimeShift: '5m'
+        filterByTraceID: false
         filterBySpanID: false
+        customQuery: true
+        query: '{${__tags}} | trace_id="${__trace.traceId}"'
         tags:
-          - key: service.name
-            value: service_name
           - key: k8s.namespace.name
             value: k8s_namespace_name
+          - key: k8s.pod.name
+            value: k8s_pod_name
 
       tracesToMetrics:
         datasourceUid: prometheus
@@ -102,9 +104,6 @@ spec:
             query: 'sum(rate(traces_spanmetrics_calls_total{$__tags}[5m]))'
           - name: 'p99 latency'
             query: 'histogram_quantile(0.99, sum(rate(traces_spanmetrics_latency_bucket{$__tags}[5m])) by (le))'
-
-      lokiSearch:
-        datasourceUid: loki
 
       serviceMap:
         datasourceUid: prometheus
