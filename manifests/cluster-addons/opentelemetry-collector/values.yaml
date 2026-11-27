@@ -101,7 +101,6 @@ agent:
     logsCollection:
       enabled: true
       includeCollectorLogs: false
-      storeCheckpoints: true
     kubernetesAttributes:
       enabled: true
 
