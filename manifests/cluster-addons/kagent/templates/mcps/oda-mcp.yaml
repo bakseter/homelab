@@ -96,7 +96,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: bridge
-          image: ghcr.io/bakseter/homelab/mcp-remote-supergateway:latest@sha256:05114a34471207d4089d7eb424d0f470724b3f02cedb0e3cfb1db34213b610b4
+          image: ghcr.io/bakseter/homelab/mcp-remote-supergateway:latest@sha256:bdb752eb922a126f2a935255009ceadd41ccd792cf8650853fdc2ca1364b977c
           command: ['/bin/sh', '/scripts/bootstrap.sh']
           ports:
             - name: mcp
