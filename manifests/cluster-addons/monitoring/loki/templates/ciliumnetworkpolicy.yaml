@@ -269,6 +269,10 @@ spec:
             k8s:io.kubernetes.pod.namespace: otel
             app.kubernetes.io/instance: opentelemetry-collector
             app.kubernetes.io/name: gateway
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: otel
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: agent
       toPorts:
         - ports:
             - port: '8080'
@@ -328,16 +332,6 @@ spec:
       app.kubernetes.io/component: ingester
 
   ingress:
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: otel
-            app.kubernetes.io/instance: opentelemetry-collector
-            app.kubernetes.io/name: gateway
-      toPorts:
-        - ports:
-            - port: '8080'
-              protocol: TCP
-
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: loki
