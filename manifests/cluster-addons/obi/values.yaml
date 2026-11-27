@@ -1,14 +1,16 @@
 opentelemetry-ebpf-instrumentation:
   env:
-    OTEL_EXPORTER_OTLP_ENDPOINT: http://opentelemetry-collector-gateway.otel.svc.cluster.local:4318
-    OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
-    OTEL_METRICS_EXPORTER: none
-    OTEL_TRACES_EXPORTER: otlp
     OTEL_EBPF_KUBE_METADATA_ENABLE: 'true'
     OTEL_EBPF_KUBE_CLUSTER_NAME: homelab
 
   config:
     data:
+      otel_traces_export:
+        endpoint: http://opentelemetry-collector-gateway.otel.svc.cluster.local:4318
+        protocol: http/protobuf
+
+      otel_metrics_export: null
+
       discovery:
         instrument:
           - k8s_namespace: 'authentik'
