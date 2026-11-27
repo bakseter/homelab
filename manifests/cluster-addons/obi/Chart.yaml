@@ -1,0 +1,7 @@
+apiVersion: v2
+name: obi-umbrella
+version: 0.1.0
+dependencies:
+  - name: opentelemetry-ebpf-instrumentation
+    version: 0.16.5
+    repository: oci://ghcr.io/open-telemetry/opentelemetry-helm-charts
