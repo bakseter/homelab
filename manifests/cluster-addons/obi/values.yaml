@@ -18,3 +18,6 @@ opentelemetry-ebpf-instrumentation:
           - k8s_namespace: 'forgejo'
           - k8s_namespace: 'immich'
           - k8s_namespace: 'media'
+
+      ebpf:
+        context_propagation: headers
