@@ -1,5 +1,17 @@
 obi:
   env:
     OTEL_EXPORTER_OTLP_ENDPOINT: http://opentelemetry-collector-gateway.otel.svc.cluster.local:4318
+    OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+    OTEL_METRICS_EXPORTER: none
+    OTEL_TRACES_EXPORTER: otlp
     OTEL_EBPF_KUBE_METADATA_ENABLE: 'true'
-    OTEL_EBPF_KUBE_CLUSTER_NAME: 'homelab'
+    OTEL_EBPF_KUBE_CLUSTER_NAME: homelab
+
+  config:
+    discovery:
+      instrument:
+        - k8s_namespace: 'authentik'
+        - k8s_namespace: 'cloudflared'
+        - k8s_namespace: 'forgejo'
+        - k8s_namespace: 'immich'
+        - k8s_namespace: 'media'
