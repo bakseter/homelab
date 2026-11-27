@@ -1,5 +1,6 @@
 gateway:
   nameOverride: gateway
+  fullnameOverride: opentelemetry-collector-gateway
   mode: deployment
   replicaCount: 2
 
@@ -11,8 +12,16 @@ gateway:
       enabled: true
     kubernetesEvents:
       enabled: true
-    kubernetesObjects:
-      enabled: true
+
+  ports:
+    jaeger-compat:
+      enabled: false
+    jaeger-thrift:
+      enabled: false
+    jaeger-grpc:
+      enabled: false
+    zipkin:
+      enabled: false
 
   affinity:
     podAntiAffinity:
@@ -57,7 +66,7 @@ gateway:
             - k8s.node.name
       resource:
         attributes:
-          - key: cluster
+          - key: k8s.cluster.name
             value: homelab
             action: upsert
       batch: {}
@@ -74,11 +83,11 @@ gateway:
       pipelines:
         traces:
           receivers: [otlp]
-          processors: [k8sattributes, resource, batch]
+          processors: [memory_limiter, k8sattributes, resource, batch]
           exporters: [otlp/tempo]
         logs:
-          receivers: [otlp, k8sobjects]
-          processors: [k8sattributes, resource, batch]
+          receivers: [otlp]
+          processors: [memory_limiter, k8sattributes, resource, batch]
           exporters: [otlphttp/loki]
 
 agent:
@@ -92,6 +101,7 @@ agent:
     logsCollection:
       enabled: true
       includeCollectorLogs: false
+      storeCheckpoints: true
     kubernetesAttributes:
       enabled: true
 
@@ -118,15 +128,19 @@ agent:
             - k8s.container.name
             - k8s.node.name
           labels:
+            - tag_name: service.name
+              key: app.kubernetes.io/name
+              from: pod
             - tag_name: logs.bakseter.net/scrape
               key: logs.bakseter.net/scrape
               from: pod
       resource:
         attributes:
-          - key: cluster
+          - key: k8s.cluster.name
             value: homelab
             action: upsert
       filter/drop_disabled:
+        error_mode: ignore
         logs:
           log_record:
             - 'resource.attributes["logs.bakseter.net/scrape"] == "false"'
