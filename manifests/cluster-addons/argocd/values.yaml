@@ -30,6 +30,9 @@ argo-cd:
 
       kustomize.buildOptions: --enable-helm
 
+      otlp.address: opentelemetry-collector-gateway.otel.svc.cluster.local:4317
+      otlp.insecure: 'true'
+
     rbac:
       scopes: '[groups, email]'
       policy.default: ''

@@ -62,6 +62,16 @@ spec:
             - port: '8081'
               protocol: TCP
 
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: otel
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: gateway
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
+
     - toFQDNs:
         - matchName: authentik.bakseter.no
       toPorts:
@@ -119,13 +129,6 @@ spec:
             dns:
               - matchPattern: '*'
 
-    - toEntities:
-        - kube-apiserver
-      toPorts:
-        - ports:
-            - port: '6443'
-              protocol: TCP
-
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: argocd
@@ -142,6 +145,23 @@ spec:
       toPorts:
         - ports:
             - port: '6379'
+              protocol: TCP
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: otel
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: gateway
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
+
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: '6443'
               protocol: TCP
 
     # Not covered by 'kube-apiserver', since IP is hardcoded
@@ -201,6 +221,16 @@ spec:
           rules:
             dns:
               - matchPattern: '*'
+
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: otel
+            app.kubernetes.io/instance: opentelemetry-collector
+            app.kubernetes.io/name: gateway
+      toPorts:
+        - ports:
+            - port: '4317'
+              protocol: TCP
 
     - toFQDNs:
         - matchName: argoproj.github.io
