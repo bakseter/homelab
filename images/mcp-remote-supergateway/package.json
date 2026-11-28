@@ -5,6 +5,6 @@
   "description": "Streamable HTTP bridge in front of mcp-remote",
   "dependencies": {
     "mcp-remote": "0.16.7",
-    "supergateway": "4.2.4"
+    "supergateway": "4.3.0"
   }
 }
